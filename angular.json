@@ -34,15 +34,15 @@
               "src/icon.css",
               "src/arrow.css",
               "src/style.css",
-              "node_modules/ngx-toastr/toastr.css"
-             
-              
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/summernote/dist/summernote-lite.min.css",
+              "node_modules/jquery-ui-dist/jquery-ui.min.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
               "./node_modules/bootstrap/dist/js/bootstrap.js",
-              "node_modules/jquery/dist/jquery.min.js"
-              
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/summernote/dist/summernote-lite.min.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -85,18 +85,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "blog:build"
+            "browserTarget": "blog:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "blog:build:production"
+              "browserTarget": "blog:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "blog:build"
+            "browserTarget": "blog:build"
           }
         },
         "test": {
