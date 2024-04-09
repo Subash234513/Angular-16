@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, makeStateKey } from '@angular/core';
 import { Observable, from, fromEvent } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
-import { makeStateKey } from '@angular/platform-browser';
+
 import { AtmaService } from '../atma.service'
 import { NotificationService } from '../notification.service'
 import { debounceTime, distinctUntilChanged, tap, filter, switchMap, finalize, takeUntil, map } from 'rxjs/operators';
