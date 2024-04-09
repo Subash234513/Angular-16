@@ -26,7 +26,7 @@ interface TeamObject {
   user_id: number;
   type: number;
 }
-import { data } from 'jquery';
+import data from 'jquery';
 
 export interface emp {
   id: string;

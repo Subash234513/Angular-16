@@ -55,7 +55,7 @@ import { SafePipe } from './safe.pipe';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field'; 
 import { ErrorHandlingServiceService } from './AppAutoEngine/import-services/CommonimportFiles';
 import { ApicallserviceService } from './AppAutoEngine/API Services/Api_and_Query/apicallservice.service';
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 import { MonthPickerDirective } from './AppAutoEngine/Directives/month-picker.directive';
 import { RefreshComponentComponent } from './refresh-component/refresh-component.component';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
@@ -125,11 +125,11 @@ const appearance: MatFormFieldDefaultOptions = {
     // TQRoutingModule,
      NgbModule, PdfViewerModule,
      MatSliderModule,
-     AgmCoreModule.forRoot({
+    //  AgmCoreModule.forRoot({
       // please get your own API key here:
       // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
-      apiKey:'AIzaSyDzR2M-IsC07ZP1vwiLKgvhIKZhqSMngC8'
-    })
+    //   apiKey:'AIzaSyDzR2M-IsC07ZP1vwiLKgvhIKZhqSMngC8'
+    // })
     // ReportsRoutingModule, ReportsModule, 
   ],
   providers: [MemoService,CookieService,DatePipe, ErrorHandlingServiceService, ApicallserviceService, ShareddataService,

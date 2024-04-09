@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 import { AtmaService } from '../atma.service'
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router'
 import { ShareService } from '../share.service'
 // import {ShareService} from '../../Master/share.service'
@@ -41,7 +41,7 @@ export class ProducttypeEditComponent implements OnInit {
         console.log("productcat", datas)
   
       }, error => {
-        return Observable.throw(error);
+        return throwError(error)
       })
   }
 

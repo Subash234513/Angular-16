@@ -1,6 +1,6 @@
 import { Component, OnInit , Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router'
 import { AtmaService } from '../atma.service'
 import { NotificationService } from '../notification.service'
@@ -49,14 +49,14 @@ export class ProducttypeComponent implements OnInit {
 
 
     private getproductcategory() {
-      this.atmaService.getproductcategory()
-        .subscribe((results: any[]) => {
+      this.atmaService.getproductcategory().subscribe
+        ((results: any[]) => {
           let datas = results["data"];
           this.productcategoryList = datas;
           console.log("product", datas)
     
         }, error => {
-          return Observable.throw(error);
+          return throwError(error);
         })
     }
     producttypeCreateForm(){

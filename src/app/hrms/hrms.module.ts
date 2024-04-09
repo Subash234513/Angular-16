@@ -27,7 +27,7 @@ import { PostjobCreateComponent } from './Recruitment/postjob-create/postjob-cre
 import { AmountPipePipe } from '../AppAutoEngine/Pipes/amount-pipe.pipe';
 import { PostJobViewComponent } from './Recruitment/post-job-view/post-job-view.component';
 import { TrackemployeeComponent } from './Attendance/trackemployee/trackemployee.component'; 
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 import { TrackLeaveRequestComponent, CustomDateFormatLR } from './LeaveRequest/track-leave-request/track-leave-request.component';
 import { AttendanceFullReportComponent, FullCustomDateFormat2 } from './Attendance/attendance-full-report/attendance-full-report.component';
 import { MonthYearFormatDirective } from './month-year-format.directive';
@@ -75,11 +75,11 @@ import { EmergencyInfoComponent } from './emergency-info/emergency-info.componen
   imports: [
     CommonModule,MatStepperModule,MatDialogModule,
     HRMSRoutingModule, MaterialModule, FormsModule, ReactiveFormsModule, SharedModule, MatDatepickerModule, MatNativeDateModule,
-    AgmCoreModule.forRoot({
+    // AgmCoreModule.forRoot({
       // please get your own API key here:
       // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
-      apiKey: 'AIzaSyDzR2M-IsC07ZP1vwiLKgvhIKZhqSMngC8'
-    })
+    //   apiKey: 'AIzaSyDzR2M-IsC07ZP1vwiLKgvhIKZhqSMngC8'
+    // })
   ]
 })
     

@@ -35,8 +35,8 @@
               "src/arrow.css",
               "src/style.css",
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/summernote/dist/summernote-lite.min.css",
-              "node_modules/jquery-ui-dist/jquery-ui.min.css"
+              "node_modules/summernote/dist/summernote-lite.min.css"
+              
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",

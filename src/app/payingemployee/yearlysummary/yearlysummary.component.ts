@@ -9,17 +9,15 @@ import { debounceTime, distinctUntilChanged, finalize, map, switchMap, takeUntil
 import { fromEvent } from 'rxjs';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { DatePipe } from '@angular/common';
-import { SummaryTable } from '../models/summary-table';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+
 import { SharedService } from 'src/app/service/shared.service';
 declare var require: any;
 import { PdfgeneratorService } from '../pdfgenerator.service';
-
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
-const htmlToPdfmake = require("html-to-pdfmake");
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+// import { pdfmake}
+// import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "pdfmake/build/vfs_fonts";
+// const htmlToPdfmake = require("html-to-pdfmake");
+// (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 interface monthHeader {
   name: string;
@@ -500,9 +498,9 @@ export class YearlysummaryComponent implements OnInit, OnDestroy {
   }
   downloadAsPDF() {
     const pdfTable = this.pdfTable.nativeElement;
-    var html = htmlToPdfmake(pdfTable.innerHTML);
-    const documentDefinition = { content: html };
-    pdfMake.createPdf(documentDefinition).download();
+    // var html = htmlToPdfmake(pdfTable.innerHTML);
+    // const documentDefinition = { content: html };
+    // pdfMake.createPdf(documentDefinition).download();
 
   }
   generatePDF() {

@@ -146,7 +146,7 @@
                 <tr *ngFor="let point of points">
                     <td>{{point?.latitude}} {{point?.longitude}}</td>
                 </tr> -->
-                <agm-map [latitude]="+ currentPos?.latitude" [longitude]="+ currentPos?.longitude" [zoom]="15"
+                <!-- <agm-map [latitude]="+ currentPos?.latitude" [longitude]="+ currentPos?.longitude" [zoom]="15"
                     [disableDefaultUI]="false" [zoomControl]="false"  [fullscreenControl]='true' [mapTypeControl]='true'  >
                     <agm-marker *ngFor="let point of points;let i=index" [latitude]="+ point?.latitude" label="{{i+1}}" [animation]="'DROP'"
                         [longitude]="+ point?.longitude" (mouseOver)="onMouseOver(infoWindow, $event)"
@@ -158,9 +158,7 @@
                                 <p>Login Time - {{point.log_time | date:'MMM d, y, h:mm:ss a'}}</p>
                                 <p>{{point.remarks}}</p>
                             </div>
-                            <!-- <div>
-                                <a (click)="onClickInfoView({id:m.id})" class="btn btn-attention pull-right">Daje <i class="fa fa-angle-double-right"></i></a>
-                            </div> -->
+                          
 
                         </agm-info-window>
                     </agm-marker>
@@ -170,7 +168,7 @@
                             [longitude]="+ point.longitude"></agm-polyline-point>
                     </agm-polyline>
 
-                </agm-map>
+                </agm-map> -->
 
 
             </div>
