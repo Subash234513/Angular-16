@@ -1,0 +1,191 @@
+<p style="color:black;font-size: 22px;font-weight: 500;margin-left: 15px;margin-top: 20px;">
+    Portal User Summary
+</p>
+<div class="col-sm-12 col-md-12 col-lg-12">
+
+    <div>
+        <!-- <form [formGroup]="portalform">
+            <table class="tablewidth">
+                <tr>
+                    <td>
+                        <mat-form-field>
+                            <mat-label>Name</mat-label>
+
+                            <input type="text" matInput formControlName="name">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+
+                            <input type="text" matInput formControlName="email">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field>
+                            <mat-label>Role</mat-label>
+
+                            <mat-select formControlName="role">
+                                <mat-option *ngFor="let role of rolesList" [value]="role.id">
+                                    {{role.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+        </form> -->
+
+        <div>
+
+
+            <!-- <button type="button" style="border-radius: 10px;
+            border-color: #f5c68b; 
+            background-color: #f5c68b;" class="btn btn-light" (click)="portalsubmit()">Submit</button> -->
+        </div>
+
+        <div>
+            <button mat-button [matMenuTriggerFor]="menu" id="primarybtn" type="button"
+            class="btn btn-light">Portal</button>
+          <mat-menu #menu="matMenu" style="width:150px">
+            <div>
+              <!-- <button style="display: none;" data-toggle="modal"
+              data-target="#addBranchpopup" #addBranchpopup></button> -->
+
+              <button  type="button" mat-menu-item  
+              >Inactive Portal</button>
+
+              <button  type="button" mat-menu-item  
+              data-toggle="modal"
+              data-target="#portalusercreatepopup">Create Portal user</button>
+            </div>
+          </mat-menu>
+
+        </div>
+
+    </div>
+
+    <table class="table" style="margin: 10px 10px 100px 10px;max-width: 95%;" id='commonstyle'>
+        <thead class="table_header">
+            <tr>
+                <th>S.no</th>
+                <th>PA Code</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+
+
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let  portal of portalSummaryList; index as i" style="text-align: left;">
+                <!-- <td> {{(this.currentpage - 1)*pageSize +i+1 }} </td> -->
+                <td>{{i+1}}</td>
+                <td>{{vendordetails.code}}</td>
+                <td>{{portal?.name}}</td>
+                <td>{{portal?.role?.text}}</td>
+                <td>
+                    <p [ngClass]="(portal.is_active)? 'activestatus':'inactivestatus' "></p>
+                </td>
+
+
+                <td *ngIf="portalSummaryList ?.length == 0" colspan="3"> No Records found</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- <div>
+    <div style="margin-bottom: 5%;font-size: small;text-align:right;">
+        <button mat-icon-button [disabled]="has_previous === false" color="primary" (click)="previousClick()">
+            <mat-icon>arrow_back</mat-icon>
+        </button> {{presentpage}}
+        <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+</div> -->
+
+</div>
+
+<div class="modal fade" id="portalusercreatepopup" tabindex="-1" role="dialog" aria-labelledby="actionpopupTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="exampleModalLongTitle" style="font-weight: bold;">Portal User</p>
+                <button type="button" class="close" #closebuttonportalform  data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" class="modalbody" >
+                <!-- <app-portaluser (onCancel)="portalCancel()" (onSubmit)="portalSubmit()"></app-portaluser> -->
+
+                <form [formGroup]="portalform">
+                    <table class="tablewidth">
+                        <tr>
+                            <td>
+                                <mat-form-field class="inputwidth" >
+                                    <mat-label>Name</mat-label>
+        
+                                    <input type="text" matInput formControlName="name">
+                                </mat-form-field>
+                            </td>
+                            <!-- <td>
+                        <mat-form-field>
+                        <mat-label>Password</mat-label>
+        
+                            <input type="text" matInput formControlName="password" >
+                        </mat-form-field>
+                    </td> 
+                </tr> -->
+        
+                            <td>
+                                <mat-form-field class="inputwidth" >
+                                    <mat-label>Email</mat-label>
+        
+                                    <input type="text" matInput formControlName="email">
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="inputwidth" >
+                                    <mat-label>Role</mat-label>
+        
+                                    <!-- <input type="text" matInput formControlName="role" > -->
+                                    <mat-select formControlName="role">
+                                        <mat-option *ngFor="let role of rolesList" [value]="role.id">
+                                            {{role.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+        
+                            <!-- <td>
+                        <mat-form-field>
+                        <mat-label>entity</mat-label>
+        
+                            <input type="text" matInput formControlName="entity" >
+                        </mat-form-field>
+                    </td> -->
+                        </tr>
+                    </table>
+                </form>
+
+                <div class="modalbutton" >
+                    <button type="button" style="border-radius: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="portalsubmit()">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

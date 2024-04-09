@@ -1,0 +1,554 @@
+<div style="  width: 100%; ">
+  <div class="row">
+    <div class="col-sm-1 col-md-1 col-1 col-lg-1 col-xl-1">
+      <div class="cardspaceListProfile color display">
+        {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+      </div>
+    </div>
+    <div class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3">
+      <p style="color: #046ba8;font-size:x-large;font-weight: 700;margin-top: 7%;">Bank Details</p>
+    </div>
+    <div class="col-sm-4 col-md-4 col-4 col-lg-4 col-xl-4">
+    </div>
+
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;padding-left:6%">
+
+      <button class="btn btn-primary" style="background-color: #044063;" type="button" (click)="showSaveButton()"
+        data-toggle="modal" data-target="#bankModal">
+        <span>+ Add</span>
+      </button>
+
+    </div>
+    <!-- <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;" type="button" data-toggle="modal" data-target="#docsModal">
+          <span>Upload</span>
+        </button>
+      </div>
+    </div> -->
+  </div>
+  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <ng-container *ngFor="let bank of EmpBankDetails; let i = index">
+      <div style="width: 44%; margin-top: 2%;" class="matCard">
+        <div class="row">
+          <div class="col-md-9">
+            <p style="margin-left: 7%;font-size: medium;font-weight: 600;">
+              Bank Info</p>
+          </div>
+          <div class="col-md-1" style="margin-left: -7%;">
+            <i class="fa solid fa-pencil" (click)="editBankRow(bank)" data-toggle="modal" data-target="#bankModal"></i>
+          </div>
+          <div class="col-md-1">
+            <i style="margin-left: 5px;" class="fa solid fa-trash-can" (click)="deleteBank(bank?.id)"></i>
+          </div>
+          <div *ngIf="bank?.employee_document !== null" class="col-md-1" style="margin-left: 5px;margin-top: 2px;">
+            <i class="fa solid fa-download" (click)="downloadfiles(bank)"></i>
+          </div>
+          <!-- <div class="col-md-1">
+            <i style="margin-left: 5px;" class="fa solid fa-trash-can" (click)="downloadfiles(bank)"></i>
+          </div> -->
+          <!-- <div class="col-md-1">
+            <i class="fa solid fa-trash-can" (click)="deleteBankRecord(bank.id)" ></i>
+          </div> -->
+        </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <span style="margin-left: 13%;">Account Number</span>
+          </div>
+          <div class="col-sm-5">
+            <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.account_no}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <span style="margin-left: 13%;">Account Holder Name</span>
+          </div>
+          <div class="col-sm-5">
+            <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.account_name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <span style="margin-left: 13%;">Bank Name</span>
+          </div>
+          <div class="col-sm-5">
+            <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.bank_id?.name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <span style="margin-left: 13%;">IFSC</span>
+          </div>
+          <div class="col-sm-5">
+            <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.ifsc}}</p>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="col-sm-5">
+            <span style="margin-left: 13%;">Account Type</span>
+          </div>
+          <div class="col-sm-5">
+            <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.account_type?.text}}
+            </p>
+          </div>
+        </div> -->
+        <!-- <div class="row">
+          <p style="margin-left: 7%; color: #A9A9A9;font-size: small;font-weight: 600;">{{bank?.ifsc}}</p>
+        </div> -->
+      </div>
+
+      <div *ngIf="(i + 1) % 3 === 0" style="width: 100%;"></div>
+    </ng-container>
+  </div>
+
+
+</div>
+<div class="modal bottom-modal" id="bankModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Bank Details</b>
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButton
+          style="color: white;opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="bankForm" class="formAbove">
+          <div class="container">
+            <div class="row g-3">
+              <div class="col">
+                <form [formGroup]="account_type">
+                  <mat-form-field class="formField">
+                    <mat-label>Account Type</mat-label>
+                    <input #bankInput placeholder="Select Account Type" name="accType" matInput formControlName="text"
+                      [matAutocomplete]="bankdet" (input)="getBankTypeAutocomplete()">
+                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                    <mat-autocomplete #bankdet="matAutocomplete" [displayWith]="displayBankName">
+                      <mat-option *ngFor="let bank of BankTypeDropdownList" [value]="bank">
+                        {{ bank.text}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                </form>
+              </div>
+              <div class="col">
+                <mat-form-field class="formField" (click)="getBankIfscAutocomplete()">
+                  <mat-label>Ifsc</mat-label>
+                  <input #bankInput placeholder="Select Ifsc" name="ifscNum" matInput formControlName="ifsc"
+                    [matAutocomplete]="bankifsc" (input)="getBankIfscAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #bankifsc="matAutocomplete" [displayWith]="displayIfscName"
+                    (optionSelected)="onBankIfscSelected($event)">
+                    <mat-option *ngFor="let ifsc of BankIfscDropdownList" [value]="ifsc">
+                      {{ ifsc.ifsccode}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+              </div>
+              <div class="col">
+                <form [formGroup]="bank_id">
+                  <mat-form-field class="formField">
+                    <mat-label>Bank Name</mat-label>
+                    <input matInput name="bankName" placeholder="Bank Name" formControlName="name" readonly>
+                  </mat-form-field>
+                </form>
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <form [formGroup]="branch">
+                  <mat-form-field class="formField">
+                    <mat-label>Bank Branch</mat-label>
+                    <input matInput placeholder="Bank branch" name="branchName" formControlName="name" readonly>
+                  </mat-form-field>
+                </form>
+
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Account Number</mat-label>
+                  <input matInput name="accNum" placeholder="acc no" formControlName="account_no"
+                    (keypress)="keyPressNumbers($event)">
+                </mat-form-field>
+
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Beneficiary</mat-label>
+                  <input matInput name="beneficiary" placeholder="Enter Beneficiary Name"
+                    formControlName="account_name">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" *ngIf="addingMode || fileupdate">
+              <div class="col-sm-7">
+                <input type="file" class="borderremove" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                .dotx,.dotm,.docb,
+                .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" placeholder="Select files"
+                  multiple="true" name="images" (change)="fileChange($event)">
+              </div>
+
+            </div>
+            <div class="row" *ngIf="!fileupdate">
+              <div  class="col-sm-9" style="margin-left: 2%;">
+                <div class="cus-attachCard" *ngIf="reuploadfileArr?.file_name !== null" style="margin-left: -2%;">
+                  <!-- H -->
+                  <span>{{ reuploadfileArr?.file_name }}</span>
+                  <button mat-icon-button type="button" (click)="viewfiles(reuploadfileArr)" data-target="#viewDownload" data-toggle="modal" style="    margin-left: 37%;">
+                    <mat-icon  aria-label="View" style="font-size: x-large;color: blue;
+                    margin-top: -19px;">visibility</mat-icon>
+                   
+                  </button>
+                  <button mat-icon-button type="button" (click)="deletefile(reuploadfileArr)" >
+                   
+                     <mat-icon  aria-label="Delete" style="font-size: x-large;color: blue;
+                     margin-top: -19px;">delete</mat-icon>
+                   
+                  </button>
+                </div>
+              </div>
+              <!-- <div *ngIf="fileupdate" class="col-sm-5" style="    margin-top: 3%;">
+                <label style="margin-right: 1em;">
+                  <input type="file" class="borderremove" style="margin-left: 5%;" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                  .dotx,.dotm,.docb,
+                  .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" multiple="true" name="images"
+                    (change)="fileChanges($event)">
+                </label>
+              </div> -->
+            </div>
+
+            
+            <!-- <div class="row" *ngIf="!addingMode">
+              <div class="col-sm-7" *ngIf="!fileupdate">
+                <div class="cus-attachCard" *ngIf="reuploadfileArr?.file_name !== null">
+               
+                  <span>{{ reuploadfileArr?.file_name }}</span>
+                  <button mat-icon-button type="button" (click)="attachmentDelete(reuploadfileArr)">
+                    <mat-icon  aria-label="Delete" style="font-size: x-large;color: blue;
+                    margin-top: -19px;">delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+          
+            </div> -->
+            <!-- <div class="row" *ngIf="">
+              <div class="col-sm-7">
+                <input type="file" class="borderremove" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                .dotx,.dotm,.docb,
+                .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" placeholder="Select files"
+                  multiple="true" name="images" (change)="fileChange($event)">
+              </div>
+            </div> -->
+            <div class="row" style="margin-top: 3%;">
+              <div class="col">
+                <button class="btn btn-primary" *ngIf="addingMode" (click)="onSubmitss()"
+                  style="background-color: #044063;">Save</button>
+                <button class="btn btn-dark" *ngIf="!addingMode" (click)="onUpdatebank()"
+                  style="background-color: #044063;">Update</button>
+                <button class="btn btn-warning" style="margin-left: 74%;" (click)="addIfsc()" data-toggle="modal"
+                  data-target="#ifscmodal" *ngIf="addingMode">Add IFSC</button>
+                <button class="btn btn-warning" style="margin-left: 70%;" (click)="addIfsc()" data-toggle="modal"
+                  data-target="#ifscmodal" *ngIf="!addingMode">Add IFSC</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal bottom-modal" id="bankModals" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Bank Details</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="bankForm" class="formAbove">
+          <div class="container">
+            <div class="row g-3">
+              <div class="col">
+                <form [formGroup]="account_type">
+                  <mat-form-field class="formField">
+                    <mat-label>Account Type</mat-label>
+                    <input #bankInput placeholder="Select Bank" name="accType" matInput formControlName="text"
+                      [matAutocomplete]="bankdet" (input)="getBankTypeAutocomplete()">
+                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                    <mat-autocomplete #bankdet="matAutocomplete" [displayWith]="displayBankName">
+                      <mat-option *ngFor="let bank of BankTypeDropdownList" [value]="bank">
+                        {{ bank.text}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <span class="error-message" *ngIf="(!accType?.valid && (accType?.touched || accType?.dirty))">
+                    *Acc Type required
+                  </span>
+                </form>
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Ifsc</mat-label>
+                  <input #bankInput placeholder="Select Bank" name="ifscNum" matInput formControlName="ifsc"
+                    [matAutocomplete]="bankifsc" (input)="getBankIfscAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #bankifsc="matAutocomplete" [displayWith]="displayIfscName"
+                    (optionSelected)="onBankIfscSelected($event)">
+                    <mat-option *ngFor="let ifsc of BankIfscDropdownList" [value]="ifsc">
+                      {{ ifsc.ifsccode}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <span class="error-message" *ngIf="(!ifscNum?.valid && (ifscNum?.touched || ifscNum?.dirty))">
+                  *Ifsc required
+                </span>
+              </div>
+              <div class="col">
+                <form [formGroup]="bank_id">
+                  <mat-form-field class="formField">
+                    <mat-label>Bank Name</mat-label>
+                    <input matInput name="bankName" placeholder="AccNo" formControlName="name">
+                  </mat-form-field>
+                </form>
+                <span class="error-message" *ngIf="(!bankName?.valid && (bankName?.touched || bankName?.dirty))">
+                  *Bank Name required
+                </span>
+              </div>
+            </div>
+
+
+
+
+            <div class="row g-3">
+              <div class="col">
+                <form [formGroup]="branch">
+                  <mat-form-field class="formField">
+                    <mat-label>Bank Branch</mat-label>
+                    <input matInput placeholder="Bank branch" name="branchName" formControlName="name">
+                  </mat-form-field>
+                </form>
+                <span class="error-message" *ngIf="(!branchName?.valid && (branchName?.touched || branchName?.dirty))">
+                  *Branch Name is required
+                </span>
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Account Number</mat-label>
+                  <input matInput name="accNum" placeholder="acc no" formControlName="account_no">
+                </mat-form-field>
+                <span class="error-message" *ngIf="(!accNum?.valid && (accNum?.touched || accNum?.dirty))">
+                  *Account Number is required
+                </span>
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Beneficiary</mat-label>
+                  <input matInput name="beneficiary" placeholder="account name" formControlName="account_name">
+                </mat-form-field>
+              </div>
+            </div>
+
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="col">
+              </div>
+              <div class="col">
+                <div class="saveUpdate">
+                  <div>
+                    <button class="btn btn-primary insidePopup" id="saveEdu" *ngIf="addingMode"
+                      (click)="onSave()">Save</button>
+                    <button class="btn btn-dark insidePopup" id="saveEdu" *ngIf="!addingMode"
+                      (click)="onUpdate()">Update</button>
+                  </div>
+                  <br><br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal bottom-modal" id="ifscmodal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Add IFSC</b>
+
+        </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButtons>
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="ifscform" class="formAbove">
+          <div class="container">
+            <div class="row g-3">
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-label>Ifsc</mat-label>
+                  <input matInput formControlName="ifsc">
+                </mat-form-field>
+                <button class="btn btn-dark " id="saveEdu" style="margin-left: 8%;
+                margin-top: -3%;
+                padding: 9px;
+                border-radius: 24px;" (click)="onSubmit()">Verify</button>
+              </div>
+              <div class="col">
+                <mat-form-field class="formField" style="margin-left: 2%;">
+                  <mat-label>Branch Name</mat-label>
+                  <input #bankInputs matInput formControlName="branchname" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row g-3">
+              <mat-form-field class="formField" style="margin-left: 2%;">
+                <mat-label>Bank Name</mat-label>
+                <input #bankInputs matInput formControlName="bankname" [matAutocomplete]="bankifscs"
+                  (input)="getBankAutocomplete()">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #bankifscs="matAutocomplete" [displayWith]="displayBankNames">
+                  <mat-option *ngFor="let bank of BankDropdownList" [value]="bank">
+                    {{bank.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <div class="col">
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-primary " id="saveEdu" style="background-color: #044063;"
+                  (click)="onAdd()">Add</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal bottom-modal" id="docsModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b> Upload Bank
+            Proof </b>
+
+
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+          #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="fileUploadForm" (ngSubmit)="onSubmits()">
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+
+            </div>
+            <div class="col-md-4">
+
+              <mat-form-field class="remarks">
+                <mat-label>Remarks</mat-label>
+                <input type="text" matInput placeholder="Remarks" name="remarkInfo" formControlName="remarks" />
+              </mat-form-field>
+              <br>
+              <span class="error-message" *ngIf="(!remarkInfo?.valid && (remarkInfo?.touched || remarkInfo?.dirty))">
+                *Remarks required
+              </span>
+
+            </div>
+
+            <div class="col-md-1">
+
+              <button class="inputFile" type="submit"><mat-icon>cloud_upload</mat-icon></button>
+
+            </div>
+          </div>
+          <br>
+          <!-- <span class="error-message" *ngIf="(!docsFile?.valid && (docsFile?.touched || docsFile?.dirty))">
+        *File required
+                 </span> -->
+
+        </form>
+
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="viewDownload" role="dialog" aria-labelledby="bankModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;">
+          View File
+        </h5>
+        <!-- <mat-icon  style="margin-left: 7%;
+        font-size: 25px; cursor: pointer;" (click)="onDownload()">cloud_download</mat-icon> -->
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton
+          style="color: white; opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12 col-sm-12" fxLayoutAlign="space-between">
+            <pdf-viewer *ngIf="pdfshow" [src]="filesrc" [original-size]="false" [render-text]='false'
+              [show-borders]="true" [fit-to-page]="true" [show-all]="true" style="display: block; height: 500px;"
+              [fit-to-page]="true">
+            </pdf-viewer>
+            <br>
+            <img *ngIf="imgshow" src="{{filesrc}}" class="img-responsive"
+              style="display: block;border-width: 2px;border-style: solid;width: 100%;" />
+          </div>
+
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>

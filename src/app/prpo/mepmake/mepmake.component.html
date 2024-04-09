@@ -1,0 +1,328 @@
+<div>
+    <form [formGroup]="MEPmakerForm">
+        <div style="margin-left: 3%;">
+            <h2>
+                Project Component Approval (PCA Maker)
+            </h2>
+            
+
+            <span *ngIf="iscapex">BPA Total Amount:{{amoun| amountPipeCustom}} &nbsp;&nbsp;&nbsp;&nbsp; Approved Amount:{{mepappr| amountPipeCustom}}
+                &nbsp;&nbsp;&nbsp;Pending Approval Amount:{{pendamt| amountPipeCustom}}&nbsp;&nbsp;&nbsp; Balance Amount:{{balanceAmount| amountPipeCustom}}</span>
+            <span *ngIf="isopex">BPA Total Amount:{{amoun| amountPipeCustom}} &nbsp;&nbsp;&nbsp;&nbsp; Approved Amount:{{mepappr| amountPipeCustom}}
+                &nbsp;&nbsp;&nbsp;Pending Approval Amount:{{pendamt| amountPipeCustom}}&nbsp;&nbsp;&nbsp; Balance Amount:{{balanceAmount| amountPipeCustom}}</span>
+
+
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>PCA Number</mat-label>
+                            <input matInput placeholder="PCA Number" formControlName="no" readonly>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>PCA Name</mat-label>
+                            <input matInput placeholder="PCA Name" (keypress)="only_numalpha($event)" autocomplete="off"
+                                formControlName="name" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getparnoFK()">
+                            <mat-label>Select BPA Number </mat-label>
+                            <input #parnoInput placeholder="Select BPA Number" matInput formControlName="parno"
+                                [matAutocomplete]="parno" (keypress)="only_numalpha($event)">
+                            <mat-autocomplete #parno="matAutocomplete" [displayWith]="displayFnparno.bind(this)"
+                                (opened)="autocompleteparnoScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let parno of parnoList" (click)="meptotalget()" 
+                                     [value]="parno.no"   title="{{parno.no}}--{{parno.desc}}"        >
+                                        {{parno.no}}--{{parno.desc}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>Choose Expense</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let type of expensetype" (click)="meptotalget()"  [value]="type.text">
+                                    {{type.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label> PCA Amount</mat-label>
+                            <input matInput placeholder="PCA Amount" type="number" (keypress)="omit_hyphen($event)"
+                                min=1 (keypress)="omit_special_num($event)" autocomplete="off" formControlName="amount"
+                                required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width:175px; margin-left: 50px;">
+                            <mat-label>Choose Start Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" placeholder="Start Date"
+                                formControlName="startdate" required>
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width:175px; margin-left: 50px;">
+                            <mat-label>Choose End Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker2" placeholder="End Date"
+                                formControlName="enddate" required>
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>Fin Year</mat-label>
+                            <mat-select formControlName="finyear">
+                                <mat-option *ngFor="let year of FinancialYearList" [value]="year.text">
+                                    {{year.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getbranchFK()">
+                            <mat-label>Select Branch Code</mat-label>
+                            <input #branchInput placeholder="Select Branch Code" matInput formControlName="branch_id"
+                                [matAutocomplete]="branch" (keypress)="only_numalpha($event)">
+                            <mat-error *ngIf="MEPmakerForm.controls.branch_id.errors?.incorrectValue ">
+                                {{MEPmakerForm.controls.branch_id.errors?.incorrectValue}}
+                            </mat-error>
+                            <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch.bind(this)"
+                                (opened)="autocompletebranchScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                        {{branch.code}}-{{branch.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    
+                    <td>
+
+                        <div style="margin-left: 50px;">
+                            <mat-label> Is Budgeted</mat-label>
+                            <mat-radio-group formControlName="budgeted" [disabled]="isBudgetedReadonly">
+                                <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                    style="margin-left: 10px;">
+                                    {{n.display}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getraisorFK()">
+                            <mat-label>Select Raiser Name</mat-label>
+                            <input #raisorInput placeholder="Select Raiser" matInput formControlName="raisor_id"
+                                [matAutocomplete]="raisor" (keypress)="only_numalpha($event)">
+                            <mat-error *ngIf="MEPmakerForm.controls.raisor_id.errors?.incorrectValue ">
+                                {{MEPmakerForm.controls.raisor_id.errors?.incorrectValue}}
+                            </mat-error>
+                            <mat-autocomplete #raisor="matAutocomplete" [displayWith]="displayFnraisor.bind(this)"
+                                (opened)="autocompleteraisorScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let emp of raisorList" [value]="emp">{{emp.full_name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getprojectownerFK()">
+                            <mat-label>Select Project Owner </mat-label>
+                            <input #projectownerInput placeholder="Select Project Owner" matInput
+                                formControlName="projectowner_id" [matAutocomplete]="projectowner"
+                                (keypress)="only_numalpha($event)">
+                            <mat-error *ngIf="MEPmakerForm.controls.projectowner_id.errors?.incorrectValue ">
+                                {{MEPmakerForm.controls.projectowner_id.errors?.incorrectValue}}
+                            </mat-error>
+                            <mat-autocomplete #projectowner="matAutocomplete"
+                                [displayWith]="displayFnprojectowner.bind(this)"
+                                (opened)="autocompleteprojectownerScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let emp of projectownerList" [value]="emp">{{emp.full_name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getrequestforFK()">
+                            <mat-label>Select Request For</mat-label>
+                            <input #rforInput placeholder="Search Request For" matInput formControlName="requestfor"
+                                [matAutocomplete]="rfor" (keypress)="only_numalpha($event)">
+                            <mat-autocomplete #rfor="matAutocomplete" [displayWith]="displayFnrfor.bind(this)"
+                                (opened)="autocompleterforScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let rfor of requestforList" [value]="rfor.name">{{rfor.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getbudgetownerFK()">
+                            <mat-label>Select Budget Owner </mat-label>
+                            <input #budgetownerInput placeholder="Select Budget Owner" matInput
+                                formControlName="budgetowner_id" [matAutocomplete]="budgetowner"
+                                (keypress)="only_numalpha($event)">
+                            <mat-error *ngIf="MEPmakerForm.controls.budgetowner_id.errors?.incorrectValue ">
+                                {{MEPmakerForm.controls.budgetowner_id.errors?.incorrectValue}}
+                            </mat-error>
+                            <mat-autocomplete #budgetowner="matAutocomplete"
+                                [displayWith]="displayFnbudgetowner.bind(this)"
+                                (opened)="autocompletebudgetownerScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let emp of budgetownerList" [value]="emp">{{emp.full_name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>Justification</mat-label>
+                            <input matInput placeholder="Justification" (keypress)="omit_special_char($event)"
+                                autocomplete="off" formControlName="justification" required>
+                        </mat-form-field>
+                    </td>
+                    <td> <span class="material-icons" type="button" data-toggle="modal"
+                            data-target=".bd-example-modal-xl">description</span></td>
+
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">
+                            Note Pad
+                        </h2>
+                    </div>
+                    <br>
+                    <div style="margin-left: 50px;width:90%;height: 70%;">
+                        
+                        <div>
+                            
+                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                (mediaDelete)="onDelete($event)" (summernoteInit)="summernoteInit($event)"
+                                formControlName="content">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                            class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 style="margin-left: 4%;">PCA Details</h2>
+        <div> <button type="button" style="margin-left: 1000px; border-radius:40px;"
+            class="btn btn-outline-success" (click)="addSection()">
+            <span class="fa fa-plus"></span></button></div>
+        <div class="table-responsive" style="margin-top: 1%;width: 90%;margin-left: 50px;">
+            
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header>
+                        <th>S.No</th>
+                        <th>Commodity</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <ng-container formArrayName="mepdetails"
+                    *ngFor="let section of getSections(MEPmakerForm); let i = index">
+                    <tr [formGroupName]="i">
+
+                        <td>{{i+1}}</td>
+                        <td>
+                            <mat-form-field style="width: 250px;" (click)="getcommodityFK()">
+                            <mat-label>Commodity Name</mat-label>
+                            <input #comInput placeholder="Select Commodity" matInput formControlName="productcategory_id"
+                                [matAutocomplete]="com">
+                            <mat-autocomplete #com="matAutocomplete" [displayWith]="displayFncom" (opened)="autocompletecomScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let com of commodityList" [value]="com">{{com.name}}
+                                    </mat-option>
+                                   
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+
+
+                       
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Description" formControlName="desc" autocomplete="off"
+                                    required>
+                            </mat-form-field>
+                        </td>
+                       
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Amount" type="number" name="totalamt"
+                                    formControlName="totalamt" autocomplete="off" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <span (click)="removeSection(i)" class="material-icons">delete</span>
+                        </td>
+
+                    </tr>
+                </ng-container>
+                <tr>
+                    <th class="totaldisplay" colspan="3">Total Amount:</th>
+                    <td colspan="2">{{sum  | amountPipeCustom }}</td>
+                </tr>
+            </table>
+        </div>
+        <div style="margin: 50px 0 100px 50px;">
+            <button type="submit" style="border-radius: 40px;margin-left: 10px;" [disabled]="clicked"
+                class="btn btn-outline-primary" (click)="mepmakerSubmit()">Submit</button>
+            <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()">Cancel</button>
+        </div>
+    </form>
+</div>
+<!-- <pre>
+    {{ MEPmakerForm.value | json }}
+</pre> -->
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

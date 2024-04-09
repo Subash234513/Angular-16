@@ -1,0 +1,951 @@
+<div class="main" *ngIf="normalView">
+    <div class="headers">
+        <div class="row" style="margin-bottom: -2%;">
+            <div class="col-sm-7">
+                <h2 id="fonts"></h2>
+            </div>
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-outline-primary mb-3" id="btnss" (click)="viewdetails()" >Advance Detail Summary</button>
+            </div>
+           
+            <div class="col-sm-2" id="btnalign" >
+                <button type="button" class="btn btn-warning mb-3" id="btnss" data-toggle="modal"
+                    data-target="#requestModal">Request Advance</button>
+            </div>
+        </div>
+        <hr>
+        <form [formGroup]="searchForm">
+            <div class="row">
+                <div class="col-sm-3" *ngIf="adminUser || checkUser">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label style="margin-left: 7%;
+                    font-size: 17px;
+                    margin-top: -9px;
+                    font-family: 'Nunito';">Employee Search</mat-label>
+                        <input matInput formControlName="empName">
+                    </mat-form-field>
+
+                </div>
+                <div class="col-sm-3" *ngIf="adminUser || checkUser">
+                    <mat-form-field style=" width: 100%;">
+                        <mat-label style="margin-left: 7%;
+                        font-size: 17px;
+                        margin-top: -9px;
+                        font-family: 'Nunito';">Advance</mat-label>
+                        <mat-select formControlName="summary" required [(ngModel)]="selectedValue">
+                        
+                            <mat-option  *ngFor="let advance of droplist"  (focusout)="myqueue(advance)" [value]="advance.index">
+                                {{advance.name}}
+                            </mat-option>
+                            
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="adminUser || checkUser">
+                    <mat-form-field style="width: 100%; ">
+                        <mat-label style="margin-left: 7%;
+                        font-size: 17px;
+                        margin-top: -9px;
+                        font-family: 'Nunito';">Advance Status</mat-label>
+                        <mat-select formControlName="advancesummary" required>
+                           <mat-option *ngFor="let summary of summarylist" [value]="summary.id">
+                             {{summary.text}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+<!-- <div  style="display: flex;"> -->
+                <div class="col-sm-1" *ngIf="adminUser || checkUser">
+                    <button mat-stroked-button  type="button" (click)="getEmployee()" aria-label="Search" style="margin-top: 6px;"><mat-icon>search</mat-icon></button>
+                </div>
+                <div class="col-sm-1" *ngIf="adminUser || checkUser">
+                    <button mat-stroked-button type="button"(click)="clearform()"aria-label="Search" style=" margin-top: 6px;" >clear</button>
+                </div>
+            </div>
+          
+        
+            
+        </form>
+
+
+    </div>
+
+    <div class="summaryTbl"   *ngIf="isshowtable || normalUser">
+        <div class="table-responsive">
+            <table class="table table-bordered text-align-center" fixed-header style="max-width: 98%;margin-top: 10px;" >
+                <thead class="table_header">
+                    <tr class="summaryTbl">
+                        <th class="AlignCenter">S.no</th>
+                        <th class="AlignCenter">Code</th>
+                        <th class="AlignCenter">Employee Name</th>
+                        <th class="AlignCenter">From Date</th>
+                        <th class="AlignCenter">To Date</th>
+                        <td class="AlignCenter">
+                            <span *ngIf="adminUser" style="font-weight: bold;">Approval</span>
+                            <span *ngIf="normalUser" style="font-weight: bold;">Advance Status</span>
+                            <span *ngIf="checkUser" style="font-weight: bold;">Approval</span>
+                        </td>
+                        <th class="AlignCenter">History</th>
+                        <th class="AlignCenter">Payment History</th>
+                        <th class="AlignCenter"  *ngIf="normalUser||showedit">Edit</th>
+                        <th class="AlignCenter" *ngIf="normalUser||showedit">Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sum of advanceSummary; index as i" class="summaryTbl">
+                        <td class="AlignCenter">{{(pagination.index-1)*limit+i+1}}</td>
+                        <td class="AlignCenter"> {{ (sum?.employee_data?.employee_no != "") ? sum?.employee_data?.employee_no : "-" }}
+                        </td>
+                        <td class="summarytextstyle AlignCenter" >{{sum?.employee_data?.name | uppercase}}</td>
+                        <td class="AlignCenter">{{sum?.from_date | date:'MMM/yyyy'}}</td>
+                        <td class="AlignCenter">{{sum?.to_date | date:'MMM/yyyy'}}</td>
+
+                        <td *ngIf="adminUser" class="AlignCenter">
+                           <span *ngIf="selectedValue==='True'">
+                            <span *ngIf="(  sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'FORCE_CLOSED'  && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'MOVE TO CHECKER'  && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'DRAFT'  )  || sum?.advance_status?.name === null || sum?.advance_status?.name === ''" data-toggle="modal" class="text-primary draft"  (click)="ApproveViews(sum)" data-target="#approveView">{{ sum?.advance_status?.name }}</span>
+                            <span *ngIf="sum?.employee_data?.employee_no !== EmployeeCode">
+
+                                <span
+                                *ngIf="(sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'REJECT'&& sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'FORCE_CLOSED'   && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'MOVE TO CHECKER' && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'DRAFT') || sum?.advance_status?.name === null || sum?.advance_status?.name === ''">
+                                    <button mat-icon-button class="iconbutton" color="green" mat-button
+                                        data-toggle="modal" (click)="ApproveViews(sum)" data-target="#approveView">
+                                        <span class="material-icons" style="color: green;">check_circle_outline</span>
+                                        <span class="material-icons" style="color: red;">close</span>
+                                    </button>
+                                </span>
+                                <span
+                                *ngIf="sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'REJECT' || sum?.advance_status?.name === 'PROCESSING' || sum?.advance_status?.name === 'MOVE TO CHECKER' || sum?.advance_status?.name === 'MOVE OF APPROVER' || sum?.advance_status?.name === 'PAID' || sum?.advance_status?.name === 'OPEN' || sum?.advance_status?.name === 'CLOSED' || sum?.advance_status?.name === 'FORCE_CLOSED' || sum?.advance_status?.name === 'DRAFT' ">{{
+                                sum?.advance_status?.name }}</span>
+                        
+                                <span
+                                    *ngIf="sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'REJECT' ">
+                                </span>
+                                <span
+                                *ngIf="sum?.advance_status?.name === 'DRAFT'">{{
+                                sum?.advance_status?.name }}</span>
+                            </span>
+                           </span> 
+                           <span *ngIf="selectedValue==='False'">
+                                <span *ngIf="(sum?.advance_status?.name !== 'MOVE TO CHECKER' && sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'FORCE_CLOSED') || sum?.advance_status?.name === null || sum?.advance_status?.name === ''" data-toggle="modal" class="text-primary draft"  (click)="ApproveViews(sum)" data-target="#approveView">{{ sum?.advance_status?.name }}</span>
+                                <span
+                                *ngIf="sum?.advance_status?.name === 'MOVE TO CHECKER' || sum?.advance_status?.name === 'REJECT' || sum?.advance_status?.name === 'PROCESSING' || sum?.advance_status?.name === 'MOVE TO APPROVER' || sum?.advance_status?.name === 'APPROVED'  || sum?.advance_status?.name === 'PAID'  || sum?.advance_status?.name === 'OPEN'  || sum?.advance_status?.name === 'CLOSED'  || sum?.advance_status?.name === 'FORCE_CLOSED'">{{
+                                    sum?.advance_status?.name }}
+                                </span>
+                           </span>
+                           
+                        </td>
+                        <td *ngIf="checkUser" class="AlignCenter ">
+                            <span *ngIf="selectedValue==='True'">
+                                <span *ngIf="(sum?.advance_status?.name !== 'DRAFT' &&  sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'DRAFT'  && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'OPEN'  && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'FORCE_CLOSED' && sum?.advance_status?.name !== 'DRAFT'  ) || sum?.advance_status?.name === null || sum?.advance_status?.name === ''" data-toggle="modal" class="text-primary draft"  (click)="ApproveViews(sum)" data-target="#approveView">{{ sum?.advance_status?.name }}</span>
+                                <span *ngIf="sum?.employee_data?.employee_no !== EmployeeCode && sum?.advance_status?.name !== 'DRAFT'" >
+                                    <span
+                                        *ngIf="(sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'MOVE TO CHECKER' && sum?.advance_status?.name !== 'APPROVED'  && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'FORCE_CLOSED'   ) || sum?.advance_status?.name === null || sum?.advance_status?.name === '' ">
+                                        <button mat-icon-button class="iconbutton" color="green" mat-button
+                                            data-toggle="modal" (click)="ApproveViews(sum)" data-target="#approveView">
+                                            <span class="material-icons" style="color: green;">check_circle_outline</span>
+                                            <span class="material-icons" style="color: red;">close</span>
+                                        </button>
+                                    </span>
+                                    <span
+                                        *ngIf="sum?.advance_status?.name === 'DRAFT' || sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'REJECT' || sum?.advance_status?.name === 'PROCESSING' || sum?.advance_status?.name === 'MOVE TO APPROVER' ||  sum?.advance_status?.name === 'DRAFT' ||  sum?.advance_status?.name === 'PAID'||  sum?.advance_status?.name === 'OPEN' ||  sum?.advance_status?.name === 'CLOSED'||  sum?.advance_status?.name === 'FORCE_CLOSED'  && idEmployee == approveDetails?.created_by ">{{
+                                        sum?.advance_status?.name }}</span>
+                                </span>
+                                <span
+                                        *ngIf="sum?.advance_status?.name === 'DRAFT'">{{
+                                        sum?.advance_status?.name }}</span>
+                                <span *ngIf="sum?.employee_data?.employee_no === EmployeeCode">                        
+                                </span>
+                            </span>
+                            <span *ngIf="selectedValue==='False'">
+                                <span *ngIf="(sum?.advance_status?.name !== 'MOVE TO CHECKER' && sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'FORCE_CLOSED'   ) || sum?.advance_status?.name === null || sum?.advance_status?.name === ''" data-toggle="modal" class="text-primary draft"  (click)="ApproveViews(sum)" data-target="#approveView">{{ sum?.advance_status?.name }}</span>
+                                <span
+                                *ngIf="sum?.advance_status?.name === 'MOVE TO CHECKER' || sum?.advance_status?.name === 'REJECT' || sum?.advance_status?.name === 'PROCESSING' || sum?.advance_status?.name === 'MOVE TO APPROVER' || sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'PAID' || sum?.advance_status?.name === 'OPEN' || sum?.advance_status?.name === 'CLOSED' || sum?.advance_status?.name === 'FORCE_CLOSED'">{{
+                                    sum?.advance_status?.name }}
+                                </span>
+                            </span>
+                           
+                            
+                        </td>
+                        
+                        <td *ngIf="normalUser" class="AlignCenter">
+                            <!-- <span *ngIf="(sum?.advance_status?.name !== 'MOVE TO CHECKER' && sum?.advance_status?.name !== 'MOVE TO APPROVER' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'PROCESSING' && sum?.advance_status?.name !== 'APPROVED' && sum?.advance_status?.name !== 'REJECT' && sum?.advance_status?.name !== 'OPEN' && sum?.advance_status?.name !== 'PAID' && sum?.advance_status?.name !== 'CLOSED' && sum?.advance_status?.name !== 'FORCE_CLOSED') || sum?.advance_status?.name === null || sum?.advance_status?.name === ''" data-toggle="modal" class="text-primary draft"  (click)="ApproveViews(sum)" data-target="#approveView">{{ sum?.advance_status?.name }}</span> -->
+                            <span
+                          >{{
+                                sum?.advance_status?.name }}
+                        </span>
+                        </td>
+
+                        <td class="AlignCenter">
+                            <button mat-icon-button matTooltip="history" class="iconbutton" color="primary" mat-button
+                            data-toggle="modal" data-target="#HistoryModal">
+                                <span class="material-icons" style="color: gray;" (click)="gettranhistory(sum)">
+                                    description
+                                </span>
+                            </button>
+                        </td>
+                        <td class="AlignCenter">
+                            <button mat-icon-button matTooltip="history" class="iconbutton" color="primary" mat-button
+                                data-toggle="modal" data-target="#payHistoryModal">
+                                <span class="material-icons" style="color: gray;" (click)="getpayhistory(sum)">
+                                    view_list
+                                </span>
+                            </button>
+                        </td>
+                        <td *ngIf="normalUser || showedit" class="AlignCenter">
+                            <span
+                                *ngIf="(sum?.advance_status?.name == 'DRAFT' )" >
+                                <mat-icon (click)="editAdvance(sum)" data-toggle="modal"
+                                    data-target="#editModal">edit</mat-icon>
+                            </span>
+                            <span
+                                *ngIf="sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'REJECT'">
+                            </span>
+
+
+
+
+                        </td>
+                        <td *ngIf=" normalUser || showedit" class="AlignCenter">
+                            <span
+                                *ngIf="(sum?.advance_status?.name == 'DRAFT' )">
+                                <mat-icon (click)="deleteAdvance(sum.id)">delete</mat-icon>
+                            </span>
+                            <span
+                                *ngIf="sum?.advance_status?.name === 'APPROVED' || sum?.advance_status?.name === 'REJECT'">
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+                <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                    color="primary">
+                    <mat-icon class="customIconSize">arrow_back</mat-icon>
+                </button>
+                {{pagination.index}}
+                <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+                    <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                </button>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+
+<div class="main" *ngIf="detailsView">
+    <div class="headers">
+        <div class="row">
+            <div class="col-md-8">
+               <div> <span (click)="backtoAdvances()" class="material-icons alignvertical pointer">arrow_back</span>
+                <span style="    margin-left: 1%;font-size: large;">Advance Summary</span></div>
+            </div>
+            <div class="col-md-2">
+                <button  color="primary" class="btn btn-primary" (click)="paidAdvance()"
+                >
+                   Advance Paid 
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" mat-fab class="AddButton"
+                  (click)="uploadAdvance()" style="    margin-top: 0%;
+                  margin-bottom: 3%;">
+                  <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <form [formGroup]="searchForms">
+                <div class="row">
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%;margin-left: 10%;">
+                            <mat-label>Employee Search</mat-label>
+                            <input matInput formControlName="empName">
+                        </mat-form-field>
+    
+                    </div>
+                  
+                    <div class="col-md-3">
+                        <mat-form-field style="width: 100%; margin-left: 25%;">
+                            <mat-label >Advance Status</mat-label>
+                            <mat-select formControlName="advancesummary" required>
+                               <mat-option *ngFor="let summary of summarylist" [value]="summary.id">
+                                 {{summary.text}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                      <div class="col-sm-1" style="margin-left: 7%;">
+                        <button mat-stroked-button  type="button" (click)="getEmployeeAdvances()" aria-label="Search" style="margin-top: 6px;"><mat-icon>search</mat-icon></button>
+                    </div>
+                    <div class="col-sm-1" >
+                        <button mat-stroked-button type="button"(click)="clearform()"aria-label="Search" style=" margin-top: 6px;" >clear</button>
+                    </div>
+                </div>
+              
+            
+                
+            </form>
+        </div>
+        
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered text-align-center" fixed-header style="max-width: 98%;margin-top: 10px;" >
+            <colgroup>
+                <col span="5" class="employeeDetails">
+                <col span="8" class="advanceDetails">
+            </colgroup>
+            <thead class="table_header">
+                <tr class="summaryTbl">
+                    <th class="AlignCenter" colspan="5">Employee Details</th>
+                    <th class="AlignCenter" colspan="8">Advance Details</th>
+                </tr>
+     
+                <tr class="summaryTbl">
+                    <th class="AlignCenter">Select</th>
+                    <th class="AlignCenter">Name</th>
+                    <th class="AlignCenter">Code</th>
+                    <th class="AlignCenter">Dept</th>
+                    <th class="AlignCenter">DOJ</th>
+
+                    <th class="AlignCenter">Request Date</th>
+                    <th class="AlignCenter">Request Amount</th>
+                    <th class="AlignCenter">Approved By</th>
+                    <th class="AlignCenter" >Paid Date</th>
+                    <th class="AlignCenter">EMI Paid</th>
+                    <th class="AlignCenter">EMI Amount</th>
+                    <th class="AlignCenter">EMI Balance</th>
+                    <th class="AlignCenter">Status</th>
+                    <th class="AlignCenter">Action</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sum of admindata; index as i" class="summaryTbl">
+                    <td>
+                        <input *ngIf="sum?.advance_status?.name === 'APPROVED'" type="checkbox" 
+                        (change)="toggleSelection($event, sum.id)" >
+                    </td>
+                    <td>{{sum?.employee_data?.name}}</td>
+                    <td>{{sum?.employee_data?.employee_no}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{sum?.request_date}}</td>
+                    <td>{{sum?.request_amount}}</td>
+                    <td>{{sum?.approved_by}}</td>
+                    <td>{{sum?.paid_date}}</td>
+                    <td>{{sum?.emi_paid}}</td>
+                    <td>{{sum?.emi_amount}}</td>
+                    <td>{{sum?.emi_balance}}</td>
+                    <td>{{sum?.advance_status?.name}}</td>
+                    <td  *ngIf="sum?.advance_status?.name === 'OPEN' || sum?.advance_status?.name === 'PAID'" style="    width: 5%;">
+                      
+                        <mat-icon style="    color: #5356FF;
+                        margin-left: 19px;" (click)="forceUpdate(sum)" data-toggle="modal" data-target="#forceUpdating">send</mat-icon>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+            <button (click)="prevpages()" mat-icon-button [disabled]="paginations.has_previous === false"
+                color="primary">
+                <mat-icon class="customIconSize">arrow_back</mat-icon>
+            </button>
+            {{paginations.index}}
+            <button (click)="nextpages()" mat-icon-button [disabled]="paginations.has_next === false" color="primary">
+                <mat-icon class="customIconSize">arrow_forward</mat-icon>
+            </button>
+        </div>
+        <br>
+        <br>
+    </div>
+
+</div>
+
+<div class="main" *ngIf="showAdvanceUpload">
+    <div class="row"> 
+        <div class="col-md-8">
+            <div> <span (click)="backtoAdvanceDetails()" class="material-icons alignvertical pointer">arrow_back</span>
+                <span style="    margin-left: 1%;font-size: large;">Advance Upload</span></div>
+            <!-- <h2>Advance Upload</h2> -->
+        </div>
+    </div>
+
+    <div class="card cards">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+            
+            </div>
+          </form>
+        </div>
+      </div>
+
+</div>
+
+<div class="modal fade  come-from-modal right" id="requestModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Request Advance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="AddClose()"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body pr-0">
+                <div [formGroup]="advRequest">
+                <div  style="height:300px;" class="overflow">
+                    <div class="row" style="margin-bottom: 3%;">
+                        <div class="col-md-4" id="fonts">
+                            <mat-label>Employee Name</mat-label>
+                        </div>
+                        <div class="col-md-6" id="fonts" style="font-weight: bold;
+                        font-size: larger;">
+                            {{EmployeeFullName | uppercase}}
+                        </div>
+                    </div>
+                     
+
+                      <form (ngSubmit)="calculateEMI()" #emiForm="ngForm"> 
+                        <div class="row">
+                            <div class="col-md-3" id="fonts">
+                                <mat-label>Requested Amount</mat-label>
+                            </div>
+    
+                            <div class="col-md-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput name="principal"  [(ngModel)]="principal"  type="number">      
+                             </mat-form-field>
+                            </div>
+                        </div>
+                             <section>
+                              <label>EMI</label>
+                                <div style="margin-left: 26%; margin-top: -9%;">
+                                 <mat-slider thumbLabel min="0" style="width:100%" max="12" step="1" showTickMarks discrete
+                                  type="text" id="loanTenure" name="loanTenure" [(ngModel)]="loanTenure" required aria-label="units">
+                                  </mat-slider>
+                                </div>
+                              </section>
+                            <button type="submit"  class="btn btn-outline-primary" style="margin-left: 340px;margin-bottom:10px">Calculate EMI</button> 
+                       </form> 
+    
+                    <div class="row">
+                        <div class="col-md-3" id="fonts">
+                            <mat-label>Reason</mat-label>
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput formControlName="reason">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                       <div class="summaryTbl" style="margin-top: -1%; width: 479px; margin-left: 3%;">
+                            <div class="table-responsive" style="height:250px">
+                              <table *ngIf="emiDetails.length > 0" class="table" >
+                                <thead>
+                                  <tr>
+                                    <th>Months</th>
+                                    <th>EMI</th>
+                                  </tr>
+                                </thead>
+                                <tbody> 
+                                 <tr *ngFor="let detail of emiDetails">
+                                     <td>{{ detail.loanTenure  }}  {{detail.year}}</td>
+                                     <td>{{ detail.emi }}</td>
+                                  </tr>
+                                </tbody>
+                               </table>
+                            </div>
+                          </div>  
+                    </div>
+                   
+                </div>
+                <div class="" style="margin-right:16px">
+                    <mat-form-field style="width: 100%;" (click)="searchfunctionchecker('','checker create')" >
+                        <mat-label>Select checker</mat-label>
+                        <input type="text" matInput formControlName="to_employee_id" [matAutocomplete]="auto"
+                            placeholder="Enter Employee Name" required>
+                        <mat-autocomplete #auto="matAutocomplete" >
+                            <mat-option *ngFor="let employee of functionalHead" [value]="employee.full_name" (focusout)="onoptionchecked(employee)">
+                                {{ employee.full_name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+           
+                <div style="margin-right:16px;">
+                    <mat-form-field style="width: 100%; ">
+                        <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks" required>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+            <div class="modal-footer">
+                <button type="button"  class="btn btn-default" data-dismiss="modal" id="fonts" (click)="AddClose()">Close</button>
+                <button type="button" class="btn yellow" data-dismiss="modal" (click)="Draft()" [disabled]="!advRequest.valid || !btnAddSubmit">Draft</button>
+                <button type="button"  class="btn btn-primary" id="fonts" data-dismiss="modal" (click)="addAdvance()" [disabled]="!advRequest.valid || !btnAddSubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade  come-from-modal right" id="approveView" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Advance Details</h4>
+                <button type="button" id="closebtn" class="close" data-dismiss="modal" aria-label="Close" #closebtn><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <div [formGroup]="advanceApprove">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-card style="border: 1px solid grey;">
+                                <mat-card-content>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <mat-icon style="color: grey; vertical-align: middle;"> person </mat-icon>
+                                            <span class="employee-name" id="fonts"
+                                                style="font-weight: bold; vertical-align: middle;">{{approveDetails?.name
+                                                | uppercase}}</span>
+                                        </div>
+
+                                        <div class="col-sm-6">               
+                                            <span id="fonts" style="background-color: #FFD6A5;
+                                            /* padding: 2%; */
+                                            padding-left: 10%;
+                                            padding-right: 10%;
+                                            border-radius: 10px;"> {{approveDetails?.advance_status?.name}} </span>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-top: 2%;">
+                        <div class="col-md-6" id="fonts">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="    margin-top: -5%;color: grey;">Reason</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.reason}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p id="fonts" style="padding-left: 3%;font-weight: 500;">To be Recovered</p>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="padding-left: 1%;margin-top: -5%;color: grey;">From</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="padding-left: 1%;margin-top: -5%;color: grey;">To</p>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-top: 2%;">
+                        <div class="col-md-6" id="fonts">
+                            <p id="fonts" style="font-size: large;margin-top: -5%;">{{approveDetails?.from_date |
+                                date:'MMM/yyyy'}}</p>
+                        </div>
+
+                        <div class="col-md-6" id="fonts">
+                            <p id="fonts" style="font-size: large;margin-top: -5%;">{{approveDetails?.to_date | date :
+                                'MMM/yyyy'}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="    margin-top: -5%;color: grey;">EMI</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.emi_amount |
+                                currency : 'INR'}}</p>
+                        </div>
+         
+                    </div>
+                    <hr style="background-color:  #673ab7;
+                    height: 1px;
+                    margin-top: -6px;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="margin-top: -5%;color: grey;">Gross Pay</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.gross_pay}} </p>
+                        </div>
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="padding-left: 1%;margin-top: -5%;color: grey;">Bal in old Advances</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.balance_oldadvance}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="    margin-top: -5%;color: grey;">EMI of Old Advance</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.emi_oldadvance}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="padding-left: 1%;margin-top: -5%;color: grey;">Total Deductions</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.total_deductions}} </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="    margin-top: -5%;color: grey;">Take Home</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.take_home}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <span
+                                style="width: 20px;border-top: solid orange;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <p id="fonts" style="padding-left: 1%;margin-top: -5%;color: grey;">Std Take Home</p>
+                                <p id="fonts" style="font-size: large;margin-top: -3%;">{{approveDetails?.take_home}}</p>
+                        </div>
+                    </div>
+
+                    <div *ngIf=" approveDetails?.advance_status?.name != 'DRAFT' &&  idEmployee != approveDetails?.created_by && checkUser ||  approveDetails?.advance_status?.name != 'DRAFT' &&  idEmployee == approveDetails?.created_by && adminUser ">
+                        
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%;" (click)="searchFunctionalHeads('', 'Approver')">
+                                <mat-label>Select Approver</mat-label>
+                                <input type="text" matInput [formControl]="aprovalemployee" [matAutocomplete]="auto"
+                                    placeholder="Enter Employee Name" required>
+                                <mat-autocomplete #auto="matAutocomplete" >
+                                    <mat-option *ngFor="let employee of functionalHead" [value]="employee.full_name" (focusout)="onOptionSelected(employee)">
+                                        {{ employee.full_name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div *ngIf="normalUser && approveDetails?.advance_status?.name !== 'DRAFT' &&  idEmployee == approveDetails?.created_by &&  adminUser">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%;" (click)="searchFunctionalHead('','checker')">
+                                <mat-label>Select checker</mat-label>
+                                <input type="text" matInput [formControl]="employeeName" [matAutocomplete]="auto"
+                                    placeholder="Enter Employee Name">
+                                <mat-autocomplete #auto="matAutocomplete" >
+                                    <mat-option *ngFor="let employee of functionalHead" [value]="employee.full_name" (focusout)="onOptionSelect(employee)">
+                                        {{ employee.full_name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+    
+                    <div *ngIf="checkUser   &&  approveDetails?.advance_status?.name !== 'DRAFT' &&  idEmployee == approveDetails?.created_by"  class="checkdraft">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%;" (click)="searchfunctionchecker('','checker create')">
+                                <mat-label>Select checker</mat-label>
+                                <input type="text" matInput [formControl]="checkerapproval" [matAutocomplete]="auto"
+                                    placeholder="Enter Employee Name">
+                                <mat-autocomplete #auto="matAutocomplete" >
+                                    <mat-option *ngFor="let employee of functionalHead" [value]="employee.full_name" (focusout)="onoptionchecker(employee)">
+                                        {{ employee.full_name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div *ngIf="checkUser && approveDetails?.advance_status?.name !== 'DRAFT' || adminUser && approveDetails?.advance_status?.name !== 'DRAFT' || normalUser && approveDetails?.advance_status?.name !== 'DRAFT'">
+                        <div class="col-md-12">
+                            <mat-form-field style="width: 100%;">
+                                    <mat-label>Remarks</mat-label>
+                                <input matInput formControlName="remark" required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- status based button changes -->
+            <div class="modal-footer" *ngIf="approveDetails?.advance_status?.name!=='DRAFT'"  >
+                <button *ngIf="approveDetails?.advance_status?.name!=='DRAFT'"  type="button" class="btn btn-default" data-dismiss="modal" id="fonts"
+                    style="margin-right: 30%;" data-dismiss="modal">Cancel</button>
+                    <!-- <span *ngIf="sum?.advance_status?.name != null">
+                    </span> -->
+                <button *ngIf="checkUser || adminUser && approveDetails?.advance_status?.name!=='DRAFT'" type="button" class="btn btn-outline-danger checkdraft" id="fonts" 
+                
+                    (click)="rejectAdvances()" data-dismiss="modal" [disabled]="!advanceApprove.valid">Reject</button>
+                
+                <button *ngIf="adminUser && approveDetails?.advance_status?.name == 'MOVE TO APPROVER' &&  approveDetails?.advance_status?.name !== 'MOVE TO CHECKER' " type="button" class="btn btn-warning" id="fonts"
+                    (click)="finalApprove()" data-dismiss="modal" [disabled]="!advanceApprove.valid">Approve</button>
+                    <button *ngIf=" approveDetails?.advance_status?.name == 'DRAFT'  &&  idEmployee == approveDetails?.created_by && normalUser||approveDetails?.advance_status?.name == 'DRAFT'  &&  idEmployee == approveDetails?.created_by && adminUser||approveDetails?.advance_status?.name == 'DRAFT'  &&  idEmployee == approveDetails?.created_by && checkUser " type="button" class="btn btn-warning" id="fonts" (click)="approvechecker()"  [disabled]="!advanceApprove.valid" data-dismiss="modal">Move
+                        to Checker</button>
+                        
+                <button *ngIf=" checkUser   && approveDetails?.advance_status?.name == 'MOVE TO CHECKER'" type="button" class="btn btn-warning checkdraft" id="fonts" (click)="approveAdv()" data-dismiss="modal" [disabled]="!advanceApprove.valid">Move
+                        to Next Level</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-hidden="true" id="HistoryModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="Container">
+                <div class="modal-header" style="padding-bottom: 1%;">
+                    <h2 class="modal-title">Transaction History</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 2%;margin-left: 50px; width: 94%;" >
+                    <table class="table scrolltable table-bordered" fixed-header >
+                        <thead>
+                            <tr class="table_header" fixed-header>
+                                <th>S.No</th>
+                                <th>Employee</th>
+                                <th>Transaction Date</th>
+                                <th>EMI Amount</th>
+                                <th>Payable Amount</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Remarks</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tran of TranHistoryList; index as i">
+                                <td>{{ i+1 }}</td>
+                                <td>{{tran?.advance_employee}}</td>
+                                <td>{{tran?.date | date:'dd-MM-yyyy'}}</td>
+                                <td>{{tran?.emi_amount}}</td>
+                                <td>{{tran?.payable_amount}}</td>
+                                <td>{{tran?.tran_from}}</td>
+                                <td>{{tran?.tran_to}}</td>
+                                <td>{{tran?.remarks}}</td>
+                                <td>{{tran?.advance_status?.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade  come-from-modal right" id="editModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Edit Advance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="AddClose()"><span
+                        aria-hidden="true">&times;</span></button>
+
+            </div>
+            <div class="modal-body pr-0">
+                <div [formGroup]="advEditForm">
+                <div  style="height:300px;" class="overflow">
+                    <div class="row">
+                        <div class="col-md-4" id="fonts">
+                            <mat-label>Employee</mat-label>
+                        </div>
+                        <div class="col-md-6" id="fonts" style="font-weight: bold;
+                        font-size: larger;">
+                            {{EmployeeFullName | uppercase}} 
+                    </div>
+                    </div>
+
+                    <form action=""  #emiForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-3" id="fonts">
+                                <mat-label>Requested Amount</mat-label>
+                            </div>
+    
+                            <div class="col-md-9">
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput name="actual_amount" [(ngModel)]="actual_amount">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                     <section>
+                        <label>EMI</label>
+                        <div style="margin-left: 26%; margin-top: -9%;">
+                          <mat-slider thumbLabel min="0" style="width: 100%;"  max="12" step="1" showTickMarks discrete
+                          type="text" id="loanTenure" name="editloanTenure" [(ngModel)]="editloanTenure" required aria-label="units">
+                          </mat-slider>
+                        </div>
+                      </section>
+
+                       <button type="submit" (click)="EditcalculateEMI()" class="btn btn-outline-primary" style="margin-left: 340px; margin-bottom: 10px;">Calculate EMI</button>
+                       </form>
+                       <div class="row">
+                        <div class="col-md-3" id="fonts">
+                            <mat-label>Reason <span class="text-danger">*</span></mat-label>
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width: 100%;">
+                                <input matInput formControlName="reason">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                      <div class="summaryTbl" >
+                        <div class="table-responsive" style="height: 250px;">
+                          <table *ngIf="EditemiDetails.length > 0" class="table">
+                            <thead class="text-left bg-light">
+                              <tr>
+                                 <th>Months</th>
+                                <th>EMI</th>
+                              </tr>
+                            </thead>
+                            <tbody class="text-left"> 
+                             <tr *ngFor="let detail of EditemiDetails">
+                                 <td>{{ detail.loanTenure  }}  {{detail.year}}</td>
+                                <td>{{ detail.emi }}</td>
+                              </tr>
+                            </tbody>
+                           </table>
+                        </div>
+                      </div>
+                </div>
+                <div class="" style="margin-right:16px">
+                    <mat-form-field style="width: 100%;" (click)="searchfunctionchecker('','checker create')" >
+                        <mat-label>Select checker</mat-label>
+                        <input type="text" matInput formControlName="to_employee_id" [matAutocomplete]="auto"
+                            placeholder="Enter Employee Name">
+                        <mat-autocomplete #auto="matAutocomplete" >
+                            <mat-option *ngFor="let employee of functionalHead" [value]="employee.full_name" (focusout)="onoptionchecked(employee)">
+                                {{ employee.full_name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+           
+                <div style="margin-right:16px;">
+                    <mat-form-field style="width: 100%; ">
+                        <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks">
+                    </mat-form-field>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="fonts" (click)="AddClose()">Close</button>
+                <button type="button" class="btn yellow" data-dismiss="modal" (click)="UpdateDraft()" [disabled]="!advEditForm.valid || !btnAddSubmit">Draft</button>
+                <button type="button" class="btn btn-primary" id="fonts" data-dismiss="modal" (click)="updateAdvance()" [disabled]="!advEditForm.valid || !btnAddSubmit">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-hidden="true" id="payHistoryModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="Container">
+                <div class="modal-header" style="padding-bottom: 1%;">
+                    <h2 class="modal-title">Advance Transaction History</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="table-responsive" style="margin-top: 2%;width: 96%;">
+                    <table class="table scrolltable table-bordered" fixed-header>
+                        <thead>
+                            <tr class="table_header" fixed-header>
+                                <th>S.No</th>
+                                <th>Paid Date</th>
+                                <th>Paid Amount</th>
+                                <th>Balance Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tran of payTranHistoryList; index as i">
+                                <td>{{ i+1 }}</td>
+                                <td>{{tran?.paid_date | date:'dd-MM-yyyy'}}</td>
+                                <td>{{tran?.paid_amount}}</td>
+                                <td>{{tran?.balance_amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-hidden="true" id="forceUpdating">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="Container">
+                <div class="modal-header" style="padding-bottom: 1%;">
+                    <h2 class="modal-title">Advance Force Closing</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <mat-card>
+                    <form [formGroup]="updateview">
+                        <div class="row">
+                            <div class="col-md-4" id="fonts">
+                                <mat-label>EMI Paid <span class="text-danger">*</span></mat-label><br>
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput formControlName="emi_paid">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-label>EMI Balance <span class="text-danger">*</span></mat-label><br>
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput formControlName="emi_balance">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4" style="    padding-left: 9%;
+                            padding-top: 25px;">
+                                <button class="btn btn-success" (click)="forceclosure()" >
+                                Update
+                                </button>
+                            </div>
+                        </div>
+                      
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,809 @@
+<div class="container">
+
+    <!-- title='({{projectview?.code}})
+                 {{projectview?.title}}'>({{projectview?.code}})
+                    {{projectview?.title}} -->
+
+    <!---------------------------------- Title Part ------------------------------------->
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-lg-8">
+            <p> <span class="material-icons alignvertical">arrow_back</span> <span class="navigateclass">Project
+                    Details</span> / <span (click)="backToProjectView()" class="textdecorationatag">
+                    ({{projectview?.code}})
+                    {{projectview?.title}}</span> / ({{proposalDataView?.code}})
+                {{proposalDataView?.name}} </p>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <button mat-stroked-button *ngIf="proposalDataView?.is_shortlisted == false" data-toggle="modal"
+                data-target="#exampleModal">
+                <!-- <mat-icon>bookmark</mat-icon> -->
+                Shortlist
+            </button>
+            <button mat-stroked-button
+                *ngIf="proposalDataView?.is_shortlisted == true && proposalDataView?.is_finalized == false "
+                data-toggle="modal" data-target="#exampleModal">
+                <!-- <mat-icon>grade</mat-icon> -->
+                Finalize
+            </button>
+            <button mat-stroked-button
+                *ngIf="proposalDataView?.is_shortlisted == true && proposalDataView?.is_finalized == true && proposalDataView?.approval_status?.text == 'PENDING' && proposalDataView?.pending_approver?.length > 0"
+                data-toggle="modal" data-target="#exampleModal">
+                <!-- <mat-icon>grade</mat-icon> -->
+                Approve
+            </button>
+
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="placingOnRight">
+                <!-- <mat-label>Version</mat-label> -->
+                <mat-form-field class="ddheight">
+                    <mat-select placeholder="Select Action" [formControl]="versionview">
+                        <mat-option *ngFor="let v of VersionList" [value]="v.id">
+                            {{v?.version}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <!-- 
+    <div>
+        <mat-icon class="iconsize bookmark" *ngIf="proposalDataView?.is_shortlisted == true" title="Bookmarked">bookmark</mat-icon>
+        <mat-icon class="iconsize star" *ngIf="proposalDataView?.is_finalized == true " title="Finalized">grade</mat-icon>
+    </div> -->
+
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#c1e2f6;">
+                    <h2 class="modal-title" id="exampleModalLabel">
+                        Remarks</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="RemarksForm">
+                        <div class="col-md-3">
+                            <mat-label>Remarks</mat-label><br>
+                            <mat-form-field class="matformfieldstyle lenthoftextfieldRemarks">
+                                <textarea class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Remarks" formControlName="remarks"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                        border-color: black;
+                                                        background-color: white;" data-dismiss="modal">Close</button>
+
+                    <button type="button" (click)="bookmarkingProfile()"
+                        *ngIf="proposalDataView?.is_shortlisted == false" style="border-radius: 10px;margin-left: 10px; 
+                            border-color: #f5c68b; background-color: #f5c68b;" class=" mat-stroked-button"
+                        data-dismiss="modal">Submit</button>
+
+                    <button type="button" (click)="finalizingProfile()"
+                        *ngIf="proposalDataView?.is_shortlisted == true && proposalDataView?.is_finalized == false "
+                        style="border-radius: 10px;margin-left: 10px; 
+                            border-color: #f5c68b; background-color: #f5c68b;" class=" mat-stroked-button"
+                        data-dismiss="modal">Submit</button>
+
+                    <button type="button" (click)="MoveToApprover()"
+                        *ngIf="proposalDataView?.is_shortlisted == true && proposalDataView?.is_finalized == true && proposalDataView?.approval_status?.text == 'PENDING'"
+                        style="border-radius: 10px;margin-left: 10px; 
+                            border-color: #f5c68b; background-color: #f5c68b;" class=" mat-stroked-button"
+                        data-dismiss="modal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div>
+        <div class="stepsdiv">
+            <div class="progressstepper">
+                <div class="stepsshow">
+                    <i class="material-icons stepcircle"
+                        [ngStyle]="proposalDataView?.is_created == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}"
+                        *ngIf="proposalDataView?.is_created == true">done</i>
+                    <i class="material-icons stepcircle"
+                        [ngStyle]="proposalDataView?.is_created == false?{'background-color': '#ff4444'}:{'background-color': '#ff4444'}"
+                        *ngIf="proposalDataView?.is_created == false">priority_high</i>
+
+                    <span class="processname">Submitted</span>
+                </div>
+                <div class="stepflow">
+                    <hr>
+                </div>
+
+                <div class="stepsshow">
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.is_shortlisted == true"
+                        [ngStyle]="proposalDataView?.is_shortlisted == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.is_shortlisted == false"
+                        [ngStyle]="proposalDataView?.is_shortlisted == false?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">timer</i>
+
+                    <span class="processname">Shortlisted</span>
+                </div>
+
+                <div class="stepflow">
+                    <hr>
+                </div>
+                <div class="stepsshow">
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.is_finalized == true"
+                        [ngStyle]="proposalDataView?.is_finalized == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.is_finalized == false"
+                        [ngStyle]="proposalDataView?.is_finalized == false?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">timer</i>
+
+                    <span class="processname">Finalized</span>
+                </div>
+
+                <div class="stepflow">
+                    <hr>
+                </div>
+
+                <div class="stepsshow">
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.approval_status?.text == 'APPROVED'"
+                        [ngStyle]="proposalDataView?.approval_status?.text == 'APPROVED'?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.approval_status?.text == 'PENDING'"
+                        [ngStyle]="proposalDataView?.approval_status?.text == 'PENDING'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">hourglass_empty</i>
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.approval_status?.text == 'DRAFT'"
+                        [ngStyle]="proposalDataView?.approval_status?.text == 'DRAFT'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">flag</i>
+                    <i class="material-icons stepcircle" *ngIf="proposalDataView?.approval_status?.text == 'REJECTED'"
+                        [ngStyle]="proposalDataView?.approval_status?.text == 'REJECTED'?{'background-color': '#ff4444'}:{'background-color': '#ff4444'}">close</i>
+                    <i class="material-icons stepcircle"
+                        *ngIf="proposalDataView?.approval_status?.text == 'UNDER EVALUATION'"
+                        [ngStyle]="proposalDataView?.approval_status?.text == 'UNDER EVALUATION'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">flag</i>
+
+                    <span class="processname">{{proposalDataView?.approval_status?.text}}</span>
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+    <br>
+    <div class="row smallsize" style="width: 90%;">
+        <div class="col">
+            <div style="margin-left: 15px;">
+                <strong>Approver group:</strong>
+                <mat-chip-grid class="inlineprint"
+                    *ngFor="let dataapprover of proposalDataView?.approver; let indexapprover = index">
+                    <div *ngIf="dataapprover?.status?.text == 'Pending'; else Rejects">
+                        <mat-chip-row color="primary" selected>{{dataapprover?.approver?.name}}</mat-chip-row>
+                    </div>
+                    <ng-template #Rejects>
+                        <div *ngIf="dataapprover?.status?.text == 'Rejected'; else awaiting">
+                            <mat-chip-row color="warn" selected> {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                    <ng-template #awaiting>
+                        <div *ngIf="dataapprover?.status?.text == 'Awaiting'; else approvedcases">
+                            <mat-chip-row style="background-color: rgba(122, 122, 122, 0.704)" selected>
+                                {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                    <ng-template #approvedcases>
+                        <div *ngIf="dataapprover?.status?.text == 'Approved';">
+                            <mat-chip-row style="background-color: rgba(36, 167, 36, 0.704)" selected>
+                                {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                </mat-chip-grid>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+
+    <div>
+        <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseprojectView"
+            aria-expanded="false" aria-controls="collapseprojectView">Project view...<mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+
+    <div class="collapse" id="collapseprojectView">
+        <div class="card card-body">
+            <div>
+                <table class="tablepaddingsizeheader smallsize">
+                    <tr>
+                        <th>Type:</th>
+                        <td>{{projectview?.type?.name}}</td>
+                        <th>Beneficiary Group:</th>
+                        <td>{{projectview?.onbehalf_group?.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>{{projectview?.approval_status?.text}}</td>
+                        <th>Version: </th>
+                        <td>{{this.versionview.value}}</td>
+
+                    <tr>
+                        <th>Commodity:</th>
+                        <td>{{projectview?.commodity_id?.name}}</td>
+                        <th>Sub Commodity:</th>
+                        <td>{{projectview?.subcommodity}}</td>
+                    </tr>
+                    <tr>
+                        <th>Submission Date:</th>
+                        <td> <span matTooltip="Start Date">{{projectview?.submission_start_date |
+                                date:'dd-MM-yyyy'}}</span> -
+                            <span matTooltip="End Date">{{projectview?.submission_end_date |
+                                date:'dd-MM-yyyy'}}</span>
+                        </td>
+                        <th>Project Date:</th>
+                        <td> <span matTooltip="Start Date">{{projectview?.project_start_date |
+                                date:'dd-MM-yyyy'}}</span>
+                            -
+                            <span matTooltip="End Date">{{projectview?.project_end_date | date:'dd-MM-yyyy'}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th> Audience:</th>
+                        <td> {{projectview?.view_type?.text}} </td>
+                        <th>Budget:</th>
+                        <td>{{projectview?.budget | amountPipe}}</td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Current Spend:</th>
+                        <td>{{projectview?.estimate_currentspent | amountPipe }}</td>
+                        <th>Estimated Save:</th>
+                        <td>{{projectview?.estimate_save | amountPipe }}</td>
+                    </tr>
+
+                    <hr>
+
+                </table>
+                <div>
+                    <p><strong>Description:</strong><br> &nbsp; {{projectview?.description}}</p>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div>
+        <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseaboutvendor"
+            aria-expanded="false" aria-controls="collapseaboutvendor">About ({{proposalDataView?.code}})
+            {{proposalDataView?.name}}:
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+    <div class="collapse content" id="collapseaboutvendor">
+        <div class="card" id="collapseNoteView">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Proposer:</th>
+                        <td>({{vendorviewData?.code}}) {{vendorviewData?.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>GST No:</th>
+                        <td>{{vendorviewData?.gst_no}}</td>
+                        <th>PAN No:</th>
+                        <td>{{vendorviewData?.pan_no}}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact Email:</th>
+                        <td>{{vendorviewData?.contact_id?.email}}</td>
+                        <th>Mobile 1:</th>
+                        <td>{{vendorviewData?.contact_id?.mobile_1}}</td>
+                    </tr>
+                    <tr>
+                        <th>Mobile 2:</th>
+                        <td>{{vendorviewData?.contact_id?.mobile_2}}</td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
+    <br>
+
+
+
+    <div style="margin-left: 15px;">
+        <table style="width: 30%;">
+            <tr>
+                <th>Bid Amount:</th>
+                <td>{{this.proposalDataView?.budget | amountPipe }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNote"
+            aria-expanded="false" aria-controls="collapseExample">Proposal Note(Short Note on Services Provided by your Company):
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+    <div class="collapse content" id="collapseNote">
+        <div class="card" id="collapseNoteView">
+            <div [innerHtml]="contentname">
+
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div>
+        <button mat-button class="buttonwidth" color="primary" data-toggle="collapse"
+            data-target="#collapseNoteExecution" aria-expanded="false" aria-controls="collapseExample">Execution Note(Timeline Details):
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+    <div class="collapse content" id="collapseNoteExecution">
+        <div class="card" id="collapseNoteView">
+            <div [innerHtml]="ExecutionContent">
+
+            </div>
+        </div>
+    </div>
+
+
+    <br>
+
+    <div>
+        <button mat-button class="buttonwidth" color="primary" data-toggle="collapse"
+            data-target="#collapseNoteFinancial" aria-expanded="false" aria-controls="collapseExample">Financial Note(Terms and Conditions):
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+    <div class="collapse content" id="collapseNoteFinancial">
+        <div class="card" id="collapseNoteView">
+            <div [innerHtml]="Financialcontent">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <br>
+
+    <div style=" margin-left: 15px;">
+        <p>Attachments:</p>
+        <div style="display:inline;  margin-left: 30px;"
+            *ngFor="let files of proposalDataView?.filedata; let indexfile = index">
+            <!-- <mat-chip-row class="cursor spacingfile" [matMenuTriggerFor]="menu1">{{indexfile+1}}.{{files?.file_name}}
+            </mat-chip-row>
+            <mat-menu #menu1="matMenu">
+                
+            </mat-menu> -->
+            <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;"
+                    type="button" class="btn btncolor">{{indexfile+1}}.{{files?.file_name}}</button>
+                <button type="button" class="btn btncolor material-icons"
+                    style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;"
+                    (click)="filedownload(files)">download</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <nav>
+            <div class="nav nav-tabs">
+                <span #myDiv class="nav-item nav-link" id="subname" data-toggle="tab" role="tab" style="color: black;"
+                    *ngFor="let sub of CMS_ProposalView_Menu_List;index as i" (click)="viewShow(sub)">
+                    {{sub?.name}}
+                </span>
+            </div>
+        </nav>
+    </div>
+
+    <div *ngIf="ProposalCommentsTab">
+        <div>
+            <h2>Comments</h2>
+
+            <div class="container">
+                <br>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+                        <textarea class="textareaset" #maincomment [formControl]="commentinput" cols="30"
+                            rows="10"></textarea>
+                        <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" class="btn btn-light"
+                            (click)="postcomment(this.commentinput.value)">Comment</button>
+                        <div class="input-group mb-3 inputCMTFile01">
+                            <div class="custom-file">
+                                <input type="file" (change)="onFileSelected($event)" multiple class="custom-file-input"
+                                    id="inputGroupFile01">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                        <div *ngIf="this.Documentfilearray?.length > 0">
+                            <!-- <mat-chip-grid *ngFor="let files of Documentfilearray; let indexfile = index">
+                                <mat-chip-row class="cursor spacingfile">{{indexfile+1}}.{{files?.name}}
+                                    <mat-icon (click)="deleteInlineFile(indexfile, '')">cancel</mat-icon>
+                                </mat-chip-row>
+                            </mat-chip-grid> -->
+                            <div style="display:inline" *ngFor="let files of Documentfilearray; let indexfile = index">
+                                <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                                    <button
+                                        style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;"
+                                        type="button" class="btn btncolor" (click)="filepreview(files)"
+                                        data-toggle="modal" data-target="#my-modalpreview">{{indexfile+1}}.
+                                        {{files?.name}} </button>
+                                    <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;"
+                                        type="button" class="btn btncolor"
+                                        (click)="deleteInlineFile(indexfile, files)">X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-sm-10 col-md-10 col-lg-10 bordercomments">
+
+                        <div class="commentsection"
+                            *ngFor="let datacomments of proposalCommentsList; let indexcomments = index">
+                            <div class="row" *ngIf="proposalCommentsList?.length > 0">
+                                <div class="col">
+
+                                    <strong>{{datacomments.created_by.full_name}}</strong>
+
+                                    <small class="leftsidemargin"><span
+                                            class="material-icons timeschedule">schedule</span>{{datacomments.created_date
+                                        | date:'dd-MMM-yyyy h:mm a'}}</small>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="commentsviewspace">
+                                <p style="margin-left: 20px;"> {{datacomments?.comment}}</p>
+                            </div>
+                            <small>
+                                <span class="material-icons" (click)="replycommentinputshowhide(datacomments)"
+                                    title="reply">
+                                    reply
+                                </span>
+                                &nbsp;
+                                <span class="material-icons" data-toggle="modal" (click)="popupimageView(datacomments)"
+                                    data-target="#exampleModalcommentFile">
+                                    image
+                                </span>
+                            </small>
+
+                            <div *ngIf="datacomments?.replyshow == true">
+                                <textarea class="textareasetreply" [value]="datacomments.replyinput" #rply></textarea>
+                                <button type="button" (click)="replycomment(rply.value, datacomments)" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; 
+                                        background-color: #f5c68b;" class="btn btn-light">Reply</button>
+                            </div>
+                            <br>
+
+                            <div class="jumbotronView" *ngIf="datacomments?.reply?.length > 0">
+
+                                <div *ngFor="let reply of datacomments?.reply">
+                                    <small>
+                                        <strong>
+                                            {{reply?.created_by?.full_name}}
+                                        </strong> &nbsp;
+                                        <small class="leftsidemargin"><span
+                                                class="material-icons timeschedule">schedule</span>{{reply?.created_date
+                                            | date:'dd-MMM-yyyy h:mm a'}}</small>
+                                        <br>
+                                        <p style="margin-left:10px;">{{reply?.comment}}</p>
+                                    </small>
+                                    <hr>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="HistoryTab">
+        <h2>Transaction History</h2>
+
+        <div style="margin-left: 15px;">
+            <table class="table table-bordered" style="margin-top: 10px;max-width: 70%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Approver</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of TranHistoryList; let historyindex = index">
+                        <td>{{historyindex+1}}</td>
+                        <td>{{type?.created_date | date: 'dd-MMM-yyyy hh:mm aa'}}</td>
+                        <td>{{type?.approval_status?.text}}</td>
+                        <td>{{type?.approver?.full_name}}</td>
+                        <td>{{type?.comments}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="TranHistoryList?.length==0 || TranHistoryList == undefined" class="NodataAlign text-center">No
+                Records Found...</div>
+        </div>
+
+
+    </div>
+
+
+    <div *ngIf="Q_A_CommentsTab">
+        <div>
+            <br>
+            <nav>
+                <div class="nav nav-tabs">
+                    <span #myDivQues *ngFor="let sub of QuestionnairesDataList;index as i"
+                        (click)="gettabBasedOnQuestionType(sub)" class="nav-item nav-link" id="subname"
+                        data-toggle="tab" role="tab" style="color: black;">
+                        {{sub?.type?.name}}
+                    </span>
+                    <!-- <span #myDiv class="nav-item nav-link" id="subname" data-toggle="tab" role="tab"
+                        style="color: black;" (click)="gettablegal()">Legal</span> -->
+                </div>
+            </nav>
+        </div>
+
+
+        <div class="table-responsive" *ngIf="QuestionnaireContents">
+            <table class="table table-bordered" style="margin: 10px 10px 100px 10px;max-width: 95%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th *ngFor="let type of typeBasedList?.header; let indexques = index">{{type.name}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let dataques of typeBasedList?.questions; let indx = index">
+                        <tr>
+                            <td>{{indx + 1}}</td>
+                            <td>{{dataques?.text}}</td>
+                            <td>{{dataques?.ans?.answer}}
+
+                                <div *ngFor="let files of dataques?.ans?.file; let fileindex = index">
+                                    <p (click)="filedownload(files)"> {{fileindex+ 1}}.
+                                        {{files?.file_name}} </p>
+                                </div>
+                            </td>
+                            <td>
+                                <span *ngIf="dataques?.ans == null; else elsepartQuestionsAns">
+                                    --
+                                </span>
+                                <ng-template #elsepartQuestionsAns>
+                                    <mat-form-field>
+                                        <input matInput autocomplete="off" placeholder="Evaluation Comments"
+                                            [ngModel]="dataques?.ans?.comments"
+                                            [readonly]="typeBasedList?.type?.can_comment == false "
+                                            (ngModelChange)="dataques?.ans.comments = $event">
+                                    </mat-form-field>
+                                </ng-template>
+                                <!--  -->
+                            </td>
+                            <!-- <td>
+                                <mat-form-field style="width: 100px">
+                                    <input matInput autocomplete="off" placeholder="Score" [ngModel]="dataques?.score"
+                                        (ngModelChange)="dataques.score = $event">
+                                </mat-form-field>
+                            </td> -->
+                            <td>
+                                <span *ngIf="dataques?.ans == null; else elsepartQuestionsAnscheck">
+                                    --
+                                </span>
+                                <ng-template #elsepartQuestionsAnscheck>
+                                <mat-checkbox [(ngModel)]="dataques.ans.red_flag"
+                                    (ngModelChange)="dataques.ans.red_flag = $event"
+                                    [disabled]="typeBasedList?.type?.can_comment == false ">
+                                </mat-checkbox>
+                            </ng-template>
+                            </td>
+
+                        </tr>
+                        <tr *ngFor="let subdataques of dataques?.sub_question; let indxsub = index">
+
+                            <!-- <table>
+                                        <tr> -->
+                            <td> {{indx + 1}}. {{indxsub + 1}}</td>
+                            <td>{{subdataques?.text}}</td>
+                            <td>{{subdataques?.ans?.answer}}
+                                <div *ngFor="let filesub of subdataques?.ans?.file; let fileindex = index">
+                                    <p (click)="filedownload(filesub)"> {{fileindex+ 1}}.
+                                        {{filesub?.file_name}} </p>
+                                </div>
+                            </td>
+                            <td>
+                                <span *ngIf="subdataques?.ans == null; else elsepartQuestionsAnsSub">
+                                    --
+                                </span>
+                                <ng-template #elsepartQuestionsAnsSub>
+                                    <mat-form-field>
+                                        <input matInput autocomplete="off" placeholder="Evaluation Comments"
+                                        [readonly]="typeBasedList?.type?.can_comment == false "
+                                            [ngModel]="subdataques?.ans.comments"
+                                            (ngModelChange)="subdataques.ans.comments = $event">
+                                    </mat-form-field>
+                                </ng-template>
+                                
+                            </td>
+                            <!-- <td>
+                                                <mat-form-field style="width: 100px">
+                                                    <input matInput autocomplete="off" placeholder="Score"
+                                                        [ngModel]="subdataques?.score"
+                                                        (ngModelChange)="subdataques.score = $event">
+                                                </mat-form-field>
+                                            </td> -->
+                            <td>
+                                <span *ngIf="subdataques?.ans == null; else elsepartQuestionsAnsSubcheck">
+                                    --
+                                </span>
+                                <ng-template #elsepartQuestionsAnsSubcheck>
+                                <mat-checkbox [(ngModel)]="subdataques.ans.red_flag"
+                                [disabled]="typeBasedList?.type?.can_comment == false "
+                                    (ngModelChange)="subdataques.ans.red_flag = $event">
+                                </mat-checkbox>
+                            </ng-template>
+                            </td>
+
+                        </tr>
+
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <div *ngIf="typeBasedList?.questions?.length > 0 && (typeBasedList?.type?.status == 1 || typeBasedList?.type?.status == 2 || typeBasedList?.type?.status == null) && typeBasedList?.type?.can_comment==true">
+                <button type="button" mat-stroked-button class="btn btn-light"
+                    (click)="dataForEvalComments(this.typeBasedList); redflagValueChange(this.typeBasedList)">Save</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px; color: white;
+                border-color: #049d14; background-color: #049d14;" class="btn btn-light"
+                data-toggle="modal"
+                data-target="#ApproveOrReturn" (click)="SelectedProcessForApproveOrReturn('Approve' )">Approve</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                border-color: #8ba4f5; background-color: #f5c68b;" class="btn btn-light"
+                data-toggle="modal"
+                data-target="#ApproveOrReturn"  (click)="SelectedProcessForApproveOrReturn('Return' )">Return </button>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+
+<div *ngIf="showimageHeaderPreviewPDF" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#c1e2f6;">
+                <h2 class="modal-title">PDF View</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <pdf-viewer [src]="pdfurl" [render-text]="true" [original-size]="false"
+                style="display: block;width: 500px; height: 800px;"></pdf-viewer>
+        </div>
+    </div>
+</div>
+
+ 
+<div *ngIf="showimageHeaderPreview" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <img src="{{jpgUrlsAPI}}" class="img-responsive" style="width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalcommentFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#c1e2f6;">
+                    <h2 class="modal-title" id="exampleModalLabel">Comment File View
+                    </h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let files of imageViewFor_Comment_ReplyList; index as index">
+                                <td>{{index+ 1}}</td>
+                                <td> <span style="cursor: pointer;" (click)="filedownload(files)">  {{files.file_name}} </span>  </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                border-color: black;
+                                background-color: white;" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="ApproveOrReturn" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#21cbe5;">
+                <h2 class="modal-title" id="exampleModalLabel">{{SelectedProcess}}
+                    Remarks</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="RemarksForm">
+                    <table>
+                        <div>
+                            <tr>
+                                <td> 
+                                        <mat-label>Remarks</mat-label><br>
+                                        <mat-form-field class="matformfieldstyle" class="matformfieldinputstyletextarea" >
+                                            <textarea type="text" matInput
+                                                autocomplete="off" placeholder="Remarks"
+                                                formControlName="remarks"></textarea>
+                                        </mat-form-field> 
+                                </td>
+                            </tr> 
+                        </div>
+                    </table> 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;" data-dismiss="modal">Close</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                                border-color: #f5c68b; background-color: #f5c68b;"
+                    class="btn btn-light" (click)="ApproveOrReturnQuestionnaire(this.typeBasedList, SelectedProcess)"  >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- (click)="ApproveOrReturnQuestionnaire(this.typeBasedList, 'Approve')" 
+(click)="ApproveOrReturnQuestionnaire(this.typeBasedList, 'Return' )"-->

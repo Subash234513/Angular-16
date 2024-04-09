@@ -1,0 +1,499 @@
+.container {
+    margin: 10px 15px 100px 10px;
+}
+
+.fontcaptical {
+    font-size: 16px;
+}
+
+.fontbase {
+    font-size: 14px;
+}
+
+.navigateclass {
+    // text-decoration: underline;
+    // color: #044063 !important;
+    // cursor: pointer;
+    white-space: nowrap;
+    width: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // border: 1px solid #000000;
+}
+
+.alignvertical {
+    vertical-align: middle;
+}
+
+.spacinggap th,
+.spacinggap td {
+    padding: 10px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.tab-btn {
+    margin-left: 81%;
+    position: relative;
+}
+
+.nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #044063 !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link:hover {
+    border: none !important;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    cursor: pointer;
+}
+
+.placingOnRight {
+    float: right;
+}
+
+.lengthofText {
+    width: 200px;
+}
+
+.inlineprint {
+    display: inline-block;
+    margin: 5px;
+}
+
+.borderofRow {
+    // border: 1px solid black;
+    display: inline;
+
+}
+
+
+
+.commentsection {
+    margin: 10px;
+    padding: 10px;
+}
+
+.buttonwidth {
+    // width: 100px;
+    font-size: 20px;
+}
+
+.proposersummary {
+    margin: 5px;
+    padding: 5px;
+}
+
+
+.inlineflow ul {
+    // text-align: center;
+    margin: 0px auto;
+}
+
+.inlineflow ul li {
+    display: inline-block;
+    width: 200px;
+    position: relative;
+}
+
+
+.flowprocess {
+    border: 4px solid #c4c0c0;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    margin-left: 50px;
+}
+
+
+.bar::after {
+    content: '';
+    background-color: #c4c0c0;
+    height: 5px;
+    width: 151px;
+    display: block;
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.namingforprocess {
+    margin-left: 50px;
+}
+
+.paddingfortableproposal tr td {
+    padding: 10px;
+    width: 40px;
+}
+
+
+.inputCMTFile01 {
+    width: 200px;
+}
+
+.dateshow {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+
+}
+
+.proposaldetailsshow {
+    width: 80%;
+}
+
+.proposaldetailsshow {
+    margin-left: 20px;
+}
+
+.content {
+    margin-left: 20px;
+}
+
+.textdecorationatag {
+    text-decoration: underline;
+    color: #044063;
+    cursor: pointer;
+}
+
+
+
+
+// .chatshadow{
+//     margin: 10px;
+//     padding: 5px;
+//     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+//     // display: inline;
+//     box-sizing: border-box;
+//     // border: 1px solid green;
+// }
+
+
+.textareaset {
+    width: 80%;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    resize: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+//   .replyinput{
+//     width: 60%;
+//     height: 30px;
+//     border-bottom: 1px solid grey;
+
+//   }
+
+.commentsviewspace {
+    margin: 5px;
+    padding: 5px;
+}
+
+.leftsidemargin {
+    margin-left: 20px;
+    color: rgba(128, 128, 128, 0.876);
+}
+
+.timeschedule {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.textareasetreply {
+    width: 80%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    resize: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.spacingfile {
+    margin: 2px;
+}
+
+// .textdecorationatag {
+//     text-align: center;
+// }
+
+.ddheight {
+    padding: 3px 3px 3px 3px;
+}
+
+input,
+mat-select,
+textarea {
+    font-size: 15px;
+}
+
+mat-form-field {
+    font-size: 8px;
+}
+
+
+.smallsize {
+    font-size: 14px;
+}
+
+.spacingdiv {
+    margin-left: 10px;
+}
+
+.tablepaddingsize tr td {
+    padding: 5px;
+    margin-left: 20px;
+}
+
+
+
+// .tablepaddingsizeheader {
+//     margin-left: 10px;
+// }
+
+.tablepaddingsizeheader tr th {
+    padding: 15px;
+    margin: 10px;
+}
+
+.lenthoftextfield {
+    width: 600px;
+}
+
+#collapseNoteView {
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 500px;
+    padding: 5px;
+    // border: 1px solid black;
+    overflow: hidden;
+    overflow: scroll;
+}
+
+#collapseNoteView::-webkit-scrollbar {
+    width: 2px;
+}
+
+/* Track */
+#collapseNoteView::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+#collapseNoteView::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+.italicsstyle {
+    font-style: italic;
+}
+
+
+
+
+
+// stepper
+
+.stepsdiv {
+    width: 100%;
+    padding: 0 50px;
+}
+
+.progressstepper {
+    display: table;
+    width: 60%;
+    position: relative;
+}
+
+
+.progressstepper .stepsshow,
+.progressstepper .stepflow {
+    display: table-cell;
+}
+
+.progressstepper .stepsshow {
+    width: 70px;
+    text-align: center;
+}
+
+//   .progressstepper .stepsshow .stepcircle {
+//     background-color: #b5e8b1;
+//   }
+
+.stepcircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    line-height: 40px;
+    text-align: center;
+    display: inline-block;
+}
+
+.progressstepper .processname {
+    display: block;
+}
+
+.bordercomments {
+    margin-left: 10px;
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 1000px;
+    overflow-x: hidden;
+    overflow: scroll;
+    border: 1px solid rgba(0, 0, 0, 0.082);
+}
+
+
+.bordercomments::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+.bordercomments::-webkit-scrollbar-track {
+    background: #e4e3e3;
+}
+
+.bordercomments::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.jumbotronView {
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 500px;
+    margin: 5px;
+    padding: 5px;
+    background-color: #e9ecef;
+    overflow: hidden;
+    overflow: scroll;
+}
+
+
+
+
+
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .tab-btn {
+    margin-left: 81%;
+    position: relative;
+  }
+  
+  #navshow{
+    width: 75%;
+    margin-left: 10px;
+  }
+  
+  .nav-item.show .nav-link,
+  .nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #044063 !important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link:hover {
+    border: none !important;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link {
+    border: none;
+    cursor: pointer;
+  }
+  
+
+  .paddingsizediv{
+    padding: 0px 10px 10px 0px;
+  }
+
+  .checkboxsize{
+    width: 200px;
+  }
+
+
+
+  .ulminmax{
+    padding: 0px;
+  }
+
+
+
+
+
+
+  .minmaxheader{
+    border: 1px solid rgba(0, 0, 0, 0.087);
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .minmax{
+    min-width: 200px;
+    max-width: 600px;
+    height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.087);
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .btncolor{
+    background-color: #e0e0e0;
+}
+
+.list td:nth-child(1) {
+    /* background: rgb(174, 201, 174); */
+    padding-left: 20px;
+  }
+  
+  .list td:nth-child(2) {
+    /* background: rgb(174, 201, 174); */
+    padding-left: 20px;
+  }
+
+  .tableForEvaluator th,  .tableForEvaluator td{
+    font-size: 12px;
+    padding: 10px;
+    white-space: pre;
+  }

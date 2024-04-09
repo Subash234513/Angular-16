@@ -1,0 +1,786 @@
+// .card {
+//     margin: 10px 20px;
+// }
+
+.headerdashboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%; 
+    padding: 10px;
+}
+
+.minicards {
+
+    width: 240px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    margin: 10px;
+    padding: 10px 10px 0px 10px;
+    // border-bottom: 2px solid rgb(95, 172, 86);
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+
+    // width: 300px;
+    // // height: 100px;
+    // margin: 10px;
+    // padding: 10px;
+    // position: relative;
+    // // border: 2px solid #6c757d64;
+    // background-color: #ffffff;
+    // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  }
+  
+  .minicards:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  }
+
+.iconsSize{
+    font-size: 40px;
+}
+
+.counts {
+    font-size: 30px;
+    font-weight: 400;
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+
+.cardTotalEmp {
+    border-bottom: 2px solid #6c757d;
+}
+
+.cardPresent {
+    border-bottom: 2px solid #28a745;
+}
+
+.cardAbsent {
+    border-bottom: 2px solid #dc3545d1;
+}
+
+
+.cardLeave {
+    border-bottom: 2px solid purple;
+}
+
+.emp{
+    color: #6c757d;
+}
+.presentstatus{
+    color: #28a745
+}
+.absentstatus{
+    color: #dc3545d1
+}
+.leave{
+    color: purple
+}
+
+
+.remainingStatus{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 10px;
+}
+
+.remainingRecords{ 
+    width: 240px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    margin: 10px;
+    padding: 10px 10px 0px 10px;
+    border-left: 2px solid rgb(95, 172, 86);
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+}
+
+.RemainingCounts{
+    font-size: 20px;
+}
+
+.cardTable{
+    margin-left: 20px;
+}
+.cardTableRight{
+    margin-right: 20px; 
+}
+
+
+.dataRecord{
+    margin: 20px;
+}
+
+.remainingStatusAside{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+}
+
+
+.minicardsaside {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    margin: 10px;
+    padding: 10px 10px 0px 10px; 
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+
+.panelset{ 
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-gap: 5px;
+      } 
+
+.panelset> div {
+    width: 200px;
+    padding: 10px; 
+    text-align: center;
+  }
+
+
+.fieldwidth{
+    width: 150px;
+}
+
+.paddingstabletd{
+    padding: 0px 10px;
+}
+.filterData{
+  font-size: 15px;
+  color: #585656; 
+  margin: 10px;
+}
+
+.dataviewRow{
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 5px;
+}
+.empView{
+    border: 1px solid blue;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////   Report Table Column 
+
+
+
+
+// .container {
+//   margin: 10px 15px 100px 10px;
+// }
+.smallinput{
+    width: 120px;
+  }
+  
+  .placingOnRight {
+    float: right;
+  }
+  
+  .tablepaddingsizeheader {
+    width: 50%;
+    margin-left: 16px;
+  }
+  
+  .tablepaddingsizeheader tr th {
+    padding: 5px;
+    margin: 10px;
+  }
+  
+  .buttonwidth { 
+    font-size: 20px;
+  }
+  
+  .inlineprint {
+    display: inline-block;
+    margin: 10px;
+  }
+  
+  .inputCMTFile01 {
+    width: 200px;
+  }
+  
+  .btncolor {
+    background-color: #e0e0e0;
+  }
+  
+  
+  .cursor {
+    cursor: pointer;
+  }
+  
+  .spacingfile {
+    margin: 2px;
+  }
+  
+  .textdecorationatag {
+    text-align: center;
+  }
+  
+  .inlineprint {
+    display: inline-block;
+    margin: 10px;
+  }
+   
+  ////////////////////////////////
+  .tablesize {
+    width: var(--widthTableFull);
+  }
+  
+  .tablesizeCalender {
+    width: var(--widthTableFull);
+  }
+  
+  .padsize thead tr th {
+    text-align: center;
+    background-color: rgb(215, 215, 250);
+  }
+  
+  .padsize tbody tr td {
+    width: 100px;
+    height: 100px;
+  }
+  
+  
+  .topleftcorner {
+    float: right;
+    font-weight: 700;
+  }
+  
+  .tableborder,
+  .tableborder thead tr th,
+  .tableborder tbody tr td {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .contentside {
+    height: 100px;
+  }
+  
+  .colorsicons {
+    font-size: 16px;
+    color: rgb(96, 93, 93);
+  }
+  
+  .aligniconBtn {
+    vertical-align: middle;
+  }
+  
+  .sizepill {
+    font-size: 8px;
+  }
+  
+  .tablesizeonwidth tr th {
+    padding: 20px;
+    white-space: nowrap; 
+  }
+  
+  .attendanceMark {
+    text-align: center;
+  }
+  
+  .attendanceMark span {
+    font-size: 16px;
+  }
+  
+  .presentstyle, .absentstyle, .weekend, .weekendHolidayPresent {
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .LP {
+    color: #FFDCBE;
+  }
+  
+  .presentstyle { 
+    color: #28a745; 
+  }
+  
+  .absentstyle { 
+    color: #dc3545; 
+  }
+  
+  .weekend { 
+    color: #6c757d; 
+  }
+   
+  .holidaypopup { 
+    color: #49728D; 
+  }
+  
+  .weekendHolidayPresent { 
+    color: #343a40; 
+  }
+  
+  .leftspace {
+    margin-left: 20px;
+  }
+  
+  #NoteView { 
+    max-height: 500px;
+    padding: 5px;
+    overflow: hidden;
+    overflow: scroll;
+  }
+  
+  #NoteView::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  /* Track */
+  #NoteView::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  #NoteView::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  .checkInAndout {
+    background-color: #f9f9f9;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+  }
+  
+  .duration {
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 5px solid #e3e3e3;
+    border-radius: 50%;
+    display: flex;
+    font-size: 18px;
+    height: 120px;
+    justify-content: center;
+    margin: 0 auto;
+    width: 120px;
+  }
+  
+  .designBoxInOut {
+    padding: 10px;
+    border: 5px solid #e3e3e3;
+    text-align: center;
+  }
+  
+  .textdec {
+    color: #49728D;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  
+  #NoteViewTable { 
+    max-width: 500px;
+    max-height: 500px;
+    padding: 5px;
+    overflow: scroll;
+  
+  }
+  
+  #NoteViewTable table thead tr th,
+  #NoteViewTable table tbody tr td,
+  #NoteViewTable table tbody tr td span {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  
+  #NoteViewTable::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  /* Track */
+  #NoteViewTable::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  #NoteViewTable::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  .listfontsize {
+    font-size: 14px;
+  }
+  
+  .breadcrumbdatawhite {
+    background-color: white;
+  }
+  
+  .breadcrumbdataselected {
+    background-color: #dbe5ec;
+  }
+  
+  // .outertable td:first-child, .outertable th:first-child {
+  //   position: sticky;
+  //   left: 0;
+  //   z-index: 10;
+  //   background-color: white;
+  // }
+  
+  // .outertable td:nth-child(2), .outertable th:nth-child(2) {
+  //   position: sticky;
+  //   left: 50px;
+  //   z-index: 11;
+  //   background-color: white;
+  // }
+  
+  // .tableFixHeaddiv th {
+  //   position: sticky;
+  //   top: 0;
+  //   background: #eee;
+  //   z-index: 14
+  // }
+  
+  // .outertable th:first-child, .outertable th:nth-child(2) {
+  //   z-index: 15
+  // }
+
+  // .tableFixHeaddiv tbody { 
+  //   // display: block; 
+  //     overflow: auto;
+  //     height: 50px;
+  // }
+
+  // .outertable thead th { 
+  //     background-color: #f2f2f2;
+  //     position: sticky;
+  //     top: 0;
+  //     z-index: 2;
+  //   }
+
+  // .outertable tbody {
+  //   height: 200px; 
+  //   overflow-y: auto;
+  // }
+  
+  
+  // .outertable th:nth-child(3) {
+  //   position: sticky;
+  //   left: 130px;
+  //   z-index: 12;
+  //   background-color: white;
+  // }
+  
+  // .outertable td:nth-child(3) {
+  //   position: sticky;
+  //   left: 130px;
+  //   z-index: 13;
+  //   background-color: white;
+  // }
+  
+  .tableFixHeaddiv{
+    max-height: 700px;
+    position: relative;
+  }
+
+  .outertable thead th { 
+      background-color: #f2f2f2;
+      position: sticky;
+      top: 0;
+      // border: 1px solid #3c3b3b;
+      // z-index: 3;
+    }
+    .togglePosition {
+      position: absolute;
+      top: 0px; 
+      font-size: 35px;
+      cursor: pointer; 
+    }
+
+    .outertable th:first-child, .outertable th:nth-child(2) {
+      background-color: #f2f2f2;
+      position: sticky;
+      left: 0;
+      z-index: 2 !important;
+    }
+
+
+    .outertable td:nth-child(2),  .outertable td:first-child{
+      background-color: #f2f2f2;
+      position: sticky;
+      left: 0;
+      // z-index: 2 !important;
+    }
+
+    .outertable th:nth-child(2), .outertable td:nth-child(2){
+      left: 53px; 
+    }
+
+  .indicatorOnCornerPermission {
+    content: '';
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background-color:#ff0000b8;
+    width: 14px;
+    height: 14px;
+    border-radius: 50px;
+    /* border-bottom-right-radius: 50px 50px; */
+    /* -webkit-animation: perm 1s linear infinite; */
+    //animation: perm 1s linear infinite;
+  }
+  
+  @keyframes perm {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .indicatorOnCornerEdited { 
+    position: relative;
+    top: 0px;
+    left: 0px;
+    font-size: 10px;
+    color: #7a7979;
+  }
+  
+  .AttendanceTableView {
+    display: flex;
+    flex-direction: row;
+    margin: 8px;
+  }
+  
+  .displayMultiple {
+    border-radius: 50px;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+    margin-left: -10px;
+    color: white;
+  } 
+  
+  .present {
+    background-color: #28a745;
+    border: 1px solid #ffffff;
+  }
+  
+  .absent {
+    background-color: #dc3545d1;
+    border: 1px solid #ffffff;
+  }
+  
+  .weekend {
+    background-color: #6c757d;
+    border: 1px solid #ffffff;
+    border: 1px solid #ffffff;
+  }
+  
+  .holiday {
+    background-color: #49728D;
+    border: 1px solid #ffffff;
+  }
+  
+  .others {
+    background-color: #FFDCBE;
+    border: 1px solid #ffffff;
+    color: #000000;
+  }
+  
+  .colorsset {
+    color: red
+  }
+  
+  .spacing {
+    margin: 5px;
+    color: #ffffff;
+  }
+  .spacingForm {
+    margin-left: 5px; 
+  }
+  
+  .tablePrevious th:nth-child(n+3):nth-child(-n+9),
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9),
+  .tablePrevious td:nth-last-child(-n+7),
+  .tablePrevious th:nth-last-child(-n+7) {
+    color: #9b8f8f;
+  }
+  
+  
+  //// previous Dates
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .present,
+  .tablePrevious td:nth-last-child(-n+7) .present {
+    background-color: #28a74670;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .absent,
+  .tablePrevious td:nth-last-child(-n+7) .absent {
+    background-color: #dc35465e;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .weekend,
+  .tablePrevious td:nth-last-child(-n+7) .weekend {
+    background-color: #6c757d6d;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .holiday,
+  .tablePrevious td:nth-last-child(-n+7) .holiday {
+    background-color: #49728D6a;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .others,
+  .tablePrevious td:nth-last-child(-n+7) .others {
+    background-color: #FFDCBE6a;
+  }
+  
+  /////// hovers dates
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .present:hover,
+  .tablePrevious td:nth-last-child(-n+7) .present:hover {
+    background-color: #28a745;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .absent:hover,
+  .tablePrevious td:nth-last-child(-n+7) .absent:hover {
+    background-color: #dc3545d1;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .weekend:hover,
+  .tablePrevious td:nth-last-child(-n+7) .weekend:hover {
+    background-color: #6c757d;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .holiday:hover,
+  .tablePrevious td:nth-last-child(-n+7) .holiday:hover {
+    background-color: #49728D;
+  }
+  
+  .tablePrevious td:nth-child(n+3):nth-child(-n+9) .others:hover,
+  .tablePrevious td:nth-last-child(-n+7) .others:hover {
+    background-color: #FFDCBE;
+  } 
+  
+  .tableTogle th:nth-child(n+3):nth-child(-n+9),
+  .tableTogle td:nth-child(n+3):nth-child(-n+9),
+  .tableTogle td:nth-last-child(-n+7),
+  .tableTogle th:nth-last-child(-n+7) {
+    display: none;
+  } 
+   
+  
+  
+  .presentDate{
+    background-color: #115db0;
+  }
+  
+  .dateFilter{
+    visibility: hidden;
+  }
+   
+  .filterData{
+    font-size: 15px;
+    color: #585656; 
+    margin: 10px;
+  }
+  
+  // .wraping{
+  //   white-space: nowrap;
+  // }
+
+  .coloring{
+    color: #ffffff
+  }
+  
+
+
+  .lateIn{
+    background-color: #f54556; 
+  }
+
+  .EarlyOut{
+    background-color: #89353e; 
+  }
+
+.permissionsclass{
+  background-color: #585656; 
+}
+
+.Leaveclass{
+  background-color: blue;
+}
+
+.wfhclass{
+  background-color: rgb(78, 153, 87);
+}
+
+
+.marginBtmBtn{
+  margin-bottom: 20px; 
+}
+
+.greenClass{
+  color: #28a745;
+}
+
+
+
+.redClass{
+  color: #dc3545;
+}
+
+.smallfont{
+  font-size:12px;
+}
+
+.pendingClass{
+  background-color: #585656;
+  color: #ffffff;
+}
+
+.ApprovedClass{
+  background-color:  #28a745;
+  color: #ffffff;
+}
+
+
+
+
+
+
+
+  @media only screen and (max-width: 600px) {
+    .calenderview {
+      display: none;
+    } 
+  }
+
+
+
+
+
+
+
+@media (max-width: 800px) {
+    .headerdashboard, .remainingStatus, .remainingStatusAside {
+        flex-direction: column; 
+        margin: 10px;
+    }
+    .minicards, .minicardsaside {
+        margin: 10px;
+    }
+    .cardTableRight{
+    margin: 20px; 
+}
+
+
+
+
+
+
+
+     
+}

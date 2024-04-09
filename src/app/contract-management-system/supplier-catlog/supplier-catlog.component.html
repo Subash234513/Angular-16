@@ -1,0 +1,241 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 style="margin-left: 10px;">Supplier Catlog</h2>
+            <form style="margin-left: 20px;" [formGroup]="SupplierCatlogForm">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <!-- <mat-label>Supplier Code</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #userInput placeholder="Select Code " type="text" matInput
+                                    formControlName="supplier_code" (keyup)="userdd(this.SupplierCatlogForm.value.supplier_code)"
+                                    class="matformfieldinputstyle" [matAutocomplete]="user">
+                                <mat-autocomplete #user="matAutocomplete" [displayWith]="displayFnuser" >
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let user of UserList" [value]="user">
+                                            ({{user.code}}) {{user?.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field> -->
+
+                            <mat-label>Supplier Code</mat-label><br>
+                            <mat-form-field class="matformfieldstyle">
+                                <mat-select class="matformfieldinputstyle" formControlName="type" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of UserList" title=" {{boolean.text}}"
+                                        [value]="boolean.code">
+                                        {{boolean.code}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </td>
+
+                        <td>
+                            <mat-label>Activity Name </mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                    formControlName="name" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+                            <mat-label>Activity Type</mat-label><br>
+                            <mat-form-field class="matformfieldstyle">
+                                <mat-select class="matformfieldinputstyle" formControlName="type" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of activityTypeList" title=" {{boolean.text}}"
+                                        [value]="boolean.name">
+                                        {{boolean.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Description </mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                <textarea class="matformfieldinputstyle heightdesc" type="text"
+                                    placeholder="Description..." formControlName="description" matInput
+                                    autocomplete="off"></textarea>
+                            </mat-form-field>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="fidelity">Fidelity</mat-checkbox>
+                            </section>
+                        </td>
+                        <td>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="bidding">Bidding</mat-checkbox>
+                            </section>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label> Start Date</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input matInput readonly placeholder="Start Date" [matDatepicker]="picker1"
+                                    [min]="today" formControlName="start_date" class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+
+
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield"> End Date</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input matInput readonly placeholder="End Date" [matDatepicker]="picker2" [min]="today"
+                                    formControlName="end_date" class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label>Product Name</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #prodInput placeholder="Select Product" type="text" matInput
+                                    (keyup)="prodDD(SupplierCatlogForm.value.productname)"
+                                    class="matformfieldinputstyle" formControlName="productname"
+                                    [matAutocomplete]="prod">
+                                <mat-autocomplete #prod="matAutocomplete" [displayWith]="displayFnprod">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let prod of ProductList" [value]="prod">
+                                            {{prod.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <!-- <br> -->
+                    <tr>
+                        <td>
+                            <mat-label>RM</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #empInput placeholder="Select Code " type="text" matInput formControlName="rm"
+                                    (keyup)="EmpDD(this.SupplierCatlogForm.value.rm)" class="matformfieldinputstyle"
+                                    [matAutocomplete]="emp">
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let emp of EMPList" [value]="emp">
+                                            {{emp.full_name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Raisor</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #empInput placeholder="Select Code " type="text" matInput
+                                    formControlName="raisor" (keyup)="EmpDD(this.SupplierCatlogForm.value.raisor)"
+                                    class="matformfieldinputstyle" [matAutocomplete]="emp">
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let emp of EMPList" [value]="emp">
+                                            {{emp.full_name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label>Approver</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #empInput placeholder="Select Code " type="text" matInput
+                                    formControlName="approver" (keyup)="EmpDD(this.SupplierCatlogForm.value.approver)"
+                                    class="matformfieldinputstyle" [matAutocomplete]="emp">
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let emp of EMPList" [value]="emp">
+                                            {{emp.full_name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td>
+                            <mat-label>Contract Spend </mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Spend"
+                                    formControlName="contract_spend" matInput autocomplete="off">
+                                <mat-hint>
+                                    <h3>{{SupplierCatlogForm.value.contract_spend | amountPipe}}</h3>
+                                </mat-hint>
+                            </mat-form-field>
+                            
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Category</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #catInput placeholder="Select Category" type="text" matInput
+                                    (keyup)="categoryDD(SupplierCatlogForm.value.category)"
+                                    class="matformfieldinputstyle" formControlName="category" [matAutocomplete]="cat">
+                                <mat-autocomplete #cat="matAutocomplete" [displayWith]="displayFncat">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let cat of CategoryList" [value]="cat">
+                                            {{cat.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label >SubCategory</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #subcatInput placeholder="Select Sub Cat" type="text" matInput
+                                    (keyup)="SubcategoryDD(SupplierCatlogForm.value.category, SupplierCatlogForm.value.subcategory)"
+                                    class="matformfieldinputstyle" formControlName="subcategory"
+                                    [matAutocomplete]="subcat">
+                                <mat-autocomplete #subcat="matAutocomplete" [displayWith]="displayFnsubcat">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let subcat of SubCategoryList" [value]="subcat">
+                                            {{subcat.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div>
+
+
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" (click)="oncancel()">Cancel</button>
+
+                    <button type="button" *ngIf="SubmitBtnShowOrHide == false"
+                     style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="SupplierCatlogSubmit()">Submit</button>
+
+                    <button type="button"  (click)="pushtovendor()" *ngIf="MoveToSupplierBTN"
+                     style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light">Move To Supplier</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

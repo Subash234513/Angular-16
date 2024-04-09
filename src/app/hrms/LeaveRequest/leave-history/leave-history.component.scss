@@ -1,0 +1,245 @@
+
+
+p {
+ 
+   font-family: "Montserrat"
+}
+
+
+h2,h1{
+    font-family: "Montserrat"
+}
+
+.container{
+  font-family: "Montserrat";
+  color: black;
+}
+
+  .table{
+    width: 50rem;
+    margin-left: 10rem;
+    font-family: "Montserrat";
+     position: relative;
+     right: 10rem;
+    
+  }
+
+  .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+
+
+  mat-expansion-panel{
+    width: 26rem;
+    border-radius: 20px;
+    border: 5px solid #d3d5d7;
+  }
+  
+  // #hideTable{
+  //   width: 20rem;
+  //   margin-right: 40rem;
+  //   position: relative;
+  //   right: 10rem;
+  
+  // }
+
+  #hideTable{
+    width: 15rem;
+     margin-left:143px;
+  }
+
+#hideAvailTable{
+  width: 23rem;
+  margin-right: 40rem;
+  position: relative;
+  right: 10rem;
+}
+  .accordion-table-container {
+    display: flex;
+    justify-content: space-between;
+  
+  }
+
+  body {
+    overflow: hidden;
+  }
+  
+
+  table.table-striped {
+    width: 100%; 
+  
+  }
+  table{
+    font-style: "Montserrat";
+  }
+
+.panelTitle{
+    font-style: "Montserrat";
+    font-size: 18px;
+    font-weight: bold;
+  
+
+  }
+
+.last-table-head{
+  border-radius: 20%;
+  background-color:  rgb(212, 211, 211);
+}
+mat-panel-title{
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+mat-accordion{
+  border-radius: 20px;
+}
+
+.scrollable-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.static-header {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 2;
+}
+// .table-container {
+//   max-height: 400px;
+//   overflow-x: hidden; 
+//   overflow-y: auto;
+//   margin-right: 15rem;
+//   margin-left: 5rem;
+//   width: 30rem;
+
+// }
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden; 
+  margin-right: 15rem;
+  margin-left: 5rem;
+  width: 30rem;
+}
+
+.head-span {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #044063;
+  color: white;
+  padding: 5px;
+  // margin-right: 1rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px; 
+  position: relative;
+  left: 3rem;
+  font-size: 13px;
+}
+
+.title-row{
+  display: flex;
+  align-items: center;
+}
+
+//table
+/* Table */
+.table .thead-light th {
+  color: black;
+}
+
+.thead-light{
+  padding: 5px;
+}
+.cus-table thead {
+  --bs-table-bg: #eeeeef;
+}
+.cus-tableContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cus-table thead th {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.cus-table td {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.cus-table th:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.cus-table th:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+
+.cus-badgeBlue {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ededfd;
+  color: #2d2e8e;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.cus-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cus-badge div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cus-badge p {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+// .mat-form-field{
+//   border: 1px solid black;
+//   border-radius: 5px;
+//   height: 35px;
+// }
+
+.search{
+  bottom:10px;
+}
+
+.displayTab{
+  width: 30rem;
+}
+
+// .typeWidth{
+//   width: 50px;
+// }
+// .snoWidth{
+//   width: 30px;
+
+// }
+

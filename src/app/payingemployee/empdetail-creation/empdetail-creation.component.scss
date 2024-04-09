@@ -1,0 +1,73 @@
+.matformfieldform{
+    // width: 200px;
+    width: 100%;
+}
+.matformfieldformleft{
+    // width: 200px;
+    // margin-left: 30px;
+    width: 100%;
+}
+.marginposition{
+    margin: 25px;
+}
+.leftpoistion{
+    margin-left: 7%;
+}
+.longInput{
+    width: 700px;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    // height: 300px; __<<ngThemingMigrationEscapedComment1>>__
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .boldheading{
+    margin-left: 38%;
+  }
+  .width{
+    width: 100%;
+  }
+  .font{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+ }
+ input{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+ }
+ .navitem{
+  cursor: pointer;
+  margin-left: 80px;
+  font-size:15px;
+ }
+ .click{
+  font-weight: bold;
+ }
+ .blue{
+  color: blueviolet;
+ }
+ .color{
+  color: red;
+ }
+
+.margin_style{
+  margin-top: 0px;
+}
+.commonstyle{
+  margin-top:-8px;
+}
+.display{
+  display: flex;
+  justify-content: right;
+  margin-right: 45px;
+}

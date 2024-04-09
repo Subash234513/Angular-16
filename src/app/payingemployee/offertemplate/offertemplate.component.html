@@ -1,0 +1,90 @@
+<div style="background-color: #ffffff; margin-top: 1px;margin-left: 1%;">
+
+  <div *ngIf="summaryView" style="margin-left: 15px;margin-top: 1%;">
+    <h2>Offer Templates</h2>
+    <div style="margin-left: 15px;margin-top: 1%;">
+      <table class="table" id='commonstyle'>
+        <thead class="">
+          <tr>
+            <th>S.No</th>
+            <th>Template Name </th>
+            <th>Grade </th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Offer Template</td>
+            <td>Level 1</td>
+            <td>
+              <i class="fa solid fa-pencil fa-fade" (click)="editTemplate()"></i>
+              <!-- <mat-icon
+              class="fa solid fa-pencil fa-fade" >edit</mat-icon> -->
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Offer Template2</td>
+            <td>Level 2</td>
+            <td>
+              <i class="fa solid fa-pencil fa-fade" (click)="editTemplate()"></i>
+              <!-- <mat-icon class="matIcon" (click)="editTemplate()">edit</mat-icon> -->
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Offer Template3</td>
+            <td>Level 3</td>
+            <td>
+
+              <i class="fa solid fa-pencil fa-fade" (click)="editTemplate()"></i>
+              <!-- <mat-icon class="matIcon" (click)="editTemplate()">edit</mat-icon> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  <div *ngIf="offerCreateView" tyle="margin-left: 15px;margin-top: 2%;">
+    <h2>Template Create
+      <button type="button" class="btn btn-outline-primary text-center"  style="border-radius: 40px;    margin-left: 32%;
+      margin-top: 2%;">Preview</button>
+       <button type="submit" class="btn btn-outline-primary text-center"  style="border-radius: 40px;    margin-left: 4%;
+       margin-top: 2%;">Save Draft</button> 
+      <button type="submit" class="btn btn-outline-success text-center"  style="border-radius: 40px;    margin-left: 4%;
+      margin-top: 2%;">Submit</button> <button type="button" class="btn btn-outline-primary text-center" (click)="addCancel()" style="border-radius: 40px;    margin-left: 4%;
+      margin-top: 2%;">Cancel</button> </h2>
+
+    <div class="row">
+      <div style="border: 1px solid rgba(0, 0, 0, 0.057);" class="col-sm-3 col-md-3 col-lg-3">
+        <h2>Template</h2>
+        <ul id="clauselist">
+          <li><span>Greetings
+              &nbsp;+</span></li>
+          <li><span>Role Definition
+              &nbsp;+</span></li>
+          <li><span>Pay Structure
+              &nbsp;+</span></li>
+          <li><span>Company Policies
+              &nbsp;+</span></li>
+        </ul>
+      </div>
+
+      <div style="border: 1px solid rgba(0, 0, 0, 0.086);padding: 3px;" class="col-sm-9 col-md-9 col-lg-9">
+        <form [formGroup]="offerForm" (ngSubmit)="Submit()">
+        <div formControlName="content"  [ngxSummernote]="config" #textbox>
+          
+        </div>
+     
+        </form>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+

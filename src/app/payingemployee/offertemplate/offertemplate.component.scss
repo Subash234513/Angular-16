@@ -1,0 +1,73 @@
+.page {
+    width: 21cm;
+    height: 29.7cm;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 2cm;
+    page-break-after: always;
+    font-family: 'Times New Roman', Times, serif;
+      font-size: larger;
+  
+    @media print {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+  
+  @media print {
+    body {
+      margin: 0;
+      
+    }
+  
+    .page {
+      margin: 0;
+      box-shadow: none;
+    }
+  
+    header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+  
+    main {
+      margin-top: 20px;
+    }
+  }
+
+//   .vertical-line {
+//     border-left: 2px solid blue;
+//     padding-left: 10px; __<<ngThemingMigrationEscapedComment0>>__
+//   }
+
+#clauselist{
+  height: 500px;
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 0px;
+}
+
+
+#clauselist li{
+  list-style: none;
+  border: 1px solid rgba(0, 0, 0, 0.266);
+  margin: 2px;
+  padding: 5px;
+}
+
+#clauselist li span{
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.fa-pencil {
+  background-color: #ededff;
+  color: #474aff;
+  padding: 10px;
+  border-radius: 4px;
+}
+// .matIcon:hover{
+//   color: rgb(8, 172, 237);
+// }

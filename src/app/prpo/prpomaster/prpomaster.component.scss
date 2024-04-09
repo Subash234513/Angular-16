@@ -1,0 +1,26 @@
+tbody td {
+	padding: 0.5em 0.1em 0.1em;
+}
+.cursor{
+    cursor: pointer;
+}
+th, td{
+    text-align:center;
+}
+::ng-deep { .cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } }
+// .cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 
+.NodataAlign{
+    text-align: center;
+}
+// .mat-autocomplete-panel{
+//     z-index: 999999;
+//   }
+// .cdk-overlay-pane {
+//     z-index: 99999;
+//   }
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+    
+  }

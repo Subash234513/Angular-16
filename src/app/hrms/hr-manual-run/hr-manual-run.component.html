@@ -1,0 +1,38 @@
+<div>
+    <div>
+        <div class="display">
+            <div class="displaySearch">
+                <div >
+                    <mat-form-field>
+                        <mat-label>Date</mat-label>
+                        <input matInput format [matDatepicker]="picker" placeholder="Choose a date" [formControl]="logDate" >
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      <!-- </mat-form-field> -->
+                    </mat-form-field>
+                </div>
+                <div class="mt-1">
+                    <button mat-raised-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+                <div class="mt-1">
+                    <button mat-raised-button (click)="clear()">
+                        Clear
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div class="ManualRun mt-1">
+                    <button mat-raised-button (click)="ManualRun()" class="buttonManualRun">
+                        <i class="fa fa-cog" [ngClass]="{'rotate-search':Searching}"></i>
+                        Manual Run
+                    </button>
+                    
+                </div>
+               </div>
+        </div>
+     
+       
+    </div>
+</div>

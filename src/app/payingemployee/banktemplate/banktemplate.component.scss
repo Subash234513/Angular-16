@@ -1,0 +1,84 @@
+.cus-taskCreateContainer1 {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .button{
+    margin-top: -8px;
+  }
+  .Template{
+    margin-left: 51px;
+    margin-top: 24px;
+  }
+  #table{
+    width: 80%;
+  }
+  .display{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fontSize{
+    font-size: 50px;
+    margin-right: 22px;
+  }
+  .modal_width{
+    width: 110%;
+  }
+  .height{
+    height: 20px;
+  }
+  .width{
+    width: 90px;
+}
+.btn{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+}
+.fa-trash {
+  border-radius: 4px;
+  background-color: #fff0d5;
+  padding: 10px;
+  color: #ffa500;
+}
+.fa-trash-can {
+  border-radius: 4px;
+  // background-color: #fff0d5;
+  padding: 10px;
+  // color: #ffa500;
+  color: red;
+  cursor: pointer;
+}
+.fa-pencil {
+  // background-color: #ededff;
+  color: #474aff;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.add{
+  margin-left: 20px;
+  background-color: rgba(45, 129, 155, 0.56);
+}
+#add{
+  margin-left: 20px;
+  background-color: rgba(45, 129, 155, 0.56);
+  margin-top: 10px;
+}
+.card {
+  width: 56%;
+  margin-left: 21%;
+}
+
+.custom-file-input {
+  background-color: aliceblue;
+}
+.fa-cloud-arrow-down{
+  padding: 10px;
+}
+// .example-chip-lis{
+//   width: 100%;
+// }

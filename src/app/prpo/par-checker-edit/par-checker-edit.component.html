@@ -1,0 +1,218 @@
+<div>
+    <form [formGroup]="PARmakerForm">
+        <div class="header">
+            <h2>
+                Budget Proposal Approval (BPA Approval)	
+            </h2>
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label>BPA Number</mat-label>
+                            <input matInput placeholder="BPA Number" formControlName="no" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" 
+                                placeholder="Start Date" formControlName="date" required>
+                            <mat-datepicker-toggle matSuffix  readonly [for]="picker1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker disabled #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                   
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label>BPA Year</mat-label>
+                            <input matInput placeholder="BPA Year" readonly formControlName="year" autocomplete="off"
+                                minlength="4" maxlength="4" size="45" pattern="[0-9]{4,4}" required >
+                            <mat-error>Enter valid Year</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> BPA Amount</mat-label>
+                            <input matInput type="number" readonly placeholder="BPA Amount"  min=1
+                                 autocomplete="off" formControlName="amount" required >
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="inputformatlongdesc">
+                            <mat-label> BPA Description</mat-label>
+                            <input matInput placeholder="BPA Description" formControlName="desc" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                    
+                    <td> <span class="material-icons" type="button" data-toggle="modal"
+                            data-target=".bd-example-modal-xl">description</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> Contingency Percentege</mat-label>
+                            <input matInput formControlName="contigency"  autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+     
+
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">
+                            Note Pad
+                        </h2>
+                    </div>
+                    <br>
+                    <div style="margin-left: 50px;width:90%;height: 70%;">
+                       
+                        <div>
+                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                (mediaDelete)="onDelete($event)" (summernoteInit)="summernoteInit($event)"
+                                formControlName="content">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                            class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <h1 style="margin-left: 4%;">BPA Details</h1>
+        <div class="table-responsive" style="margin-top: 2%;width: 90%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header>
+                        <th>S.No</th>
+                        <th>Expense Type</th>
+                        <th>Request For</th>
+                        <th>Description</th>
+                        <th>Year</th>
+                        <th>Amount</th>
+                        <th>Remarks</th>
+                        <th>Contingency Amount</th>
+                        <th>Total Amount</th>
+                        <th>Download File</th>
+                        <!-- <th>View File </th> -->
+                    </tr>
+                </thead>
+                <tbody *ngFor="let section of PardetailsList; let i = index">
+                    <tr>
+                        <td>{{i+1}}</td>
+                        <td> {{section.exptype}}   </td>
+                        <td> {{section.requestfor}}   </td>
+                        <td> {{section.desc}}   </td>
+                        <td> {{section.year}}   </td>
+                        <td> {{section.originalamount | amountPipeCustom}}   </td>
+                        <td> {{section.remarks}}   </td>
+                        <td> {{ (section.contigency * section.originalamount) / 100 | amountPipeCustom}}   </td>
+                        <td> {{section.amount | amountPipeCustom}}   </td>
+                        <td style="cursor: pointer;margin-top: 0%;width: 50%;">
+                            <i class="fa fa-download"></i><br>
+                        <div *ngIf="section.file_upload?.length==0; else filePar" class="NodataAlign">No
+                            File Found...</div>
+                        <ng-template #filePar>
+                            <p *ngFor="let a of section.file_upload ;index as i;"
+                                (click)="fileDownloads(a.file_id,a.file_name )"
+                                class=" btn-btn-link">
+                                {{i+1}}. {{a.file_name }}<br>
+                            </p><br>
+                        </ng-template>
+                    </td>
+                    <!-- <td style="margin-left:-1%">
+                        <div *ngIf="section.file_upload?.length==0; else fileactionPar" class="NodataAlign">
+                            No
+                            File Found...</div>
+                        <ng-template #fileactionPar>
+                            <p class="btn btn-link" *ngFor="let a of section.file_upload ;index as i;"
+                                style="margin-left:-1%" data-target="#exampleModal" data-toggle="modal"
+                                (click)="commentPopup(a.file_id,a.file_name)">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <br>
+                                (Note:Only image file can be viewed)
+                            </p>
+                        </ng-template>
+                    </td> -->
+                    </tr>
+                    
+                </tbody>
+                <tr>
+                    <th class="totaldisplay" colspan="5">Total Amount:</th>
+                    <td class="rightaligntotal">{{sum  | amountPipeCustom }}</td>
+                    <td class="totaldisplay" colspan="3" style="margin-left: 50px;">{{perceTotalsum  | amountPipeCustom }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="row" style="margin-bottom: 50px;">
+        <form [formGroup]="approvalForm">
+            <mat-form-field style="width: 400px; margin-left: 50px;">
+                <mat-label>Approval Remarks</mat-label>
+                <textarea matInput placeholder="APPROVE Remarks" formControlName="remarks"
+                    autocomplete="off"></textarea>
+            </mat-form-field>
+            <button type="submit" data-dismiss="modal" [disabled]="approvedisable" (click)="approveClick()" class="btn btn-outline-success"
+                style="border-radius: 40px;margin-left: 10px;">APPROVE</button>
+        </form>
+
+        <form [formGroup]="rejectForm">
+            <mat-form-field style="width: 400px; margin-left: 50px;">
+                <mat-label>Rejected Remarks</mat-label>
+                <textarea matInput placeholder="REJECT Remarks" formControlName="remarks" autocomplete="off"></textarea>
+            </mat-form-field>
+            <button type="button" data-dismiss="modal" [disabled]="rejectdisable" (click)="rejectClick()" class="btn btn-outline-danger"
+                [disabled]="rejectForm.invalid" style="border-radius: 40px;margin-left: 10px;">REJECT</button>
+
+            <br>
+            <br>
+        </form>
+        <div style="margin-top: 3%;margin-left: 5%;">
+            <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()">Cancel</button>
+        </div>
+    </div>
+
+</div>
+<div *ngIf="showimagepopup" id="exampleModal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <pre>
+{{ approvalForm.value | json }}
+</pre>
+
+<pre>
+    {{ rejectForm.value | json }}
+    </pre>
+     -->
+
+
+     <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+        <p style="color: white">Please Wait. </p>
+    </ngx-spinner>

@@ -1,0 +1,72 @@
+
+
+<div style="margin-left: 19px;margin-top: 1%; width: 100%;">
+    
+    <div>
+      
+        
+        <form [formGroup]="portalForm" autocomplete="off">
+            <table>
+                <tr>
+                    <td>
+                        <mat-label>PA Code<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                            <input matInput  class="matformfieldinputstyle"
+                                formControlName="supplier_code" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-label style="margin-left: 60px;">Name<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline">
+                            <input matInput  class="matformfieldinputstyle"
+                                formControlName="name" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                   
+                    <!-- <td>
+                        <mat-label style="margin-left: 60px;">Supplier Code<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline">
+                            <input matInput  class="matformfieldinputstyle"
+                                formControlName="supplier_code" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td> -->
+
+                    <td>
+                        <mat-label style="margin-left: 60px;">Relationship Type<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline">
+                            <input matInput  class="matformfieldinputstyle" [(ngModel)]="rel_type"
+                                formControlName="relationship_type" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                    
+                    
+                </tr>
+                <!-- <tr>
+                    <td>
+                        <mat-label>Created By<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+
+                            <input matInput  class="matformfieldinputstyle"
+                                formControlName="created_by" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                             
+                </tr>       -->
+            </table>
+        
+        </form>
+    </div>
+</div>
+<div style="margin-top: 3%;margin-left: 10px;">
+    <button type="button" (click)="onCancelClick()" class="btn btn-light"
+    style="border-radius: 7px;
+border-color: black;
+background-color: white;margin-left: 10px;">Cancel</button>
+    <button type="submit" style="border-radius: 10px;
+    border-color: #f5c68b;
+    background-color: #f5c68b;margin-left: 10px;" 
+    class="btn btn-light" (click)="portalsubmitForm()" >Submit</button>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen] = "true" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

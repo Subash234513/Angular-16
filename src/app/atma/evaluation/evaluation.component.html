@@ -1,0 +1,974 @@
+<div style="background-color: #f6f6f6;">
+    <mat-card style="margin:20px 12px 20px 20px;" class="mat-elevation-z0">
+        <div style="margin-left: 15px;">
+
+            <div>
+
+                <div style="float:right;margin:20px">
+
+                    <button class="btn btn-success" data-target="#history1" data-toggle="modal"
+                        style="border-radius: 10px;margin-left:10px" type="button" (click)="historyopen()" >
+                        History</button>
+
+                    <button type="button" class="btn btn-light" [routerLink]='"/atma/vendorView"' skipLocationChange
+                        style="border-radius: 7px;margin-left: 10px;border-color: black;background-color: white;">
+                        Back</button>
+                </div>
+
+                <!-- <mat-form-field appearance="outline" class="inputwidth">
+                    <mat-label>History</mat-label>
+                    <mat-select>
+                        <mat-option *ngIf="historydropdown.length == 0"> No History </mat-option>
+
+                        <ng-container *ngIf="historydropdown.length != 0">
+                            <mat-option (click)="historyselect(tab.non_transfor_date,tab.expiry_date);periodmodal=false"
+                                data-target="#history" data-toggle="modal"
+                                *ngFor="let tab of historydropdown;let a=index">
+
+                                <span>{{tab.date}}</span>
+                                <mat-icon class="icon">
+                                    open_in_new
+                                </mat-icon>
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field> -->
+
+            </div>
+            <div>
+
+                <nav>
+                    <div class="nav nav-tabs">
+
+                        <a class="nav-item nav-link" [ngStyle]="getnavbarcolor(tab)"
+                            [ngClass]="(tab.index == i)? 'active': '' " *ngFor="let tab of questiondata;let i=index"
+                            data-toggle="tab" (click)="changeindex(i)">{{tab.type_id.name}} <div
+                                *ngIf="tab?.mapping[0]?.type_status?.id == 3" class="tickicon
+                            ">&#10004;</div>
+
+                        </a>
+
+                    </div>
+                </nav>
+
+                <div>
+
+
+
+                    <div class="table-responsive" *ngFor="let question of questiondata; let i = index; "
+                        style="width: 98%;overflow-x: hidden;">
+                        <div *ngIf="i == question.index">
+
+
+                            <table class="table" id="commonstyle">
+                                <tr class="head">
+                                    <th *ngFor="let tab of question['question_header'];let j=index;">
+                                        {{tab.name}}
+
+                                    </th>
+                                </tr>
+
+                                <tr *ngFor="let tr of question['tablearray'];let k=index">
+
+                                    <td *ngFor="let td of tr['tdarray'];let l=index">
+                                        <div *ngIf="td.is_input == false ; else input">
+                                            <p style="padding:30px 0px">{{td.tdvalue}}</p>
+                                            <div class="subpadding" *ngFor="let sub of td['sub_question']">
+                                                <p style="padding: 15px 30px;">{{sub.answer}}</p>
+                                            </div>
+                                        </div>
+
+                                        <ng-template #input>
+                                            <!-- <mat-form-field class="inputwidth">
+                                            <input
+                                              matInput
+                                              [value]="td.tdvalue"
+                                              [ngModel]="td.tdvalue"
+                                              (ngModelChange)="td.tdvalue = $event"
+                                            />
+                                          </mat-form-field> -->
+
+                                            <div *ngIf="td.input_type?.name == 'TEXT'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <input matInput
+                                                        [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                        placeholder="Enter answer" [value]="td.tdvalue"
+                                                        [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event">
+                                                </mat-form-field>
+                                            </div>
+                                            <div *ngIf="td.input_type?.name == 'TEXT_AREA'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <textarea matInput
+                                                        [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                        [value]="td.tdvalue" [ngModel]="td.tdvalue"
+                                                        (ngModelChange)="td.tdvalue = $event"
+                                                        placeholder="Enter answer"></textarea>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="td.input_type?.name == 'NUMBER'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <input matInput type="number"
+                                                        [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                        [value]="td.tdvalue" [ngModel]="td.tdvalue"
+                                                        (ngModelChange)="td.tdvalue = $event"
+                                                        placeholder="Enter answer">
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="td.input_type?.name == 'CHECK_BOX'">
+                                                <!-- <input type="checkbox" > -->
+                                                <div *ngFor="let option of td.input_value">
+                                                    <mat-checkbox
+                                                        [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                        (change)="getcheckboxchecked($event.checked,option,i,l,k)">
+                                                        {{option.options}}</mat-checkbox>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="td.input_type?.name == 'RADIO_BUTTON'">
+                                                <!-- <input type="radio" [value]="td.tdvalue"
+                                          [ngModel]="td.tdvalue"
+                                          (ngModelChange)="td.tdvalue = $event" > -->
+
+                                                <mat-radio-group [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                    [(ngModel)]="td.tdvalue" aria-label="Select an option">
+                                                    <mat-radio-button *ngFor="let opt of td.input_value"
+                                                        [value]="opt.id">{{opt.options}}</mat-radio-button>
+
+                                                </mat-radio-group>
+
+                                            </div>
+
+                                            <div *ngIf="td.input_type?.name == 'DROP_DOWN'">
+                                                <mat-form-field class="inputwidth">
+                                                    <mat-select [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                        [(ngModel)]="td.tdvalue">
+                                                        <mat-option *ngFor="let opt of td.input_value" [value]="opt.id">
+                                                            {{opt.options}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="td.input_type?.name == 'FILE'">
+
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <input matInput
+                                                        [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                        placeholder="Enter answer" [value]="td.tdvalue"
+                                                        [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event">
+                                                </mat-form-field>
+
+                                                <input type="file"
+                                                    [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                    (change)="fileuploadquestionnaire($event.target.files,td,i,k,l)"
+                                                    multiple>
+                                                <br>
+
+                                                <table id="another">
+                                                    <tr *ngFor="let upload of td.filedata;index as f" class="btn-link">
+                                                        <td style="color: blue;" data-target="#imagepreview"
+                                                            data-toggle="modal" (click)="getfileview(i,k,l,f)"> {{f+1}}.
+                                                            {{upload.name}}</td>
+                                                        <td>
+                                                            <button mat-icon-button (click)="getdownload(i,k,l,f)">
+                                                                <mat-icon style="color: gray;" aria-label="Edit">
+                                                                    download</mat-icon>
+                                                            </button>
+                                                        </td>
+                                                        <td>
+
+                                                            <button mat-icon-button (click)="getfiledelete(i,k,l,f)">
+                                                                <mat-icon style="color: gray;" aria-label="Edit">
+                                                                    delete</mat-icon>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+
+
+                                            </div>
+
+                                            <div *ngFor="let sub of td['sub_question'];let m=index">
+                                                <!-- <mat-form-field class="inputwidth">
+                                              <input
+                                                matInput
+                                                [value]="sub.answer"
+                                                [ngModel]="sub.answer"
+                                                (ngModelChange)="sub.answer = $event"
+                                              />
+                                            </mat-form-field> -->
+                                                <div *ngIf="sub?.input_type?.name == 'TEXT'">
+                                                    <mat-form-field class="inputwidth" appearance="standard">
+                                                        <input matInput
+                                                            [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                            placeholder="Enter answer" [value]="sub.answer"
+                                                            [ngModel]="sub.answer"
+                                                            (ngModelChange)="sub.answer = $event">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div *ngIf="sub?.input_type?.name == 'TEXT_AREA'">
+                                                    <mat-form-field class="inputwidth" appearance="standard">
+                                                        <textarea
+                                                            [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                            matInput [value]="sub.answer" [ngModel]="sub.answer"
+                                                            (ngModelChange)="sub.answer = $event"
+                                                            placeholder="Enter answer"></textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div *ngIf="sub?.input_type?.name == 'NUMBER'">
+                                                    <mat-form-field class="inputwidth" appearance="standard">
+                                                        <input [readonly]="question?.mapping[0]?.type_status?.id == 3"
+                                                            matInput type="number" [value]="sub.answer"
+                                                            [ngModel]="sub.answer" (ngModelChange)="sub.answer = $event"
+                                                            placeholder="Enter answer">
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div *ngIf="sub?.input_type?.name == 'CHECK_BOX'">
+                                                    <!-- <input type="checkbox" > -->
+                                                    <mat-checkbox
+                                                        [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                        *ngFor="let option of sub.input_value" [(ngModel)]="sub.answer">
+                                                        option.options</mat-checkbox>
+                                                </div>
+
+                                                <div *ngIf="sub?.input_type?.name == 'RADIO_BUTTON'">
+                                                    <!-- <input type="radio" [value]="sub.answer"
+                                              [ngModel]="sub.answer"
+                                              (ngModelChange)="sub.answer = $event" > -->
+
+                                                    <mat-radio-group
+                                                        [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                        [(ngModel)]="sub.answer" aria-label="Select an option">
+                                                        <mat-radio-button *ngFor="let opt of sub.input_value"
+                                                            [value]="opt.id">{{opt.options}}</mat-radio-button>
+
+                                                    </mat-radio-group>
+
+                                                </div>
+
+                                                <div *ngIf="sub?.input_type?.name == 'DROP_DOWN'">
+                                                    <mat-form-field class="inputwidth">
+                                                        <mat-select
+                                                            [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                            [(ngModel)]="sub.answer">
+                                                            <mat-option *ngFor="let opt of sub.input_value"
+                                                                [value]="opt.id">{{opt.options}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div *ngIf="sub?.input_type?.name == 'FILE'">
+                                                    <input [disabled]="question?.mapping[0]?.type_status?.id == 3"
+                                                        type="file">
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </td>
+
+                                </tr>
+                            </table>
+
+
+                            <!-- <div>
+                                <mat-form-field class="inputwidth" id="normalformfieldsize" appearance="fill" (click)="getdepartment('',dep_currentpage=1)">
+                                    <mat-label>Department</mat-label>
+                                    <input type="text" #deptinput matInput autocomplete="off"
+                                        [matAutocomplete]="deptauto"
+                                        (keyup)="getdepartment($event.target.value,dep_currentpage=1)">
+                                    <mat-autocomplete [panelWidth]="300" #deptauto="matAutocomplete"
+                                        [displayWith]="getdeptlist" (opened)="departmentscroll()">
+                                        <mat-option *ngFor="let dept of deptlist" [value]="dept">{{dept.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div> -->
+                            <!-- <form [formGroup]="mapform" > -->
+                            <tr>
+                                <td>
+                                    <mat-form-field style="width: 250px;">
+                                        <mat-label>Period</mat-label>
+                                        <!-- <mat-select disabled  [(ngModel)]="question.mappinghtml.period">
+                                            <mat-option (click)="periodselect(i)" *ngFor="let period of periodlist" [value]="period.id">
+                                                {{period.name}}
+                                            </mat-option>
+                                        </mat-select> -->
+                                        <input type="text" [(ngModel)]="question.mappinghtml.period.name" matInput
+                                            readonly>
+                                    </mat-form-field>
+                                </td>
+                                <td class="tdpadding">
+                                    <!-- <mat-form-field *ngIf="question.mappinghtml.period == 1">
+                                        <mat-select [(ngModel)]="question.mappinghtml.periodicity"
+                                            placeholder="Periodicity" matInput>
+                                            <mat-option *ngFor="let opt of periodicity_quaterly" [value]="opt.id">
+                                                {{opt.text}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field *ngIf="question.mappinghtml.period == 2">
+                                        <mat-select [(ngModel)]="question.mappinghtml.periodicity"
+                                            placeholder="Periodicity" matInput>
+                                            <mat-option *ngFor="let opt of periodicity_half" [value]="opt.id">
+                                                {{opt.text}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field
+                                        *ngIf="question.mappinghtml.period != 1 && question.mappinghtml.period != 2">
+                                        <input type="text" [(ngModel)]="question.mappinghtml.periodicity"
+                                            placeholder="Periodicity" matInput>
+
+                                    </mat-form-field> -->
+
+                                </td>
+                                <td>
+
+
+                                    <mat-form-field>
+                                        <mat-label>Start Month</mat-label>
+                                        <input matInput [matDatepicker]="excemfrom" readonly
+                                            [(ngModel)]="question.mappinghtml.period_start">
+
+                                        <mat-datepicker-toggle matSuffix [for]="excemfrom">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #excemfrom startView="multi-year"
+                                            (monthSelected)="setMonthAndYear($event, excemfrom,i)"
+                                            panelClass="example-month-picker">
+                                        </mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td class="tdpadding">
+                                    <mat-form-field>
+                                        <mat-label>End Month</mat-label>
+                                        <input matInput [matDatepicker]="enddate" readonly
+                                            [(ngModel)]="question.mappinghtml.period_end">
+
+                                        <mat-datepicker-toggle disabled matSuffix [for]="enddate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #enddate startView="multi-year"
+                                            (monthSelected)="setMonthAndYearend($event, enddate,i)"
+                                            panelClass="example-month-picker">
+                                        </mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td class="tdpadding">
+                                    <mat-form-field>
+                                        <mat-label>Remarks</mat-label>
+
+                                        <input type="text" [(ngModel)]="question.mappinghtml.remarks"
+                                            placeholder="Remarks" matInput>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <!-- </form> -->
+
+
+
+                            <div style="margin-bottom: 25px; margin-top: 30px;">
+
+                                <button type="button" class="btn btn-light" [routerLink]='"/atma/vendorView"'
+                                    skipLocationChange style="border-radius: 7px;margin-left: 10px;
+                                                border-color: black;
+                                                background-color: white;">Back</button>
+
+                                <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                                            border-color: #f5c68b;
+                                            background-color: #f5c68b;"
+                                    [disabled]="question?.mapping[question?.mapping.length-1]?.type_status?.id == 2"
+                                    (click)="questionsubmit(question,1,1)" class="btn btn-light">Draft</button>
+
+                                <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                                            border-color: #f5c68b;
+                                            background-color: #f5c68b;"
+                                    [disabled]="question?.mapping[question?.mapping.length-1]?.type_status?.id == 2"
+                                    data-target="#submitpop" data-toggle="modal"
+                                    (click)="currentsubmitqusttype=question;" class="btn btn-light">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </mat-card>
+</div>
+
+<div id="imagepreview" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1"
+    role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Image/PDF View</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:20px" *ngIf="imgviewboolean">
+                <img src="{{imgprviewurl}}" class="img-responsive" style="width: 100%;">
+
+            </div>
+            <div style="padding:20px" *ngIf="pdfviewboolean">
+                <pdf-viewer [src]="pdfpreviewurl" [render-text]="true" [original-size]="false" style="height: 500px;">
+                </pdf-viewer>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="history" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="padding:25px 30px 25px 25px; ">
+            <div class="modal-header">
+                <h2 class="modal-title"> {{fulldata}} </h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="modalclose" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+
+                <!-- <nav>
+                    <div class="nav nav-tabs">
+
+                        <a class="nav-item nav-link" 
+                            class="active" *ngFor="let tab of currenthistorydata;let i=index"
+                            data-toggle="tab"  >{{tab.type_id.name}}
+                        </a>
+
+                    </div>
+                </nav>  -->
+                <!-- 
+                <mat-form-field appearance="outline" class="inputwidth">
+                    <mat-label>History</mat-label>
+                    <mat-select>
+                        <mat-option *ngIf="historydropdown.length == 0"> No History </mat-option>
+
+                        <ng-container *ngIf="historydropdown.length != 0">
+                            <mat-option (click)="historyselect(tab.non_transfor_date,tab.expiry_date);periodmodal=false"
+                               
+                                *ngFor="let tab of historydropdown;let a=index">
+
+                                <span>{{tab.date}}</span>
+                                <mat-icon class="icon">
+                                    open_in_new
+                                </mat-icon>
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <nav>
+                    <div class="nav nav-tabs">
+
+                        <a class="nav-item nav-link" 
+                            [ngClass]="(i == 0 )? 'active': '' " *ngFor="let tab of questiondata;let i=index"
+                            data-toggle="tab" (click)="getquestionhistory(vendorid, tab.type_id.id, tab.mappinghtml.expiry_date)">{{tab.type_id.name}} <div
+                                *ngIf="tab?.mapping[0]?.type_status?.id == 3" class="tickicon
+                            ">&#10004;</div>
+
+                        </a>
+
+                    </div>
+                </nav> -->
+
+                <br>
+
+
+                <div *ngFor="let question of currenthistorydata;let i=index">
+
+                    <table class="table" id="commonstyle">
+                        <tr class="head">
+                            <th *ngFor="let tab of question['question_header'];let j=index;">
+                                {{tab.name}}
+
+                            </th>
+                        </tr>
+
+                        <tr *ngFor="let tr of question['tablearray'];let k=index">
+
+                            <td *ngFor="let td of tr['tdarray'];let l=index">
+                                <div *ngIf="td.is_input == false ; else input">
+                                    <p style="padding:30px 0px">{{td.tdvalue}}</p>
+                                    <div class="subpadding" *ngFor="let sub of td['sub_question']">
+                                        <p style="padding: 15px 30px;">{{sub.answer}}</p>
+                                    </div>
+                                </div>
+
+                                <ng-template #input>
+                                    <!-- <mat-form-field class="inputwidth">
+                                <input
+                                  matInput
+                                  [value]="td.tdvalue"
+                                  [ngModel]="td.tdvalue"
+                                  (ngModelChange)="td.tdvalue = $event"
+                                />
+                              </mat-form-field> -->
+
+                                    <div *ngIf="td.input_type?.name == 'TEXT'">
+                                        <mat-form-field class="inputwidth" appearance="standard">
+                                            <input matInput readonly placeholder="Enter answer" [value]="td.tdvalue"
+                                                [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event">
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="td.input_type?.name == 'TEXT_AREA'">
+                                        <mat-form-field class="inputwidth" appearance="standard">
+                                            <textarea matInput readonly [value]="td.tdvalue" [ngModel]="td.tdvalue"
+                                                (ngModelChange)="td.tdvalue = $event"
+                                                placeholder="Enter answer"></textarea>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div *ngIf="td.input_type?.name == 'NUMBER'">
+                                        <mat-form-field class="inputwidth" appearance="standard">
+                                            <input matInput type="number" readonly [value]="td.tdvalue"
+                                                [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event"
+                                                placeholder="Enter answer">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div *ngIf="td.input_type?.name == 'CHECK_BOX'">
+                                        <!-- <input type="checkbox" > -->
+                                        <div *ngFor="let option of td.input_value">
+                                            <mat-checkbox disabled
+                                                (change)="getcheckboxchecked($event.checked,option,i,l,k)">
+                                                {{option.options}}</mat-checkbox>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="td.input_type?.name == 'RADIO_BUTTON'">
+                                        <!-- <input type="radio" [value]="td.tdvalue"
+                              [ngModel]="td.tdvalue"
+                              (ngModelChange)="td.tdvalue = $event" > -->
+
+                                        <mat-radio-group disabled [(ngModel)]="td.tdvalue"
+                                            aria-label="Select an option">
+                                            <mat-radio-button *ngFor="let opt of td.input_value" [value]="opt.id">
+                                                {{opt.options}}</mat-radio-button>
+
+                                        </mat-radio-group>
+
+                                    </div>
+
+                                    <div *ngIf="td.input_type?.name == 'DROP_DOWN'">
+                                        <mat-form-field class="inputwidth">
+                                            <mat-select disabled [(ngModel)]="td.tdvalue">
+                                                <mat-option *ngFor="let opt of td.input_value" [value]="opt.id">
+                                                    {{opt.options}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div *ngIf="td.input_type?.name == 'FILE'">
+                                        <input type="file" disabled
+                                            (change)="fileuploadquestionnaire($event.target.files,td,1,k,l)" multiple>
+                                        <br>
+
+                                        <table id="another">
+                                            <tr *ngFor="let upload of td.filedata;index as f" class="btn-link">
+                                                <td style="color: blue;" data-target="#imagepreview" data-toggle="modal"
+                                                    (click)="getfileview(i,k,l,f)"> {{f+1}}.
+                                                    {{upload.name}}</td>
+                                                <td>
+                                                    <button mat-icon-button (click)="getdownload(i,k,l,f)">
+                                                        <mat-icon style="color: gray;" aria-label="Edit">
+                                                            download</mat-icon>
+                                                    </button>
+                                                </td>
+                                                <td>
+
+                                                    <button mat-icon-button (click)="getfiledelete(i,k,l,f)">
+                                                        <mat-icon style="color: gray;" aria-label="Edit">
+                                                            delete</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+
+
+                                    </div>
+
+                                    <div *ngFor="let sub of td['sub_question'];let m=index">
+                                        <!-- <mat-form-field class="inputwidth">
+                                  <input
+                                    matInput
+                                    [value]="sub.answer"
+                                    [ngModel]="sub.answer"
+                                    (ngModelChange)="sub.answer = $event"
+                                  />
+                                </mat-form-field> -->
+                                        <div *ngIf="sub?.input_type?.name == 'TEXT'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <input matInput readonly placeholder="Enter answer" [value]="sub.answer"
+                                                    [ngModel]="sub.answer" (ngModelChange)="sub.answer = $event">
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="sub?.input_type?.name == 'TEXT_AREA'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <textarea readonly matInput [value]="sub.answer" [ngModel]="sub.answer"
+                                                    (ngModelChange)="sub.answer = $event"
+                                                    placeholder="Enter answer"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="sub?.input_type?.name == 'NUMBER'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <input readonly matInput type="number" [value]="sub.answer"
+                                                    [ngModel]="sub.answer" (ngModelChange)="sub.answer = $event"
+                                                    placeholder="Enter answer">
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div *ngIf="sub?.input_type?.name == 'CHECK_BOX'">
+                                            <!-- <input type="checkbox" > -->
+                                            <mat-checkbox disabled *ngFor="let option of sub.input_value"
+                                                [(ngModel)]="sub.answer">
+                                                option.options</mat-checkbox>
+                                        </div>
+
+                                        <div *ngIf="sub?.input_type?.name == 'RADIO_BUTTON'">
+                                            <!-- <input type="radio" [value]="sub.answer"
+                                  [ngModel]="sub.answer"
+                                  (ngModelChange)="sub.answer = $event" > -->
+
+                                            <mat-radio-group disabled [(ngModel)]="sub.answer"
+                                                aria-label="Select an option">
+                                                <mat-radio-button *ngFor="let opt of sub.input_value" [value]="opt.id">
+                                                    {{opt.options}}</mat-radio-button>
+
+                                            </mat-radio-group>
+
+                                        </div>
+
+                                        <div *ngIf="sub?.input_type?.name == 'DROP_DOWN'">
+                                            <mat-form-field class="inputwidth">
+                                                <mat-select disabled [(ngModel)]="sub.answer">
+                                                    <mat-option *ngFor="let opt of sub.input_value" [value]="opt.id">
+                                                        {{opt.options}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div *ngIf="sub?.input_type?.name == 'FILE'">
+                                            <input disabled type="file">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<button id="expiryopen" type="button" class="btn btn-primary" #closebutton1 data-target="#expirypopup"
+    data-toggle="modal" style="display: none;">
+    Launch demo modal
+</button>
+
+<div id="expirypopup" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h2 class="modal-title">Approve</h2> -->
+                <button type="button" class="close" #expiryclose data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:20px;text-align: center;">
+                <p style="font-weight: bold"> Period going to expiry </p>
+                <!-- <p style="font-weight: bold" >Are you sure?</p> -->
+            </div>
+            <div>
+                <div style="margin-bottom: 25px;text-align: center;">
+
+
+
+                    <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                                border-color: #f5c68b;
+                                background-color: #f5c68b;font-weight: bold;" (click)="getrenew()"
+                        class="btn btn-light">Renew</button>
+
+                    <!-- <button type="button" style="border-radius: 10px;margin-left: 10px;
+                        border-color: #f5c68b;
+                        background-color: #f5c68b;font-weight: bold;" 
+                        class="btn btn-light">New</button> -->
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="submitpop" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h2 class="modal-title">Approve</h2> -->
+                <button type="button" class="close" #submitclose data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:20px;text-align: center;">
+                <p style="font-weight: bold"> Answers you entered can't be edit or draft until next period </p>
+                <!-- <p style="font-weight: bold" >Are you sure?</p> -->
+            </div>
+            <div>
+                <div style="margin-bottom: 25px;text-align: center;">
+
+
+
+                    <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                                border-color: #f5c68b;
+                                background-color: #f5c68b;" (click)="questionsubmit(currentsubmitqusttype,2,2)"
+                        class="btn btn-light">Approve</button>
+
+                    <button type="button" class="btn btn-light" type="button" data-dismiss="modal" style="border-radius: 7px;margin-left: 10px;
+                                    border-color: black;
+                                    background-color: white;">cancel</button>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="history1" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h2 class="modal-title">Approve</h2> -->
+                <button type="button" class="close" #submitclose data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:20px;text-align: center;">
+                <!-- <mat-tab-group>
+                    <mat-tab  (click)="getquestionhistory(vendorid, tab.type_id.id, tab.mappinghtml.expiry_date)"  *ngFor="let tab of questiondata;let i=index" label="{{tab.type_id.name}}" > -->
+
+                <nav mat-tab-nav-bar>
+                    <a mat-tab-link class="fontweight" [active]="i==tab.historyindex"
+                        (click)="getquestionhistory(vendorid, tab.type_id.id, tab.mappinghtml.expiry_date);historychangeindex(i)"
+                        *ngFor="let tab of questiondata;let i=index"> {{tab.type_id.name}} </a>
+
+                </nav>
+
+                <div *ngIf="historyshowdata.length == 0">
+                    <div class="historymodal">
+                        <p style="text-align:center"> No History </p>
+                    </div>
+                </div>
+                <div *ngIf="historyshowdata.length != 0" class="historymodaldatas" >
+                <mat-tab-group *ngIf="historyshowdata.length != 0">
+                    <mat-tab class="fontweight" *ngFor="let question of historyshowdata;let i=index"
+                        label="{{question.date}}">
+
+
+
+                        <table class="table" id="commonstyle">
+                            <tr class="head">
+                                <th *ngFor="let tab of question['questiondata']['question_header'];let j=index;">
+                                    {{tab.name}}
+
+                                </th>
+                            </tr>
+
+                            <tr *ngFor="let tr of question['questiondata']['tablearray'];let k=index">
+
+                                <td  *ngFor="let td of tr['tdarray'];let l=index">
+                                    <div style="float:left"  *ngIf="td.is_input == false ; else input">
+                                        <p style="padding:30px 0px">{{td.tdvalue}}</p>
+                                        <div class="subpadding" *ngFor="let sub of td['sub_question']">
+                                            <p style="padding: 15px 30px;">{{sub.answer}}</p>
+                                        </div>
+                                    </div>
+
+                                    <ng-template #input>
+                                        <!-- <mat-form-field class="inputwidth">
+                                                <input
+                                                  matInput
+                                                  [value]="td.tdvalue"
+                                                  [ngModel]="td.tdvalue"
+                                                  (ngModelChange)="td.tdvalue = $event"
+                                                />
+                                              </mat-form-field> -->
+
+                                        <div *ngIf="td.input_type?.name == 'TEXT'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <input matInput readonly placeholder="Enter answer" [value]="td.tdvalue"
+                                                    [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event">
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="td.input_type?.name == 'TEXT_AREA'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <textarea matInput readonly [value]="td.tdvalue" [ngModel]="td.tdvalue"
+                                                    (ngModelChange)="td.tdvalue = $event"
+                                                    placeholder="Enter answer"></textarea>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div *ngIf="td.input_type?.name == 'NUMBER'">
+                                            <mat-form-field class="inputwidth" appearance="standard">
+                                                <input matInput type="number" readonly [value]="td.tdvalue"
+                                                    [ngModel]="td.tdvalue" (ngModelChange)="td.tdvalue = $event"
+                                                    placeholder="Enter answer">
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div *ngIf="td.input_type?.name == 'CHECK_BOX'">
+                                            <!-- <input type="checkbox" > -->
+                                            <div *ngFor="let option of td.input_value">
+                                                <mat-checkbox disabled
+                                                    (change)="getcheckboxchecked($event.checked,option,i,l,k)">
+                                                    {{option.options}}</mat-checkbox>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="td.input_type?.name == 'RADIO_BUTTON'">
+                                            <!-- <input type="radio" [value]="td.tdvalue"
+                                              [ngModel]="td.tdvalue"
+                                              (ngModelChange)="td.tdvalue = $event" > -->
+
+                                            <mat-radio-group disabled [(ngModel)]="td.tdvalue"
+                                                aria-label="Select an option">
+                                                <mat-radio-button *ngFor="let opt of td.input_value" [value]="opt.id">
+                                                    {{opt.options}}</mat-radio-button>
+
+                                            </mat-radio-group>
+
+                                        </div>
+
+                                        <div *ngIf="td.input_type?.name == 'DROP_DOWN'">
+                                            <mat-form-field class="inputwidth">
+                                                <mat-select disabled [(ngModel)]="td.tdvalue">
+                                                    <mat-option *ngFor="let opt of td.input_value" [value]="opt.id">
+                                                        {{opt.options}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div *ngIf="td.input_type?.name == 'FILE'">
+                                            <input type="file" disabled
+                                                (change)="fileuploadquestionnaire($event.target.files,td,1,k,l)"
+                                                multiple>
+                                            <br>
+
+                                            <table id="another">
+                                                <tr *ngFor="let upload of td.filedata;index as f" class="btn-link">
+                                                    <td style="color: blue;" data-target="#imagepreview"
+                                                        data-toggle="modal" (click)="getfileview(i,k,l,f)"> {{f+1}}.
+                                                        {{upload.name}}</td>
+                                                    <td>
+                                                        <button mat-icon-button (click)="getdownload(i,k,l,f)">
+                                                            <mat-icon style="color: gray;" aria-label="Edit">
+                                                                download</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                    <td>
+
+                                                        <button mat-icon-button (click)="getfiledelete(i,k,l,f)">
+                                                            <mat-icon style="color: gray;" aria-label="Edit">
+                                                                delete</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+
+
+                                        </div>
+
+                                        <div *ngFor="let sub of td['sub_question'];let m=index">
+                                            <!-- <mat-form-field class="inputwidth">
+                                                  <input
+                                                    matInput
+                                                    [value]="sub.answer"
+                                                    [ngModel]="sub.answer"
+                                                    (ngModelChange)="sub.answer = $event"
+                                                  />
+                                                </mat-form-field> -->
+                                            <div *ngIf="sub?.input_type?.name == 'TEXT'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <input matInput readonly placeholder="Enter answer"
+                                                        [value]="sub.answer" [ngModel]="sub.answer"
+                                                        (ngModelChange)="sub.answer = $event">
+                                                </mat-form-field>
+                                            </div>
+                                            <div *ngIf="sub?.input_type?.name == 'TEXT_AREA'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <textarea readonly matInput [value]="sub.answer"
+                                                        [ngModel]="sub.answer" (ngModelChange)="sub.answer = $event"
+                                                        placeholder="Enter answer"></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                            <div *ngIf="sub?.input_type?.name == 'NUMBER'">
+                                                <mat-form-field class="inputwidth" appearance="standard">
+                                                    <input readonly matInput type="number" [value]="sub.answer"
+                                                        [ngModel]="sub.answer" (ngModelChange)="sub.answer = $event"
+                                                        placeholder="Enter answer">
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="sub?.input_type?.name == 'CHECK_BOX'">
+                                                <!-- <input type="checkbox" > -->
+                                                <mat-checkbox disabled *ngFor="let option of sub.input_value"
+                                                    [(ngModel)]="sub.answer">
+                                                    option.options</mat-checkbox>
+                                            </div>
+
+                                            <div *ngIf="sub?.input_type?.name == 'RADIO_BUTTON'">
+                                                <!-- <input type="radio" [value]="sub.answer"
+                                                  [ngModel]="sub.answer"
+                                                  (ngModelChange)="sub.answer = $event" > -->
+
+                                                <mat-radio-group disabled [(ngModel)]="sub.answer"
+                                                    aria-label="Select an option">
+                                                    <mat-radio-button *ngFor="let opt of sub.input_value"
+                                                        [value]="opt.id">
+                                                        {{opt.options}}</mat-radio-button>
+
+                                                </mat-radio-group>
+
+                                            </div>
+
+                                            <div *ngIf="sub?.input_type?.name == 'DROP_DOWN'">
+                                                <mat-form-field class="inputwidth">
+                                                    <mat-select disabled [(ngModel)]="sub.answer">
+                                                        <mat-option *ngFor="let opt of sub.input_value"
+                                                            [value]="opt.id">
+                                                            {{opt.options}}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="sub?.input_type?.name == 'FILE'">
+                                                <input disabled type="file">
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+                <!-- </mat-tab>
+                </mat-tab-group> -->
+            </div>
+        </div>
+
+    </div>
+</div>

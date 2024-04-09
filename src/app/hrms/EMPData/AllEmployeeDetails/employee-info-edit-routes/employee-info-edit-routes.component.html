@@ -1,0 +1,199 @@
+<!-- <mat-horizontal-stepper class="stepper" [linear]="isLinear" #stepper (selectionChange)="logStepIndex($event)">
+
+  <mat-step style="padding: 0 32px;">
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 0" class="fa-solid fa-user" style="    font-size: large;
+        margin-right: 8px;"></i>
+        <i *ngIf="currentStepIndex === 0" class="fa-solid fa-user fa-fade" style="    font-size: large;color: #525CEB;
+         margin-right: 8px;"></i>
+        <span *ngIf="currentStepIndex !== 0" style="color: #046ba8;margin-left: 0%;
+        font-weight: 600;
+        font-size: small;">Employee Info</span>
+        <span *ngIf="currentStepIndex === 0" style="color: #525CEB;margin-left: 0%;
+        font-weight: 600;
+    font-size: medium;">Employee Info</span>
+
+
+      </ng-template>
+      <app-employee-basic-details *ngIf="currentStepIndex === 0"></app-employee-basic-details>
+    </form>
+  </mat-step>
+
+
+
+  <mat-step [ngClass]="{'selected-step': isStepActive(2)}" style="padding: 0 32px;">
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 1" class="fa-solid fa-address-card"
+          style="font-size: large; margin-right: 8px;"></i>
+        <i *ngIf="currentStepIndex === 1" class="fa-solid fa-address-card fa-fade"
+          style="font-size: large; margin-right: 8px;color: #525CEB;"></i>
+        <span *ngIf="currentStepIndex !== 1" style="color: #046ba8;margin-left: 0%;
+    font-weight: 600;
+    font-size: small;">Address</span>
+        <span *ngIf="currentStepIndex === 1" style="color: #525CEB;margin-left: 0%;
+    font-weight: 600;font-size: medium;">Address</span>
+      </ng-template>
+      <app-employeeaddress *ngIf="currentStepIndex === 1"></app-employeeaddress>
+    </form>
+  </mat-step>
+  <mat-step style="padding: 0 32px;">
+    <form>
+          <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 2" class="fa-solid fa-id-badge"
+          style="    font-size: large;margin-right: 8px;"></i>
+        <i *ngIf="currentStepIndex === 2" class="fa-solid fa-id-badge fa-fade"
+          style="    font-size: large;margin-right: 8px;color:#525CEB"></i>
+        <span *ngIf="currentStepIndex !== 2"
+          style="color: #046ba8;margin-left: 0%;font-weight: 600;font-size: small;">Emergency </span>
+        <span *ngIf="currentStepIndex === 2"
+          style="color: #525CEB;margin-left: 0%;font-weight: 600;font-size: medium;">Emergency
+        </span>
+
+      </ng-template>
+      <app-employee-emergency-details *ngIf="currentStepIndex === 2"></app-employee-emergency-details>
+    </form>
+  </mat-step>
+
+
+  <mat-step [ngClass]="{'selected-step': currentStepIndex === 3}" style="padding: 0 32px;">
+    <form>
+        <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 3" class="fa-solid fa-user-graduate"
+          style="font-size: large;margin-right: 8px;"></i>
+        <i *ngIf="currentStepIndex === 3" class="fa-solid fa-user-graduate fa-fade"
+          style="font-size: large;margin-right: 8px;color:#525CEB"></i>
+        <span *ngIf="currentStepIndex !== 3"
+          style="color: #046ba8;margin-left: 0%;font-weight: 600;font-size: small;">Education</span>
+        <span *ngIf="currentStepIndex === 3"
+          style="color: #525CEB;margin-left: 0%;font-weight: 600;font-size: medium;">Education</span>
+
+      </ng-template>
+      <app-employee-education *ngIf="currentStepIndex === 3"></app-employee-education>
+    </form>
+  </mat-step>
+  <mat-step [ngClass]="{'selected-step': currentStepIndex === 4}">
+    <form>
+      <ng-template matStepLabel>
+        <i  *ngIf="currentStepIndex !== 4" class="fa-solid fa-building" style="font-size: large;margin-right: 8px;"></i>
+        <i  *ngIf="currentStepIndex === 4" class="fa-solid fa-building fa-fade" style="font-size: large;margin-right: 8px;color: #525CEB"></i>
+        <span *ngIf="currentStepIndex !== 4" style="color: #046ba8;margin-left: 0%;font-weight: 600;font-size: small;">Experience</span>
+        <span *ngIf="currentStepIndex === 4" style="color: #525CEB;margin-left: 0%;font-weight: 600;font-size: medium;">Experience</span>
+      </ng-template>
+      <app-employee-experience *ngIf="currentStepIndex === 4"></app-employee-experience>
+    </form>
+  </mat-step>
+
+
+  <mat-step >
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 5" class="fa-solid fa-people-roof" style="font-size: large;margin-right: 8px;"> </i>
+        <i *ngIf="currentStepIndex === 5" class="fa-solid fa-people-roof fa-fade" style="font-size: large;margin-right: 8px;color: #525CEB;"> </i>
+        <span *ngIf="currentStepIndex !== 5" style="color: #046ba8;margin-left: 0%;font-weight: 600;font-size: small;">Family</span>
+        <span  *ngIf="currentStepIndex === 5" style="color: #525CEB;margin-left: 0%;font-weight: 600;font-size: medium;">Family</span>
+      </ng-template>
+      <app-employee-family-info *ngIf="currentStepIndex === 5"></app-employee-family-info>
+    </form>
+  </mat-step>
+
+
+  <mat-step [ngClass]="{'selected-step': currentStepIndex === 6}">
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 6"  class="fa-solid fa-landmark" style="    font-size: large; margin-right: 8px;"></i>
+        <i *ngIf="currentStepIndex === 6" class="fa-solid fa-landmark fa-fade" style="    font-size: large; margin-right: 8px;color: #525CEB"></i>
+        <span *ngIf="currentStepIndex !== 6" style="color: #046ba8;margin-left: 0%;font-weight: 600;font-size: small;">Bank </span>
+        <span *ngIf="currentStepIndex === 6" style="color: #525CEB;margin-left: 0%;font-weight: 600;font-size: medium; ">Bank </span>
+      </ng-template>
+      <app-employee-bank-details *ngIf="currentStepIndex === 6"></app-employee-bank-details>
+    </form>
+  </mat-step>
+
+  <mat-step [ngClass]="{'selected-step': currentStepIndex === 7}">
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 7"  class="fa-solid fa-shield" style="    font-size: large;
+        margin-right: 8px;"></i>
+         <i  *ngIf="currentStepIndex === 7"  class="fa-solid fa-shield fa-fade" style="    font-size: large;color: #525CEB;
+         margin-right: 8px;"></i>
+
+        <span  *ngIf="currentStepIndex !== 7" style="color: #046ba8;margin-left: 0%;
+        font-weight: 600;
+        font-size: small;">Insurance</span>
+        <span  *ngIf="currentStepIndex === 7"  style="color: #525CEB;margin-left: 0%;
+        font-weight: 600;
+        font-size: medium;">Insurance</span>
+      </ng-template>
+    </form>
+  </mat-step>
+
+  <mat-step [ngClass]="{'selected-step': currentStepIndex === 8}">
+    <form>
+      <ng-template matStepLabel>
+        <i *ngIf="currentStepIndex !== 8"  class="fa-solid fa-folder-open" style="    font-size: large;
+        margin-right: 8px;"></i>
+         <i  *ngIf="currentStepIndex === 8"  class="fa-solid fa-folder-open fa-fade" style="    font-size: large;color: #525CEB;
+         margin-right: 8px;"></i>
+
+        <span  *ngIf="currentStepIndex !== 8" style="color: #046ba8;margin-left: 0%;
+        font-weight: 600;
+        font-size: small;">Documents</span>
+        <span  *ngIf="currentStepIndex === 8"  style="color: #525CEB;margin-left: 0%;
+        font-weight: 600;
+        font-size: medium;">Documents</span>
+      </ng-template>
+      <app-employee-documents *ngIf="currentStepIndex === 8"></app-employee-documents>
+
+    </form>
+  </mat-step>
+ 
+</mat-horizontal-stepper> -->
+
+
+<nav id="navshow" class="cus-tmsNavContainer">
+  <div class="nav nav-tabs cus-tmsNav">
+    <p
+      #myDiv
+      class="nav-item nav-link"
+      id="subname"
+      [ngClass]="i == returnnav ? 'active' : ''"
+      data-toggle="tab"
+      (click)="subModuleData(sub)"
+      role="tab"
+      *ngFor="let sub of Tran_Menu_List; index as i"
+      style="font-family: 'Inter', serif;"
+    >
+      {{ sub }}
+    </p>
+  </div>
+</nav>
+
+<div *ngIf="isShowEmployeeInfo">
+  <app-employee-basic-details></app-employee-basic-details>
+</div>
+<div *ngIf="isShowAddress">
+  <app-employeeaddress></app-employeeaddress>
+</div>
+<div *ngIf="isShowEducation">
+  <app-employee-education></app-employee-education>
+</div>
+<div *ngIf="isShowExperience">
+  <app-employee-experience></app-employee-experience>
+</div>
+<div *ngIf="isShowFamily">
+  <app-employee-family-info></app-employee-family-info>
+</div>
+<div *ngIf="isShowEmergency">
+  <app-employee-emergency-details></app-employee-emergency-details> 
+</div>
+<div *ngIf="isShowInsurance">
+  <app-employeeinsurance></app-employeeinsurance> 
+</div>
+<div *ngIf="isShowbank">
+  <app-employee-bank-details></app-employee-bank-details> 
+</div>
+<div *ngIf="isShowDocuments">
+  <app-employee-documents></app-employee-documents> 
+</div>

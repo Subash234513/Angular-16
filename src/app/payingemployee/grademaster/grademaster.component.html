@@ -1,0 +1,315 @@
+<div class="maincontent" *ngIf="isSummaryContent">
+    <div class="search">
+        <div class="row">
+            <h2   class="grade">Grade Master</h2>
+        </div>
+   
+        <form [formGroup]="datassearch" class="data" >
+            <section>
+                <div class="row">
+                  
+                    <div class="col-sm-3">
+                        <mat-form-field  class="searched"  >
+                            <mat-label>Grade Name</mat-label>    
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-md-4" >
+                        <div>
+                            <button mat-stroked-button type="button" class="button" (click)="searchData()"
+                                aria-label="Search" >
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <button mat-stroked-button class="clear" type="button" 
+                            (click)="clearData()"
+                                >Clear</button>
+                                <button type="button" mat-fab class="fab" (click)="newSegments()"
+                                   >
+                                <mat-icon style="color: black;" matTooltip="Add">add</mat-icon> 
+                             </button>
+                             <button type="button" id="add" mat-fab 
+                            (click)="uploadfile()">
+                            <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                        </button>
+                        </div>
+                       
+                    </div>
+                 
+                    
+                </div>
+            </section>
+    
+        </form>
+    
+    </div>
+ 
+    
+    <div class="table" *ngIf="isShowTable">
+    
+        <div>
+            <!-- <h3 style="margin-left:25px;">Grade Mapping</h3> -->
+            <div>
+    
+                <table class="tables border" id='commonstyle'>
+                    <thead class="table_header border">
+                        <tr>
+                            <th class="border text-center">S.no</th>                            
+                            <th class="border text-center">Grade Name</th>
+                            <!-- <th>Points</th> -->
+                            <th class="border width text-center">Edit</th>
+                            <th class="border width text-center">Delete</th>                       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sum of summarylist;index as ind">
+                            <td class="border text-center">{{(pagination.index-1)*limit+ind+1}}</td>
+                            <td class="border text-center">{{sum?.name}}</td>
+                   
+                            <!-- <td>{{sum?.points}}</td> -->
+                            <!-- <td>{{sum?.percentage}}</td> -->
+                            <td class="border width text-center"><i class="fa-solid fa-pencil" (click)="editSegment(sum)"></i>
+                              </td>    
+                              <td class="border width text-center">
+                                <i class="fa-solid fa-trash-can" (click)="deleteSegment(sum.id)"></i>             
+                
+                              </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-sm-12" id="dis">
+                      <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                          color="primary">
+                          <mat-icon class="customIconSize">arrow_back</mat-icon>
+                      </button>
+                      {{pagination.index}}
+                      <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                          color="primary">
+                          <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                      </button>
+                
+                  </div>
+                    </div>
+                    </div>
+                    </div>
+                  <!-- <div class="col-sm-3">
+                      <mat-form-field  class="searched"  >
+                          <mat-label>Grade Name</mat-label>    
+                          <input matInput formControlName="name">
+                      </mat-form-field>
+                  </div>
+                 
+                  <div class="col-md-4" >
+                      <div>
+                          <button mat-stroked-button type="button" class="button" (click)="searchData()"
+                              aria-label="Search" >
+                              <mat-icon>search</mat-icon>
+                          </button>
+                          <button mat-stroked-button class="clear" type="button" 
+                          (click)="clearData()"
+                              >Clear</button>
+                              <button type="button" mat-fab class="fab" (click)="newSegments()"
+                                 >
+                              <mat-icon style="color: black;" matTooltip="Add">add</mat-icon> 
+                           </button>
+                      </div>
+                     
+                  </div> -->
+               
+                  
+              <!-- </div>
+          </section>
+  
+      </form> -->
+  
+  <!-- </div> -->
+<!--   
+  <div class="table" *ngIf="isShowTable">
+  
+      <div> -->
+          <!-- <h3 style="margin-left:25px;">Grade Mapping</h3> -->
+          <!-- <div>
+  
+              <table class="tables" id='commonstyle'>
+                  <thead class="table_header">
+                      <tr>
+                          <th>S.no</th>                            
+                          <th>Grade Name</th>
+                          <th>Points</th>
+                          <th>Edit</th>
+                          <th>Delete</th>                       
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let sum of summarylist;index as ind">
+                          <td>{{(pagination.index-1)*limit+ind+1}}</td>
+                          <td>{{sum?.name}}</td>
+                 
+                          <td>{{sum?.points}}</td> -->
+                          <!-- <td>{{sum?.percentage}}</td> -->
+                          <!-- <td><mat-icon (click)="editSegment(sum)">edit</mat-icon>
+                            </td>    
+                            <td>
+                              <mat-icon (click)="deleteSegment(sum.id)">delete</mat-icon>             
+              
+                            </td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div class="col-sm-12" id="dis">
+                <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                    color="primary">
+                    <mat-icon class="customIconSize">arrow_back</mat-icon>
+                </button>
+                {{pagination.index}}
+                <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                    color="primary">
+                    <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                </button>
+    
+            </div>
+          </div>
+      </div>
+  </div> -->
+  
+
+<!-- </div> -->
+</div>
+
+<div *ngIf="isNewCreation" class="left"  style="margin-left: 40px;">
+    <h2>New Grade</h2>
+    <form [formGroup]="addForm" autocomplete="off">
+      <table>
+        <div>
+          <tr>
+            <td>
+              <mat-label>Grade Name<label>*</label> </mat-label><br>
+              <mat-form-field class="matformfieldstyle1" appearance="outline">
+                <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+              </mat-form-field>
+            </td>
+           
+            <!-- <td>
+                <mat-label class="point">Points</mat-label><br>
+                <mat-form-field class="matformfieldstyle1" style="margin-left: 26px;
+                margin-top: 7px;"  appearance="outline">
+                    <input matInput class="matformfieldinputstyle" type="name" formControlName="points" autocomplete="off">
+                  </mat-form-field>
+            </td> -->
+            
+
+          
+  
+          </tr>
+        </div>
+      </table>
+      <button type="button" class="btn"  id="Cancel" (click)="onCancelAdd()">Cancel</button>
+      <button type="submit"  id="Cancel"  (click)="onSubmitAdd()" class="btn">Submit</button>
+    </form>
+  </div>
+
+
+<div *ngIf="isTypeCreation"  class="map" >
+  <h2>Template Mapping Edit</h2>
+  <form [formGroup]="editForm" autocomplete="off">
+      <table>
+          <div>
+            <tr>
+              <!-- <td>
+                <mat-label>Template Name<label class="Template" >*</label> </mat-label><br>
+                <mat-form-field class="matformfieldstyle3"  appearance="outline">
+                  <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+                </mat-form-field>
+              </td> -->
+              <!-- <td>
+                  <mat-label>Grade Name<label>*</label> </mat-label><br>
+                  <mat-form-field class="matformfieldstyle1" appearance="outline">
+                    <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+                  </mat-form-field>
+                </td> -->
+                <td>
+                    <mat-label>Grade Name<label>*</label> </mat-label><br>
+                    <mat-form-field class="matformfieldstyle1" appearance="outline">
+                      <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+                    </mat-form-field>
+                  </td>
+                <!-- <td>
+                    <mat-label class="point">Points</mat-label><br>
+                    <mat-form-field class="matformfieldstyle1" style="margin-left: 26px;
+                    margin-top: 7px;"  appearance="outline">
+                        <input matInput class="matformfieldinputstyle" type="name" formControlName="points" autocomplete="off">
+                      </mat-form-field>
+                </td> -->
+                <!-- <td>
+                    <mat-label class="segment">Segment</mat-label><br>
+                    <mat-form-field (click)="getSegments()" class="matformfieldstyle4">
+                       
+                        <mat-select formControlName="segment" multiple>
+                            <mat-option *ngFor="let type of segmentdata" [value]="type.id">
+                                {{type.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+              </td>
+               <td>
+                  <mat-label class="segment">Segment</mat-label><br>
+                  <mat-form-field (click)="getSegments()" class="matformfieldstyle4">
+                     
+                      <mat-select formControlName="segment" multiple>
+                          <mat-option *ngFor="let type of segmentdata" [value]="type.id">
+                              {{type.name}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </td> -->
+              
+      
+              </tr>
+            </div>
+          </table>
+   
+      <button type="button" id="radius" class="btn" (click)="onCancel()">Cancel</button>
+      <button type="submit" id="radius"  (click)="update()" class="btn">Submit</button>
+    </form>
+    
+  </div>
+  <div *ngIf="isFileUpload">
+    <div class="card">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+                Cancel
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+                Download Template
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+  
+
+  
+            
+    
+            <!-- </tr>
+          </div>
+        </table>
+ 
+    <button type="button" id="radius" class="btn btn-light" (click)="onCancel()">Cancel</button>
+    <button type="submit" class="update"  (click)="update()" class="btn btn-light">Submit</button>
+  </form>
+</div> -->
+

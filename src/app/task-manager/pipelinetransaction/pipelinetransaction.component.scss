@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+  padding: 20px;
+}
+
+.nav-links {
+  cursor: pointer;
+  color: #adadad;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.btnActive{
+    color: #044063;
+    text-decoration: underline;
+}

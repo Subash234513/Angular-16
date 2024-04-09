@@ -1,0 +1,672 @@
+<div *ngIf="isShowStory">
+  <div>
+    <form [formGroup]="storySummaryForm" class="cus-storiesFormMain">
+      <div class="cus-storiesFormContainer">
+        <div class="cus-storiesFormContainer1">
+          <div style="width: 400px">
+            <mat-form-field style="width: 100%">
+              <mat-label>Search Story</mat-label>
+              <input matInput formControlName="query" />
+              <!-- <mat-icon matSuffix class="maticonsize" (click)="storySearchs('')">search</mat-icon> -->
+            </mat-form-field>
+          </div>
+
+          <div>
+            <!-- <i class="fa-solid fa-xmark" style="margin-left: 18%;" (click)="resetStory()"></i> -->
+            <button class="btn" type="button" (click)="resetStory()" style="background-color: #e4e4e4; color: #044063">
+              Clear
+            </button>
+          </div>
+
+          <div class="cus-storiesFormIcon1" style="cursor: pointer" (click)="storySearching('')">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <!-- <div class="col-md-2">
+                    <mat-form-field style="width: 100%;margin-top: -12%;">
+                        <mat-label>Teams</mat-label>
+                        <mat-select matInput formControlName="team" (selectionChange)="onSelectChanges($event)">
+                            <mat-option *ngFor="let opt of teamList" [value]="opt.id">
+                                {{ opt.name }}
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                </div> -->
+          <!-- <div class="col-md-2">
+                    <mat-form-field style="width: 100%;margin-top: -12%;">
+                        <mat-label>Sprints</mat-label>
+                        <mat-select matInput formControlName="sprint"
+                            (selectionChange)="onSelectChangeSpr($event)">
+                            <mat-option *ngFor="let opt of sprintlsts" [value]="opt.id">
+                                {{ opt.name }}
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                </div> -->
+
+          <div style="position: relative">
+            <!-- <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;display: flex;font-size: larger;
+                    margin-top: -4%;
+                    margin-left: 69%;"> <mat-icon style="margin-left: 2%;">filter_list</mat-icon>filter</span> -->
+            <button class="btn" (click)="togglePopupss()" class="cus-storiesFormIcon2">
+              <span> <i class="fa-solid fa-filter"></i></span>
+            </button>
+
+            <!-- Filter Popup -->
+            <div>
+              <div *ngIf="this.showPopupss">
+                <form [formGroup]="storySummaryForm" class="cus-filterSearchContainer">
+                  <div class="cus-filterSearch">
+                    <!-- <div>
+              <mat-form-field class="matformfieldstyle" appearance="outline">
+                <mat-select
+                  class="matformfieldinputstyle"
+                  placeholder="Filter"
+                  formControlName="dynamicdropdown"
+                >
+                  <mat-option
+                    (click)="datefunction()"
+                    *ngFor="let type1 of sprintfilterss"
+                    [value]="type1.id"
+                    >{{ type1.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Start date</mat-label>
+                        <input matInput [matDatepicker]="picker1" placeholder="Start Date" autocomplete="off"
+                          formControlName="start_date" (dateInput)="startdateclick($event)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <!-- <mat-datepicker (dateChange)="startdateclick()" ></mat-datepicker> -->
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field>
+                        <mat-label>End date</mat-label>
+                        <input matInput [matDatepicker]="picker2" placeholder="End Date" autocomplete="off"
+                          formControlName="end_date" (dateInput)="enddateclick($event)"
+                          [min]="storySummaryForm.value.start_date" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2> </mat-datepicker>
+                        <!-- <mat-datepicker (click)="enddateclick()"></mat-datepicker> -->
+                      </mat-form-field>
+                    </div>
+                    <!-- <div >
+                    <mat-form-field>
+                        <mat-label>Query</mat-label>
+                        <input matInput formControlName="query" placeholder="Query">
+                    </mat-form-field>
+                </div> -->
+                    <div>
+                      <mat-form-field style="width: 100%" (click)="getteamdrop()">
+                        <mat-label>Team</mat-label>
+                        <input #teamInput placeholder="Select Team" matInput formControlName="team"
+                          [matAutocomplete]="teamsrole" (click)="teamclick()" />
+                        <mat-autocomplete #teamsrole="matAutocomplete" [displayWith]="displayFnteamclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of teamdrop" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                            <mat-option *ngIf="!teamdrop || !teamdrop.length">
+                              No Records Found
+                            </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+                    <div >
+                      <mat-form-field style="width: 100%" click="getSprintDropDown()">
+                        <mat-label>Sprints</mat-label>
+                        <input #teamInput placeholder="Select Sprint" matInput formControlName="sprint"
+                          [matAutocomplete]="teamsprintrole" (click)="teamsprintclick()" />
+                        <!-- (selectionChange)="onSelectChangeSpr($event)"> -->
+                        <mat-autocomplete #teamsprintrole="matAutocomplete" [displayWith]="displaysprintteamclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of sprintlsts" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!sprintlsts || !sprintlsts.length">
+                            No Records Found
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+                  </div>
+                  <div class="cus-filterSearch-btnDiv">
+                    <button class="btn btn-secondary" color="primary" (click)="resetsprinitform()">
+                      Reset
+                    </button>
+                    <div>
+                      <button class="btn btn-primary" type="submit" color="primary" (click)="storySearch('')"
+                        style="margin-right: 10px;background-color: #044063;color: white;">
+                        Apply
+                      </button>
+
+                      <button class="btn btn-secondary" (click)="togglePopupss()">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cus-storiesFormContainer2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#storiesModal"
+            style="background-color: #044063; color: white">
+            <!-- (click)="createStory()" -->
+            + Story
+          </button>
+
+          <!-- StoriesCreation popup -->
+          <div class="modal fade" id="storiesModal" tabindex="-1" role="dialog" aria-labelledby="storiesModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content" style="width: 700px; transform: translateX(-10%)">
+                <div class="modal-header" style="background-color: #044063;color: white;">
+                  <p class="modal-title" id="storiesModalLabel" style="margin-bottom: 0">
+                    New Story Creation
+                  </p>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton
+                    style="color: white;" (click)="popclose()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <app-stories (OnSubmit)="SubmitbackToStorySummary()"></app-stories>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Stories Content -->
+    <div class="cus-storiesContent">
+      <!-- Story View -->
+      <div *ngIf="isShowStorySummary" class="cus-storiesViewMain">
+        <div class="cus-storiesView">
+          <div class="cus-storiesView1" *ngFor="let list of storyList" style="cursor: pointer"
+            (click)="viewTask(list); selectItem(list) ;">
+            <div [class.highlighted-row]="list === selectedItem" class="cus-storiesView1-content">
+              <div class="cus-storiesView1-sub">
+                <p style="cursor: pointer">
+                  <b>
+                    <span *ngIf="list?.code">{{ list?.code }}</span>
+                    |
+                  </b>
+                </p>
+                <p style="cursor: pointer" *ngIf="list?.name" title="{{ list?.name }}">
+                  {{
+                  list?.name.length > 12
+                  ? (list?.name | slice : 0 : 12) + ".."
+                  : list?.name
+                  }}
+                </p>
+              </div>
+
+              <div class="cus-storiesView1-sub">
+                <p *ngIf="list?.team.length > 0" class="cus-badgeRed">
+                  {{ list?.team[0]?.name }}
+                </p>
+                <p *ngIf="list?.team.length > 1" class="cus-badgeRed">
+                  {{ list?.team[1]?.name }}
+                </p>
+                <p class="cus-badgeGreen" title="Sprint Name">
+                  <span *ngIf="list?.sprint?.name; else plusSign ">{{
+                    list?.sprint?.name
+                    }}</span>
+                  <ng-template #plusSign (click)="openModal($event)" style="cursor: pointer">
+                    <span data-target="#workinprogressModal" data-toggle="modal" class="cus-storyPlusBtn">+</span>
+                  </ng-template>
+                </p>
+              </div>
+              <p style="margin-top: 3%; margin-left: -3%;margin-bottom: -3%;    width: 100%;">
+                <span  style="font-size: small;font-style: italic;">Completed<span 
+                  style="margin-left: 2%;font-size: small;font-style: normal;" class="cus-badgeBlue">{{list?.report?.Completed}}</span></span>
+                  <span  style="font-size: smaller;margin-left: 2%;font-style: italic;" title="Work In Progress">WIP</span><span 
+                  style=" margin-left: 2%;font-size: small;font-style: normal;"  class="cus-badgeBlue">{{list?.report['Work in Progress']}}</span>
+                  <span style="font-size: smaller;margin-left: 2%;font-style: italic;" title="Yet To Start">YTS</span><span 
+                  style="margin-left: 2%;font-size: small;font-style: normal;" class="cus-badgeBlue">{{list?.report['Yet to Start']}}</span>
+                  <span style="font-size: smaller;margin-left: 2%;font-style: italic;">Hold</span><span
+                  style="margin-left: 2%;font-size: small;font-style: normal;" class="cus-badgeBlue">{{list?.report['Hold']}}</span>
+                </p>
+            </div>
+
+
+          </div>
+
+
+          <div class="cus-storiesView2" *ngIf="has_storynext">
+            <button (click)="loadMoreStories()">
+              <!-- <i class="fa-solid fa-angles-right fa-fade"></i>
+                                <i class="fa-solid fa-angles-right fa-fade"></i> -->
+              Load More
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stories Table -->
+      <div *ngIf="showTasksPage" class="cus-storiesTableMain">
+        <div class="cus-storiesTable">
+          <div>
+            <div class="cus-storiesTableHeader" style="margin-bottom: 20px">
+              <p class="cus-tableSearchHead" style="margin-bottom: 0">
+                List of Tasks
+              </p>
+              <div class="cus-tableSearchContent">
+                <button class="btn" style="background-color: #044063; color: white" (click)="onclickTaskAdd()">
+
+                  + Task
+                </button>
+              </div>
+            </div>
+            <!-- Add Task Popup -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document" style="margin-left: auto; transform: translateX(-15%)">
+                <div class="modal-content" style="width: 800px">
+                  <div class="modal-header" style="background-color: #044063;color: white;">
+                    <p class="modal-title" id="exampleModalLabel" style="margin-bottom: 0">
+                      Add Task
+                    </p>
+                    <button type="button" class="close" data-dismiss="modal" #closebutton1 style="color: white;"
+                      aria-label="Close" (click)="taskcreateclose()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <!-- <div class="modal-body"> -->
+                  <div *ngIf="taskcreate">
+
+                    <app-task-creation (OnSubmit)="SubmitbackToStorySummarys()"></app-task-creation>
+                  </div>
+
+                  <!-- </div> -->
+                  <!-- <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div> -->
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <table class="table cus-table">
+                <thead style="color: #5e6c84">
+                  <tr>
+                    <th scope="col">
+                      <i class="fa-solid fa-list-check"></i> Tasks
+                    </th>
+                    <th scope="col"><i class="fa-solid fa-at"></i> Assignee</th>
+                    <th scope="col"><i class="fa-solid fa-tag"></i> Labels</th>
+                    <th scope="col">
+                      <i class="fa-regular fa-calendar-days"></i> Due Date
+                    </th>
+                    <th scope="col">
+                      <i class="fa-solid fa-rotate-right"></i> Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let type of storyTaskList; index as i">
+                  <tr *ngIf="showtabledatas">
+                    <td>
+                      <div>
+                        <mat-icon *ngIf="type?.priority_type?.text === 'High'" style="color: #f50000"
+                          title="High">flag</mat-icon>
+                        <mat-icon *ngIf="type?.priority_type?.text === 'Normal'" style="color: #ffcc00"
+                          title="Normal">flag</mat-icon>
+                        <mat-icon *ngIf="type?.priority_type?.text === 'Low'" style="color: #6fddff"
+                          title="Low">flag</mat-icon>
+                        <span class="cus- badge">
+                          <span style="padding: 2px 4px" class="cus-badgeLightBlack">{{ type?.code }}</span>
+                        </span>
+                        -
+                        <span class="firstcolumn" title="{{ type?.task }}" (click)="story_TaskView(type.id)"
+                          style="cursor: pointer; color: blue">
+                          {{
+                          type?.task.length > 25
+                          ? (type?.task | slice : 0 : 25) + ".."
+                          : type?.task
+                          }}
+                        </span>
+                      </div>
+                    </td>
+                    <td style="text-align: center">
+                      <div>
+                        <ng-container *ngIf="
+                            type?.assigned_to && type?.assigned_to.length > 0
+                          ">
+                          <div title="{{ type?.assigned_to[0].name }}">
+                            <div>
+                              <span
+                                *ngIf="type?.assigned_to[0]?.name.trim().split(' ')[0].length > 1; else shortOrTwoWords">
+                                {{ type?.assigned_to[0]?.name.trim().split(' ')[0] | uppercase }}
+                              </span>
+                              <ng-template #shortOrTwoWords>
+                                <span *ngIf="type?.assigned_to[0]?.name.trim().split(' ')[0].length === 1">
+                                  {{ type?.assigned_to[0]?.name.trim().split(' ').slice(0, 2).join(' ') | uppercase }}
+                                </span>
+                              </ng-template>
+                            </div>
+                            <!-- <div *ngIf="type?.assigned_to.length > 1"
+                                                            [matBadge]="type?.assigned_to.length - 1"
+                                                            matBadgePosition="above after" matBadgeSize="small"
+                                                            matBadgeColor="warn">
+                                                            {{type?.assigned_to[0]?.name[0] | uppercase}}
+                                                        </div> -->
+                          </div>
+                        </ng-container>
+                      </div>
+                    </td>
+
+                    <td style="text-align: center">
+                      <span class="cus-badge">
+                        <span class="cus-badgecustom">{{ type?.type }}</span>
+                      </span>
+                    </td>
+
+                    <td style="text-align: center">
+                      {{
+                      type?.end_date !== "None"
+                      ? (type?.end_date | date : "dd/MM/yyyy")
+                      : ""
+                      }}
+                    </td>
+
+                    <td style="text-align: center">
+                      <span class="cus-badge">
+                        <span *ngIf="type?.task_status == 'Work in Progress'" class="cus-badgeBlue">Work In
+                          Progress</span>
+                        <span *ngIf="type?.task_status == 'Completed'" class="cus-badgeGreen">Completed</span>
+                        <span *ngIf="type?.task_status == 'Yet to Start'" class="cus-badgeLightBlack">Yet to
+                          Start</span>
+                        <span *ngIf="type?.task_status == 'Verified'" class="cus-badgeYellow">Verified</span>
+                        <span *ngIf="type?.task_status == 'Draft'" class="cus-badgeLightGreen">Draft</span>
+                        <span *ngIf="type?.task_status == 'Reopen'" class="cus-badgeRed">Reopen</span>
+                        <span *ngIf="type?.task_status == 'Deleted '" class="cus-badgeRed">Deleted</span>
+                        <span *ngIf="type?.task_status == 'Hold'" class="cus-badgeRed">Hold</span>
+                        <!-- <span *ngIf="type?.task_status === null || type?.task_status === ''" class="cus-badgeRed">Unassigned</span> -->
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div *ngIf="storyTaskList?.length == 0 || storyTaskList == undefined" class="NodataAlign text-center">
+            No Records Found...
+          </div>
+
+          <div class="cus-taskPageBtnsDiv">
+            <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+2}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+3}}</p>             -->
+            <!-- <div *ngIf="this.pageNumbi != 1" class="cus-pageNumbers">
+                        <p style="text-align: center;">{{this.pageNumbi-1}}</p>
+                        <p class="cus-btnActive" style="text-align: center;">{{this.pageNumbi}}</p>
+                        <p style="text-align: center;">{{this.pageNumbi+1}}</p>
+                        <p style="text-align: center;">{{this.pageNumbi+2}}</p>
+    
+                    </div> -->
+            <button mat-icon-button [disabled]="has_previousStoryTask === false" (click)="previousPage()">
+              <mat-icon>arrow_backward</mat-icon>
+            </button>
+            <div class="cus-pageNumbers">
+              <!-- <p style="text-align: center;">{{this.pageNumbers-1}}</p>  -->
+              <p class="cus-btnActive">{{ this.pageNumbers }}</p>
+              <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                           <p style="text-align: center;">{{this.pageNumbers+2}}</p>                -->
+            </div>
+            <button mat-icon-button [disabled]="has_nextStoryTask === false" (click)="nextPage()">
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+
+          <!-- <div class="cus-pageCount" *ngIf="showpagedata">
+            <div *ngIf="this.pageNumbers == 1" class="cus-pageNumbers">
+              <p class="cus-btnActive" style="text-align: center">
+                {{ this.pageNumbers }}
+              </p>
+              <p style="text-align: center">{{ this.pageNumbers + 1 }}</p>
+              <p style="text-align: center">{{ this.pageNumbers + 2 }}</p>
+              <p style="text-align: center">{{ this.pageNumbers + 3 }}</p>
+            </div>
+            <div *ngIf="this.pageNumbers != 1" class="cus-pageNumbers">
+              <p style="text-align: center">{{ this.pageNumbers - 1 }}</p>
+              <p class="cus-btnActive" style="text-align: center">
+                {{ this.pageNumbers }}
+              </p>
+              <p style="text-align: center">{{ this.pageNumbers + 1 }}</p>
+              <p style="text-align: center">{{ this.pageNumbers + 2 }}</p>
+            </div>
+            <button *ngIf="this.pageNumbers != 1" class="cus-btnPrevious" mat-icon-button
+              [disabled]="has_previous === false" (click)="previousPage()">
+              <mat-icon>arrow_backward</mat-icon>Previous
+            </button>
+            <button *ngIf="this.pageNumbers != 1" class="cus-btnNext" mat-icon-button [disabled]="has_next === false"
+              (click)="nextPage()" [disabled]="!isNextPageAllowed()">
+              <mat-icon>arrow_forward</mat-icon>Next
+            </button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showTasksVuews">
+      <div>
+        <div class="cus-tableContainer">
+          <div class="cus-tableSearch">
+            <p class="cus-tableSearchHead">List of Tasks</p>
+            <div class="cus-tableSearchContent">
+              <div class="cus-tableInputDiv">
+                <div class="cus-tableInput">
+                  <input type="text" />
+                </div>
+                <button>Advance Search</button>
+              </div>
+              <button class="btn" (click)="onclickTaskAdd()" style="background-color: #044063; color: white">
+                + Task
+              </button>
+            </div>
+          </div>
+          <div>
+            <table class="table cus-table">
+              <thead style="background-color: #eeeeef">
+                <tr>
+                  <th scope="col">
+                    <i class="fa-solid fa-list-check"></i>Task
+                  </th>
+                  <th scope="col"><i class="fa-solid fa-at"></i>Assignee</th>
+                  <th scope="col"><i class="fa-solid fa-tag"></i>Labels</th>
+                  <th scope="col">
+                    <i class="fa-regular fa-calendar-days"></i>Due Date
+                  </th>
+                  <th scope="col">
+                    <i class="fa-solid fa-rotate-right"></i>Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let type of storyTaskList; index as i">
+                <tr>
+                  <td class="cus-storiesTableRow">
+                    <div>
+                      <mat-icon *ngIf="type?.priority_type?.text === 'High'" style="color: #f50000"
+                        title="High">flag</mat-icon>
+                      <mat-icon *ngIf="type?.priority_type?.text === 'Normal'" style="color: #ffcc00"
+                        title="Normal">flag</mat-icon>
+                      <mat-icon *ngIf="type?.priority_type?.text === 'Low'" style="color: #6fddff"
+                        title="Low">flag</mat-icon>
+                      <span class="cus- badge">
+                        <span class="cus-badgeLightBlack">{{
+                          type?.code
+                          }}</span>
+                      </span>
+                      -
+                      <span class="firstcolumn" title="{{ type?.task }}" (click)="story_TaskView(type.id)"
+                        style="cursor: pointer; color: blue">
+                        {{
+                        type?.task.length > 25
+                        ? (type?.task | slice : 0 : 25) + ".."
+                        : type.task
+                        }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <ng-container *ngIf="
+                          type?.assigned_to && type?.assigned_to.length > 0
+                        ">
+                        <div class="circle-badge" title="{{ getEmployeeNames(type?.assigned_to) }}">
+                          <div>
+                            {{ type?.assigned_to[0]?.name[0] | uppercase }}
+                          </div>
+
+                          <!-- <div *ngIf="type?.assigned_to.length > 1"
+                                                        [matBadge]="type?.assigned_to.length - 1"
+                                                        matBadgePosition="above after" matBadgeSize="small"
+                                                        matBadgeColor="warn">
+                                                        {{type?.assigned_to[0]?.name[0] | uppercase}}
+                                                    </div> -->
+                        </div>
+                      </ng-container>
+                    </div>
+                  </td>
+
+                  <td style="text-align: center">
+                    <span class="cus-badge">
+                      <span class="cus-badgecustom">{{ type?.type }}</span>
+                    </span>
+                  </td>
+
+                  <td style="text-align: center">
+                    {{
+                    type?.end_date !== "None"
+                    ? (type?.end_date | date : "dd/MM/yyyy")
+                    : ""
+                    }}
+                  </td>
+
+                  <td style="text-align: center">
+                    <span class="cus-badge">
+                      <span *ngIf="type?.task_status == 'Work in Progress'" class="cus-badgeBlue">Work In
+                        Progress</span>
+                      <span *ngIf="type?.task_status == 'Completed'" class="cus-badgeGreen">Completed</span>
+                      <span *ngIf="type?.task_status == 'Yet to Start'" class="cus-badgeLightBlack">Yet to Start</span>
+                      <span *ngIf="type?.task_status == 'Verified'" class="cus-badgeYellow">Verified</span>
+                      <span *ngIf="type?.task_status == 'Draft'" class="cus-badgeLightGreen">Draft</span>
+                      <span *ngIf="type?.task_status == 'Reopen'" class="cus-badgeRed">Reopen</span>
+                      <span *ngIf="type?.task_status == 'Deleted '" class="cus-badgeRed">Deleted</span>
+                      <span *ngIf="type?.task_status == 'Hold'" class="cus-badgeRed">Hold</span>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="storyTaskList?.length == 0 || storyTaskList == undefined" class="NodataAlign text-center">
+          No Records Found...
+        </div>
+        <div class="cus-pageCount">
+          <div *ngIf="this.pageNumbers == 1" class="cus-pageNumbers">
+            <p class="cus-btnActive" style="text-align: center">
+              {{ this.pageNumbers }}
+            </p>
+            <p style="text-align: center">{{ this.pageNumbers + 1 }}</p>
+            <p style="text-align: center">{{ this.pageNumbers + 2 }}</p>
+            <p style="text-align: center">{{ this.pageNumbers + 3 }}</p>
+          </div>
+          <div *ngIf="this.pageNumbt != 1" class="cus-pageNumbers">
+            <p style="text-align: center">{{ this.pageNumbers - 1 }}</p>
+            <p class="cus-btnActive" style="text-align: center">
+              {{ this.pageNumbers }}
+            </p>
+            <p style="text-align: center">{{ this.pageNumbers + 1 }}</p>
+            <p style="text-align: center">{{ this.pageNumbers + 2 }}</p>
+          </div>
+          <button *ngIf="this.pageNumbers != 1" class="cus-btnPrevious" (click)="previousPage()">
+            <mat-icon>arrow_backward</mat-icon>Previous
+          </button>
+          <button class="cus-btnNext" (click)="nextPage()" [disabled]="!isNextPageAllowed()">
+            Next <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+        <br /><br />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="storycreate">
+  <app-stories (OnSubmit)="SubmitbackToStorySummary()" (OnCancel)="CancelbackToStorySummary()"></app-stories>
+</div>
+
+<div *ngIf="taskcreate">
+  <app-task-creation (OnSubmit)="SubmitbackToStorySummarys()"
+    (OnCancel)="CancelbackToStorySummary()"></app-task-creation>
+</div>
+<div *ngIf="taskview">
+  <app-taskviews (OnSubmit)="SubmitbackToSummary()" (OnCancel)="backtoTaskSummary()"></app-taskviews>
+</div>
+
+<div class="modal" id="workinprogressModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h3 class="modal-title" style="margin-bottom: 0">Sprint Mapping</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Sprints</p>
+        <div>
+          <form [formGroup]="storySummaryForm">
+            <div click="getSprintDropDown()">
+              <mat-form-field style="width: 100%">
+                <mat-label>Enter Here</mat-label>
+                <input #teamInput placeholder="Select Sprint" matInput formControlName="sprints"
+                  [matAutocomplete]="teamsprintrole" (click)="teamsprintclicks()" />
+                <!-- (selectionChange)="onSelectChangeSpr($event)"> -->
+                <mat-autocomplete #teamsprintrole="matAutocomplete" [displayWith]="displaysprintteamclient">
+                  <ng-container>
+                    <mat-option *ngFor="let opt of sprintlsts" [value]="opt" title="{{opt.name}}">
+                      {{ opt.name }}
+                    </mat-option>
+                    <mat-option *ngIf="!sprintlsts ||  !sprintlsts.length" >
+                      No Records Found
+                    </mat-option>
+                  </ng-container>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div>
+          <button class="btn btn-primary" (click)="addSprintToStory()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

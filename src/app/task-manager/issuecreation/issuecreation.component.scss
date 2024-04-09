@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.cus-createScreenContainer {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+}
+
+.cus-createContent {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.cus-createHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  width: 96%;
+  margin: 20px auto;
+}
+
+.cus-createHeader h3 {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.cus-createHeaderNav {
+  background-color: #eeeeef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.cus-createHeaderNav p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-bottom: 0;
+  max-width: 326.5px;
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cus-createHeaderNavActive {
+  background-color: white;
+  font-weight: 600;
+}
+
+.cus-createForm {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  row-gap: 16px;
+  column-gap: 16px;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.cus-createForm label {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.cus-createInput1 input {
+  width: 100%;
+  height: 44px;
+  border-radius: 5px;
+  border: 1px solid #dedede;
+  display: block;
+}
+
+.cus-createInput2 {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.cus-createInput2 input {
+  width: 20px;
+  height: 20px;
+}
+
+.cus-createInputSub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cus-createInput3 {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  border-radius: 5px;
+  border: 1px solid #dedede;
+}
+
+.cus-createInput3 input {
+  width: 100%;
+  height: 44px;
+  border-radius: 5px;
+  border: 1px solid #dedede;
+}
+
+.cus-createFormBtns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+}
+
+.cus-createAddressForm,
+.cus-createContactForm,
+.cus-createProfileForm {
+  display: none;
+}
+
+.cus-attachCard {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.171);
+  padding: 4px 10px;
+  max-width: 205px;
+  width: 100%;
+  margin: 3px 0 0 0;
+  border-radius: 6px; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+
+.icons {
+  font-size: 14px;
+}
+.material-icons {
+  font-family: 'Material Icons', sans-serif;
+}
+.borderremove {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline: none;
+}
+
+.cus-sprintFormIcon2 {
+  background-color: #044063;
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}

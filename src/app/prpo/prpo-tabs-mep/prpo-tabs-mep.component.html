@@ -1,0 +1,313 @@
+
+    <div class="Container" style="margin-left: 20px;">
+        <nav>
+            <div class="nav nav-tabs" style="margin-top: 1%;">
+                <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                    *ngFor="let sub of prpoMEPList">
+                    {{sub.name}}
+                </span>
+            </div>
+    
+        </nav>
+        
+    </div>
+    
+    
+        <div *ngIf="isMepcreateTab">
+            <app-mepmake (onSubmit)="MEPCreateSubmit()" (onCancel)="MEPCreateCancel()"></app-mepmake>
+        </div>
+        
+        <div *ngIf="isMEPContigencyTab">
+            <app-mepcontigency (onSubmit)="MEPContigencySubmit()" (onCancel)="MEPContigencyCancel()"></app-mepcontigency>
+        </div>
+        <div *ngIf="isMEPStatusTab">
+            <app-mep-status-screen (onCancel)="MEPStatusCancel()"></app-mep-status-screen>
+        </div>
+        <div *ngIf="isMEPApproverScreenTab">
+            <app-mepapprover (onSubmit)="MEPApproverSubmit()" (onCancel)="MEPApproverCancel()"></app-mepapprover>
+        </div>
+    
+    
+    
+        <div *ngIf="isMEPmakerTab">
+           
+                    <form [formGroup]="mepsummarySearchForm" (ngSubmit)="mepsummarySearch()">
+                        <h2 style="margin-left: 5%;" class="headertitle">Project Component Approval (PCA Summary)</h2>
+                        <table>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="spacebtwfield" style="margin-left: 50px;">
+                                        <input class="toolbar-search" type="text" formControlName="no" matInput
+                                            autocomplete="off" (keypress)="only_numalpha($event)">
+                                        <mat-placeholder>PCA Number</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="spacebtwfield" style="margin-left: 50px;">
+                                        <input class="toolbar-search" type="text" formControlName="name" matInput
+                                            autocomplete="off" >
+                                        <mat-placeholder>PCA Name</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="spacebtwfield" style="margin-left: 50px;">
+                                        <input class="toolbar-search" type="text" formControlName="amount" matInput
+                                            autocomplete="off" (keypress)="numberOnly($event)">
+                                        <mat-placeholder>PCA Amount</mat-placeholder>
+                                    </mat-form-field>
+                            </tr>
+                            <tr>
+    
+                                <td>
+                                    <mat-form-field class="spacebtwfield" style="margin-left: 50px;">
+                                        <input class="toolbar-search" type="text" formControlName="finyear" matInput
+                                            autocomplete="off" (keypress)="numberOnly($event)">
+                                        <mat-placeholder>PCA Year</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <div class="spacebtwfield" style="margin-left: 50px;">
+                                        <mat-label> Is Budgeted</mat-label>
+                                        <mat-radio-group formControlName="budgeted" class="radiobtnwdth">
+                                            <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                                class="radiobtnwdth">
+                                                {{n.display}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="buttonsize btn btn-outline-primary" type="submit"
+                                        style="margin-left: 50%;" color="primary"><i class="fa fa-search"
+                                            aria-hidden="true"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+                                <td> <button class="buttonsize btn btn-outline-primary" style="margin-left: 50%;"
+                                        (click)="resetmep()" type="submit" color="primary">Reset</button></td>
+                                <td><button type="button" class="buttonsize btn btn-outline-success" (click)="addMep()">
+                                        <span class="fa fa-plus"></span></button></td>
+                                        <td>
+                                            <button [disabled]="isPCASummaryExport" style="border-radius:40px;margin-left: 20px;cursor: pointer" type="button"
+                                        class="btn btn-outline-success" (click)="makerexceldownload()">
+                                        <span></span>Export </button>
+                                        </td>
+                            </tr>
+                        </table>
+                    </form>
+                    
+            <div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 50px;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header style="text-align:center;">
+                            <th>S.No</th>
+                            <th>PCA Number</th>
+                            <th>PCA Name</th>
+                            <th>Budgeted</th>
+                            <th>PCA Amount</th>
+                            <th>Type</th>
+                            <th>Final Year</th>
+                            <th>PCA Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="padding: 0.5em 0.1em 0.1em;text-align:center;" style="text-align:center;padding: 0.5em 0.1em 0.1em;">
+                        <tr *ngFor="let mep of MepList; index as i">
+                            <td> {{(presentpage - 1)*pageSize +i+1 }} </td>
+                            <td>{{ mep.no }}</td>
+                            <td>{{ mep.name}}</td>
+                            <td>
+                                <div *ngIf="mep.budgeted === 1 ; else lock">
+                                    Yes
+                                </div>
+                                <ng-template #lock>No </ng-template>
+                            </td>
+                            <td class="rightalign">{{ mep.amount  | amountPipeCustom }}</td>
+                            <td>{{ mep.type}}</td>
+                            <td>{{ mep.finyear}}</td>
+                            <td>{{ mep.mep_status}}</td>
+                           
+                            <td>
+                                <div *ngIf="mep.mep_status === 'MODIFICATION-APPROVAL'; else pendapp">
+                                    <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                        (click)="editmepconmake(mep)" title="contigency PCA percentage Form">
+                                        <mat-icon aria-label="Edit">edit</mat-icon>
+                                    </button>
+                                </div>
+                                <ng-template #pendapp>
+                                    <div *ngIf="mep.mep_status === 'PENDING-APPROVAL'; else reject">
+                                        <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                            (click)="editmepmake(mep)" title="PCA Edit form">
+                                            <mat-icon style="color: gray;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #reject>
+                                    <div *ngIf="mep.mep_status === 'REJECTED'; else enablecon">
+                                        <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                            (click)="StatusScreen(mep)" title="PCA Edit form">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #enablecon>
+                                    <div *ngIf="mep.contigency === 0 ; else enable">
+                                        <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                            title="Edit contigency" (click)="editmepconmake(mep)"
+                                            title="PCA Contigency Edit">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #enable>
+                                    <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                        (click)="StatusScreen(mep)" title="contigency percentage already assigned">
+                                        <mat-icon aria-label="Edit">edit</mat-icon>
+                                    </button>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+    
+                </table>
+                <div *ngIf="MepList?.length==0; else paginationMEP" class="NodataAlign">No Records Found...</div>
+                <ng-template #paginationMEP>
+                    <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                        <button mat-icon-button [disabled]="has_previous === false" color="primary"
+                            (click)="previousClick()">
+                            <mat-icon>arrow_back
+                            </mat-icon>
+                        </button>
+                        {{presentpage}}
+                        <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+                            <mat-icon>arrow_forward
+                            </mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    
+        <div *ngIf="isMEPapproverTab">
+            
+                    <form [formGroup]="mepAppsummarySearchForm" (ngSubmit)="mepAppsummarySearch()">
+                        <h2 class="headertitle">Project Component Approval (PCA Approver Summary)</h2>
+                        <table>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="spacebtwfield">
+                                        <input class="toolbar-search" type="text" formControlName="no" matInput autocomplete="off" >
+                                        <mat-placeholder>PCA Number</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="spacebtwfield">
+                                        <input class="toolbar-search" type="text" formControlName="name" matInput
+                                            autocomplete="off" >
+                                        <mat-placeholder>PCA Name</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                              
+                                <td>
+                                    <mat-form-field class="spacebtwfield">
+                                        <input class="toolbar-search" type="text" formControlName="amount" matInput (keypress)="numberOnly($event)"
+                                            autocomplete="off" >
+                                        <mat-placeholder>PCA Amount</mat-placeholder>
+                                    </mat-form-field>
+                            </tr>
+                            <tr>
+            
+                                <td>
+                                    <mat-form-field class="spacebtwfield">
+                                        <input class="toolbar-search" type="text" formControlName="finyear" matInput (keypress)="numberOnly($event)"
+                                            autocomplete="off">
+                                        <mat-placeholder>PCA Year</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <div class="spacebtwfield">
+                                        <mat-label> Is Budgeted</mat-label>
+                                        <mat-radio-group formControlName="budgeted" class="radiobtnwdth">
+                                            <mat-radio-button *ngFor="let n of yesorno" [value]="n.value" class="radiobtnwdth">
+                                                {{n.display}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="buttonsize btn btn-outline-primary" type="submit" color="primary"><i
+                                            class="fa fa-search" aria-hidden="true"></i></button>
+                                </td>
+                                <td> <button class="buttonsize btn btn-outline-primary" style="margin-left: 50px;"
+                                        (click)="resetmepApp()" type="submit" color="primary">Reset</button></td>
+                                        <td>
+                                            <button [disabled]="isPCAApproverSummary" style="border-radius:40px;margin-left: 20px;cursor: pointer" type="button"
+                                        class="btn btn-outline-success" (click)="checkerexceldownload()"
+                                       >
+                                        <span></span>Export </button>
+                                        </td>
+                            </tr>
+                        </table>
+                    </form>
+                
+            <div class="table-responsive" style="margin-top: 2%;width: 94%;margin-left: 50px;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <th>PCA Number</th>
+                            <th>PCA Name</th>
+                            <th>Budgeted</th>
+                            <th>PCA Amount</th>
+                            <th>Type</th>
+                            <th>Final Year</th>
+                            <th>PCA status</th>
+                            
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let mep of MepAppList; index as i">
+                            <td> {{(presentpage - 1)*pageSize +i+1 }} </td>
+                            <td>{{ mep.no }}</td>
+                            <td>{{ mep.name}}</td>
+                            <td>
+                                <div *ngIf="mep.budgeted === 1 ; else lock">
+                                    Yes
+                                </div>
+                                <ng-template #lock>No </ng-template>
+                            </td>
+                            <td class="rightalign">{{ mep.amount  | amountPipeCustom }}</td>
+                            <td>{{ mep.type}}</td>
+                            <td>{{ mep.finyear}}</td>
+                            <td>{{ mep.mep_status}}</td>
+                            
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="editmepmakeApp(mep)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+            
+                </table>
+                <div *ngIf="MepAppList?.length==0; else paginationMEP" class="NodataAlign">No Records Found...</div>
+                <ng-template #paginationMEP>
+                    <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                        <button mat-icon-button [disabled]="has_previousApp === false" color="primary" (click)="previousClickApp()">
+                            <mat-icon>arrow_back
+                            </mat-icon>
+                        </button>
+                        {{presentpage}}
+                        <button mat-icon-button [disabled]="has_nextApp === false" color="primary" (click)="nextClickApp()">
+                            <mat-icon>arrow_forward
+                            </mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+
+        <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+            <p style="color: white">Please Wait. </p>
+        </ngx-spinner>

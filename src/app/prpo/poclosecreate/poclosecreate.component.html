@@ -1,0 +1,152 @@
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="poclosecreate">
+            <h2 style="margin-left: 3%;">Purchase Order Close Create</h2>
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field style="margin-left: 50px;">
+                            <input type="text" formControlName="no" matInput autocomplete="off"
+                                (keypress)="only_numalpha($event)">
+                            <mat-placeholder>PO Number</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="margin-left: 50px; width: 250px;">
+                            <input formControlName="supplier_id" matInput autocomplete="off"
+                                (keypress)="only_char($event)">
+                            <mat-placeholder>Supplier Name</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="table-responsive" style="margin-top: 2%;width: 94%;margin-left: 50px;">
+    <table class="table scrolltable table-bordered" fixed-header>
+        <thead>
+            <tr class="table_header" fixed-header>
+                <th>S.No</th>
+                <!-- <th>Product Category</th>
+                <th>Product Type</th> -->
+                <th>Product Name </th>
+                <th>Item</th>
+                <th>UOM</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+                <th>Total Amount</th>
+                <th>Delivery Details</th>
+
+            </tr>
+        </thead>
+
+        <!-- <tbody *ngFor="let poclose of poclosedataList;index as i"> -->
+        <tbody>
+        
+        <tr *ngFor="let poclose of poclosedataList;index as i">
+
+
+            <!-- <tr *ngFor="let po of poclose.product_data;index as i" > -->
+            <!-- <tr *ngFor="let poclose of poclosedataList?.product_data;index as i" > -->
+            <!-- <tr *ngFor="let po of poclose.product_data;index as i"> -->
+
+
+                <td>{{i+1}}</td>
+                <!-- <td>{{po.category_id.name}}</td>
+                <td>{{po.producttype_id.name}}</td> -->
+                <td>{{poclose.product_name}}</td>
+                <td>{{poclose.item_name}}</td>
+                <td>{{poclose.uom}}</td>
+                <td>{{poclose.qty}}</td>
+                <td>{{poclose.unitprice | amountPipeCustom}}</td>
+                <td>{{poclose.amount| amountPipeCustom}}</td>
+                <td>{{poclose.totalamount| amountPipeCustom}}</td>
+                <td>
+                    <span data-toggle="modal" data-target=".bd-example-modal-lg" class="material-icons" (click)="dataForSelectedLine(poclose,poclose.product_data)"
+                        (click)="delivery(poclose.id)">
+                        local_post_office
+                    </span>
+                </td>
+
+            </tr>
+        </tbody>
+        <tr>
+            <th class="totaldisplay" colspan="7">Total Amount:</th>
+            <td class="rightaligntotal">{{totallineAmount | amountPipeCustom }}</td>
+        </tr>
+
+        <div *ngIf="poclosedataList?.length==0 ; " style="text-align: center;">No Records Found...</div>
+
+    </table>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Delivery Details</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>Product Name: {{ ProductNameForSelectedLine }} &nbsp; &nbsp;&nbsp;&nbsp; Quantity: {{ QtyForSelectedLine }}</h3>
+                    <div class="table-responsive"
+                        style="margin-top: 2%;margin-left:50px; width: 90%; overflow-x: hidden;">
+                        <table class="table table-bordered">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Godown Name</th>
+                                    <th>Incharge Name</th>
+                                    <th>Address</th>
+                                    <th>UOM</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of deliverylist;index as i">
+                                    <td>{{i+1}}</td>
+                                    <td>{{d?.prpoqty_id?.prccbs_id?.branch_id?.name}}</td>
+                                    <td>{{d?.prpoqty_id?.prccbs_id?.branch_id?.incharge}} </td>
+                                    <td>{{d?.poheader_id?.branch_id?.line1}},{{d.poheader_id?.branch_id?.line2}},{{d.poheader_id?.branch_id?.line3}}
+                                    </td>
+                                    <td>{{d?.prpoqty_id?.prdetails_id?.uom}}</td>
+                                    <td>{{d?.qty}}</td>
+                                </tr>
+                            </tbody>
+                            <div colspan="5" *ngIf="deliverylist?.length==0 ; " style="text-align: center;">No Records
+                                Found...</div>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form [formGroup]="pocloseremarks">
+    <mat-form-field style="width:500px;margin-left: 50px;" *ngIf="approvedcheck">
+        <input type="text" formControlName="remarks" matInput autocomplete="off">
+        <mat-placeholder>Close Remarks</mat-placeholder>
+    </mat-form-field>
+    <div class="row" style="margin-left: 50px;">
+        <button type="button" class="btn btn-outline-success" *ngIf="approvedcheck"
+            style="border-radius: 40px;margin-left: 10px;" (click)="poclosesubmit()"
+            [disabled]="clicked">Submit</button>
+        <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+            (click)="onCancelClick()">Cancel</button>
+    </div>
+</form>
+<!-- <button type="button" class="btn btn-outline-primary"
+          style="border-radius: 40px;margin-left: 50px;margin-top: 1%;" (click)="onCancelClick()">Cancel</button> -->
+
+<!-- <pre>
+    {{pocloseremarks.value | json}}
+</pre> -->
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

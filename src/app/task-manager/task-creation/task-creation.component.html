@@ -1,0 +1,645 @@
+<div class="cus-taskCreationMain" style="padding: 20px">
+  <h3 style="font-weight: bold;">Task creation</h3>
+  <!-- <div (click)="BackToSummary()">
+      <span class="material-icons alignvertical">arrow_back</span>
+      <span
+        *ngIf="sprintName"
+        class="alignvertical textdecorationatag cus-badgeYellow"
+        >{{ sprintName }} / {{ storyName }}
+      </span>
+    </div> -->
+
+  <form [formGroup]="EmpTaskCreate" class="cus-taskCreateContainer">
+    <!-- <div class="row"  *ngIf="storyName">
+            {{sprintName}} / {{storyName}}
+        </div> -->
+    <div>
+      <div class="cus-taskCreateContainer1">
+        <div>
+          <mat-form-field (click)="clientsearch('')">
+            <mat-label>Client <span style="color: red;">*</span></mat-label>
+            <input
+              #cltInput
+              matInput
+              formControlName="client"
+              [matAutocomplete]="clt"
+              autocomplete="off"
+              (keyup)="clientsearch(this.EmpTaskCreate.value.client)"
+            />
+
+            <mat-autocomplete
+              #clt="matAutocomplete"
+              [displayWith]="displayFnclt"
+            >
+              <mat-option
+                *ngFor="let clt of EmpTaskCreateObj.clientList"
+                [value]="clt"
+                (click)="resetProjectAndModule()" title="{{clt.name}}"
+              >
+                {{ clt.name }}
+              </mat-option>
+              <mat-option *ngIf="!EmpTaskCreateObj.clientList ||!EmpTaskCreateObj.clientList.length">
+                No Records Found
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field (click)=" Projectsearch(
+            this.EmpTaskCreate.value.client,
+            ''
+          )">
+            <mat-label>Project <span style="color: red;">*</span></mat-label>
+            <input
+              #appnmInput
+              matInput
+              type="text"
+              formControlName="project"
+              [matAutocomplete]="appnm"
+              autocomplete="off"
+              (keyup)="
+                Projectsearch(
+                  this.EmpTaskCreate.value.client,
+                  this.EmpTaskCreate.value.project
+                )
+              "
+            />
+            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+            <mat-autocomplete
+              #appnm="matAutocomplete"
+              [displayWith]="displayFnappnm"
+            >
+              <mat-option
+                *ngFor="let appnm of EmpTaskCreateObj.projectList"
+                [value]="appnm"
+                (click)="resetModule()" title="{{appnm.name}}"
+              >
+                {{ appnm.name }}
+              </mat-option>
+              <mat-option *ngIf="!EmpTaskCreateObj.projectList || !EmpTaskCreateObj.projectList.length">
+                No Records Found
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field (click)="  getModule(
+            this.EmpTaskCreate.value.client,
+            this.EmpTaskCreate.value.project,
+            ''
+          )">
+            <mat-label>Module <span style="color: red;">*</span></mat-label>
+            <input
+              #modnmInput
+              matInput
+              formControlName="project_map_id"
+              autocomplete="off"
+              (keyup)="
+                getModule(
+                  this.EmpTaskCreate.value.client,
+                  this.EmpTaskCreate.value.project,
+                  this.EmpTaskCreate.value.project_map_id
+                )
+              "
+              [matAutocomplete]="modnm"
+            />
+            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+            <mat-autocomplete
+              #modnm="matAutocomplete"
+              [displayWith]="displayFnmodnm"
+              (optionSelected)="onModuleSelected($event)"
+            >
+              <mat-option
+                *ngFor="let modnm of EmpTaskCreateObj.moduleList"
+                [value]="modnm" title="{{modnm.name}}"
+              >
+                {{ modnm.name }}
+              </mat-option>
+              <mat-option *ngIf="!EmpTaskCreateObj.moduleList ||!EmpTaskCreateObj.moduleList.length">
+                No Records Found
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="cus-quickView">
+        <p style="margin: 0; padding: 0">
+          <b>Quick View</b>
+        </p>
+        <p class="cus-badgeBlue pointer" style="margin-bottom: 0;margin-left: 20px;"  >
+          <span (click)="SelectedLink( EmpTaskCreateObj.QuickAccessList[0])">
+          
+            <span class="alignvertical">
+              {{  EmpTaskCreateObj?.QuickAccessList[0]?.client?.name }}
+            </span>
+            <span class="material-icons fontsize alignvertical"
+              >arrow_forward_ios</span
+            >{{ EmpTaskCreateObj?.QuickAccessList[0]?.project?.name}}
+            
+            <span class="material-icons fontsize alignvertical"
+              >arrow_forward_ios</span
+            >{{ EmpTaskCreateObj?.QuickAccessList[0]?.module?.name }}
+            <span class="alignvertical">
+              
+            </span>
+            &nbsp;&nbsp;&nbsp;
+          </span>
+        </p>
+        <!-- <div class="cus-quickView" *ngFor="let data of quickviewlist">
+        <span>name:{{data.name}}</span>
+        </div> -->
+
+      </div>
+
+      <!-- <div class="col-sm-4 col-md-4 col-lg-4">
+          <div
+            class="AccessTags"
+            *ngIf="EmpTaskCreateObj?.QuickAccessList?.length > 0"
+          >
+            <p>Quick Access:</p>
+
+            <ul
+              class="list-group"
+              *ngFor="let data of EmpTaskCreateObj?.QuickAccessList"
+            >
+              <li class="list-group-item cursor">
+                <span class="material-icons alignMiddle">label_important</span>
+                <span (click)="SelectedLink(data)">
+                  {{ data?.client?.name }} >> {{ data?.module?.name }} >>
+                  {{ data?.project?.name }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div> -->
+      <!-- <div class="table-responsive">
+
+                <table formArrayName="data" style="width: 100%;">
+                    <tr *ngFor="let data of EmpTaskCreate.controls.data['controls']; let dataIndex = index"
+                        [formGroupName]="dataIndex" class="mains">
+
+                        <td style="width: 55%; display: contents;">
+                            <span class="main_1 flex cursor"><i class="fa fa-stop" aria-hidden="true"></i></span>
+                            <span class="inputs">
+                                <input type="text" placeholder="Task Name" class="inpt inputslong"
+                                    formControlName="task">
+                            </span>
+                        </td>
+
+                        <td>
+                            <div  [style.color]="borderColor"  matTooltip={{fastagename}} class="flex dot" (click)="getdevtype()"><i class="fa {{fastag}} cursor"  style="    margin-left: -250%;"
+                                    aria-hidden="true" [matMenuTriggerFor]="afterMenu"></i>
+                                    <mat-menu  #afterMenu="matMenu" class="cdk-overlay-pane" xPosition="after" yPosition="below">
+                                        <mat-option [value]="devtype.id"
+                                        *ngFor="let devtype of EmpTaskCreateObj.devtypelist"
+                                        (click)='getdevTypeId(dataIndex, devtype, "dev_type_name")'>
+                                        {{devtype.text}} </mat-option>
+                                      </mat-menu>
+                                </div>                   
+                           
+                        </td>
+
+                        <td>
+                            <div  [style.color]="borderColors"  matTooltip={{employe_name}} class="flex dot" ><i class="fa {{new_icon}} cursor" style="margin-left: -200%;" [matMenuTriggerFor]="afterMenus" (click)="developer(dataIndex)"></i>
+                             
+                                <mat-menu #afterMenus="matMenu" class="cdk-overlay-pane" xPosition="after" yPosition="below">
+                                        <input type="text" matInput (click)="developer(dataIndex);$event.stopPropagation();" formControlName="developer">
+                                <mat-option *ngFor="let dep of empList" [value]="dep" (click)="selectemployee(dataIndex,dep)" >
+                                    {{dep.name}}
+                                </mat-option>
+                             </mat-menu>
+                              
+                            </div>
+                        </td>
+
+                        <td>
+                            <div [style.color]="borderstart" matTooltip='{{data.get("start_date").value}}' class="flex dot">
+                              
+                                    <input readonly placeholder="Start" [matDatepicker]="picker1" [style.color]="borderstart" 
+                                    formControlName="start_date" style="margin-left: -112%;" [min]="sprstartdate" [max]="sprenddate"
+                                    (dateChange)='ChangeDateFormat(dataIndex, "start_date", data.get("start_date").value,$event)'
+                                    class="inputs outlinesnone widthset" (dateInput)="changeBorder()">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1" [style.color]="borderstart" >
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker1 [style.color]="borderstart" ></mat-datepicker>
+                                     
+                                
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div  matTooltip='{{data.get("end_date").value}}' class="flex dot " [style.color]="borderend">
+                                <input readonly placeholder="Start" [matDatepicker]="picker2" [min]='data.get("start_date").value' [max]="sprenddate"
+                                formControlName="end_date" style="margin-left: -112%;" style="margin-left: -115%;"
+                                (dateChange)='ChangeDateFormats(dataIndex, "end_date", data.get("end_date").value,$event)'
+                                class="inputs outlinesnone widthset" (dateInput)="changeBorders()" [style.color]="borderend">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2" [style.color]="borderend">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2 [style.color]="borderend"></mat-datepicker>
+                            </div>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <div [style.color]="borderdev" matTooltip={{dependiciestip}} class="flex dot "><i class="fa {{squarecheck}} cursor" style="margin-left: -75%;" aria-hidden="true" [matMenuTriggerFor]="afterMenud" (click)="dependencysearch(dataIndex)"></i>
+                                <mat-menu #afterMenud="matMenu" class="cdk-overlay-pane" xPosition="after" yPosition="below"  >
+                                    <input type="text" matInput (click)="dependencysearch(dataIndex);$event.stopPropagation();" formControlName="dependency_id" >
+                                    <mat-option title="{{dep?.task}}" *ngFor="let dep of EmpTaskCreateObj.dependencylist" [value]="dep" (click)="selectdependencies(dataIndex,dep)">
+                                        {{ (dep?.task.length>25)?(dep?.task | slice:0:25)+'..':(dep?.task)}}
+                                    </mat-option>
+                               
+                                  </mat-menu>
+                            </div>
+
+                        </td>
+
+                        <div class="flex dot "><i class="fa fa-flag cursor" style="margin-left: -35%;" aria-hidden="true" [matMenuTriggerFor]="afterMenup" (click)="dependencysearch(dataIndex)"  [style.color]="data?.get('priority_type_color')?.value"
+                            ></i>
+                            <mat-menu #afterMenup="matMenu" xPosition="after">
+                                <mat-option [value]="pry.id"
+                                *ngFor="let pry of EmpTaskCreateObj.priorityList"
+                                (click)='getprioritytype(dataIndex, pry.id, "priority_type")'>
+                                {{pry.text}} </mat-option>
+                           
+                              </mat-menu>
+                        </div>
+                        <div class="flex" style="padding-right: 10px;">
+                            <button class="flex btn btn-success pt-0 pb-0 cursor"  (click)="SubmitTask()">SAVE</button>
+                        </div>
+
+                    </tr>
+                </table>
+            </div>          -->
+      <!-- <form [formGroup]="" 
+            <mat-select #devTypeSelect formControlName="dev_type_name" class="inputs arrowClass">
+                <mat-option [value]="devtype" *ngFor="let devtype of EmpTaskCreateObj.devtypelist" (click)='getdevTypeId(dataIndex, data.get("dev_type_name").value, "type")'>
+                    {{devtype.text}}
+                </mat-option>
+            </mat-select> -->
+      <!-- <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="containers" style="border: 1px solid #7b68ee;    height: 34px;
+                margin-bottom: 1%;">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <input type="text" appearance="null" style="border: none;    height: 31px;
+                        margin-left: 1%;" placeholder="Task Details">
+                        </div>
+                        <div class="col-lg-1">
+                            <span *ngIf="icons !== null" class="badge" style="margin-left: -17%;background-color:  #ededfd;color:#2d2e8e;
+                            float: left;
+                            margin-right: 39px;
+                            margin-top: 7px;">{{ icons }}</span>
+                            <mat-icon *ngIf="icon !== 'local_offer'" aria-hidden="false"
+                                style="color: lightgrey; text-align: center; margin-top: 3px; margin-left: -64%; margin-right: 10%;"
+                                (click)="openIconDialog(icon)">
+                                local_offer
+                            </mat-icon>
+                        </div>
+                        <div class="col-lg-1">
+                            <input #datepickerInput [matDatepicker]="picker" style="display: none"
+                                (dateChange)="onDateSelected($event)">
+                                <div *ngIf="dates" class="badge"
+                                style="margin-left: -1%; background-color: #ededfd; color: #2d2e8e;  margin-right: 9px; margin-top: 7px;">{{
+                                dates }}</div>
+                            <mat-icon aria-hidden="false"
+                                style="color: lightgrey; text-align: center; margin-top: 3px; margin-right: 10%; cursor: pointer;"
+                                (click)="openDatepicker(datepickerInput)"> 
+                                calendar_today
+                            </mat-icon>
+
+                            <mat-datepicker #picker></mat-datepicker>
+                           
+                        </div>
+                        <div class="col-lg-1">
+                            <input #datepickerInputs [matDatepicker]="picker1" style="display: none"
+                                (dateChange)="onDateSelecteds($event)">
+                                <div *ngIf="datest" class="badge"
+                                style="margin-left: 6%; background-color: #ededfd; color: #2d2e8e;  margin-right: 1px; margin-top: 7px;">{{
+                                datest }}</div>
+                            <mat-icon aria-hidden="false"
+                                style="color: lightgrey; text-align: center; margin-top: 3px; margin-right: 10%; cursor: pointer;"
+                                (click)="openDatepickers(datepickerInputs)"> 
+                                calendar_today
+                            </mat-icon>
+
+                            <mat-datepicker #picker1></mat-datepicker>
+                           
+                        </div>
+
+                        <div class="col-sm-1">
+                            <div style="float: right;">
+
+
+                                <mat-icon aria-hidden="false"
+                                    style="color: lightgrey; text-align: center;margin-top: 3px;margin-right: 10%;">person_add</mat-icon>
+                                <mat-icon aria-hidden="false"
+                                    style="color: lightgrey; text-align: center;margin-top: 3px;margin-right: 10%;">device_hub</mat-icon>
+                                <mat-icon aria-hidden="false"
+                                    style="color: lightgrey;text-align: center;margin-top: 3px;margin-right: 10%;">flag</mat-icon>
+                                <div style="background: #7b68ee;
+                        font-size: 11px;
+                        font-weight: 500;
+                        line-height: 1;
+                        padding: 0 12px;
+                        height: 20px;
+                        border-radius: 2px;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        margin: 0 10px;
+                        flex-shrink: 0;
+                        width: 38px;
+                        float:right;
+                        margin-top: 5px;">Save
+                                </div>
+
+
+                                <mat-icon style="padding: 4px;
+                        font-size: large;
+                        margin-top: 3px;
+                        color: lightgray;
+                        font-weight: bold;
+                        float: right;
+                        margin-right: 4%;">close</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> -->
+
+      <hr />
+
+      <div formArrayName="data">
+        <div
+          class="cus-taskCreateContainer2"
+          *ngFor="
+            let data of EmpTaskCreate.controls.data['controls'];
+            let dataIndex = index
+          "
+          [formGroupName]="dataIndex"
+        >
+          <div class="cus-taskCreateGrid100">
+            <!-- <mat-form-field>
+              <mat-label>Task</mat-label>
+              <input
+                type="text"
+                placeholder="Enter Task here!"
+                formControlName="task"
+                autocomplete="off"
+                matInput
+              />
+            </mat-form-field> -->
+            <mat-form-field>
+              <mat-label>Task <span style="color: red;">*</span></mat-label>
+              <textarea
+               rows="2"
+                type="text"
+                placeholder="Enter Task here!"
+                matInput
+                autocomplete="off"
+                formControlName="task"
+              ></textarea>
+            </mat-form-field>
+          </div>
+
+          <!-- <div>
+                  <span class="badge badge-pill badge-warning paddingSpace">
+                    <span class="material-icons fonts">tag</span>
+                    {{ data.get("dev_type_name").value?.text }}
+                  </span>
+                  <span class="badge badge-pill badge-secondary paddingSpace">
+                    From:
+                    {{ data.get("start_date").value | date : "dd-MM-yyyy" }}
+                  </span>
+                  <span class="badge badge-pill badge-secondary paddingSpace">
+                    To: {{ data.get("end_date").value | date : "dd-MM-yyyy" }}
+                  </span>
+                </div> -->
+
+          <div>
+            <!-- <mat-select formControlName="dev_type_name" class="inputs arrowClass">
+                                        <mat-option [value]="devtype"
+                                            *ngFor="let devtype of EmpTaskCreateObj.devtypelist" 
+                                         
+                                            (click)="selectDevType(dataIndex,devtype)">
+                                            {{devtype.text}} </mat-option>
+                                    </mat-select> -->
+            <mat-form-field>
+              <mat-label>Type <span style="color: red;">*</span></mat-label>
+              <mat-select formControlName="type">
+                <mat-option
+                  *ngFor="let devtypes of EmpTaskCreateObj.devtypelist"
+                  [value]="devtypes"
+                  (click)="selectDevType(devtypes)" title="{{devtypes.text}}"
+                >
+                  {{ devtypes.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <!-- <div class="col-sm-6 col-md-6 col-lg-6 tight-gutter">
+                                        <input readonly placeholder="Start" [matDatepicker]="picker1"
+                                            formControlName="start_date"
+                                            (dateChange)='ChangeDateFormat(dataIndex, "start_date", data.get("start_date").value,$event)'
+                                            class="inputs">
+                                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                    </div> -->
+            <!-- <div class="col-sm-6 col-md-6 col-lg-6 tight-gutter">
+                                        <input readonly placeholder="End" [matDatepicker]="picker2"
+                                            formControlName="end_date"
+                                            (dateChange)='ChangeDateFormat(dataIndex, "end_date", data.get("end_date").value, $event)'
+                                            [min]='data.get("start_date").value' class="inputs outlinesnone">
+                                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker2></mat-datepicker>
+                                    </div> -->
+            <mat-form-field>
+              <mat-label>Planned Start Date</mat-label>
+              <input
+                matInput
+                readonly
+                [matDatepicker]="picker1"
+                formControlName="start_date"
+                (dateChange)="
+                  ChangeDateFormat(
+                    dataIndex,
+                    'start_date',
+                    data.get('start_date').value,
+                    $event
+                  )
+                "
+                [min]="sprstartdate"
+                [max]="sprenddate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                class="maticonsize"
+                [for]="picker1"
+              >
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Planned End Date</mat-label>
+              <input
+                matInput
+                readonly
+                [matDatepicker]="picker2"
+                formControlName="end_date"
+                (dateChange)="
+                  ChangeDateFormat(
+                    dataIndex,
+                    'end_date',
+                    data.get('end_date').value,
+                    $event
+                  )
+                "
+                [min]="data.get('start_date').value"
+                [max]="sprenddate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                class="maticonsize"
+                [for]="picker2"
+              >
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        <div >
+          <mat-form-field (click)="dropdown('')">
+            <mat-label>Employee</mat-label>
+            <input
+              #empInput
+              matInput
+              formControlName="developer"
+              [matAutocomplete]="emp"
+              (keyup)="dropdown($event.target.value)"
+             
+            />
+            <mat-icon matSuffix>unfold_more</mat-icon>
+            <mat-autocomplete
+              #emp="matAutocomplete"
+              [displayWith]="displayFndev"
+            >
+              <mat-option *ngFor="let emp of empList" [value]="emp" title="{{emp.name}}">
+                {{ emp.name }}
+              </mat-option>
+              <mat-option *ngIf="!empList || !empList.length">
+                No Records Found
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+          <div>
+            <mat-form-field (click)="getdev('')">
+              <mat-label>Dependency</mat-label>
+              <input
+                #depInput
+                matInput
+                formControlName="dependency_id"
+                [matAutocomplete]="dep"
+                autocomplete="off"
+              />
+              <mat-icon matSuffix>unfold_more</mat-icon>
+              <mat-autocomplete
+                #dep="matAutocomplete"
+                [displayWith]="displayFnDep"
+              >
+                <mat-option
+                  *ngFor="let dep of EmpTaskCreateObj.dependencylist"
+                  [value]="dep"
+                  title="({{ dep.code }}){{ dep.task }}"
+                >
+                ({{ dep.code }}){{ dep.task }}
+                </mat-option>
+                <mat-option *ngIf="!EmpTaskCreateObj.dependencylist ||!EmpTaskCreateObj.dependencylist.length">
+                  No Records Found
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Priority Type</mat-label>
+              <mat-select formControlName="priority_type" class="">
+                <mat-option
+                  [value]="pry.id"
+                  *ngFor="let pry of EmpTaskCreateObj.priorityList"
+                  (click)="
+                    getprioritytype(
+                      dataIndex,
+                      data.get('priority_type').value,
+                      'priority_type'
+                    )
+                  "
+                  title="{{pry.text}}"
+                >
+                  {{ pry.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- <td>
+                <span class="material-icons" (click)="deleteTask(dataIndex)">
+                  delete
+                </span>
+              </td> -->
+        </div>
+
+        <div>
+          <span *ngIf="EmpTaskCreate.get('data')?.length == 0"
+            >No Task Added!</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px">
+      <div class="cus-taskCreateContainer3">
+        <button
+          (click)="popclose()"
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          aria-label="Close"
+          #closebutton
+        >
+          Back
+        </button>
+
+        <button
+          class="btn btn-primary"
+          (click)="SubmitTask()"
+          style="background-color: #044063; color: white"
+        >
+          Submit
+        </button>
+        <!-- <button class="btn btn-light" id="WhiteBtn" (click)="BackToSummary()">Back</button> -->
+      </div>
+    </div>
+  </form>
+
+  <!-- <pre>
+    {{EmpTaskCreate.value | json}}
+</pre> -->
+</div>

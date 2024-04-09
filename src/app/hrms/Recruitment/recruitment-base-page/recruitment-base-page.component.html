@@ -1,0 +1,19 @@
+<div> 
+    <nav>
+        <div class="nav nav-tabs">
+            <span class="nav-item nav-link" data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                *ngFor="let sub of RecruitmentObjects.recruitment_Menu_List;index as i">
+                {{sub.name}}
+            </span>
+        </div>
+    </nav> 
+
+
+
+<div *ngIf="Objs['Post Job']">
+    <mat-card>
+        <app-post-job></app-post-job>
+    </mat-card>
+</div>
+
+</div>

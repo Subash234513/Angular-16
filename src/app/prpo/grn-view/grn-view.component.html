@@ -1,0 +1,202 @@
+<div style="margin-left: 50px;margin-top:2%;">
+    <h1 style="margin-left: 1px;">
+        Goods Received Note Details View </h1>
+    <!-- <br><br> -->
+    <div class="table-responsive">
+    <table width="70%" style="margin-top:3%;white-space: nowrap;">
+        <tbody>
+
+
+            <tr>
+                <th> GRN No:</th>
+                <td class="tdpad"> {{GRNNo}}</td>
+                <th> DC Number:</th>
+                <td  class="tdpad"> {{DCNumber}}</td>
+            </tr>
+            <tr>
+                <th> Invoice Number:</th>
+                <td  class="tdpad"> {{InvoiceNumber}}</td>
+            </tr>
+            <tr>
+                <th> Supplier Name:</th>
+                <td  class="tdpad"> {{SupplierName}}</td>
+                <th> Invoice Number:</th>
+                <td  class="tdpad"> {{InvoiceNumber}}</td>
+            </tr>
+            
+            <tr>
+                <th> Remarks: </th>
+                <td colspan="3"> {{makerRemarks}}  </td>
+
+            </tr>
+            <tr>
+                <th> Approver Remarks:  </th>
+                <td colspan="3"> {{approverRemarks}} </td>
+            </tr>
+
+
+            
+        </tbody>
+    </table>
+    </div>
+</div>
+
+
+
+<!------------------------------------------------------------------------------------------------------------------------>
+<div class="table-responsive" style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;" class="center">
+    <table class="table table-bordered" fixed-header>
+        <thead class="table_header">
+            <tr>
+                <th>S.No</th>
+                <th>Delivery Location</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>PO Number</th>
+                <th>PR Number</th>
+                <th>Product Name</th>
+                <th>Received Quantity</th>
+                <!-- <th>Amount</th> -->
+                <th>UOM Name</th>
+                <th>Asset Details</th>
+            </tr>
+        </thead>
+        <tbody >
+                <tr *ngFor="let grndetailsview of grndetailsviewList;index as i">
+                <td>{{i+1 }}</td>
+                <td>{{grndetailsview?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.name}}</td>
+                <td>{{grndetailsview?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.code}}</td>
+                <td>{{grndetailsview?.inwardheader?.date| date: 'dd-MMM-yyyy'}}</td>
+                <td>{{grndetailsview?.poheader_id?.no}}</td>
+                <td>{{grndetailsview?.podelivery_id?.prpoqty_id?.prccbs_id?.prdetails?.prheader_id?.no}}</td>
+                <td>{{grndetailsview?.podetails_id?.product_name}}</td>    
+                <td>{{grndetailsview?.quantity | number:'1.0-0'}}</td>
+                <td>{{grndetailsview?.podetails_id?.uom}}</td>
+                <td>
+                    <div *ngIf="grndetailsview?.is_asset == 1 ; else lockasset">
+                        <button type="button" class="btn btn-outline-success" data-toggle="modal"
+                        data-target="#assetdetails" (click)="getGrnAssetdata(grndetailsview)" ><span
+                            class="fa fa-file"></span>
+                    </button>
+                    </div>
+                    <ng-template #lockasset> -- </ng-template>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="grndetailsviewList ?.length == 0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...
+</div>
+<ng-template #paginationgrn>
+    <div class="cursor" style="font-size: small;text-align:right; margin-bottom:10px;">
+        <button mat-icon-button [disabled]="has_previousgrndetailsview === false" color="primary" (click)="previousClickgrndetails()">
+            <mat-icon>arrow_back
+            </mat-icon>
+        </button>
+        {{presentpagegrndetailsview}}
+        <button mat-icon-button [disabled]="has_nextgrndetailsview === false" color="primary" (click)="nextClickgrndetails()">
+            <mat-icon>arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<!-- <div *ngIf="grndetailsviewList ?.length == 0" style="margin-left: 42%;">
+    <h3>Sorry data not found!.. </h3>
+</div>
+<div class="row" *ngIf="grndetailsviewpage">
+    <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+        <button mat-icon-button [disabled]="has_previousgrndetailsview === false" color="primary"
+            (click)="previousClickgrndetails()">
+            <mat-icon>arrow_back
+            </mat-icon>
+        </button>
+        {{presentpagegrndetailsview}}
+        <button mat-icon-button [disabled]="has_nextgrndetailsview === false" color="primary"
+            (click)="nextClickgrndetails()">
+            <mat-icon>arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</div> -->
+<button style="margin-left:50px;margin-bottom:100px;" type="button" (click)="onCancelClick()"
+                    class="btn btn-outline-primary">
+                    Back</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="assetinfodetails" aria-hidden="true"
+    id="assetdetails">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" style="font-family:'Times New Roman', Times, serif;font-size:25px;">
+                    Asset data</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered" fixed-header
+                        style="width: 95%;margin-top: 10px;margin-left:25px;overflow-x: hidden;">
+                        <thead class="table_header" style="text-align: center;overflow-x: hidden;">
+                            <tr style="text-align:center;">
+
+                                <th>S.No</th>
+                                <th>Asset ID</th>
+                                <th>Asset Serial No</th>
+                                <th>Manufacture</th>
+                                <th>Warranty start date </th>
+                                <th>Warranty End Date</th>
+                                <th>Installation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let asset of assetList; index as i">
+                                <td>{{i+1}}</td>
+                                <td>{{asset?.assetid}}</td>
+                                <td>{{asset?.serialno}} </td>
+                                <td>{{asset?.manufacturer}} </td>
+                                <td>{{asset?.warranty_from_date | date:'dd-MM-yyyy'}} </td>
+                                <td>{{asset?.warranty_to_date | date:'dd-MM-yyyy'}} </td>
+                                <td>{{asset?.installation_date | date:'dd-MM-yyyy' }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="margin-bottom: 5% ;margin-left:45%">
+                <button type="submit" data-dismiss="modal" class="btn btn-outline-primary"
+                    style="border-radius: 40px;">BACK</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>
+

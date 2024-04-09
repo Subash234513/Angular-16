@@ -1,0 +1,282 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.addbtn {
+  text-align: right;
+}
+
+.popup-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-btn span {
+  margin: 0;
+  padding: 0;
+}
+
+.popup-btn button {
+  border: none;
+  background-color: #044063;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 4px;
+  padding: 6px 14px;
+}
+
+.popup-table {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.popup-btns-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+tr:hover {
+  background-color: #eeeeef;
+}
+
+.timeline-highlight {
+  padding: 2px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-block;
+  background-color: #6c757d;
+  color: white;
+  padding: 0 4px;
+  line-height: 16px;
+  margin-right: 10px;
+}
+
+.timesheet-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.timesheet-container h2 {
+  margin-bottom: 0;
+}
+
+.timesheet-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+// Bootstrap Popup
+.cus-popupH2 {
+  background-color: #007bff;
+  color: white;
+  width: 100%;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.popup-main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-main-container input {
+  height: 30px;
+  width: 200px;
+}
+
+.popup-common-div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.popup-btns-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.popup-btns-div button {
+  // background-color: rgb(139, 139, 243);
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.cus-othersDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.cus-selectDiv {
+  padding-bottom: 10px;
+}
+
+.cus-select {
+  padding: 12px 6px;
+  font-size: 16px;
+}
+
+.cus-tableContainer {
+  border-width: 1px 0px 1px 0px;
+  // border-style: solid;
+  border-color: #dedede;
+  padding: 10px 20px 0 20px;
+}
+
+.cus-tableSearch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 20px 0;
+  margin-top: -4%;
+  margin-left: -4%;
+}
+
+// .timebootmodal {
+//   width: 300px;
+// }
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-margin {
+  margin-left: auto;
+}
+
+.template-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px;
+}
+
+.tableBody-center td {
+  text-align: center;
+}
+
+.trash {
+  color: rgb(211, 1, 1);
+  text-align: center;
+  font-size: 20px;
+}
+
+// Cus Style
+.cus-timesheetHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 10px 20px;
+}
+
+.cus-table {
+  position: sticky;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e2e1e1;
+}
+
+.cus-table thead th {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+  z-index: 1000;
+}
+
+.cus-table td {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-align: left;
+}
+
+thead {
+  border-radius: 1px;
+}
+
+th {
+  background-color: #f7f7f7;
+  padding: 12px;
+}
+
+td {
+  border: 1px solid #e2e1e1;
+  margin: 0;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.cus-templateHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 10px 20px;
+}
+
+.cus-templateHead1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.cus-popup2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cus-sprintContainer1 {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.cus-sprintContainer100 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.cus-sprintContainer2 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.NoRecords{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}

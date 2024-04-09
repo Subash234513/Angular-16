@@ -1,0 +1,365 @@
+<div id="maincontent" *ngIf="isSummaryContent">
+  <div class="row">
+    <h2 class="company">Company Contribution</h2>
+  </div>
+  <div class="search">
+
+    <form [formGroup]="datassearch" class="form">
+      <section>
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field class="type">
+              <mat-label>Name</mat-label>
+
+              <input matInput formControlName="name">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-7 column">
+            <div>
+              <button mat-stroked-button type="button" class="stroked" (click)="searchData()" aria-label="Search">
+                <mat-icon>search</mat-icon>
+              </button>
+              <button mat-stroked-button type="button" class="button" (click)="cleardata()">Clear</button>
+              <button type="button" mat-fab class="fab" (click)="newContribution()">
+                <mat-icon matTooltip="Add" style="color: black;">add</mat-icon>
+              </button>
+
+              <button type="button" class="fab" mat-fab (click)="uploadfile()">
+                <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </form>
+
+  </div>
+
+  <div class="table">
+
+    <div>
+      <!-- <h3 style="margin-left:25px;">Summary</h3> -->
+      <div>
+
+        <table class="table table-bordered" id='commonstyle'>
+          <thead class="table_header">
+            <tr>
+              <th class="text-center">S.no</th>
+              <th class="text-center">
+                Name
+              </th>
+              <th class="text-center">
+                Percentage
+              </th>
+              <th class="text-center">Amount</th>
+              <th class="text-center">Effective From</th>
+              <th class="text-center">GL NO</th>
+              <th class="width text-center">Edit</th>
+
+              <th class="width text-center">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sum of summarylist;index as ind">
+              <td class="text-center">{{(pagination.index-1)*limit+ind+1}}</td>
+              <td class="text-center">{{sum.name}}</td>
+              <td class="text-center">{{sum.percentage}}</td>
+              <td class="text-center">{{sum.amount | currency: 'INR'}}</td>
+              <td class="text-center">{{sum.effective_from | date: 'dd-MMM-yy'}}</td>
+              <td class="text-center">{{sum.glno}}</td>
+              <td class="width text-center">
+                <i class="fa-solid fa-pencil" (click)="editContribution(sum)"></i>
+              </td>
+
+
+              <td class="width text-center">
+                <i class="fa-solid fa-trash-can" (click)="deleteEntry(sum.id)"></i>
+
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="col-sm-12">
+          <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false" color="primary">
+            <mat-icon class="customIconSize">arrow_back</mat-icon>
+          </button>
+          {{pagination.index}}
+          <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+            <mat-icon class="customIconSize">arrow_forward</mat-icon>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+<div *ngIf="isNewContribution" class="new">
+  <h2>Company Contribution Add</h2>
+  <form [formGroup]="addForm" autocomplete="off">
+    <div class="row">
+      <!-- <table>
+      <div>
+        <tr>
+          <td> -->
+      <div class="col-2">
+        <mat-label>Name<label class="off">*</label> </mat-label><br>
+        <mat-form-field class="matformfieldstyle1" appearance="outline">
+          <input matInput type="name" formControlName="name" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Pay Component<label class="Component">*</label></mat-label><br>
+        <mat-form-field (click)="paycomponent_search('')">
+          <mat-chip-grid #chiplist>
+            <mat-chip-row *ngFor="let company of chipSelectedcompany" [removable]="true"
+              (removed)="removedcompany(company)">
+              {{company.name}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip-row>
+            <input #companyInput formControlName="paycomponentflagmaster" [matAutocomplete]="auto"
+              [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true">
+          </mat-chip-grid>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="companySelected($event)">
+            <mat-option *ngFor="let thiscompany of allcompanylist" [value]="thiscompany" title="{{thiscompany.name}}">
+              {{thiscompany.name}}
+            </mat-option>
+            <mat-option *ngIf="!allcompanylist.length">
+              No Records Found
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Percentage<label class="centage">*</label> </mat-label><br>
+        <mat-form-field appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="percentage" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Effective From<label class="From">*</label> </mat-label><br>
+        <mat-form-field appearance="outline" class="matformfieldstyle4">
+          <input matInput [matDatepicker]="picker" class="matformfieldinputstyle" formControlName="effective_from"
+            autocomplete="off" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Amount<label class="From">*</label> </mat-label><br>
+        <mat-form-field appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="amount" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2 ">
+        <mat-label>GL NO</mat-label><br>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="GlNo" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <!-- </td> -->
+      <!-- <td>
+            <mat-label>Pay Component<label class="Component" >*</label> </mat-label><br>
+            <mat-form-field  class="matformfieldstyle2">
+                 <mat-label>Paycomponent</mat-label> -->
+      <!-- <mat-select formControlName="paycomponentflagmaster" multiple (openedChange)="onDropdownOpened($event)">
+                    <mat-option *ngFor="let type of paycomponent_array" [value]="type.id">{{ type.name }}</mat-option>
+                  </mat-select>
+            </mat-form-field>
+          </td> -->
+      <!-- <td> -->
+
+      <!-- </td>
+          <td> -->
+
+      <!-- </td>
+          <td> -->
+
+      <!--             
+          </td>
+          <td> -->
+
+      <!-- </td>
+
+        </tr>
+      </div>
+    </table> -->
+    </div>
+    <button type="button" class="btn btn-light" (click)="onCancelAdd()">Cancel</button>
+    <button type="submit" class="btn btn-light boo" (click)="onSubmitAdd()">Submit</button>
+  </form>
+</div>
+
+
+<div *ngIf="isEditContribution" class="new">
+  <h2>Company Contribution Edit</h2>
+  <!-- <form [formGroup]="editForm" autocomplete="off">
+    <table>
+      <div>
+        <tr>
+          <td>
+            <mat-label>Name<label class="control">*</label> </mat-label><br>
+            <mat-form-field class="matformfieldstyle6"  appearance="outline">
+              <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+            </mat-form-field>
+          </td> -->
+  <!-- <td>
+            <mat-label>Pay Component<label class="opened" >*</label> </mat-label><br>
+            <mat-form-field  class="matformfieldstyle7">
+                  <mat-label>Paycomponent</mat-label> -->
+  <!-- <mat-select formControlName="paycomponentflagmaster" multiple (openedChange)="onDropdownOpened($event)" >
+                    <mat-option *ngFor="let type of paycomponent_array" [value]="type.id" (onSelectionChange)="onSelectionChange($event)" >{{ type.name }}</mat-option>
+                  </mat-select>
+            </mat-form-field>
+          </td>  -->
+  <!-- <mat-label class="gra">Pay Component<label style="color: red;">*</label></mat-label><br>
+          <mat-form-field class="matformfieldstyle2">
+              <mat-chip-grid #chiplist> 
+                <mat-chip-row *ngFor="let company of chipeditSelectedcompany" [selected]="true" [removable]="true" (removed)="editremovedcompany(company)">
+                  {{company.name}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip-row>
+                <input #editcompanyInput formControlName="paycomponentflagmaster" [matAutocomplete]="auto" [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true">
+              </mat-chip-grid>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="editcompanySelected($event)">
+                <mat-option *ngFor="let type of paycomponent_array" [value]="type">
+                  {{type.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          <td>
+            <mat-label class="auto" >Percentage<label class="complete">*</label> </mat-label><br>
+            <mat-form-field class="matformfieldstyle3"  appearance="outline">
+              <input matInput class="matformfieldinputstyle" type="name" formControlName="percentage"
+                autocomplete="off">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-label class="effective" >Effective From<label class="choose">*</label> </mat-label><br>
+            <mat-form-field class="matformfieldstyle9"  appearance="outline">
+              <input matInput [matDatepicker]="picker" class="matformfieldinputstyle" formControlName="effective_from"
+                autocomplete="off" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+          </td>
+          <td>
+            <mat-label class="amo" >Amount<label class="unt">*</label> </mat-label><br>
+            <mat-form-field class="matformfieldstyle10" appearance="outline">
+              <input matInput class="matformfieldinputstyle" type="name" formControlName="amount"
+                autocomplete="off">
+            </mat-form-field>
+          </td>
+
+        </tr>
+      </div>
+    </table>
+    <button type="button" class="btn btn-light"(click)="onCancel()">Cancel</button>
+    <button type="submit" class="sub"  (click)="onEdit()" class="btn btn-light">Submit</button>
+  </form> -->
+  <form [formGroup]="editForm" autocomplete="off">
+    <div class="row">
+      <!-- <table>
+      <div>
+        <tr>
+          <td> -->
+      <div class="col-2">
+        <mat-label>Name<label class="off">*</label> </mat-label><br>
+        <mat-form-field class="matformfieldstyle1" appearance="outline">
+          <input matInput type="name" formControlName="name" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Pay Component<label class="Component">*</label></mat-label><br>
+        <mat-form-field (click)="paycomponent_search('')">
+          <mat-chip-grid #chiplist>
+            <mat-chip-row *ngFor="let company of chipeditSelectedcompany"  [removable]="true"
+              (removed)="editremovedcompany(company)">
+              {{company.name}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip-row>
+            <input #editcompanyInputName formControlName="paycomponentflagmaster" [matAutocomplete]="auto"
+              [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true">
+          </mat-chip-grid>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="editcompanySelected($event)">
+            <mat-option *ngFor="let type of paycomponent_array" [value]="type" title="{{type.name}}">
+              {{type.name}}
+            </mat-option>
+            <mat-option *ngIf="!paycomponent_array.length">
+              No Records Found
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Percentage<label class="centage">*</label> </mat-label><br>
+        <mat-form-field appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="percentage" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Effective From<label class="From">*</label> </mat-label><br>
+        <mat-form-field appearance="outline" class="matformfieldstyle4">
+          <input matInput [matDatepicker]="picker" class="matformfieldinputstyle" formControlName="effective_from"
+            autocomplete="off" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <mat-label>Amount<label class="From">*</label> </mat-label><br>
+        <mat-form-field appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="amount" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-2 ">
+        <mat-label>GL NO </mat-label><br>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input matInput class="matformfieldinputstyle" type="name" formControlName="GlNo" autocomplete="off">
+        </mat-form-field>
+      </div>
+
+
+    </div>
+    <button type="button" class="btn btn-light" (click)="onCancelAdd()">Cancel</button>
+    <button type="submit" class="btn btn-light boo" (click)="onEdit()">Submit</button>
+  </form>
+</div>
+
+<div *ngIf="isFileUpload">
+  <div class="card">
+    <div class="card-body">
+      <form novalidate [formGroup]="uploadForms">
+        <div class="input-group mb-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+              (change)="fileChange($event, $event.target.files)">
+            <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class=" btn btn-warning" type="button" (click)="uploadDocuments()">
+            <i class="fas fa-file-import"></i> Upload
+          </button>
+          <button class=" btn  btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+            Cancel
+          </button>
+          <button class=" btn  btn-outline-info" (click)="downloadTemplate()" style="margin-left:34%;">
+            Download Template
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

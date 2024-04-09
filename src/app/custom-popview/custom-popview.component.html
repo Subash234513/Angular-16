@@ -1,0 +1,109 @@
+<!-- Popup View -->
+<!-- <form [formGroup]="popupForm" class="custome-popup"> -->
+  <form [formGroup]="taskAddForm" autocomplete="off">
+    <h2>Time Sheet Log</h2>
+    <div class="popup-main-container">
+      <!-- log type api others & Activity -->
+      <div class="popup-common-div cus-selectDiv">
+        <label>Log Type</label>
+        <select
+          (click)="dpclick()"
+          formControlName="selectLogType"
+          class="cus-select"
+        >
+          <option disabled>Select a value</option>
+          <option *ngFor="let items of logTypeArr" [value]="items.name">
+            {{ items.name }}
+          </option>
+        </select>
+      </div>
+      <!-- others part -->
+      <div *ngIf="othersPopMenuNgif" class="cus-othersDiv">
+        <div class="popup-common-div">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput />
+          </mat-form-field>
+        </div>
+        <div class="popup-common-div">
+          <mat-form-field appearance="outline">
+            <mat-label>Time Spend</mat-label>
+            <input type="text" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="copy-div" *ngIf="activityPopMenuNgif" class="cus-activityDiv">
+        <!-- Client -->
+        <div class="custom-container popup-common-div">
+          <mat-form-field (click)="client()">
+            <ng-container *ngIf="!isLoading">
+              <mat-option
+                *ngFor="let clt of clientList"
+                (focusout)="FocusOut_select_client(clt)"
+                [value]="clt"
+              >
+                {{ clt.name }}
+              </mat-option>
+            </ng-container>
+
+            <mat-label>Client</mat-label>
+            <input
+              #cltInput
+              matInput
+              (click)="clearClient()"
+              formControlName="client"
+              [matAutocomplete]="clt"
+              required
+            />
+            <mat-autocomplete
+              #clt="matAutocomplete"
+              [displayWith]="displayFnclient"
+            >
+              <mat-option *ngIf="isLoading" class="is-loading"
+                >Loading...</mat-option
+              >
+               </mat-autocomplete>
+          </mat-form-field>
+        </div>
+  
+        <!-- Application -->
+        <div class="popup-common-div">
+          <mat-form-field class="matformfieldstyle" (click)="application()">
+            <mat-label>Application</mat-label>
+            <input
+              #appnmInput
+              class="matformfieldinputstyle"
+              matInput
+              (click)="clearApp()"
+              formControlName="app_id"
+              [matAutocomplete]="appnm"
+              required
+            />
+            <mat-autocomplete
+              #appnm="matAutocomplete"
+              [displayWith]="displayFnApp"
+            >
+              <mat-option *ngIf="isLoading" class="is-loading"
+                >Loading...</mat-option
+              >
+              <ng-container *ngIf="!isLoading">
+                <mat-option
+                  *ngFor="let appnm of appNameList"
+                  (focusout)="FocusOut_select_app(appnm)"
+                  [value]="appnm"
+                >
+                  {{ appnm.name }}
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  
+    <div class="popup-btns-div">
+      <button mat-raised-button (click)="onAddClick()">Add</button>
+      <button mat-raised-button (click)="onCloseClick()">Cancel</button>
+    </div>
+  </form>

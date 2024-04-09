@@ -1,0 +1,545 @@
+<div>
+    <div>
+        <form [formGroup]="GRNForm">
+            <div>
+                <h2 style="margin-left: 3%;">
+                    Goods Received Note Inward Form
+                </h2>
+                <table>
+                    <div>
+                        <tr>
+                            <td>
+                                <mat-form-field style="width: 200px;margin-left: 50px;">
+                                    <mat-label>PO No</mat-label>
+                                    <input matInput placeholder="PO No" formControlName="pono" autocomplete="off"
+                                        (keypress)="only_numalpha($event)" maxlength="">
+                                </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+
+                            <td>
+                                <mat-form-field style="width: 200px;margin-left: 50px;">
+                                    <mat-label>PR No</mat-label>
+                                    <input matInput placeholder="PR No" formControlName="prno" autocomplete="off"
+                                        (keypress)="only_numalpha($event)">
+                                </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px;margin-left: 50px;">
+                                    <mat-label>Branch Code</mat-label>
+                                    <input placeholder="Branch Code" matInput formControlName="branchcode" #branch
+                                        [matAutocomplete]="autoPrimary">
+                                    <mat-autocomplete #autoPrimary="matAutocomplete" [displayWith]="displayFns">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let branchcode of branchNameData" [value]="branchcode">
+                                                {{branchcode.codename}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-primary" type="submit"
+                                    style="border-radius:40px;margin-left: 15px;" color="primary"
+                                    (click)="GRNCreateEditForm()"><i class="fa fa-search"
+                                        aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field style="width: 200px;margin-left: 50px;">
+                                    <mat-label>Supplier Name</mat-label>
+                                    <input matInput placeholder="Supplier Name" [value]="inputSUPPLIERValue"
+                                        [readonly]="true" formControlName="suppliername" autocomplete="off">
+                                </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-primary" type="submit" data-toggle="modal"
+                                    data-target="#selectSupplier" style="border-radius:40px;margin-left: 40px;
+                        margin-top: auto;" color="primary"><i class="fa fa-long-arrow-up fa-lg" aria-hidden="true"></i>
+                                    Select Supplier</button>
+
+                                <button type="button" style="border-radius:40px;margin-left: 15px;"
+                                    class="btn btn-outline-primary" (click)="dataclearinwardform()">
+                                    Reset</button>
+                            </td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="table-responsive" id="styleScroll" style="margin-top: 2%;width: 95%;margin-left: 5px;">
+        <table class="table scrolltable table-bordered" fixed-header>
+            <thead>
+                <tr class="table_header" fixed-header>
+                    <th>S.No</th>
+                    <th>PO No</th>
+                    <th>PR No</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Supplier Name</th>
+                    <th>Product Name</th>
+                    <th>Item</th>
+                    <th>Ordered Quantity</th>
+                    <th>UOM</th>
+                    <th>Already Received Quantity</th>
+                    <th>Remaining Quantity</th>
+                    <th>Current Received Quantity</th>
+                    <th>Add Asset Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let grninward of grninwardList;index as i">
+                    <td>{{(this.presentpagegrninward - 1)*pageSizegrninward +i+1 }}</td>
+                    <td>{{grninward?.poheader_id?.no}}</td>
+                    <td>{{grninward?.prpoqty_id?.prccbs_id?.prdetails?.prheader_id?.no}}</td>
+                    <td>{{grninward?.poheader_id.type}}</td>
+                    <td>{{grninward?.prpoqty_id?.prccbs_id?.branch_id?.code}}--{{grninward?.prpoqty_id?.prccbs_id?.branch_id?.name}}
+                    </td>
+                    <td>{{grninward?.poheader_id?.supplierbranch_id?.code}}--{{grninward?.poheader_id?.supplierbranch_id?.name}}
+                    </td>
+                    <td>{{grninward?.podetails_id?.product_name}}</td>
+                    <td>{{grninward?.podetails_id?.item_name}}</td>
+                    <td>{{grninward?.qty}}</td>
+                    <td>{{grninward?.podetails_id?.uom}}</td>
+                    <td>{{grninward?.received_quantity}}</td>
+                    <td>{{grninward?.qty - grninward?.received_quantity}}</td>
+                    <td><input type="number" [value]="grninward?.qty - grninward?.received_quantity" #quantity
+                            class="inputStyle" [disabled]=grninward.fieldtext /></td>
+                    <td>
+                        <div *ngIf="grninward.is_asset == 1 ; else lock" data-toggle="modal"
+                            data-target="#assetdataModal">
+                            <button
+                                (click)="passgrninwardid(grninward?.poheader_id, grninward?.podetails_id, grninward, quantity.value, templatepopup )"
+                                type="button" class="btn btn-outline-success" [disabled]=grninward.fieldtext><span
+                                    class="fa fa-plus"></span>
+                            </button>
+
+
+                        </div>
+                        <!-- <div *ngIf="assetpopup"> -->
+                        <ng-template #templatepopup>
+
+                            <div>
+                                <div>
+                                    <button type="button" class="close" (click)="closedialog()" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <h2>Number of Asset Details needed : {{TotalAssetRequired}}</h2>
+                                <h2>Selected Asset count: {{SelectedAsset}}</h2>
+                                <div class="table-responsive" style="width: 100%;margin-top:2%;"
+                                    class="tablescroll">
+                                    <form [formGroup]="GrnAssestForm">
+
+                                        <table class="table table-bordered" fixed-header
+                                            style="margin-left: 10px;width: 95%">
+                                            <thead class="table_header">
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Asset Serial No</th>
+                                                    <th>Manufacturer</th>
+                                                    <th>Warranty Start Date</th>
+                                                    <th>Warranty End Date</th>
+                                                    <th *ngIf="ShowHideAssertInstallation">Installation Required </th>
+                                                    <th>Asset IDS</th>
+                                                    <th>Select</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody formArrayName="assetitems"
+                                                *ngFor="let grndetails of GrnAssestForm.get('assetitems').controls; index as index">
+                                                <tr [formGroupName]="index">
+                                                    <!-- <tr [formGroupName]="fieldGlobalIndex(i)"> -->
+                                                    <!-- <td> {{((popup-1)*itemsPerPage)+i+1}} </td> -->
+                                                    <td> {{index+1}} </td>
+                                                    <td>
+                                                        <mat-form-field style="width: 170px;">
+                                                            <input matInput placeholder="Asset Serial No"
+                                                                formControlName="serialno"
+                                                                autocomplete="off">
+                                                        </mat-form-field>
+                                                    </td>
+                                                    <td>
+                                                        <mat-form-field style="width: 170px;">
+                                                            <input matInput placeholder="Asset Manufacturer"
+                                                                formControlName="manufacturer"
+                                                                autocomplete="off">
+                                                        </mat-form-field>
+                                                    </td>
+                                                    <td>
+                                                        <mat-form-field style="width:170px;">
+                                                            <input matInput readonly [matDatepicker]="picker1"
+                                                                placeholder="Warranty Start Date"
+                                                                formControlName="warranty_from_date">
+                                                            <mat-datepicker-toggle matSuffix [for]="picker1">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker1></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </td>
+                                                    <td>
+                                                        <mat-form-field style="width:170px;">
+                                                            <input matInput readonly [matDatepicker]="picker2"
+                                                                placeholder="Warranty End Date"
+                                                                formControlName="warranty_to_date">
+                                                            <mat-datepicker-toggle matSuffix [for]="picker2">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker2></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </td>
+                                                      <td *ngIf="ShowHideAssertInstallation">
+                                                        <mat-form-field style="width:170px;">
+                                                            <input matInput readonly [matDatepicker]="picker3"
+                                                                placeholder="Installation Date"
+                                                                formControlName="installation_date">
+                                                            <mat-datepicker-toggle matSuffix [for]="picker3">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker3></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </td>
+                                                    <td>
+                                                        <mat-form-field style="width: 200px;">
+                                                            <input matInput formControlName="assetid" readonly
+                                                                autocomplete="off">
+                                                        </mat-form-field>
+                                                    </td> 
+                                                    <td>
+
+                                                        <input type="checkbox" class="checkboxsize"
+                                                            [disabled]=fieldCheckboxAsset[index]
+                                                            (click)="assetArrayFormation(grndetails, index, $event)" /> 
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+                                        <div class="row"  style="font-size: small;margin-bottom: 5%;">
+
+                                            <div class="col">
+                                                <button style="border-radius: 40px;margin-left: 10px;margin-bottom: 100px;"
+                                                class="btn btn-outline-primary"
+                                                (click)="getData(grninward, i, quantity.value, $event, 'popup')"
+                                                data-dismiss="modal">Save</button>
+                                            </div>
+                                            <div class="col">
+                                                
+
+                                                <button type="button" style="border-radius:40px;"
+                                                class="btn btn-outline-primary" (click)="nextassetClick()">
+                                                <span class="material-icons">
+                                                    autorenew
+                                                </span>Load More
+                                            </button>
+                                            </div>
+
+
+                                        </div>
+
+                                        
+                                        <!-- <div class="col-sm-12"
+                                            style="font-size: small;text-align: right;margin-bottom: 5%;">
+                                        
+
+                                            
+                                        </div>
+                                        <div mat-dialog-actions>
+                                            
+                                        </div> -->
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </ng-template>
+
+
+                        <!-- </div> -->
+                        <ng-template #lock>- </ng-template>
+
+
+
+                    </td>
+                    <td><input type="checkbox" class="checkboxsize"
+                            (click)="getData(grninward, i, quantity.value, $event, 'checkbox')"
+                            [disabled]="grninward.disabled" [checked]="grninward.CheckboxenableDiableArrays == true" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div *ngIf="grninwardList ?.length == 0" style="text-align: center;">
+        <h3>Sorry data not found!.. </h3>
+    </div>
+    <div class="row" *ngIf="grninwardpage">
+        <div class="col-sm-10" style="margin-bottom: 5%;font-size: small;text-align:right;">
+            <button mat-icon-button [disabled]="has_previousgrninward === false" color="primary"
+                (click)="previousClickgrninward()">
+                <mat-icon>arrow_back
+                </mat-icon>
+            </button>
+            {{presentpagegrninward}}
+            <button mat-icon-button [disabled]="has_nextgrninward === false" color="primary" (click)="nextClickgrninward()">
+                <mat-icon>arrow_forward
+                </mat-icon>
+            </button>
+        </div>
+    </div> -->
+    </div>
+
+
+    <div *ngIf="grninwardList ?.length == 0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...
+    </div>
+    <ng-template #paginationgrn>
+        <div class="cursor" style="font-size: small;text-align:right; margin-bottom:30px;">
+            <button mat-icon-button [disabled]="has_previousgrninward === false" color="primary"
+                (click)="previousClickgrninward()">
+                <mat-icon>arrow_back
+                </mat-icon>
+            </button>
+            {{presentpagegrninward}}
+            <button mat-icon-button [disabled]="has_nextgrninward === false" color="primary"
+                (click)="nextClickgrninward()">
+                <mat-icon>arrow_forward
+                </mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+    <form [formGroup]="GRNForm2" (ngSubmit)="GRNCreateEditForm2()">
+        <table>
+            <tr>
+                <td>
+                    <mat-form-field style="width: 200px; margin-left: 50px;">
+                        <mat-label>DC Number</mat-label>
+                        <input matInput placeholder="DC Number" formControlName="dcnote" autocomplete="off" maxlength=""
+                            (keypress)="only_numalpha($event)" (ngModelChange)="inputDCValue = $event.toUpperCase()"
+                            >
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+
+                <td>
+                    <mat-form-field style="width: 200px;margin-left: 50px;">
+                        <mat-label>Invoice Number</mat-label>
+                        <input matInput placeholder="Invoice Number" formControlName="invoiceno" autocomplete="off"
+                            (keypress)="only_numalpha($event)" (ngModelChange)="inputINVValue = $event.toUpperCase()"
+                            required>
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    <mat-form-field style="width:200px;margin-left: 50px;">
+                        <mat-label>Received Date</mat-label>
+                        <input matInput readonly [matDatepicker]="picker1" placeholder="Received Date"
+                            formControlName="date" [max]="todate" [min]="fromdate">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field style="width: 200px;margin-left: 50px;">
+                        <mat-label>Remarks</mat-label>
+                        <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off" required>
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    <!-- <button type="button" mat-raised-button (click)="fileInput.click()"> +Choose File</button> -->
+                    <input type="file" #fileInput name="image" formControlName="fileData"
+                        (change)="fileProgress($event)" />
+                    <span style="color: green;">{{fileName}}</span>
+                </td>
+            </tr>
+        </table>
+        <div style="margin-bottom: 5%; margin-left: 50px;">
+            <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary"
+                [disabled]="issubmit">Submit</button>
+            <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    id="selectSupplier">
+    <div class="modal-dialog modal-xl" style="width:80%;height:200%;">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#DDEFDD;">
+                <h2 class="modal-title">
+                    Find Supplier</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <br>
+            <div class="modal-body">
+                <form [formGroup]="SelectSupplierForm" (ngSubmit)="SelectSuppliersearch()">
+                    <table style="margin-left: 20px;">
+                        <div>
+                            <tr>
+                                <td>
+                                    <mat-form-field style="width: 200px;">
+                                        <mat-label>Supplier GST Number</mat-label>
+                                        <input matInput placeholder="GST No" formControlName="gstno" autocomplete="off"
+                                            (keypress)="only_numalpha($event)" maxlength="">
+                                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+
+                                <td>
+                                    <mat-form-field style="width: 200px;">
+                                        <mat-label>Supplier Code</mat-label>
+                                        <input matInput placeholder="Supplier" formControlName="code" autocomplete="off"
+                                            (keypress)="only_numalpha($event)">
+                                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+
+                                <td>
+                                    <mat-form-field style="width: 200px;">
+                                        <mat-label>PAN Number</mat-label>
+                                        <input matInput placeholder="PAN" formControlName="panno" autocomplete="off"
+                                            (keypress)="only_numalpha($event)">
+                                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+
+                                <button class="btn btn-outline-primary" type="submit"
+                                    style="border-radius:40px;margin-left: 15px;" color="primary"
+                                    (click)="SelectSuppliersearch()"><i class="fa fa-search"
+                                        aria-hidden="true"></i></button>&nbsp;
+
+                                <button type="button" style="border-radius:40px;margin-left: 15px;"
+                                    class="btn btn-outline-primary" (click)="dataclear()">
+                                    Reset</button>
+                            </tr>
+                            <tr>
+                                <div *ngIf="default">
+                                    <td>
+                                        <mat-form-field style="width: 250px;margin-top: 5px;">
+                                            <mat-label>Choose Supplier</mat-label>
+                                            <input #name placeholder="Choose Supplier" matInput formControlName="name"
+                                                [matAutocomplete]="autosupp">
+                                            <mat-autocomplete #autosupp="matAutocomplete" [displayWith]="displayFn">
+                                                <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                                                </mat-option>
+                                                <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let suppliername of supplierNameData"
+                                                        ngDefaultControl [(ngModel)]="inputSUPPLIERValue"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="inputSUPPLIERValue = $event.toUpperCase()"
+                                                        (focusout)="getgrnView(suppliername)" [value]="suppliername">
+                                                        {{suppliername.name}}
+                                                    </mat-option>
+                                                </ng-container>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </div>
+
+                                <div *ngIf="alternate">
+                                    <td>
+                                        <mat-form-field style="width: 250px;margin-top: 5px;">
+                                            <mat-label>Choose Supplier</mat-label>
+                                            <input #name placeholder="Choose Supplier" matInput formControlName="name"
+                                                [matAutocomplete]="autosupp2">
+                                            <mat-autocomplete #autosupp2="matAutocomplete" [displayWith]="displaytest">
+                                                <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                                                </mat-option>
+                                                <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let suppliername of selectsupplierlist"
+                                                        ngDefaultControl [(ngModel)]="inputSUPPLIERValue"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="inputSUPPLIERValue = $event.toUpperCase()"
+                                                        (focusout)="getgrnView(suppliername)" [value]="suppliername">
+                                                        {{suppliername.name}}
+                                                    </mat-option>
+                                                </ng-container>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </div>
+                            </tr>
+                        </div>
+                    </table>
+
+                    <!-- <form [formGroup]="supplierchooseForm"></form> -->
+                    <table border="0">
+                        <tbody>
+
+
+                            <tr>
+                                <td style="width: 18%;"><strong>Supplier Name : </strong></td>
+                                <td colspan="3" style="text-align: left;">{{SupplierName}}</td>
+                            </tr>
+                            <tr>
+
+                                <td><strong>Supplier Code : </strong></td>
+                                <td>{{SupplierCode}}</td>
+                                <td> <strong>Address : </strong></td>
+                                <td style="width: 18%;">{{line1}},
+                                    {{line2}},
+                                    {{line3}}</td>
+                            </tr>
+                            <tr>
+
+                                <td style="width: 20%;"><strong>Supplier GST Number : </strong></td>
+                                <td style="width: 18%;">{{SupplierGSTNumber}}</td>
+                                <td><strong>City : </strong></td>
+                                <td>{{City}}</td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr>
+
+
+                                <td><strong>Supplier PAN Number : </strong></td>
+                                <td>{{SupplierPANNumber}}</td>
+
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ///////////////// Asset work -->
+
+
+
+
+
+
+
+
+<!-- <pre>
+    {{GRNForm2.value | json}}
+</pre>
+<pre>
+    {{GrnAssestForm.value | json}}
+</pre> -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

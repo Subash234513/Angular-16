@@ -1,0 +1,1514 @@
+<div>
+<nav>
+    <div class="nav nav-tabs" >
+        <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+            *ngFor="let sub of tasksubmoduleList">
+            {{sub.name}}
+        </span>
+    </div>
+</nav>
+<div style="margin-left: 40px;">
+    <div *ngIf="taskmaker">
+    <div class="col-md-12">
+        <h2>Task Summary</h2>
+        <!-- <label class="alert alert-info btn">
+            <strong>Non Assigned Employee</strong><mat-icon  (click)="isclick_product()">{{icon_product  ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+           <mat-card *ngIf="icon_product == true">
+            <table class="table table-bordered">
+                <thead class="table_header">
+                    <tr>
+                        <th>S.no</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of notificationList; index as i">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ type?.name}}</td>
+                    </tr>    
+                </tbody>
+            </table> 
+           </mat-card>
+        </label> -->
+        <!-- <label *ngIf="this.notificationList.length > 0" class="alert alert-info notify">
+            Non Assigned Employee<mat-icon  (click)="isclick_product()">{{icon_product  ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+           <mat-card *ngIf="icon_product == true">
+            <table class="table table-bordered">
+                <thead class="table_header">
+                    <tr>
+                        <th>S.no</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of notificationList; index as i">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ type?.name}}</td>
+                    </tr>    
+                </tbody>
+            </table> 
+           </mat-card>
+        </label> -->
+        <!-- <div *ngIf="this.notificationList.length > 0" class="alert alert-info notify">
+            Non Assigned Employee<mat-icon  (click)="isclick_product()">{{icon_product  ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+           <mat-card *ngIf="icon_product == true">
+            <table class="table table-bordered">
+                <thead class="table_header">
+                    <tr>
+                        <th>S.no</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of notificationList; index as i">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ type?.name}}</td>
+                    </tr>    
+                </tbody>
+            </table> 
+           </mat-card>
+        </div> -->
+        <!-- <label *ngIf="this.notificationList.length > 0">
+            <strong>Non Assigned Employee</strong><mat-icon  (click)="isclick_product()">{{icon_product  ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+            <mat-chip-grid *ngIf="icon_product == true" class="inlineprint">
+                <div *ngFor="let type of notificationList">
+                    <mat-chip-row style="background-color: dimgray;color: white;">{{type?.name}}</mat-chip-row>
+                </div>
+            </mat-chip-grid>
+        </label> -->
+
+
+        <button *ngIf="this.notificationList.length > 0" mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNote"
+                      aria-expanded="false" aria-controls="collapseNoteview">Non Assigned Employee:<mat-icon (click)="isclick_product()">{{icon_product  ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+        </button>
+        <br>
+
+        <div  *ngIf="this.notificationList.length > 0" class="panel-collapse collapse show in" id="collapseNote">
+            <div class="card" id="collapseNoteView">
+                <mat-chip-grid *ngIf="icon_product == true" class="inlineprint">
+                    <div *ngFor="let type of notificationList">
+                        <mat-chip-row style="background-color: darkgray;color: white;">{{type?.name}}</mat-chip-row>
+                    </div>
+                </mat-chip-grid>
+            </div>
+        </div>
+
+        <form [formGroup]="taskSearchForm" >
+            <div class="row">
+ 
+
+                <div class="col-md-3">
+                    <mat-label>From Date</mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline">
+    
+                                    <input matInput readonly [matDatepicker]="picker1" class="matformfieldinputstyle"
+                                         formControlName="start_date" (dateChange)="StartDate($event.value)">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label >To Date</mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline" >
+    
+                                    <input matInput readonly [matDatepicker]="picker2" class="matformfieldinputstyle"
+                                         formControlName="end_date" [min]="set_StartDate">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                </div>
+                <!-- <div class="col-md-3">
+                    <mat-label >Dev Type </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline">
+                                    <mat-select class="matformfieldinputstyle" formControlName="dev_type">
+                                        <mat-option *ngFor="let devtype of devtypelist" 
+                                            [value]="devtype.id">
+                                            {{devtype.text}}
+                                        </mat-option>
+                                    </mat-select>
+                    </mat-form-field>
+                </div> -->
+               
+               
+                <!-- <div class="col-md-3">
+                    <mat-label>Client</mat-label><br>
+                            <mat-form-field class="matformfieldstyle"  appearance="outline"
+                                (click)="client()">
+
+                                <input #cltInput  class="matformfieldinputstyle" matInput 
+                                    formControlName="client" [matAutocomplete]="clt">
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt"
+                                    (opened)="autocompleteCltScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let clt of clientList" [value]="clt">
+                                            {{clt.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                     </mat-form-field>
+                </div> -->
+
+                <div class="col-md-3">
+                    <mat-label >Project Name</mat-label><br>
+                    <mat-form-field class="matformfieldstyle"  appearance="outline"
+                        (click)="appName()">
+                        <input #appnmInput  class="matformfieldinputstyle" matInput 
+                            formControlName="app_id" [matAutocomplete]="appnm" >
+                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                        <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm"
+                            (opened)="autocompleteAppnmScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let  appnm of appNameList" [value]="appnm">
+                                    {{appnm.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                    <mat-label >Module Name</mat-label><br>
+                    <mat-form-field class="matformfieldstyle"  appearance="outline"
+                        (click)="moduleName()">
+
+                        <input #modnmInput  class="matformfieldinputstyle" matInput
+                            formControlName="module_id" [matAutocomplete]="modnm" >
+                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                        <mat-autocomplete #modnm="matAutocomplete" [displayWith]="displayFnmodnm"
+                            (opened)="autocompletemodnmScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let modnm of moduleNameList" [value]="modnm">
+                                    {{modnm.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-md-3">
+                    <mat-label >Status</mat-label><br>
+                    <mat-form-field class="matformfieldstyle" appearance="outline">
+                        <mat-select class="matformfieldinputstyle" formControlName="status">
+                            <mat-option *ngFor="let status of statusList" 
+                                [value]="status.id">
+                                {{status.text}}
+                            </mat-option>
+                        </mat-select>
+        </mat-form-field>
+                </div> -->
+                <div class="col-md-3">
+                    <mat-label>Status</mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 230px;" (click)="getemp('')">
+                                    <mat-chip-grid #chipListemp>
+                                        <mat-chip-row *ngFor="let empl of chipSelectedemp"  [removable]=true
+                                            (removed)="removedemp(empl)">
+                                            {{empl.text}}
+                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                        </mat-chip-row>
+                                        <input #empInput [formControl]="status" [matAutocomplete]="emp"
+                                             class="matformfieldinputstyle"
+                                            (keyup)="getemp(status.value)" [matChipInputFor]="chipListemp"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]=true required>
+                                    </mat-chip-grid>
+    
+                                    <mat-autocomplete #emp="matAutocomplete" (optionSelected)="empSelected($event)"
+                                        >
+                                        <mat-option *ngFor="let emp of empList" [value]="emp">
+                                            {{emp.text}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                        </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label >Code</mat-label><br>
+                    <mat-form-field class="matformfieldstyle"  appearance="outline" style="width: 230px;">
+                        <input type="text" class="matformfieldinputstyle"  matInput autocomplete="off" formControlName="query">
+                        <!-- <mat-placeholder>Code</mat-placeholder> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label >Team Lead</mat-label><br>
+                    <mat-form-field class="matformfieldstyle"  appearance="outline"
+                        (click)="TeamLead()">
+
+                        <input #teamldInput  class="matformfieldinputstyle" matInput
+                        formControlName="team_lead" [matAutocomplete]="teamld" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld"
+                        (opened)="autocompleteteteamldScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let teamld of teamldList" [value]="teamld">
+                                {{teamld.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label >Assignee</mat-label><br>
+                    <mat-form-field class="matformfieldstyle"  appearance="outline"
+                        (click)="developerName()">
+
+                        <input #developerInput  class="matformfieldinputstyle" matInput
+                        formControlName="developer_id" [matAutocomplete]="dev" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #dev="matAutocomplete" [displayWith]="displayFndev"
+                        (opened)="autocompletetedevScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let dev of developerList" [value]="dev">
+                                {{dev.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <button mat-stroked-button type="button" style="background-color: white;"
+                            aria-label="Search" (click)="TaskSearch('')">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="resetTask()">Clear</button>
+                        <!-- <button mat-fab type="button" 
+                            style="margin-left: 20px;background-color: burlywood;" (click)="onclickTaskAdd()">
+                            <mat-icon matTooltip="Add Task">add</mat-icon></button> -->
+                            <button type="button" style="  border-radius: 10px;margin-left: 20px;border-color: #f5c68b;
+                                background-color: #f5c68b;" class="btn btn-light" 
+                                    (click)="onclickTaskAdd()"><i class="fa fa-plus-circle"></i> Add Task</button>
+                        <button mat-mini-fab color="green" (click)="taskdownload()" style="margin-left: 20px;" aria-label="Example icon button with a filter list icon">
+                                <mat-icon>download</mat-icon>
+                        </button>    
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+  
+    <div class="col-sm-12 col-md-12 col-lg-12" >
+    <div class="table-responsive">
+        <table class="table table-bordered" fixed-header style="max-width: 100%; margin-top: 10px;">
+            <thead class="table_header">
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Code</th>
+                    <!-- <th mat-sort-header>Start Date</th> -->
+                    <th>Start Date<span class="material-icons" style="cursor: pointer;color: grey;font-size: 18px;" (click)="startdate_iconclick()">
+                        {{startdate_icon  ? 'arrow_upward' : 'arrow_downward' }}
+                        </span></th>
+                    <th>End Date<span class="material-icons" style="cursor: pointer;color: grey;font-size: 18px;" (click)="enddate_iconclick()">
+                        {{enddate_icon  ? 'arrow_upward' : 'arrow_downward' }}
+                        </span></th>
+                    <!-- <th>Unit Head</th> -->
+                    <!-- <th>Start Date</th>
+                    <th>End Date</th> -->
+                    <th>Team Lead</th>
+                    <th>Task Desc</th>
+                    <th>Assigned</th>
+                    <th>#Module</th>
+                    <th>#Project</th>
+                    <!-- <th>#Client</th> -->
+                    <!-- <th>Dev Type</th> -->
+                    <th>Status</th>
+                    <th>Action</th>
+                    <!-- <th>Check</th> -->
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let type of taskList; index as i">
+                    <td>{{(presentpageTask - 1)*pagesizetask +i+1 }}</td>
+                    <td>{{type?.code}}</td>
+                    <td>{{type?.start_date | date:'dd-MMM-yyyy'}}</td>
+                    <td>{{type?.end_date | date:'dd-MMM-yyyy'}}</td>
+                    <!-- <td>{{type?.unit_head.full_name}}</td> -->
+                    <td>{{type?.team_lead.full_name}}</td>
+                    <td>
+                        {{ (type?.task.length>35)?
+                            (type?.task | slice:0:35)+'..':(type.task) }}
+                    </td>
+                    <!-- <td>{{type?.task}}</td> -->
+                    <td>{{type?.assign_to.full_name}}</td>
+                    <td>{{type?.module_id}}</td>
+                    <td>{{type?.app_id}}</td>
+                    <!-- <td>{{type?.client_name}}</td> -->
+                    <!-- <td>{{type?.dev_type}}</td> -->
+                    <td [ngClass]="(type.task_status == 'Verified' )? 'verified':(type.task_status == 'Deleted' )? 'Deleted':'notverified' ">{{type?.task_status}}</td>
+                    <td>
+                        <button mat-icon-button matTooltip="Task view" class="iconbutton" 
+                        (click)="onClickTaskSummary(type)" color="primary">
+                                <mat-icon class="enabled_icon" aria-label="view">visibility</mat-icon>
+                            </button>
+                        <button *ngIf="(type.task_status != 'Deleted')"  [disabled]="type.task_status == 'Verified'" mat-icon-button matTooltip="Delete" class="iconbutton"
+                            (click)="deleteTask(type)" color="primary">
+                            <mat-icon>delete</mat-icon>
+                        </button> 
+                        <!-- <button *ngIf="type.task_status == 'Draft'" (click)="TeamLead_Approve(type.id)" mat-button class="btn btn-success" style="cursor: pointer;">
+                            Approve
+                          </button>    -->
+                    </td>
+                    <!-- <td> -->
+                        <!-- <button (click)="TeamLead_Approve()" mat-button class="btn btn-success" style="cursor: pointer;">
+                            Approve
+                          </button>
+                          <button (click)="TeamLead_Approve()" mat-button class="btn btn-danger" style="cursor: pointer;">
+                            Reject
+                          </button> -->
+                        <!-- <button type="button" class="btn btn-outline-success" data-toggle="modal"
+                       data-target="#rejectModalForPremiseNameApproval" style="border-radius: 40px;">
+                        APPROVE/REJECT</button> -->
+                    <!-- </td> -->
+                    
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div *ngIf="taskList?.length==0 || taskList == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_previousTask === false" color="primary"
+                (click)="TaskSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{presentpageTask}}
+            <button type="button" mat-icon-button [disabled]="has_nextTask === false" color="primary"
+                (click)="TaskSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    </div>
+    </div> 
+    </div>
+
+  
+
+
+
+
+
+
+<div *ngIf="taskcreate">
+    <app-task-create (onSubmit)="tasksumit()" (onCancel)="taskcancel()"></app-task-create>
+    <!-- <app-project-create (onSubmit)="ProjectCreate()" (onCancel)="ProjectCancel()"></app-project-create> -->
+</div>
+
+<div *ngIf="taskview">
+    <app-task-view (onCancel)="taskviewcancel()"></app-task-view>
+    <!-- <app-project-view (onSubmit)="ProjectViewBack()"></app-project-view> -->
+</div>
+    
+    <div *ngIf="MyTask">
+        <app-emp-task-summary></app-emp-task-summary>
+    </div>
+
+    <div *ngIf="TimeSheet">
+        <app-time-sheet></app-time-sheet>
+    </div>
+
+
+
+    <div class="container" *ngIf="taskmetrics">
+        <app-taskchart></app-taskchart>
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen]="true" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>
+
+
+
+
+<div *ngIf="taskreport">
+    <form [formGroup]="taskreportForm"  autocomplete="off"  >
+        <div class="col-md-12" style="margin-left:1%">
+            <h2>Task Report Summary</h2>
+        </div> 
+        <mat-card class="example-card" style=" margin-left: 2%">
+
+
+            
+            <div class="row" style=" margin-left: 2%">
+                <div>
+                        <mat-form-field  style="width:200px;">
+                            <mat-label>Task Report </mat-label>
+                  
+                            <mat-select [(value)]="selected" >
+                                <mat-option value="module_based" (click)="mod_based_select()" >Module Wise Task Report </mat-option>
+                                <mat-option value="employee_client_based" (click)="emp_cli_based_select()">Employee Based Task Report</mat-option>
+                                <mat-option value="employee_based" (click)="emp_based_select()">Client - Employee Based Task Report</mat-option>
+                                
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 200px;margin-left: 20px;" *ngIf="client_n">
+                            <mat-label>Client </mat-label>
+                            <input matInput placeholder="Client" formControlName="client" #taskrcltInput autocomplete="off" [matAutocomplete]="clt" (click)="taskrclient()" />
+                            <mat-autocomplete #clt="matAutocomplete"  (opened)="autocompletetaskCltScroll()" [displayWith]="displaytrclt" >
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let clt of trclientList"   [value]="clt">{{clt.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-form-field style="width:200px;margin-left: 20px;" *ngIf="project_n">
+                            <mat-label>Project Name </mat-label>
+                            <input matInput placeholder="Project Name" formControlName="app_id" #taskrappInput autocomplete="off" [matAutocomplete]="app" (click)="taskrappName()" />
+                            <mat-autocomplete #app="matAutocomplete" [displayWith]="displaytrcapp" (opened)="autocompleteApptrScroll()">
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let app of trappNameList"   [value]="app">{{app.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                
+                </div>
+                </div>
+            <div class="row"  style="margin-left: 2%">
+
+                <div >
+                        <mat-form-field style="width:200px;" *ngIf="module_n">
+                            <mat-label>Module Name</mat-label>
+                            <input matInput placeholder="Module Name" formControlName="project_map_id" #taskmodInput autocomplete="off" [matAutocomplete]="mod" (click)="taskrmoduleName()" />
+                            <mat-autocomplete #mod="matAutocomplete" [displayWith]="displaytrmod" (opened)="autocompletemodtrScroll()" >
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let mod of trmoduleNameList"   [value]="mod">{{mod.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        
+                        <mat-form-field style="width:200px;margin-left: 20px;" *ngIf="taskreportunithead" >
+                            <mat-label>Unit Head Name</mat-label>
+                            <input matInput placeholder="Unit Head Name" formControlName="unit_head" #taskunitheadInput autocomplete="off" [matAutocomplete]="unit_head" (click)="taskunitName()" />
+                            <mat-autocomplete #unit_head="matAutocomplete" [displayWith]="displayunithead" (opened)="autocompleteunitScroll()">
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let unit_head of tunitheademployeeList"   [value]="unit_head">{{unit_head.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        
+                        
+                        <mat-form-field style="width:200px;margin-left: 20px;" *ngIf="taskreportprojecthead" >
+                            <mat-label>Project Head Name</mat-label>
+                            <input matInput placeholder="Project Head Name" formControlName="project_head" #taskprojectheadInput autocomplete="off" [matAutocomplete]="project_head" (click)="taskprojectheadName()" />
+                            <mat-autocomplete #project_head="matAutocomplete" [displayWith]="displayprojecthead" (opened)="autocompleteprojectScroll()">
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let project_head of tprojectheademployeeList"   [value]="project_head">{{project_head.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                </div> 
+                
+                <div  *ngIf="taskreportemployeename" >
+                    <mat-form-field style="width:200px;">
+                        <mat-label>Employee Name</mat-label>
+                        <input matInput placeholder="Employee Name" formControlName="employee" #taskrempInput autocomplete="off" [matAutocomplete]="emp" (click)="taskemployee()" />
+                        <mat-autocomplete #emp="matAutocomplete"  (opened)="autocompleteemployeeScroll()" [displayWith]="displayemployee" >
+                            <mat-option *ngIf="isLoading">Loading..</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let emp of temployeeList"   [value]="emp">{{emp.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            
+                    <div  *ngIf="taskreportfromdate" >
+                        <mat-form-field  style="width: 200px;margin-left: 20px;">
+                            <mat-label>From Date</mat-label>
+                            <input matInput [matDatepicker]="picker1" formControlName="start_date" [max]="current_date" >
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                
+                    </div>
+            
+                    <div  *ngIf="taskreporttodate" >
+                        <mat-form-field  style="width:200px;margin-left: 20px;">
+                            <mat-label>To Date</mat-label>
+                            <input matInput [matDatepicker]="picker2" formControlName="end_date" [min]="current_date"   ><!--[max]="taskreportForm.get('start_date').value"  required> -->
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+            
+                    </div>
+                    <!-- <button mat-raised-button type="button" class="btn btn-info" style="border-radius:40px; height:40px;margin-left:25px">
+                         View Details
+                    </button> -->
+
+                    <button mat-raised-button type="button" class="btn btn-primary"  (click)="DownloadSubmitted()"  style="border-radius: 40px;height: 40px;margin-left: 25px;">
+                        Download
+                            <mat-icon *ngIf="first"><mat-spinner color="green" diameter="20">
+                            </mat-spinner></mat-icon>
+                            <mat-icon *ngIf="!first" inline=true style="color:rgb(245, 245, 245)" >download</mat-icon>
+                    </button>
+
+                    <button mat-raised-button type="button" class="btn btn-danger"  (click)="reset1()"  style="border-radius: 40px;height: 40px;margin-left: 25px;">
+                        Reset
+                            
+                    </button>
+                </div>
+           
+
+
+                <div class="row"  style="margin-left: 2%">
+                            
+                
+                        <div   *ngIf="taskreporttask">
+                            <mat-form-field  style="width: 200px;">
+                                <mat-label>Task Name</mat-label>
+                                <input matInput placeholder="Task Name" formControlName="task_name" #tasknameInput autocomplete="off" [matAutocomplete]="taskname" (click)="taskName()" />
+                                <mat-autocomplete #taskname="matAutocomplete" [displayWith]="displayemptask" (opened)="autocomplettaskScroll()" >
+                                    <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let taskname of gettasknamelist"   [value]="taskname">{{taskname.task}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                                
+                    
+                        </div>
+                
+                        <div >
+                            <mat-form-field  style="width:200px;margin-left: 20px;" *ngIf="taskreporttasktype">
+                                <mat-label>Task Type</mat-label>
+                                <input matInput placeholder="Task Type" [matAutocomplete]="tasknameb" formControlName="task_type"  autocomplete="off" (click)="typeStatus()" />
+                                <mat-autocomplete #tasknameb="matAutocomplete"   >
+                                    <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let status of statusList"   [value]="status">{{status.text}}
+                                   
+                                        </mat-option>
+                                </ng-container>
+                                </mat-autocomplete>
+                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                               
+                            </mat-form-field>
+                
+                        </div>
+                        
+                         <div style="margin: left 20px;">
+                            <mat-form-field  style="width: 200px;margin-left: 20px;" *ngIf="taskreportmonth">
+                                <mat-label>Month</mat-label>
+                                <input matInput [matDatepicker]="picker3" formControlName="month" [max]="current_date" required>
+                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field> 
+                        </div> 
+                        <button  mat-raised-button type="button" class="btn btn-primary"  (click)="Teamwisereport()"  style="border-radius: 40px;height: 40px;margin-left: 25px;">
+                            Team  wisereport   
+                        </button>
+                </div>
+        
+            </mat-card>
+      <div>
+       
+             
+    </div>
+    <div class= "col-md-12 row" style="margin-left: 20px ; margin-top:12px ; ">
+    <div class="col-md-3">
+        
+      <span style="width:2px">  <mat-form-field class="matformfieldstyle"  appearance="outline"
+        (click)="TeamLead()" >
+            <mat-label >Team Leaders</mat-label>
+            <input #teamldInput  class="matformfieldinputstyle" matInput 
+            formControlName="teamlead" [matAutocomplete]="teamld" >
+            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+        <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld"
+            (opened)="autocompleteteteamldScroll()">
+            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+            <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let teamld of teamldList" [value]="teamld" (click)="TeamLeaders(teamld)" > 
+                    {{teamld.name}}
+                </mat-option>
+            </ng-container>
+        </mat-autocomplete>
+        </mat-form-field></span>
+    </div>
+    <div class="col-md-3" style="margin-top:20px; color:#2626EE" >
+        <mat-label  >Number Of Task : <span style="color:black"> {{task}} </span></mat-label>                   
+                               
+       
+    </div>
+    <div class="col-md-3" style="margin-top:20px; color:#2626EE" >
+            <mat-label >Completed : <span style="color:black">{{completed}} </span></mat-label>           
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE">
+        <mat-label>Work in Progress : <span style="color:black"> {{wip}} </span></mat-label>
+    </div>
+    <div class="col-md-3" *ngFor="let i of cli;let index=index ">
+        <div class="col-md-3" style="display: contents;text-overflow: initial;" *ngFor="let item of i | keyvalue;let index=index ">
+           <div class="col-md-3 " style="display: contents;text-overflow: initial;"><span  style="margin-top: 20px; color:#2626EE">{{item.key}}</span> : <span  style="color:black">{{item.value}}</span></div>
+       </div>
+       </div>
+       
+    </div>
+     <!-- <div class="col-md-12 row"  style="gap: 183px; margin-left:3%; row-gap:5px; " >
+     <div  *ngFor="let i of cli;let index=index ">
+     <div  *ngFor="let item of i | keyvalue;let index=index ">
+        <div class="col-md-3 row" style="display: contents;text-overflow: initial;"><span  style="margin-top: 20px; color:#2626EE">{{item.key}}</span> : <span  style="color:black">{{item.value}}</span></div>
+    </div>
+    </div>
+    </div>   -->
+   </form>
+   </div>
+    
+    <!--<div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="i['Task in KVB']" >
+        <mat-label>Task in KVB: <span style="color:black"> {{i['Task in KVB']}}   </span> </mat-label>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="i['Task in NAC']">
+        <mat-label>Task in NAC: <span style="color:black"> {{i['Task in NAC']}}   </span></mat-label>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="i['Task in VSOLV']">
+        <mat-label>Task in VSOLV: <span style="color:black"> {{i['Task in VSOLV']}}   </span></mat-label>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="i['Task in Guardian']">
+        <mat-label>Task in VSOLV: <span style="color:black"> {{i['Task in Guardian']}}   </span></mat-label>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="i['Task in Iron Mountain']">
+        <mat-label>Task in VSOLV: <span style="color:black"> {{i['Task in Iron Mountain']}}   </span></mat-label>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px; color:#2626EE" *ngIf="['i.Task in Ujjivan']">
+        <mat-label>Task in VSOLV: <span style="color:black"> {{i['Task in Ujjivan']}}   </span></mat-label>
+    </div> -->
+
+   
+   
+   
+<div *ngIf="Carddetails"  style="margin-top: 10px; margin-left: 50px;">
+<div style="text-align: left; margin-top: 5%; margin-left: 50px;margin-top: 10px; margin-left: 50px;overflow-x: scroll;overflow-y: scroll;width:900px ;height: 400px;">
+    <form [formGroup]="taskstatusForm"  autocomplete="off"  >
+        <div class="col-md-12 row" >
+            <div class ="col-md-6" *ngFor="let taskempstatus of getemptasklist2" >  
+                <!-- <mat-autocomplete #emptask="matAutocomplete" (opened)="autocompleteempstatusScroll()" > -->
+                <mat-card class="emp-card" style="margin-bottom: 4%; border:solid 1px black;"  >
+
+                   
+                        <mat-card-header>
+                            <mat-card-title  (click)="employeFullDetails(taskempstatus.Employee.emp_id)" >{{taskempstatus.Employee.name}}</mat-card-title>
+                      </mat-card-header>
+                      <mat-divider ></mat-divider>
+                      <mat-card-content>
+                       
+                        <p style="margin-left:15px">WIP<span style="float : right;" >{{taskempstatus['Work In Progress']}}</span></p>
+                        <p style="margin-left:15px">Completed<span style="float : right;" >{{taskempstatus.Completed}}</span></p>
+                        <p style="margin-left:15px">Yet to start<span style="float : right;">{{taskempstatus['Yet To Start']}}</span></p>
+                        <p style="margin-left:15px">Hold<span style="float : right;">{{taskempstatus.Hold}}</span></p>
+                        <p style="margin-left:15px">Deleted<span style="float : right;">{{taskempstatus.Deleted}}</span></p>
+                        <p style="margin-left:15px">Verified<span style="float : right;">{{taskempstatus.Verified}}</span></p>
+                        <p style="margin-left:15px">Draft<span style="float : right;">{{taskempstatus.Draft}}</span></p>
+                        
+                      </mat-card-content>
+                  
+                </mat-card>
+            <!-- </mat-autocomplete> -->
+                </div>
+            </div>
+                
+            </form>          
+ </div>         
+</div>
+<div *ngIf="Tasksumarydetails">
+    <form [formGroup]="tasksumarryForm"  autocomplete="off"  >
+        <div class="col-md-12" style="margin-left:1%">
+            <h2>Employee Based Details</h2>
+           
+        </div>
+    <div class="row" style=" margin-left: 2%">
+        <div>
+                <mat-form-field style="width: 200px;margin-left: 20px;">
+                    <mat-label>Client </mat-label>
+                    <input matInput placeholder="Client" formControlName="client" #taskrcltInput autocomplete="off" [matAutocomplete]="cli" (click)="tasksummaryclient()" />
+                    <mat-autocomplete #cli="matAutocomplete"  (opened)="autocompletetaskRptScroll()" [displayWith]="displaytrcli" >
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let cli of summarycli"   [value]="cli">{{cli.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field style="width:200px;margin-left: 20px;" >
+                    <mat-label>Project Name </mat-label>
+                    <input matInput placeholder="Project Name" formControlName="projectname" #taskrappInput autocomplete="off" [matAutocomplete]="pr" (click)="taskprojectName()" />
+                    <mat-autocomplete #pr="matAutocomplete" [displayWith]="displayprjapp" (opened)="autocompletetaskRptScroll()">
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let pr of prNameList"   [value]="pr">{{pr.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>  
+                    <mat-form-field  style="width: 200px;margin-left: 20px;">
+                        <mat-label>From Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="from_date" [max]="current_date" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>                
+                    <mat-form-field  style="width:200px;margin-left: 20px;">
+                        <mat-label>To Date</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="to_date" [min]="current_date"   ><!--[max]="taskreportForm.get('start_date').value"  required> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-stroked-button type="button" style="background-color: white; margin-left:15px"
+                            aria-label="Search" (click)="TaskSummarySearch('')">
+                            <mat-icon>search</mat-icon>
+                     </button>
+                     <button type="button"  (click)="resetfield()" class="mat-icon-button " style="margin-left:15px; border-radius:8px; background-color:#dc3545bf; color:#fff">
+                        clear
+                    </button>
+                    <button type="button"  (click)="back()" class="mat-icon-button " style="margin-left:35px; border-radius:8px; background-color:#0d85db9e; color:#fff">
+                        Back 
+                    </button>
+        </div>
+        
+        </div>
+    </form>
+        <div class="row" style="margin-top:10px; margin-left:20px;">
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong" >Name</span>: <span style="font-family:serif; font-size:18px">{{employye_name}}</span></h3>
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong">Team Lead</span>: <span style="font-family:serif; font-size:18px">{{team_lead}}</span></h3>
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong">Unit Lead</span>: <span style="font-family:serif; font-size:18px">{{unit_lead}}</span></h3>
+           
+   
+        </div>
+            <div class=" tableresponsive tablefixFixHeaddiv" style="overflow:scroll">
+                    <table class="table table-bordered outertable " style="margin-left:38px;width:93%; " >
+                             <thead class="table_header" style="background-color:#044063c7; color:#fff ; ">
+                                 <tr>
+                                    <th scope="col">SI.No</th>
+                                     <th scope="col">Client Name</th>
+                                     <th scope="col">Project Name</th>
+                                     <!-- <th>Module and employee level time spent </th> -->
+                                     <!-- <th>Employee level time spent</th>                                                     -->
+                                     <th scope="col">Task Code</th>                                                    
+                                     <th scope="col">Task</th> 
+                                     <th scope="col">Start date</th> 
+                                     <th scope="col">End date</th> 
+                                     <th scope="col">Work date</th> 
+                                     <th scope="col">Work hours</th> 
+                                     <!-- <th scope="col">Date based time spent</th>  -->
+                                     <th scope="col">Task status</th> 
+                                 </tr>
+                              </thead>
+                                     <tbody *ngFor="let details of moduledetails;  let i=index" >
+                                                                               
+                                         <td class="tablecolumn">{{(modumoduledetailspresentpage - 1)*pagesizetask +i+1 }}</td>
+                                         <td class="tablecolumn">{{details['Client name']}}</td>
+                                         <td class="tablecolumn">{{details['Project name']}}</td>
+                                         <!-- <p style="margin-left:15px">Employee :<span>{{details['Employee']}}</span></p> -->
+                                         <!-- <p style="margin-left:15px">DEPARTMENT to start :<span >{{details['Department']}}</span></p> -->
+                                         <!-- <td >{{details['Module and employee level time spent']}}</td> -->
+                                         <!-- <td >{{details['Employee level time spent']}}</td> -->
+                                         <td class="tablecolumn">{{details['Task Code']}}</td>
+                                         <td class="tablecolumn">{{details['Task']}}</td> 
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['Start date'] | date:'d MMMM, y'}}</td> 
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['End date'] | date:'d MMMM, y'}}</td> 
+                                         <!-- <p style="margin-left:15px">Actual start date :<span >{{details['Actual start date']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Actual end date :<span >{{details['Actual end date']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Unit head :<span >{{details['Unit head']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Team lead :<span >{{details['Team lead']}}</span></p>  -->
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['Work date'] | date:'d MMMM, y'}}</td> 
+                                         <td class="tablecolumn">{{details['Work hours']}}</td> 
+                                         <!-- <td class="tablecolumn">{{details['Date based time spent']}}</td>  -->
+                                         <td class="tablecolumn">{{details['Task status']}}</td>
+                                        
+                                      </tbody>
+                    </table>
+                    <div *ngIf="moduledetails?.length==0 || moduledetails == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_pre_module === false" color="primary"
+                (click)="moduledetailspage('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{modumoduledetailspresentpage}}
+            <button type="button" mat-icon-button [disabled]="has_next_module === false" color="primary"
+                (click)="moduledetailspage('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+                    </div>                
+                                
+                </div>                     
+                        
+                     
+                
+            
+         
+       
+    
+ 
+
+
+<div *ngIf="ShowViewDetailsTable" style="margin-top: 10px; margin-left: 50px;overflow-x: scroll;overflow-y: scroll;width:900px ;height: 400px;">
+    <div class="table" >
+        <table >
+            <tr>
+                <th>WIP</th>
+                <th>Completed</th>
+                <th>yet to start</th>
+                <th>Hold</th>
+                <th>Deleted</th>
+                <th>Verified</th>
+                <th>Draft</th>
+            </tr>
+            <tbody>
+                <tr *ngFor="let taskempstatus of getemptasklist2">
+                    <td>{{taskempstatus['Work In Progress']}}</td>
+                    <td>{{taskempstatus.Completed}}</td>
+                    <td>{{taskempstatus['Yet To Start']}}</td>
+                    <td>{{taskempstatus.Hold}}</td>
+                    <td>{{taskempstatus.Deleted}}</td>
+                    <td>{{taskempstatus.Verified}}</td>
+                    <td>{{taskempstatus.Draft}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button mat-raised-button type="button" class="btn btn-danger"  style="border-radius: 40px;height: 40px;margin-left: 300px;">Back</button>
+    </div>
+</div> 
+
+
+
+<div *ngIf="query_report" class="container">
+    <form [formGroup]="attendanceReportsearchForm">
+        <table>
+            <tr>
+                <td>
+
+                    <mat-form-field class="spacingForm" (click)="getTeamLeads('')">
+                        <mat-label>Team Lead</mat-label>
+
+                        <input #teamldInput class="matformfieldinputstyle" matInput
+                            (keyup)="getTeamLeads(attendanceReportsearchForm.value.lead_id)" formControlName="lead_id"
+                            [matAutocomplete]="teamld">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                            <mat-option *ngFor="let teamld of teamldList" [value]="teamld">
+                                {{teamld.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field
+                        (click)="getLeadBasedemployee(attendanceReportsearchForm.value.lead_id?.id, attendanceReportsearchForm.value.emp?.full_name)"
+                        class="spacingForm">
+                        <mat-label> Employee </mat-label>
+                        <input #empInput placeholder="Select Employee" matInput formControlName="emp"
+                            [matAutocomplete]="emp"
+                            (keyup)="getLeadBasedemployee(attendanceReportsearchForm.value.lead_id?.id, attendanceReportsearchForm.value.emp)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                            <mat-option *ngFor="let emp of employeeList" [value]="emp"
+                                title="{{emp.full_name}}">{{emp.full_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+
+                <td>
+
+                    <mat-form-field class="spacingForm" (click)="getDepartment('')">
+                        <mat-label>Department</mat-label>
+                        <input #deptInput class="matformfieldinputstyle" matInput
+                            (keyup)="getDepartment(attendanceReportsearchForm.value.department)"
+                            formControlName="department" [matAutocomplete]="dept">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #dept="matAutocomplete" [displayWith]="displayFnDept">
+                            <mat-option *ngFor="let dept of deptList" [value]="dept">
+                                {{dept.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field (click)="getorg_id('')" class="spacingForm">
+                        <mat-label> Premise </mat-label>
+                        <input #org_idInput placeholder="Select premise" matInput formControlName="org_id"
+                            [matAutocomplete]="org_id" (keyup)="getorg_id(attendanceReportsearchForm.value.org_id)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #org_id="matAutocomplete" [displayWith]="displayFnorg_id">
+                            <mat-option *ngFor="let org_id of org_idList" [value]="org_id"
+                                title="{{org_id.name}}">{{org_id.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field dateFormat2 class="smallinput spacingForm">
+                        <mat-label> Month </mat-label>
+                        <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+                            formControlName="monthyear">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"  
+                        (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            aria-label="Search" (click)="AttendanceReportSearch('',log_date.value, filter_key.value)">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="resetAttendanceReport()">Clear</button>
+                        <!-- <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="filter_key.reset(); AttendanceReportSearch('')">Clear Filters</button> -->
+
+                        <button mat-raised-button type="button" style="margin-left: 20px;"
+                            (click)="Attendanceexceldownload()">
+                            <span class="material-icons">download</span>Export </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+    <!-- <pre>{{attendanceReportsearchForm.value | json}}</pre> -->
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+        <span class="badge holiday coloring leftspace" style="background-color: #49728D;">Holiday - H </span>
+        <span class="badge badge-secondary leftspace" >Weekend - W</span>
+        <span class="badge badge-success leftspace">Present - P</span>
+        <span class="badge absent coloring leftspace" style="background-color: #dc3545d1;">Absent - A</span>
+        <span class="badge absent coloring leftspace" style="background-color: #dc3545d1;">Leave - L</span>
+        <!-- <span class="badge others leftspace">More - +</span> -->
+
+        <div class="table-responsive tableFixHeaddiv">
+
+            <table class="table table-bordered outertable" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious tableTogle">
+                        <th class="tablecolumn">S.No</th>
+                        <th class="tablecolumn">Employee</th>
+                        <th >Days Present <br><small>(in a Month)</small>
+                            <span class="material-icons togglePosition" (click)="Toggle()"
+                                title="{{showHide == false ? 'Collapse': 'Expand' }}">
+                                {{showHide == false ? 'switch_right': 'switch_left' }}
+                            </span>
+                        </th>
+                        <ng-container *ngIf="ListOfDaysInSelectedMonth?.length > 0">
+                            <th *ngFor="let days of ListOfDaysInSelectedMonth.length!=0?ListOfDaysInSelectedMonth:[]; let i = index" attr.name='{{i}}'
+                            matTooltip="{{days!='shift'?( days | date: 'dd-MMM-yyyy') :''}}" style="text-align: center;">
+                                <span> {{days!='shift'?(days | date:'d'):''}} <sup> {{PresentDate == days? '*': ''}} </sup> </span>
+                                <br>
+                                <small> {{days!='shift'?  (days | date: 'EEEEEE'):""}} </small>
+                                <br>
+                                <!-- PresentDate >= days? -->
+                                <!-- <span class="material-icons filterData" > {{PresentDate >= days? 'filter_alt': ''}} </span> -->
+                                <mat-select [disabled]="PresentDate < days" [formControl]="filter_key"
+                                    class="inputs arrowClass filterData" (click)='getFilterBasedOnDate(days)'>
+                                    <mat-option [value]="typeOfAttendance" *ngFor="let typeOfAttendance of Filterlist"
+                                        (click)="AttendanceReportSearch('', days, typeOfAttendance ); this.log_date.patchValue(days)">
+                                        {{typeOfAttendance.text}} </mat-option>
+                                </mat-select>
+                            </th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <tr *ngFor="let data of arrReport; let index = index" [ngClass]="showHide? '': 'tableTogle' "
+                        class="tablePrevious tableTogle">
+                        <td class="tablecolumn">{{index+1}}</td>
+                        <td class="tablecolumn" matTooltip="({{data?.code}}) {{data?.name}}"> ({{data?.code}}) {{data?.name}}
+                        </td>
+                        <td  matTooltip="{{data?.present_count}}">{{data?.present_count}}</td>
+                        <!-- <td>{{data?.duration}}</td> -->
+                        <ng-container *ngIf="ListOfDaysInSelectedMonth?.length > 0">
+                            <td *ngFor="let datascheck of ListOfDaysInSelectedMonth; let indextwo = index;"
+                                attr.name='{{indextwo}}' matTooltip="{{datascheck}}" class="attendanceMark">
+
+                                <div class="AttendanceTableView" data-toggle="modal" data-target=".popupReport"
+                                    data-backdrop='static' data-keyboard='false' (click)="getAttendanceBasedOnEmployee(data, datascheck); 
+                            getSelectedEMP(datascheck, 'summary'); activityData(datascheck,'summary', data);">
+                            <!-- <div class="indicatorOnCornerPermission"   title="{{datascheck}} - ({{data?.code}}) {{data?.name}} - {{Permission_Data.title}}"
+                            *ngIf="data[datascheck] !=null && data[datascheck].includes('PRM')"></div>  -->
+                          
+                        
+                                    <ng-container *ngFor="let loop of (data[datascheck]!=null ?data[datascheck]:[]); let dateindex = index" >
+                                        <div  [ngClass]="
+                                                loop == 'Present'   ?'displayMultiple present':
+                                                loop == 'Half day'   ?'displayMultiple present':
+                                                loop=='Absent'      ?'displayMultiple absent': 
+                                                loop=='Leave'       ?'displayMultiple absent':
+                                                loop=='Weekend'     ?'displayMultiple weekend':
+                                                loop=='IN'          ?'displayMultiple present':
+                                                loop=='OUT'         ?'displayMultiple present':
+                                                loop=='NOT IN'      ?'displayMultiple weekend':
+                                                loop=='Holiday'     ?'displayMultiple holiday':'' "
+                                                [style.z-index]=dateindex
+                                                matTooltip=" {{datascheck}} - ({{data?.code}}) {{data?.name}} - {{ 
+                                                    loop == Present_Data?.name            ? Present_Data?.title: 
+                                                    loop == Halfday_Data?.name            ? Halfday_Data?.title: 
+                                                    loop == Absent_Data?.name             ? Absent_Data?.title:
+                                                    loop == Leave_Data?.name              ? Leave_Data?.title: 
+                                                    loop == Holiday_Data?.name            ? Holiday_Data?.title:
+                                                    loop == In_Data?.name                 ? In_Data?.title:
+                                                    loop == Out_Data?.name                ? Out_Data?.title:
+                                                    loop == NotIn_Data?.name              ? NotIn_Data?.title:
+                                                    loop == Permission_Data?.name         ? Permission_Data?.title:
+                                                    loop == Updated_Attendance_Data?.name ? Updated_Attendance_Data?.title:
+                                                    loop == Weekend_Data?.name            ? Weekend_Data?.title: 'Click for More...' }}">
+
+                                            <!-- {{  loop == Present_Data?.name              ? Present_Data?.display:
+                                                loop == Halfday_Data?.name              ? Halfday_Data?.display:
+                                                loop == Absent_Data?.name               ? Absent_Data?.display:
+                                                loop == Leave_Data?.name                ? Leave_Data?.display:
+                                                loop == Holiday_Data?.name              ? Holiday_Data?.display:
+                                                loop == In_Data?.name                   ? In_Data?.display:
+                                                loop == Out_Data?.name                  ? Out_Data?.display:
+                                                loop == NotIn_Data?.name                ? NotIn_Data?.display :
+                                                loop == Weekend_Data?.name              ? Weekend_Data?.display: null
+                                                 }} -->
+
+                                              
+                                              <span *ngIf="loop==Present_Data?.name"><i class="fa fa-user" aria-hidden="true" style="color:#28a745; font-size:20px"></i></span>
+                                              <span *ngIf="loop==Leave_Data?.name"><i class="fa fa-user-times" aria-hidden="true" style="color:#dc3545d1;font-size:20px"></i></span>
+                                              <span *ngIf="loop==Holiday_Data?.name"><i class="fa fa-calendar-o" aria-hidden="true" style="color:#49728D; font-size:20px"></i></span>
+                                              <span *ngIf="loop==Weekend_Data?.name"><i class="fa fa-home" aria-hidden="true" style="color:#6c757d; font-size:20px"></i></span>
+                                              <span *ngIf="loop==NotIn_Data?.name">NP</span>
+                                              <span *ngIf="loop==In_Data?.name">IN</span>
+                                                <!-- 
+                                                   
+                                                loop=='PRM'         ?'absent':
+                                                loop=='Is_updated'  ?'weekend':
+                                                    
+                                                    loop == Permission_Data?.name           ? Permission_Data?.display:
+                                                loop == Updated_Attendance_Data?.name   ? Updated_Attendance_Data?.display: -->
+                                            
+                                            </div>
+
+                                    </ng-container>
+                                    </div>
+                                    <div *ngIf="arrtime_1[index][datascheck] !=null">
+                                        <div *ngIf="arrtime_1[index][datascheck]?.Present_hours !=''" >
+                                            
+                                        <!-- <label style="white-space:nowrap; overflow:hidden; text-overflow:clip; text-align:justify; color:#2626EE; " ><mat-icon title="Time spent {{datascheck.Present_hours}}" style="font-size:16px; position:realative">schedule</mat-icon>
+                                            <span style="color:#212529;">{{arrtime[index][datascheck]?.Present_hours }}<small>hrs</small></span></label> -->
+                                            <!-- <label style="white-space:nowrap; overflow:hidden; text-overflow:clip; color:#2626EE;  text-align:left; margin-left:2px" ><mat-icon title="Time spent {{arrtime[index][datascheck]?.Present_hours}}hrs" style="font-size:16px; ">schedule</mat-icon>
+                                                <span style="color:#212529;">{{arrtime[index][datascheck]?.Present_hours }}<small>hrs</small></span></label>              
+                                            <label style="white-space:nowrap; overflow:hidden; text-overflow:clip; color:#2626EE;  text-align:left; margin-left:2px"><mat-icon title="Time Booked {{arrtime[index][datascheck]?.Present_hours}}hrs"  style="font-size:16px;">work_outline</mat-icon>
+                                               <span style="color:#212529; "> {{arrtime[index][datascheck]?.Work_hours  }}<small>hrs</small></span></label> -->
+                                             <span class="row" style="white-space:nowrap; overflow:hidden; text-overflow:clip; text-align:center;">  <label ><span style="color:#212529; font-size:11px;"><mat-icon style="color:#2626EE;  text-align:center; font-size:16px;" matTooltip="Time Spent {{arrtime_1[index][datascheck]?.Present_hours}}hrs">schedule</mat-icon> {{arrtime_1[index][datascheck]?.Present_hours }}hrs</span></label></span>
+                                             <span class="row" style="white-space:nowrap; overflow:hidden; text-overflow:clip; text-align:justify;">  <label ><span  style="color:#212529; font-size:11px "><mat-icon style="color:#2626EE;  text-align:center; font-size:16px;" matTooltip="Time Booked {{arrtime_1[index][datascheck]?.Work_hours}}hrs">work_outline</mat-icon >{{arrtime_1[index][datascheck]?.Work_hours }}hrs</span></label></span>
+                                    </div>
+                                      </div>
+
+                                
+                                    <!-- <div class="indicatorOnCornerEdited" *ngIf="data[datascheck] !=null && data[datascheck]?.includes('Is_updated')" 
+                                    >(edited)</div>  -->
+
+                                <!-- <span data-toggle="modal" data-target=".popupReport" data-backdrop='static'
+                                data-keyboard='false'
+                                (click)="getAttendanceBasedOnEmployee(data, datascheck); 
+                                getSelectedEMP(datascheck, 'summary'); activityData(datascheck,'summary', data);"
+
+                                [ngClass]="data[datascheck] == 'Present'?'presentstyle': data[datascheck]=='Absent'?'absentstyle': data[datascheck]=='Absent (PL)' ?'absentstyle': data[datascheck]=='Absent (CL)' ?'absentstyle':data[datascheck]=='Absent (SL)'?'absentstyle':data[datascheck]=='Absent (LOP)' ?'absentstyle':data[datascheck]=='WFH'?'weekendHolidayPresent': data[datascheck]=='COMP-OFF'?'weekendHolidayPresent':data[datascheck]=='Holiday' ?'holiday': data[datascheck]=='Weekend' ?'weekend': ''"
+                                class=" material-icons">
+                                {{data[datascheck] == "Present"?"done": data[datascheck] == 'Absent'?'close':
+                                data[datascheck] == 'Absent (PL)'?'close': data[datascheck] == 'Absent
+                                (CL)'?'close':data[datascheck] == 'Absent (SL)'?'close':data[datascheck] ==
+                                'Absent (LOP)'?'close':data[datascheck] == 'WFH'?'settings_remote':
+                                data[datascheck] == 'COMP-OFF'?'C':data[datascheck] == 'Holiday'?'H':
+                                data[datascheck] == 'Weekend'?'W': ''}}
+
+                            </span> -->
+
+
+
+
+
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="arrReport?.data?.length==0 || arrReport == undefined ||arrReport?.length==0  ; else paginationarrReport"
+            class="NodataAlign text-center">No Records Found...</div>
+        <ng-template #paginationarrReport>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+
+
+                <button type="button" mat-raised-button [disabled]="has_nextattreport === false" color="primary"
+                    (click)="AttendanceReportSearch('next',this.log_date.value, this.filter_key.value )">
+                    Load More
+                </button>
+
+                <!-- <button type="button" mat-icon-button [disabled]="has_previousattreport === false" color="primary"
+                    (click)="AttendanceReportSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button> {{presentpageattreport}}
+                <button type="button" mat-icon-button [disabled]="has_nextattreport === false" color="primary"
+                    (click)="AttendanceReportSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button> -->
+            </div>
+        </ng-template>
+    </div>
+</div>    
+</div>
+
+
+
+
+
+<div class="modal fade popupReport" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-8">
+                        <div id="NoteViewTable">
+                            <table class="table table-bordered size">
+                                <thead>
+                                    <tr>
+                                        <th scope="col tablecolumn">Day</th>
+                                        <th scope="col"> In</th>
+                                        <th scope="col"> Out</th>
+                                        <th scope="col">Duration
+                                            <br><small>(in Hrs)</small>
+                                        </th>
+                                        <th scope="col">Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let day of ListOfDaysInSelectedMonth; let indextwo = index">
+                                    <tr
+                                        [ngClass]="selectedclass== indextwo?'breadcrumbdataselected': 'breadcrumbdatawhite' ">
+                                        <td class="textdec tablecolumn">
+                                            <span (click)="activityData(day, 'popup' )"
+                                                (click)="getSelectedEMP(indextwo, 'popup')">{{day | date:'dd-MMM-yyyy'}}
+                                            </span>
+                                        </td>
+                                        <ng-container *ngFor="let dataset of MonthlyActivityReport">
+                                            <ng-container *ngIf="day == dataset?.log_date;">
+                                                <td>{{dataset?.first_check_in | date:'shortTime'}}</td>
+                                                <td>{{dataset?.last_check_in | date:'shortTime'}}</td>
+                                                <td> {{dataset?.duration}} </td>
+                                                <td>{{dataset?.flag}}</td>
+                                            </ng-container>
+
+                                        </ng-container>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+
+                        <div class="card">
+                            <div class="card-body" id="NoteView">
+                                <h3 class="card-title"> Name:
+                                    ({{BasicDetails?.code}})
+                                    {{BasicDetails?.name}} </h3>
+                                <h3 class="card-title">
+                                    ({{ActivityDataList | date:
+                                    'dd-MMM-yyyy'}}) </h3>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Inside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.in_time}}
+                                            <small>hrs</small>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Outside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.out_time}}
+                                            <small>hrs</small>
+                                        </div>
+                                    </div>
+
+                                </div><br>
+                                <div>
+                                    <ng-container *ngFor="let loop of DatesBadge">
+
+                                        <span class="badge badge-pill spacing" [ngClass]="
+                                          loop == 'Present'?'present':
+                                          loop=='Absent'?'absent': 
+                                          loop=='Leave' ?'absent':
+                                          loop=='Weekend' ?'weekend':
+                                          loop=='Holiday' ?'holiday':
+                                          loop=='Leave Pending' ?'weekend':
+                                          loop=='PRM'         ?'absent':
+                                          loop=='Is_updated'  ?'weekend':
+                                          loop == 'Leave Approved'? 'present': 'weekend' ">
+                                            {{ loop == Present_Data?.name ? Present_Data?.title:
+                                            loop == Absent_Data?.name ? Absent_Data?.title:
+                                            loop == Leave_Data?.name ? Leave_Data?.title:
+                                            loop == Halfday_Data?.name ? Halfday_Data?.title:
+                                            loop == Holiday_Data?.name ? Holiday_Data?.title:
+                                            loop == Weekend_Data?.name ? Weekend_Data?.title:
+                                            loop == WFH_Data?.name ? WFH_Data?.title:
+                                            loop == CL_Data?.name ? CL_Data?.title:
+                                            loop == PL_Data?.name ? PL_Data?.title:
+                                            loop == SL_Data?.name ? SL_Data?.title:
+                                            loop == OD_Data?.name ? OD_Data?.title:
+                                            loop == In_Data?.name   ? In_Data?.title:
+                                            loop == Out_Data?.name  ? Out_Data?.title:
+                                            loop == NotIn_Data?.name? NotIn_Data?.title:
+                                            loop == ApprovedLeave_Data?.name ? ApprovedLeave_Data?.title:
+                                            loop == PendingLeave_Data?.name ? PendingLeave_Data?.title:
+                                            loop == Updated_Attendance_Data?.name ? Updated_Attendance_Data?.title:
+                                            loop == Permission_Data?.name ? Permission_Data?.title: '--'
+                                            }}
+                                        </span>
+                                    </ng-container>
+
+                                </div>
+                                <br>
+                                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>In</th>
+                                            <th>Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let dataLog of logActivityList?.log">
+                                            <td>{{dataLog?.check_in |
+                                                date:'shortTime'}}</td>
+                                            <td>{{dataLog?.check_out |
+                                                date:'shortTime'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+</div>
+
+
+<!-- 
+<div class="modal fade popupReport" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>        -->
+
+
+ <div *ngIf="teammeberdetail">
+    <form [formGroup]="teammemberForm"  autocomplete="off"  >
+        <div class="col-md-12" style="margin-left:1%">
+            <h2>Team Based Employee Details</h2>
+           
+        </div>
+    <div class="row" style=" margin-left: 2%">
+                <mat-form-field class="spacingForm" (click)="getTeamLeads('')">
+                    <mat-label>Team Lead</mat-label>
+
+                    <input #teamldInput class="matformfieldinputstyle" matInput
+                        (keyup)="getTeamLeads(attendanceReportsearchForm.value.lead_id)" formControlName="teamlead"
+                        [matAutocomplete]="teamld">
+                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                    <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                        <mat-option *ngFor="let teamld of teamldList" [value]="teamld"  (onSelectionChange)="tlemployee(teamld)">
+                            {{teamld.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field style="width:200px; margin-left: 20px">
+                    <mat-label>Employee Name</mat-label>
+                    <input matInput placeholder="Employee Name" formControlName="emp_id" #taskrempInput autocomplete="off" [matAutocomplete]="emp" (click)="teamleademploee()" />
+                    <mat-autocomplete #emp="matAutocomplete"  (opened)="autocompleteamployeeScroll()" [displayWith]="displayemployeeteam" >
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let emp of employeels"   [value]="emp">{{emp.Name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+            
+                <mat-form-field style="width: 200px;margin-left: 20px;">
+                    <mat-label>Client </mat-label>
+                    <input matInput placeholder="Client" formControlName="client" #taskrcltInput autocomplete="off" [matAutocomplete]="cli" (click)="Teamsummaryclient()" />
+                    <mat-autocomplete #cli="matAutocomplete"  (opened)="autocompletetaskteamRptScroll()" [displayWith]="displaytacli" >
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let cli of teamsummarycli"   [value]="cli">{{cli.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field style="width:200px;margin-left: 20px;" >
+                    <mat-label>Project Name </mat-label>
+                    <input matInput placeholder="Project Name" formControlName="projectname" #taskrappInput autocomplete="off" [matAutocomplete]="pr" (click)="teamprojectName()" />
+                    <mat-autocomplete #pr="matAutocomplete" [displayWith]="displayprjapp" (opened)="autocompletetaskteamRptScroll()">
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let pr of teamprNameList"   [value]="pr">{{pr.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>  
+                    <mat-form-field  style="width: 200px;margin-left: 20px;">
+                        <mat-label>From Date</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="from_date" [max]="current_date" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>                
+                    <mat-form-field  style="width:200px;margin-left: 20px;">
+                        <mat-label>To Date</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="to_date" [min]="current_date"   ><!--[max]="taskreportForm.get('start_date').value"  required> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-stroked-button type="button" style="background-color: white; margin-left:15px; height:45px"
+                            aria-label="Search" (click)="TeamTaskSummarySearch('')">
+                            <mat-icon>search</mat-icon>
+                     </button>
+                     <button type="button"  (click)="teamresetfield()" class="mat-icon-button " style="margin-left:15px; border-radius:8px; background-color:#dc3545bf; color:#fff">
+                        clear
+                    </button>
+                    <button type="button"  (click)="teamback()" class="mat-icon-button " style="margin-left:35px; border-radius:8px; background-color:#0d85db9e; color:#fff">
+                        Back 
+                    </button>
+        
+        
+        </div>
+    </form>
+        <!-- <div class="row" style="margin-top:10px; margin-left:20px;">
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong" >Name</span>: <span style="font-family:serif; font-size:18px">{{employye_name}}</span></h3>
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong">Team Lead</span>: <span style="font-family:serif; font-size:18px">{{team_lead}}</span></h3>
+           <h3 style="margin-left:27px;"><span style="font-weight:bold; font-size:larger; color:#2626EE; font-family:fangsong">Unit Lead</span>: <span style="font-family:serif; font-size:18px">{{unit_lead}}</span></h3>
+           
+   
+        </div>-->
+            <div class=" tableresponsive " style="overflow:scroll"> 
+                    <table class="table table-bordered  " style="margin-left:38px;width:93%; " >
+                             <thead class="table_header" style="background-color:#044063c7; color:#fff ; ">
+                                 <tr>
+                                    <th scope="col">SI.No</th>
+                                     <th scope="col">Client Name</th>
+                                     <th scope="col">Project Name</th>
+                                     <th scope="col">Employee Name</th>
+                                     <!-- <th>Module and employee level time spent </th> -->
+                                     <!-- <th>Employee level time spent</th>                                                     -->
+                                     <th scope="col">Task Code</th>                                                    
+                                     <th scope="col">Task</th> 
+                                     <th scope="col">Start date</th> 
+                                     <th scope="col">End date</th> 
+                                     <th scope="col">Work date</th> 
+                                     <th scope="col">Work hours</th> 
+                                     <!-- <th scope="col">Date based time spent</th>  -->
+                                     <th scope="col">Task status</th> 
+                                 </tr>
+                              </thead>
+                                     <tbody *ngFor="let details of searchreportpage;  let i=index" >
+                                                                               
+                                         <td class="tablecolumn">{{(reportpresentpage - 1)*pagesizetask +i+1 }}</td>
+                                         <td class="tablecolumn">{{details['Client name']}}</td>
+                                         <td class="tablecolumn">{{details['Project name']}}</td>
+                                         <td class="tablecolumn">{{details['Employee']}}</td>
+                                         <!-- <p style="margin-left:15px">Employee :<span>{{details['Employee']}}</span></p> -->
+                                         <!-- <p style="margin-left:15px">DEPARTMENT to start :<span >{{details['Department']}}</span></p> -->
+                                         <!-- <td >{{details['Module and employee level time spent']}}</td> -->
+                                         <!-- <td >{{details['Employee level time spent']}}</td> -->
+                                         <td class="tablecolumn">{{details['Task Code']}}</td>
+                                         <td class="tablecolumn">{{details['Task']}}</td> 
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['Start date'] | date:'d MMMM, y'}}</td> 
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['End date'] | date:'d MMMM, y'}}</td> 
+                                         <!-- <p style="margin-left:15px">Actual start date :<span >{{details['Actual start date']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Actual end date :<span >{{details['Actual end date']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Unit head :<span >{{details['Unit head']}}</span></p>  -->
+                                         <!-- <p style="margin-left:15px">Team lead :<span >{{details['Team lead']}}</span></p>  -->
+                                         <td class="tablecolumn" style="white-space:nowrap">{{details['Work date'] | date:'d MMMM, y'}}</td> 
+                                         <td class="tablecolumn">{{details['Work hours']}}</td> 
+                                         <!-- <td class="tablecolumn">{{details['Date based time spent']}}</td>  -->
+                                         <td class="tablecolumn">{{details['Task status']}}</td>
+                                        
+                                      </tbody>
+                    </table>
+                    <div *ngIf="searchreportpage?.length==0 || searchreportpage == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_pre_emp === false" color="primary"
+                (click)="reportdetailspage('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{reportpresentpage}}
+            <button type="button" mat-icon-button [disabled]="has_next_emp === false" color="primary"
+                (click)="reportdetailspage('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+                    </div>                
+                                
+                </div>                     
+                        
+                     
+                
+            
+         
+       
+    
+ 
+
+

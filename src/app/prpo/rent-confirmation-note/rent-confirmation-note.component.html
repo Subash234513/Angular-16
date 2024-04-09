@@ -1,0 +1,617 @@
+<div class="Container" style="margin-left: 20px;">
+    <div class="nav nav-tabs" style="margin-top: 1%;">
+        <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+            *ngFor="let sub of prpoRCNList">
+            {{sub.name}}
+        </span>
+    </div>
+
+
+    <!-- <div *ngIf="isRCNmakerTab"> -->
+    <span *ngIf="isRCNCreateform">
+        <app-rent-cnote-create (onSubmit)="rcncreateSubmit()" (onCancel)="rcncreateCancel()"></app-rent-cnote-create>
+    </span>
+    <span *ngIf="isRCNViewTab">
+        <app-rcnview (onCancel)="rcnViewCancel()"></app-rcnview>
+    </span>
+
+    <div *ngIf="isRCNmakerTab">
+        <!-- <div class="row"> -->
+
+
+            <!-- <div> -->
+            <form [formGroup]="GRNDataForm" >
+                <h1 style="margin-left: 3%;">
+                    Rent Confirmation Note Summary
+                </h1>
+                <table>
+                    <!-- <div> -->
+                    <tr>
+                        <td>
+                            <mat-form-field style="width: 175px; margin-left: 50px;">
+                                <mat-label>RCN Number</mat-label>
+                                <input matInput placeholder="RCN No" formControlName="no" autocomplete="off"
+                                    (keypress)="only_numalpha($event)" maxlength="">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+
+                        <td>
+                            <!-- <mat-form-field style="width: 175px; margin-left: 50px;">
+                                <mat-label>Landlord Name</mat-label>
+                                <input matInput placeholder="Landlord" formControlName="suppliername" autocomplete="off"
+                                    (keypress)="only_char($event)">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                            <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getSuppliersearch()">
+                                <mat-label>Landlord Name</mat-label>
+                                   <input #suppliersearchInput placeholder="Select supplier" matInput formControlName="suppliername" [matAutocomplete]="suppliersearch">
+                                <mat-autocomplete #suppliersearch="matAutocomplete" [displayWith]="displayFnsuppliersearch" (opened)="autocompletesuppliersearchScroll()">
+                                   <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                   <ng-container *ngIf="!isLoading">
+                                       <mat-option *ngFor="let supplier of suppliersearchList" [value]="supplier" >
+                                       {{supplier.name}}
+                                       </mat-option>
+                                   </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                        </td>
+
+                        <td>
+                            <mat-form-field style="width:175px; margin-left: 50px;">
+                                <mat-label>RCN From Date</mat-label>
+                                <input matInput readonly [matDatepicker]="picker1" placeholder="GRN from Date"
+                                    formControlName="fromdate">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            <mat-form-field style="width:175px; margin-left: 50px;">
+                                <mat-label>RCN To Date</mat-label>
+                                <input matInput readonly [matDatepicker]="picker2" placeholder="GRN To Date"
+                                    formControlName="todate">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field style="width: 175px; margin-left: 50px;">
+                                <mat-label>MIN Amount</mat-label>
+                                <input matInput placeholder="MIN Amount" formControlName="minquantity"
+                                    autocomplete="off" (keypress)="numberOnly($event)">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            <mat-form-field style="width: 175px; margin-left: 50px;">
+                                <mat-label>MAX Amount</mat-label>
+                                <input matInput placeholder="MAX Amount" formControlName="maxquantity"
+                                    autocomplete="off" (keypress)="numberOnly($event)">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                       
+                        <td>
+                            <button class="btn btn-outline-primary" type="submit"
+                                style="border-radius:40px;margin-left: 50px;" color="primary"
+                                (click)="GRNSummaryFormsearch()"><i class="fa fa-search"
+                                    aria-hidden="true"></i></button>&nbsp;
+                            <!-- </td>
+                                    <td> -->
+                            <button type="button" style="border-radius:40px;margin-left: 50px;"
+                                class="btn btn-outline-primary" (click)="dataclear()">
+                                Reset</button>
+
+                        </td>
+                        <td>
+                            <!-- <button type="button" class="btn btn-outline-success" style="border-radius:40px;margin-left: 50px"
+                                [routerLink]="'/RCNcreatesummary'">
+                                <span class="fa fa-plus"></span>
+                            </button> -->
+                            <!-- <button type="button" class="btn btn-outline-success" *ngIf="ismakerCheckerButton"
+                                (click)="addForm()"
+                                style="border-radius: 20px;margin-bottom: 10px;margin-top:4px; cursor: pointer;"
+                                color="primary"><span class="fa fa-plus"></span>
+                                {{addFormBtn}} </button> -->
+
+                            <button type="button" class="btn btn-outline-success"
+                                style="border-radius:40px;margin-left: 50px" (click)="rcncreateform()">
+                                <span class="fa fa-plus"></span>
+                            </button>
+
+                        </td>
+                    </tr>
+                    <!-- </div> -->
+                </table>
+            </form>
+            <!-- </div> -->
+            <!-- <div class="table-responsive" id="styleScroll" style="margin-top: 2%;width: 90%;margin-left: 10px;"> -->
+            <!-- <table class="table scrolltable table-bordered" fixed-header> -->
+            <!-- <div class="table-responsive" style="margin-top: 2%;width: 90%;margin-left: 10px;"> -->
+            <!-- <h4 style="margin-left:1%; font-family:'Times New Roman', Times, serif;font-size:18px;font-weight:bold;">
+                    GRN Inward Summary
+                </h4> -->
+            <!-- <table class="table table-bordered" fixed-header>
+                    <thead class="table_header"> -->
+
+        <!-- </div> -->
+        <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered">
+                <thead>
+                    <tr class="table_header">
+                        <th>S.No</th>
+                        <th>RCN No</th>
+                        <th>Schedule Ref No</th>
+                        <th>Rent Ref No</th>
+                        <th>Landlord Name</th>
+                        <th>Net Payable Amount</th>
+                        <th>Invoice No</th>
+                        <th>Invoice Date</th>
+                        <!-- <th>AWB No</th> -->
+                        <!-- <th>UOM</th> -->
+                        <th>Status</th>
+                        <th>File</th>
+                        <th>View</th>
+                        <!-- <th>TXN History</th> -->
+                        <th>PDF View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let GRN of grnList;index as i">
+                        <td>{{(this.presentpagegrn - 1)*pageSize +i+1 }}</td>
+                        <td>{{GRN?.inwardheader?.code}}</td>
+                        <td>{{GRN?.poheader_id?.no }} </td>
+                        <td> {{GRN?.inwardheader?.rent_refno}} </td>
+                        <td>
+                            {{GRN?.poheader_id?.supplierbranch_id?.code}}--{{GRN?.poheader_id?.supplierbranch_id?.name}}
+                        </td>
+                        <td class="rightalign">{{GRN?.quantity| currency:'INR'}}</td>
+                        <td>{{GRN?.inwardheader?.invoiceno }}</td>
+                        <td style="white-space: nowrap;overflow:hidden;margin: 15px; padding: 15px;">
+                            {{GRN?.date | date:'dd-MMM-yyyy'}} </td>
+                        <!-- <td style="margin: 15px; padding: 15px;">{{GRN.inwardheader.dcnote }}</td> -->
+                        <!-- <td>-</td> -->
+                        <!-- <td style="margin: 15px; padding: 15px;">{{GRN.podelivery.product_id.uom_id.code}}</td> -->
+                        <td>{{GRN?.inwardheader?.grn_status }}</td>
+
+                        <td style="text-align: center;color:green;">
+                            <i class="fa fa-file" aria-hidden="true" data-toggle="modal" data-target="#fileview"
+                                (click)="filesummary(GRN)"></i>
+                        </td>
+                        <td><span class="material-icons" matTooltip="view" style="color:green;">
+                                <mat-icon style="color: green;" class="material-icons" (click)="view(GRN)">
+                                    visibility</mat-icon>
+                            </span></td>
+                        <!-- <td style="text-align: center;color:green;">
+                            <i class="fa fa-file" aria-hidden="true" data-toggle="modal"
+                                data-target="#exampleModalLongs" (click)="tranview(GRN)"></i>
+                        </td> -->
+                        <td style="text-align: center;color:green;"><span class="material-icons" (click)="GRNPDf(GRN)">
+                                picture_as_pdf
+                            </span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="grnList?.length==0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...</div>
+
+        <ng-template #paginationgrn>
+            <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                <button mat-icon-button [disabled]="has_previousgrn === false" color="primary"
+                    (click)="previousClickgrn()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpagegrn}}
+                <button mat-icon-button [disabled]="has_nextgrn === false" color="primary" (click)="nextClickgrn()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            id="exampleModalLongs">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#DDEFDD;">
+                        <h2 class="modal-title"
+                            style="color:black ;font-family:'Times New Roman', Times, serif;font-size:25px;font-weight:lighter;">
+                            View Transaction History Against {{POno}}</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-bordered" fixed-header
+                        style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.no</th>
+                                <th>RCN Header No</th>
+                                <th>Transaction Date</th>
+                                <th>Status</th>
+                                <th>Employee Name</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tran of tranList;index as i">
+                                <td>{{(this.presentpagetran - 1)*pageSizetran +i+1 }}</td>
+                                <td>{{tran.ref_id.code }}</td>
+                                <td>{{tran.ref_id.date | date: 'dd-MMM-yyyy'}} </td>
+                                <td>{{tran.comments}}</td>
+                                <td>{{tran.from_user_id.full_name }}</td>
+                                <td>{{tran.ref_id.remarks }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div *ngIf="tranList ?.length == 0" style="margin-left: 42%;">
+                        <h3>Sorry data not found!.. </h3>
+                    </div>
+                    <tr>
+                        <button style="margin-left: 500px;" type="button" data-dismiss="modal"
+                            class="btn btn-outline-primary">
+                            Back</button>
+                    </tr>
+                    <div class="row" *ngIf="tranpage">
+                        <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+                            <button mat-icon-button [disabled]="has_previoustran === false" color="primary"
+                                (click)="previousClicktran()">
+                                <mat-icon>arrow_back
+                                </mat-icon>
+                            </button>
+                            {{presentpagetran}}
+                            <button mat-icon-button [disabled]="has_nexttran === false" color="primary"
+                                (click)="nextClicktran()">
+                                <mat-icon>arrow_forward
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            id="fileview">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#DDEFDD;">
+                        <h2 class="modal-title"
+                            style="color:black ;font-family:'Times New Roman', Times, serif;font-size:25px;font-weight:lighter;">
+                            RCN Header File(s) for </h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-bordered" fixed-header
+                        style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.no</th>
+                                <th>File Name</th>
+                                <th>Download File</th>
+                                <!-- <th>View File</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of fileList;index as i">
+                                <td>{{i+1 }}</td>
+                                <td>{{file.file_name}}</td>
+                                <td style="padding: 0.5em 0.1em 0.1em;text-align:center;">
+                                    <a (click)="fileDownload(file.file_id,file.file_name )"><i class="fa fa-download"
+                                            style="color: green;">
+
+                                        </i></a>
+                                </td>
+                                <!-- <td style="margin-left:-1%">
+                                    <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                        data-toggle="modal" (click)="commentPopup(file.file_id,file.file_name)">
+                                        File Name:{{a.file_name }}<i class="fa fa-picture-o"
+                                            aria-hidden="true"></i>
+                                        <br>
+                                        (Note:Only image file can be viewed)
+                                    </p>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="fileList?.length == 0" style="margin-left: 42%;">
+                        <h3>Sorry File not found!.. </h3>
+                    </div>
+                    <tr>
+                        <button type="button" data-dismiss="modal" style="border-radius: 40px;margin-left: 50px; "
+                            class="btn btn-outline-primary">
+                            Back</button>
+                    </tr>
+                    <!-- <div class="row" *ngIf="filepage">
+                        <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+                            <button mat-icon-button [disabled]="has_previousfile === false" color="primary"
+                                (click)="previousClickfile()">
+                                <mat-icon>arrow_back
+                                </mat-icon>
+                            </button>
+                            {{presentpagefile}}
+                            <button mat-icon-button [disabled]="has_nextfile === false" color="primary"
+                                (click)="nextClickfile()">
+                                <mat-icon>arrow_forward
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showimagepopup" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+            tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- RCN Release -->
+
+    <!-- <span *ngIf="isRCNreleaseform">
+        <app-ro-release (onSubmit)="Rcnreleasesubmit()" (onCancel)="rcnreleaseCancel()"></app-ro-release>
+    </span> -->
+
+
+
+    <div *ngIf="isRCNreleaseTab">
+
+        <!-- <div class="row">
+            <div class="col-12"> -->
+                <form [formGroup]="rcnreleaseSearchForm">
+                    <h2 style="margin-left: 3%;">RO Release Summary</h2>
+                    <table>
+                        <tr>
+                            <td>
+                                <mat-form-field style="margin-left: 50px;">
+                                    <input type="text" formControlName="pono" matInput autocomplete="off">
+                                    <mat-placeholder>RO Number</mat-placeholder>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <!-- <mat-form-field style="width: 250px; margin-left: 50px;">
+                                    <mat-label>Branch Code</mat-label>
+                                    <input placeholder="Branch Code" matInput formControlName="branchcode" #branch
+                                        [matAutocomplete]="autoPrimary">
+                                    <mat-autocomplete #autoPrimary="matAutocomplete"
+                                        [displayWith]="displayFns.bind(this)">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let branchcode of branchNameData"
+                                                [value]="branchcode.name">
+                                                {{branchcode.code}}--{{branchcode.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 200px; margin-left: 50px;">
+                                    <mat-label>Branch Code</mat-label>
+                                    <input #branchInput placeholder="Select Branch Code" matInput formControlName="branchcode" [matAutocomplete]="branch">
+                                    <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch" (opened)="autocompletebranchScroll()">
+                                       <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                       <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                                {{branch.code}}-{{branch.name}}
+                                            </mat-option>
+                                       </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <!-- <mat-form-field style="margin-left: 50px;">
+                                    <input type="text" formControlName="suppliername" matInput autocomplete="off">
+                                    <mat-placeholder>Landlord</mat-placeholder>
+                                </mat-form-field> -->
+                                <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getSuppliersearch()">
+                                    <mat-label>Landlord Name</mat-label>
+                                       <input #suppliersearchInput placeholder="Select supplier" matInput formControlName="suppliername" [matAutocomplete]="suppliersearch">
+                                    <mat-autocomplete #suppliersearch="matAutocomplete" [displayWith]="displayFnsuppliersearch" (opened)="autocompletesuppliersearchScroll()">
+                                       <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                       <ng-container *ngIf="!isLoading">
+                                           <mat-option *ngFor="let supplier of suppliersearchList" [value]="supplier" >
+                                           {{supplier.name}}
+                                           </mat-option>
+                                       </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-primary" type="submit" (click)="rcnreleaseSearch()"
+                                    style="border-radius:40px;margin-left: 50px;margin-top: -2%;" color="primary"><i
+                                        class="fa fa-search" aria-hidden="true"></i></button>
+                            </td>
+                            <td><button class="btn btn-outline-primary cursor" (click)="resetReleaseSearchForm()"
+                                    type="submit" style="border-radius:40px;margin-left:  20px;margin-top: -2%;"
+                                    color="primary">Reset</button></td>
+                        </tr>
+                    </table>
+                </form>
+                <!-- <div style="margin-top: -4%;margin-left: 68%;">
+                    
+                </div> -->
+            <!-- </div>
+        </div> -->
+        <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered">
+                <thead>
+                    <tr class="table_header">
+                        <th>S.No</th>
+                        <th>Schedule Ref No</th>
+                        <th>Branch Location</th>
+                        <th>Landlord Name</th>
+                        <th>Rent Type</th>
+                        <th>Rent Amount</th>
+                        <th>Reason for Hold</th>
+                        <th>Action</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rcn of releaseList; index as i">
+                        <td>{{(this.presentpagepo - 1)*pageSizetran +i+1 }}</td>
+                        <td>{{rcn?.poheader_id?.no}}</td>
+                        <td>{{rcn?.prpoqty_id?.prccbs_id?.branch_id?.code}}--{{rcn?.prpoqty_id?.prccbs_id?.branch_id?.name}}
+                        </td>
+                        <td>{{rcn?.poheader_id?.supplierbranch_id?.code}}--{{rcn?.poheader_id?.supplierbranch_id?.name}}
+                        </td>
+                        <td>{{rcn?.podetails_id?.product_name}}</td>
+                        <td class="rightalign" >{{rcn?.qty - rcn?.received_quantity | currency:'INR'}}</td>
+                        <td>{{rcn?.poheader_id?.closeremarks}}</td>
+                        <td><span data-toggle="modal" data-target=".bd-example-modal-lg" class="fa fa-eye"
+                                (click)="releasedata(rcn)"></span></td>
+
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                            aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background:#DDEFDD;">
+                                        <h2 class="modal-title">{{ROHeader}} </h2>
+
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <table class="table table-bordered" fixed-header
+                                        style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                                        <thead class="table_header">
+                                            <tr>
+                                                <th>Schedule Ref No</th>
+                                                <th>Branch Location</th>
+                                                <th>Landlord Name</th>
+                                                <th>Rent Type</th>
+                                                <th>Rent Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ROHeader}}</td>
+                                                <td>{{RObranchCode}}--{{ROBranchName}}</td>
+                                                <td>{{ROSupplierCode}}--{{ROSupplierName}}</td>
+                                                <td>{{RoType}}</td>
+                                                <td>{{RoAmount}}</td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="modal-footer">
+                                        <form [formGroup]="Releaseform">
+                                            <mat-form-field style="width:300px;margin-left: 25px;">
+                                                <mat-label> Reason for Release</mat-label>
+                                                <textarea matInput placeholder="Remarks" autocomplete="off"
+                                                    formControlName="remarks" required></textarea>
+                                            </mat-form-field>
+                                        </form>
+                                        <button type="submit" style="float: left;" class="btn btn-outline-success"
+                                            style="border-radius: 40px;margin-left: 10px;" data-dismiss="modal"
+                                            (click)="ReleaseRoSubmit()" (click)="this.Releaseform.reset()">
+                                            Release</button>
+                                        <!-- <pre>{{ Releaseform.value | json }}</pre> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         
+
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="releaseList?.length==0 ; else showpagination" style="text-align: center;">No Records Found...
+            </div>
+            <ng-template #showpagination>
+                <div class="row" *ngIf="poreopenpage">
+                    <div class="cursor" style="font-size: small;text-align:right;margin-left:90%; margin-bottom:100px;">
+                        <button mat-icon-button [disabled]="has_previouspo === false" color="primary"
+                            (click)="previousClickpo()">
+                            <mat-icon>arrow_back
+                            </mat-icon>
+                        </button>
+                        {{presentpagepo}}
+                        <button mat-icon-button [disabled]="has_nextpo === false" color="primary"
+                            (click)="nextClickpo()">
+                            <mat-icon>arrow_forward
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>

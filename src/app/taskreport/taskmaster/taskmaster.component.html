@@ -1,0 +1,55 @@
+<div style="background-color: #F6F6F6">
+    <mat-card style="margin:10px 12px 20px 10px;" class="mat-elevation-z0">
+        <nav>
+            <div class="nav nav-tabs" >
+                <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                    *ngFor="let sub of task_Master_Menu_List">
+                    {{sub.name}}
+                </span>
+            </div>
+        </nav>
+
+  </mat-card>
+
+</div>
+
+
+
+
+ 
+
+<div *ngIf="clientSummary">
+<app-client-view></app-client-view>
+</div>
+
+<div *ngIf="activitysummary">
+    <app-activity></app-activity>
+</div>
+
+<div *ngIf="projectSummary">
+    <app-project-view></app-project-view>
+</div>
+<div *ngIf="moduleSummary">
+    <app-module-view></app-module-view>
+</div>
+<div *ngIf="mappingSummary">
+    <app-mapping-view></app-mapping-view>
+</div>
+<div *ngIf="teamSummary">
+    <app-team-view></app-team-view>
+</div>
+<div *ngIf="pipelineSummary">
+    <app-pipeline-view></app-pipeline-view>
+</div>
+<div *ngIf="taskapprover">
+    <app-task-approval></app-task-approval>
+</div>
+<div *ngIf="category">
+    <app-category></app-category>
+</div>
+<div *ngIf="subcategory">
+    <app-subcategory></app-subcategory>
+</div>
+<div *ngIf="auditmapping">
+    <app-audit-mapping></app-audit-mapping>
+</div>

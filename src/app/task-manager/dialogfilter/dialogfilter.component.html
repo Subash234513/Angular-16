@@ -1,0 +1,50 @@
+
+<div class="my-dialog-container">
+  <div  class="dialog-header" style="background-color: #044063;">
+    <h3>Filters</h3>
+  </div>
+  <form [formGroup]="myForm" style="margin-top: 3%;">
+    <div *ngFor="let row of filterRows; let i = index" class="row">
+      <div class="col-sm-4">
+        <mat-form-field style="width: 150px; margin-left: 4%;" class="select-container">
+          <mat-label>Select Filter</mat-label>
+          <input matInput [formControlName]="'dropdown1'" placeholder="Select Filter" readonly>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-5">
+        <mat-form-field style="width: 270px; margin-left: 2%;">
+          <input matInput [formControlName]="'inputField'" placeholder="Input Field">
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-3" >
+        <button mat-icon-button (click)="addFilterRow()" style="margin-left: 32px;" >
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="removeFilterRow(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <!-- <div class="row">
+    
+       
+    
+     
+    </div> -->
+  </form> 
+</div>
+<div class="row" style="    margin-bottom: 3%;
+margin-left: -1%;"> 
+  <div class="col-sm-8">
+    <mat-chip-grid>
+      <mat-chip-row (click)="selectFilter('startdate')">Start Date</mat-chip-row>
+      <mat-chip-row (click)="selectFilter('enddate')">End Date</mat-chip-row>
+      <!-- <mat-chip-row (click)="selectFilter('status')">Status</mat-chip-row> -->
+    </mat-chip-grid>
+  </div>
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-outline-primary" style="margin-left: 32%;" (click)="sendValue()">Apply Filter</button>
+  </div>
+</div>

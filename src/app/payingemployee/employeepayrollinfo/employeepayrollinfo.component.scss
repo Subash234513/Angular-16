@@ -1,0 +1,113 @@
+// :host /deep/ .mat-tab-group {
+//   flex-direction: row;
+// }
+
+// :host /deep/ .mat-tab-header {
+//   border-bottom: none;
+// }
+
+// :host /deep/ .mat-tab-header-pagination {
+//   display: none !important;
+// }
+
+// :host /deep/ .mat-tab-labels {
+//   flex-direction: column;
+// }
+
+// :host /deep/ .mat-ink-bar {
+//   height: 100%;
+//   left: 98% !important;
+// }
+
+// :host /deep/ .mat-tab-body-wrapper {
+//   flex: 1 1 auto;
+  
+// }
+
+.headers {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.headers h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.headers p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.company-logos {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.company-logos img {
+  width: 63px;
+  height: auto;
+}
+
+.company-names {
+  font-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+.pay-slip {
+  margin-top: 20px;
+  text-align: center;
+}
+
+// table, th, td {
+//   border: 1px solid black;
+//   border-collapse: collapse;
+// }
+
+
+#previewTable,
+#ths,
+#tds {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.center {
+  font-size: 18px;
+  color: navy;
+  text-align: center;
+}
+
+.pay01 {
+  color: maroon;
+}
+
+.pay02 {
+  color: rgb(0, 128, 28);
+}
+
+.pay03 {
+  color: rgb(47, 5, 71);
+}
+
+.pay04 {
+  color: rgb(88, 9, 42);
+}
+
+.pay05 {
+  color: rgb(7, 66, 68);
+}
+
+.pay06 {
+  color: rgb(104, 62, 8);
+}
+
+.pay07 {
+  color: rgb(230, 209, 21);
+}
+#span{
+  font-size: 24px;
+}

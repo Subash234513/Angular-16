@@ -1,0 +1,84 @@
+<div class="ml-5 mt-3">
+    <form [formGroup]="AttendanceGroup">
+        <div class="col-12 row">
+
+            <div class="col-md-3">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="Name">
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field class="MonthWidth">
+                    <mat-label>Month</mat-label>
+                    <mat-select formControlName="Month">
+                        <mat-option *ngFor="let month of options" [value]="month.value">
+                            {{month.key}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field class="MonthWidth">
+                    <mat-label>Year</mat-label>
+                    <mat-select formControlName="Year">
+                        <mat-option *ngFor="let year of years" [value]="year">
+                            {{year}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div class="col-md-3" style="margin-top: 6px;">
+                <button mat-stroked-button (click)="Summary(pagination.index)">
+                    <mat-icon>search</mat-icon>
+                </button>
+           
+                <button style="margin-left: 4%;" mat-stroked-button (click)="Clear()">
+            
+                    Clear
+                </button>
+            </div>
+
+
+        </div>
+
+    </form>
+</div>
+<div class="ml-5">
+    <table class="table table-bordered ">
+        <thead>
+            <th class="text-center">Employee Code</th>
+            <th class="text-center">Employee Name</th>
+            <th class="text-center">Month</th>
+            <th class="text-center">Year</th>
+            <th class="text-center">Present Count</th>
+            <th class="text-center">Leave Count</th>
+            <!-- <th class="text-center">Duration</th> -->
+            <th class="text-center">Paid Days</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let table of tableData">
+                <td class="text-center">{{table.employee.code}}</td>
+                <td class="text-center">{{table.employee.full_name}}</td>
+                <td class="text-center">{{options[table.month-1].key}}</td>
+                <td class="text-center">{{table.year}}</td>
+                <td class="text-center">{{table.present_count}}</td>
+                <td class="text-center">{{table.leave_count}}</td>
+                <td class="text-center">{{table.paid_days}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+        <button type="button" (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+            color="primary">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        {{pagination.index}}
+        <button type="button" (click)="nextpage()" mat-icon-button color="primary"
+            [disabled]="pagination.has_next === false">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+</div>

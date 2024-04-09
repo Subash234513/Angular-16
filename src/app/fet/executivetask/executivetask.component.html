@@ -1,0 +1,318 @@
+<!-- <div class="wholediv">
+    <div>
+        <div>
+
+            <h2>Executive Form</h2>
+        </div>
+        <form [formGroup]="executiveform">
+            <div class="col-md-12 row nomargin">
+                <div class="inputdivstyle1">
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Type</mat-label>
+                        <input matInput formControlName="type">
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" >
+                        <mat-label>Unit Head</mat-label>
+
+                        <input matInput formControlName="unit_head">
+                    </mat-form-field> -->
+
+                    <!-- <mat-form-field class="inputwidthstyle1" (click)="unitHead()">
+                        <mat-label>Unit Head</mat-label>
+                        <input #unitHDInput class="matformfieldinputstyle" matInput formControlName="unit_head"
+                            [matAutocomplete]="unitHD" required>
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #unitHD="matAutocomplete" [displayWith]="displayFnunitHD"
+                            (opened)="autocompleteuntheadScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let unitHd of unitheadList" [value]="unitHd">
+                                    {{unitHd.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" >
+                        <mat-label>Team Lead</mat-label>
+
+                        <input matInput formControlName="team_lead">
+                    </mat-form-field> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" (click)="TeamLead()">
+                        <mat-label>Team Lead</mat-label>
+
+                        <input #teamldInput class="matformfieldinputstyle" matInput formControlName="team_lead"
+                            [matAutocomplete]="teamld" required>
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld"
+                            (opened)="autocompleteteteamldScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let teamld of teamldList" [value]="teamld">
+                                    {{teamld.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1">
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Task</mat-label>
+
+                        <input matInput formControlName="task">
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Customer</mat-label>
+                        <input matInput formControlName="customer">
+                    </mat-form-field> -->
+                <!-- </div>
+                <div class="inputdivstyle1">
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Start Date</mat-label>
+
+                        <input matInput #autocomplete readonly [matDatepicker]="startdate"
+                            class="matformfieldinputstyle" formControlName="start_date">
+                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="startdate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #startdate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="inputdivstyle1">
+
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>End Date</mat-label>
+
+                        <input matInput #autocomplete readonly [matDatepicker]="enddate" class="matformfieldinputstyle"
+                            formControlName="end_date">
+                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="enddate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #enddate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1">
+
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Actual End Date</mat-label>
+
+                        <input matInput #autocomplete readonly [matDatepicker]="actualenddate"
+                            class="matformfieldinputstyle" formControlName="actual_end_date">
+                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="actualenddate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #actualenddate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1">
+
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>Actual Start Date</mat-label>
+
+                        <input matInput #autocomplete readonly [matDatepicker]="actualstartdate"
+                            class="matformfieldinputstyle" formControlName="actual_start_date">
+                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="actualstartdate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #actualstartdate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" >
+                        <mat-label>Delay Days</mat-label>
+
+                        <input matInput formControlName="delay_days">
+                    </mat-form-field> -->
+                <!-- </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" >
+                        <mat-label>Task Status</mat-label>
+
+                        <input matInput formControlName="task_status">
+                    </mat-form-field> -->
+                <!-- </div>
+                <div class="inputdivstyle1"> -->
+
+                    <!-- <mat-form-field class="inputwidthstyle1"(click)="executivedropdown('')">
+                        <mat-label  >Executive action</mat-label>
+
+                        <input #teamldInput matInput (keyup)="executivedropdown($event.target.value)"
+                            formControlName="executive_action" [matAutocomplete]="executivecomplete" required>
+                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                        <mat-autocomplete #executivecomplete="matAutocomplete" [displayWith]="displayFnteamld">
+                           
+                            
+                                <mat-option *ngFor="let exe of executivedata" [value]="exe">
+                                    {{exe.name}}
+                                </mat-option>
+                          
+                        </mat-autocomplete>
+                    </mat-form-field> -->
+                <!-- </div>
+                <div class="inputdivstyle1">
+                    <mat-form-field class="inputwidthstyle1">
+                        <mat-label>reason for delay</mat-label>
+
+                        <input matInput formControlName="reason_for_delay">
+                    </mat-form-field>
+                </div>
+                <div class="inputdivstyle1"> -->
+                    <!-- <mat-form-field class="inputwidthstyle1" > 
+                        <mat-label>Comments</mat-label>
+
+                        <input matInput formControlName="comments">
+                    </mat-form-field> -->
+                <!-- </div>
+
+            </div>
+            <div class="col-md-12">
+                <div>
+
+                    <div style="float:right">
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="addSection()"><mat-icon>add</mat-icon>add Task
+                        </button>
+                    </div>
+
+                    <div formArrayName="taskfollow" class="table-responsive  ">
+                        <table id="tablesize" class="table table-bordered" fixed-header
+                            style="margin-top: 10px;width: 156%;">
+                            <thead class="table_header">
+                                <tr>
+
+                                    <th>S.No</th>
+                                    <th>Customer<label style="color:red">*</label></th>
+
+                                    <th>Employee<label style="color:red">*</label></th>
+                                    <th>Task Status<label style="color:red">*</label></th>
+                                    <th>Delay Days<label style="color:red">*</label></th>
+                                    <th>Executive Action<label style="color:red">*</label></th>
+                                    <th>Complete<label style="color:red">*</label></th> -->
+
+                                    <!-- <th>Place of Visit</th> -->
+                                    <!-- <th>Remarks<label style="color:red">*</label></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: left;"
+                                    *ngFor="let item of executiveform.controls.taskfollow['controls'];index as i"
+                                    [formGroupName]="fieldGlobalIndex(i)">
+                                    <td>{{i+1}}</td>
+                                    <td> -->
+                                        <!-- <mat-form-field>
+                                            <mat-label>Customer</mat-label>
+                                            <input matInput formControlName="customer">
+                                        </mat-form-field> -->
+
+                                        <!-- <mat-form-field  (click)="getcustomerdatafromgold('')">
+                         
+
+                                            <input formControlName="customer" #employeeinput
+                                                (keyup)="getcustomerdatafromgold($event.target.value)" matInput
+                                                [matAutocomplete]="customerautocomplete">
+                                            <mat-autocomplete #customerautocomplete="matAutocomplete" [displayWith]="displayFnname">
+                                                
+                                                    <mat-option *ngFor="let customer of customerdata" [value]="customer">
+                                                        {{customer.full_name}}
+                                                    </mat-option>
+                                             
+                                            </mat-autocomplete>
+                
+                                        </mat-form-field>
+
+                                    </td>
+                                    <td> -->
+                                        <!-- <mat-form-field>
+                                            <mat-label>Employee</mat-label>
+                                            <input matInput formControlName="employee_id">
+                                        </mat-form-field> -->
+                                        <!-- <mat-form-field  (click)="getemployeedropdown('',employeecurrentpage=1)">
+                         
+
+                                            <input formControlName="employee_id" #employeeinput
+                                                (keyup)="getemployeedropdown($event.target.value,employeecurrentpage=1)" matInput
+                                                [matAutocomplete]="employeeautocomplete">
+                                            <mat-autocomplete #employeeautocomplete="matAutocomplete" [displayWith]="displayFnname">
+                                                
+                                                    <mat-option *ngFor="let name of employeedropdown" [value]="name">
+                                                        {{name.full_name}}
+                                                    </mat-option>
+                                             
+                                            </mat-autocomplete>
+                
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-label>Task Status</mat-label> -->
+                                            <!-- <input matInput formControlName="task_status"> -->
+                                            <!-- <mat-select  matInput formControlName="task_status" >
+                                                <mat-option *ngFor="let task of taskdropdowndata" [value]="task.id" >{{task.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-label>Delay days</mat-label>
+                                            <input matInput formControlName="delay_days">
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field class="inputwidthstyle1" (click)="executivedropdown('')">
+                                            <mat-label>Executive action</mat-label>
+
+                                            <input #teamldInput matInput
+                                                (keyup)="executivedropdown($event.target.value)"
+                                                formControlName="executive_action" [matAutocomplete]="executivecomplete"
+                                                required>
+                                            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                            <mat-autocomplete #executivecomplete="matAutocomplete"
+                                                [displayWith]="displayFnteamld">
+
+
+                                                <mat-option *ngFor="let exe of executivedata" [value]="exe">
+                                                    {{exe.name}}
+                                                </mat-option>
+
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-label>Complete</mat-label>
+                                            <input matInput #autocomplete readonly [matDatepicker]="completedate"
+                                                class="matformfieldinputstyle" formControlName="is_complete">
+                                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="completedate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #completedate></mat-datepicker>
+                                        </mat-form-field>
+                                    </td>
+                                    
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-label>Remarks</mat-label>
+                                            <input matInput formControlName="remarks">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div style="margin-bottom: 25px; margin-top: 30px; ">
+
+                <button type="button" (click)="oncancelclick()" class="btn btn-light" skipLocationChange style="border-radius: 7px;margin-left: 10px;border-color: black;
+                    background-color: white;">Cancel</button>
+                <button type="submit" style="border-radius: 10px;margin-left: 10px;border-color: #f5c68b;
+                    background-color: #f5c68b;" (click)="executivesubmit()" class="btn btn-light">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<pre>{{executiveform.value | json}}</pre> -->

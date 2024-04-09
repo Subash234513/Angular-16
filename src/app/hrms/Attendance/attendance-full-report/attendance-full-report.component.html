@@ -1,0 +1,474 @@
+<div class="container">
+
+    <form [formGroup]="attendanceReportsearchForm">
+        <table>
+            <tr>
+                <td>
+
+                    <mat-form-field (click)="getTeamLead('')">
+                        <mat-label>Team Lead</mat-label>
+
+                        <input #teamldInput class="matformfieldinputstyle" matInput
+                            (keyup)="getTeamLead(attendanceReportsearchForm.value.lead_id)" formControlName="lead_id"
+                            [matAutocomplete]="teamld">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                            <mat-option *ngFor="let teamld of teamldList" [value]="teamld">
+                                {{teamld.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field
+                        (click)="getLeadBasedemployee(attendanceReportsearchForm.value.lead_id?.id, attendanceReportsearchForm.value.emp?.full_name)"
+                        class="spacingForm">
+                        <mat-label> Employee </mat-label>
+                        <input #empInput placeholder="Select Employee" matInput formControlName="emp"
+                            [matAutocomplete]="emp"
+                            (keyup)="getLeadBasedemployee(attendanceReportsearchForm.value.lead_id?.id, attendanceReportsearchForm.value.emp)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                            <mat-option *ngFor="let emp of employeeList" [value]="emp"
+                                title="{{emp.full_name}}">{{emp.full_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+
+                <!-- <td>
+
+                    <mat-form-field class="spacingForm" (click)="getDepartment('')">
+                        <mat-label>Department</mat-label>
+                        <input #deptInput class="matformfieldinputstyle" matInput
+                            (keyup)="getDepartment(attendanceReportsearchForm.value.department)"
+                            formControlName="department" [matAutocomplete]="dept">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #dept="matAutocomplete" [displayWith]="displayFnDept">
+                            <mat-option *ngFor="let dept of deptList" [value]="dept">
+                                {{dept.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td> -->
+                <td>
+
+                    <mat-form-field (click)="getorg_id('')" class="spacingForm">
+                        <mat-label> Deployed Site </mat-label>
+                        <input #org_idInput placeholder="Select Deployed Site" matInput formControlName="org_id"
+                            [matAutocomplete]="org_id" (keyup)="getorg_id(attendanceReportsearchForm.value.org_id)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #org_id="matAutocomplete" [displayWith]="displayFnorg_id">
+                            <mat-option *ngFor="let org_id of org_idList" [value]="org_id"
+                                title="{{org_id.name}}">{{org_id.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field dateFormat2 class="smallinput spacingForm">
+                        <mat-label> Month </mat-label>
+                        <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+                            formControlName="monthyear">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                            (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field>
+                </td>
+                
+            </tr>
+            <tr>
+
+                <td>
+
+                    <mat-form-field (click)="getbsdata('')">
+                        <mat-label> BS </mat-label>
+                        <input #bsInput placeholder="Select BS" matInput formControlName="bs"
+                            [matAutocomplete]="bs_id" (keyup)="getbsdata(attendanceReportsearchForm.value.bs)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #bs_id="matAutocomplete" [displayWith]="displayFnbs_id">
+                            <mat-option *ngFor="let bs_id of bsdatalist" [value]="bs_id"
+                                title="{{bs_id.name}}">{{bs_id.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field (click)="getccdata('')"  class="spacingForm" >
+                        <mat-label> CC </mat-label>
+                        <input #CC_idInput placeholder="Select CC" matInput formControlName="cc"
+                            [matAutocomplete]="cc_id" (keyup)="getccdata(attendanceReportsearchForm.value.cc)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #cc_id="matAutocomplete" [displayWith]="displayFncc">
+                            <mat-option *ngFor="let cc of ccdatalist" [value]="cc"
+                                title="{{cc.name}}">{{cc.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                
+            
+                <td colspan="2">
+                    <div>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;" class="btnalignbtm"
+                            aria-label="Search" (click)="AttendanceReportSearch('',log_date.value, filter_key.value)">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;" class="btnalignbtm"
+                            (click)="resetAttendanceReport()">Clear</button>
+                        <!-- <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="filter_key.reset(); AttendanceReportSearch('')">Clear Filters</button> -->
+
+                        <button mat-raised-button type="button" style="margin-left: 20px;" class="btnalignbtm"
+                            (click)="AttendanceexceldownloadNew('',log_date.value, filter_key.value)">
+                            <span class="material-icons">download</span>Export </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+    <!-- <pre>{{attendanceReportsearchForm.value | json}}</pre> -->
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+        <span class="badge holiday coloring leftspace">Holiday - H </span>
+        <span class="badge badge-secondary leftspace">Weekend - W</span>
+        <span class="badge badge-success leftspace">Present - P</span>
+        <span class="badge absent coloring leftspace">Absent - A</span>
+        <span class="badge absent coloring leftspace">Leave - L</span>
+        <span class="badge partialpresent coloring leftspace">Partially Present - PP</span>
+
+        <!-- <span class="badge others leftspace">More - +</span> -->
+
+        
+
+        <div class="table-responsive tableFixHeaddiv">
+
+            <table class="table table-bordered outertable" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious">
+                        <!-- <th class="tablecolumn">S.No</th> -->
+                        <th class="tablecolumn">Employee</th>
+                        <th class="tablecolumn">Days Present <br><small>(in a Month)</small>
+                            <span class="material-icons togglePosition" (click)="Toggle()"
+                                title="{{showHide == false ? 'Collapse': 'Expand' }}">
+                                {{showHide == false ? 'switch_right': 'switch_left' }}
+                            </span>
+                        </th>
+                        <ng-container *ngIf="ListOfDaysInSelectedMonth?.length > 0">
+                            <th *ngFor="let days of ListOfDaysInSelectedMonth; let i = index" attr.name='{{i}}'
+                                title="{{days | date: 'dd-MMM-yyyy'}}" style="text-align: center;">
+                                <span> {{days | date:'d'}} <sup> {{PresentDate == days? '*': ''}} </sup> </span>
+                                <br>
+                                <small> {{days | date: 'EEEEEE'}} </small>
+                                <br>
+                                <!-- PresentDate >= days? -->
+                                <!-- <span class="material-icons filterData" > {{PresentDate >= days? 'filter_alt': ''}} </span> -->
+                                <mat-select [disabled]="PresentDate < days" [formControl]="filter_key"
+                                    class="inputs arrowClass filterData" (click)='getFilterBasedOnDate(days)'>
+                                    <mat-option [value]="typeOfAttendance" *ngFor="let typeOfAttendance of Filterlist"
+                                        (click)="AttendanceReportSearch('', days, typeOfAttendance ); this.log_date.patchValue(days)">
+                                        {{typeOfAttendance.text}} </mat-option>
+                                </mat-select>
+                            </th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <tr *ngFor="let data of arrReport; let index = index" [ngClass]="showHide? '': 'tableTogle' "
+                        class="tablePrevious">
+                        <td class="tablecolumn empname"  title="({{data?.code}}) {{data?.name}}"><span (click)="PresentCount(data)"  class="dataPresent"> {{index+1}}. ({{data?.code}}) {{data?.name}}</span> 
+                            <div *ngIf="isPresentid==data?.id " >
+                                <div >
+                                    <div class="partialpresentcolor PresentDisplayFlex" title="Partially Present"><div class="PresentWidth">PP</div><div>-</div><div>{{PresentDataCount?.partially_present_count}}</div></div>
+                                    <div class="absentcolor PresentDisplayFlex" title="Leave"><div class="PresentWidth">L</div><div>-</div><div>{{PresentDataCount?.leave_count}}</div></div>  
+                                    <div class="absentcolor PresentDisplayFlex" title="Absent"><div class="PresentWidth">A</div><div>-</div><div>{{PresentDataCount?.absent_count}}</div></div>
+                                    <div class="text-secondary PresentDisplayFlex" title="Permission"><div class="PresentWidth">PRM</div><div>-</div><div>{{PresentDataCount?.permission_count}}</div></div>
+                                    <div class="text-success PresentDisplayFlex" title="Late Check In"><div class="PresentWidth">LI</div><div>-</div><div>{{PresentDataCount?.late_checkin_count}}</div></div>
+                                    <div class="text-warning PresentDisplayFlex" title="Early Check Out"><div class="PresentWidth">EO</div><div>-</div><div>{{PresentDataCount?.early_checkout_count}}</div></div>
+                                </div>
+                               
+                            </div>
+                        </td>
+                        <td class="tablecolumn" title="{{data?.present_count}}"><span >{{data?.present_count}}</span>
+                           
+                        </td>
+                        <!-- <td>{{data?.duration}}</td> -->
+                        <ng-container *ngIf="ListOfDaysInSelectedMonth?.length > 0">
+                            <td *ngFor="let datascheck of ListOfDaysInSelectedMonth; let indextwo = index;"
+                                attr.name='{{indextwo}}' title="{{datascheck}}" class="attendanceMark">
+
+                                <div class="AttendanceTableView" data-toggle="modal" data-target=".popupReport"
+                                    data-backdrop='static' data-keyboard='false' (click)="getAttendanceBasedOnEmployee(data, datascheck); 
+                            getSelectedEMP(datascheck, 'summary'); activityData(datascheck,'summary', data);">
+                            <div class="indicatorOnCornerPermission"   title="{{datascheck}} - ({{data?.code}}) {{data?.name}} - {{Permission_Data.title}}"
+                            *ngIf="data[datascheck] !=null && data[datascheck].includes('PRM')"></div> 
+                                    <ng-container *ngFor="let loop of data[datascheck]; let dateindex = index">
+                                        <div [ngClass]="
+                                                loop == 'Present'   ?'displayMultiple present':
+                                                loop == 'Half day'   ?'displayMultiple present':
+                                                loop=='Absent'      ?'displayMultiple absent': 
+                                                loop=='Leave'       ?'displayMultiple absent':
+                                                loop=='Weekend'     ?'displayMultiple weekend':
+                                                loop=='IN'          ?'displayMultiple present':
+                                                loop=='OUT'         ?'displayMultiple present':
+                                                loop=='NOT IN'      ?'displayMultiple weekend':
+                                                loop=='Partially Present'?'displayMultiple partialpresent':
+                                                loop=='Holiday'     ?'displayMultiple holiday':'' "
+                                                [style.z-index]=dateindex
+                                            title=" {{datascheck}} - ({{data?.code}}) {{data?.name}} - {{ 
+                                                    loop == Present_Data?.name            ? Present_Data?.title: 
+                                                    loop == Halfday_Data?.name            ? Halfday_Data?.title: 
+                                                    loop == Absent_Data?.name             ? Absent_Data?.title:
+                                                    loop == Leave_Data?.name              ? Leave_Data?.title: 
+                                                    loop == Holiday_Data?.name            ? Holiday_Data?.title:
+                                                    loop == In_Data?.name                 ? In_Data?.title:
+                                                    loop == Out_Data?.name                ? Out_Data?.title:
+                                                    loop == NotIn_Data?.name              ? NotIn_Data?.title:
+                                                    loop == Permission_Data?.name         ? Permission_Data?.title:
+                                                    loop == Updated_Attendance_Data?.name ? Updated_Attendance_Data?.title:
+                                                    loop == PartiallyPresent_Data?.name   ? PartiallyPresent_Data?.title:
+                                                    loop == Weekend_Data?.name            ? Weekend_Data?.title: 'Click for More...' }}">
+
+                                            {{  loop == Present_Data?.name              ? Present_Data?.display:
+                                                loop == Halfday_Data?.name              ? Halfday_Data?.display:
+                                                loop == Absent_Data?.name               ? Absent_Data?.display:
+                                                loop == Leave_Data?.name                ? Leave_Data?.display:
+                                                loop == Holiday_Data?.name              ? Holiday_Data?.display:
+                                                loop == In_Data?.name                   ? In_Data?.display:
+                                                loop == Out_Data?.name                  ? Out_Data?.display:
+                                                loop == NotIn_Data?.name                ? NotIn_Data?.display :
+                                                loop == PartiallyPresent_Data?.name     ? PartiallyPresent_Data?.display:
+                                                loop == Weekend_Data?.name              ? Weekend_Data?.display: null }}
+
+
+                                                <!-- 
+
+                                                loop=='PRM'         ?'absent':
+                                                loop=='Is_updated'  ?'weekend':
+                                                    
+                                                    loop == Permission_Data?.name           ? Permission_Data?.display:
+                                                loop == Updated_Attendance_Data?.name   ? Updated_Attendance_Data?.display: -->
+                                        </div>
+                                    </ng-container>
+                                    
+                                </div>
+
+                                
+                                    <div class="indicatorOnCornerEdited" *ngIf="data[datascheck] !=null && data[datascheck].includes('Is_updated')" 
+                                    >(edited)</div> 
+
+                                <!-- <span data-toggle="modal" data-target=".popupReport" data-backdrop='static'
+                                data-keyboard='false'
+                                (click)="getAttendanceBasedOnEmployee(data, datascheck); 
+                                getSelectedEMP(datascheck, 'summary'); activityData(datascheck,'summary', data);"
+
+                                [ngClass]="data[datascheck] == 'Present'?'presentstyle': data[datascheck]=='Absent'?'absentstyle': data[datascheck]=='Absent (PL)' ?'absentstyle': data[datascheck]=='Absent (CL)' ?'absentstyle':data[datascheck]=='Absent (SL)'?'absentstyle':data[datascheck]=='Absent (LOP)' ?'absentstyle':data[datascheck]=='WFH'?'weekendHolidayPresent': data[datascheck]=='COMP-OFF'?'weekendHolidayPresent':data[datascheck]=='Holiday' ?'holiday': data[datascheck]=='Weekend' ?'weekend': ''"
+                                class=" material-icons">
+                                {{data[datascheck] == "Present"?"done": data[datascheck] == 'Absent'?'close':
+                                data[datascheck] == 'Absent (PL)'?'close': data[datascheck] == 'Absent
+                                (CL)'?'close':data[datascheck] == 'Absent (SL)'?'close':data[datascheck] ==
+                                'Absent (LOP)'?'close':data[datascheck] == 'WFH'?'settings_remote':
+                                data[datascheck] == 'COMP-OFF'?'C':data[datascheck] == 'Holiday'?'H':
+                                data[datascheck] == 'Weekend'?'W': ''}}
+
+                            </span> -->
+
+
+
+
+
+                            </td>
+                        </ng-container>
+
+                    </tr>
+                </tbody>
+                
+            </table>
+            
+            
+
+        </div>
+        <div *ngIf="ListOfDaysInSelectedMonth?.length == 0  ; else paginationarrReport"
+            class="NodataAlign text-center">No Records Found...</div>
+        <ng-template #paginationarrReport>
+            <div class="PageDisplay" style="font-size: small;text-align: right;margin-bottom: 5%;">
+
+                <div>
+                    <mat-form-field class="PageNumberWidth">
+                        <mat-label>Page No</mat-label>
+                        <input matInput [formControl]="PageNumber">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button class="LoadMore" type="button" mat-raised-button [disabled]="has_nextattreport === false" color="primary"
+                    (click)="AttendanceReportSearch('next',this.log_date.value, this.filter_key.value )">
+                    Load More
+                </button>
+                </div>
+                
+ 
+            </div>
+        </ng-template>
+
+        
+        
+    </div>
+</div>    
+</div>
+
+
+
+
+
+<div class="modal fade popupReport" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-8">
+                        <div id="NoteViewTable">
+                            <table class="table table-bordered size">
+                                <thead>
+                                    <tr>
+                                        <th scope="col tablecolumn">Day</th>
+                                        <th scope="col"> In</th>
+                                        <th scope="col"> Out</th>
+                                        <th scope="col">Duration
+                                            <br><small>(in Hrs)</small>
+                                        </th>
+                                        <th scope="col">Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let day of ListOfDaysInSelectedMonth; let indextwo = index">
+                                    <tr
+                                        [ngClass]="selectedclass== indextwo?'breadcrumbdataselected': 'breadcrumbdatawhite' ">
+                                        <td class="textdec tablecolumn">
+                                            <span (click)="activityData(day, 'popup' )"
+                                                (click)="getSelectedEMP(indextwo, 'popup')">{{day | date:'dd-MMM-yyyy'}}
+                                            </span>
+                                        </td>
+                                        <ng-container *ngFor="let dataset of MonthlyActivityReport">
+                                            <ng-container *ngIf="day == dataset?.log_date;">
+                                                <td>{{dataset?.first_check_in | date:'shortTime'}}</td>
+                                                <td>{{dataset?.last_check_in | date:'shortTime'}}</td>
+                                                <td> {{dataset?.duration}} </td>
+                                                <td>{{dataset?.flag}}</td>
+                                            </ng-container>
+
+                                        </ng-container>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+
+                        <div class="card">
+                            <div class="card-body" id="NoteView">
+                                <h3 class="card-title"> Name:
+                                    ({{BasicDetails?.code}})
+                                    {{BasicDetails?.name}} </h3>
+                                <h3 class="card-title">
+                                    ({{ActivityDataList | date:
+                                    'dd-MMM-yyyy'}}) </h3>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Inside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.in_time}}
+                                            <small>hrs</small>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Outside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.out_time}}
+                                            <small>hrs</small>
+                                        </div>
+                                    </div>
+
+                                </div><br>
+                                <div>
+                                    <ng-container *ngFor="let loop of DatesBadge">
+
+                                        <span class="badge badge-pill spacing" [ngClass]="
+                                          loop == 'Present'?'present':
+                                          loop=='Absent'?'absent': 
+                                          loop=='Leave' ?'absent':
+                                          loop=='Weekend' ?'weekend':
+                                          loop=='Holiday' ?'holiday':
+                                          loop=='Leave Pending' ?'weekend':
+                                          loop=='PRM'         ?'absent':
+                                          loop=='Is_updated'  ?'weekend':
+                                          loop=='Partially Present'?'partialpresent':
+                                          loop == 'Leave Approved'? 'present': 'weekend' ">
+                                            {{ loop == Present_Data?.name ? Present_Data?.title:
+                                            loop == Absent_Data?.name ? Absent_Data?.title:
+                                            loop == Leave_Data?.name ? Leave_Data?.title:
+                                            loop == Halfday_Data?.name ? Halfday_Data?.title:
+                                            loop == Holiday_Data?.name ? Holiday_Data?.title:
+                                            loop == Weekend_Data?.name ? Weekend_Data?.title:
+                                            loop == WFH_Data?.name ? WFH_Data?.title:
+                                            loop == CL_Data?.name ? CL_Data?.title:
+                                            loop == PL_Data?.name ? PL_Data?.title:
+                                            loop == SL_Data?.name ? SL_Data?.title:
+                                            loop == OD_Data?.name ? OD_Data?.title:
+                                            loop == In_Data?.name   ? In_Data?.title:
+                                            loop == Out_Data?.name  ? Out_Data?.title:
+                                            loop == NotIn_Data?.name? NotIn_Data?.title:
+                                            loop == ApprovedLeave_Data?.name ? ApprovedLeave_Data?.title:
+                                            loop == PendingLeave_Data?.name ? PendingLeave_Data?.title:
+                                            loop == Updated_Attendance_Data?.name ? Updated_Attendance_Data?.title:
+                                            loop == PartiallyPresent_Data?.name ? PartiallyPresent_Data?.title:
+                                            loop == Permission_Data?.name ? Permission_Data?.title: '--'
+                                            }}
+                                        </span>
+                                    </ng-container>
+
+                                </div>
+                                <br>
+                                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>In</th>
+                                            <th>Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let dataLog of logActivityList?.log">
+                                            <td>{{dataLog?.check_in |
+                                                date:'shortTime'}}</td>
+                                            <td>{{dataLog?.check_out |
+                                                date:'shortTime'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

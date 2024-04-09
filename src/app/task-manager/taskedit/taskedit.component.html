@@ -1,0 +1,279 @@
+<div>
+  <form [formGroup]="EmpTaskCreate" class="cus-taskEdit">
+    <div class="cus-taskEditMain">
+      <div class="modal-body" style="width: 100%">
+        <!-- <h3>Task Edit Screen</h3> -->
+        <!-- <div class="row">
+                      <div class="col-sm-8 col-md-8 col-lg-4">
+                          <mat-label>Client</mat-label><br>
+                          <mat-form-field class="inputWidthTop">
+                              <input matInput   formControlName="client">                          
+                          </mat-form-field>
+  
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-4">
+                          <mat-label>Project</mat-label><br>
+                          <mat-form-field class="inputWidthTop">
+                              <input  matInput type="text" formControlName="project" >            
+                          </mat-form-field>
+                      </div>
+                      <div class="col-sm-8 col-md-8 col-lg-4">
+                          <mat-label>Module</mat-label><br>
+                          <mat-form-field class="inputWidthTop">
+                              <input #modnmInput matInput formControlName="project_map_id" >
+                             
+                          </mat-form-field>
+                      </div>
+                  </div> -->
+        <div class="cus-taskEditContainer1">
+          <div>
+            <mat-form-field>
+              <mat-label>Client</mat-label>
+              <input #cltInput matInput formControlName="client" [matAutocomplete]="clt" autocomplete="off"
+                (keyup)="clientsearch(this.EmpTaskCreate.value.client)" />
+              <!-- <mat-icon matSuffix>unfold_more</mat-icon> -->
+              <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt">
+                <mat-option *ngFor="let clt of EmpTaskCreateObj.clientList" [value]="clt" (click)="resetdataclient()">
+                  {{ clt.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Project</mat-label>
+              <input #appnmInput matInput type="text" formControlName="project" [matAutocomplete]="appnm"
+                autocomplete="off" (keyup)="
+                    Projectsearch(
+                      this.EmpTaskCreate.value.client,
+                      this.EmpTaskCreate.value.project
+                    )
+                  " />
+              <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+              <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm">
+                <mat-option *ngFor="let appnm of EmpTaskCreateObj.projectList" [value]="appnm" (click)="resetmodule()">
+                  {{ appnm.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Module</mat-label>
+              <input #modnmInput matInput formControlName="project_map_id" autocomplete="off" (keyup)="
+                    getModule(
+                      this.EmpTaskCreate.value.client,
+                      this.EmpTaskCreate.value.project,
+                      this.EmpTaskCreate.value.project_map_id
+                    )
+                  " [matAutocomplete]="modnm" />
+              <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+              <mat-autocomplete #modnm="matAutocomplete" [displayWith]="displayFnmodnm">
+                <mat-option *ngFor="let modnm of EmpTaskCreateObj.moduleList" [value]="modnm">
+                  {{ modnm.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="cus-taskEditContainer2">
+          <div class="cus-taskEdit100">
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>Task</mat-label>
+                <input
+                
+                  type="text"
+                  placeholder="Enter Task here!"
+                  formControlName="task"
+                  autocomplete="off"
+                  matInput
+                />
+              </mat-form-field> -->
+            <mat-form-field>
+              <mat-label>Task</mat-label>
+              <textarea rows="2" type="text" placeholder="Enter Task here!" matInput autocomplete="off"
+                formControlName="task"></textarea>
+            </mat-form-field>
+
+            <!-- <div>
+                    <span class="badge badge-pill badge-warning paddingSpace">
+                      <span class="material-icons fonts">tag</span>
+                      {{ selectedDevTypeName }}
+                    </span>
+                    <span class="badge badge-pill badge-secondary paddingSpace">
+                      From: {{ selectedStartDate | date : "dd-MM-yyyy" }}
+                    </span>
+                    <span class="badge badge-pill badge-secondary paddingSpace">
+                      To: {{ selectedEndDate | date : "dd-MM-yyyy" }}
+                    </span>
+                  </div> -->
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="type">
+                <mat-option [value]="devtype.id" *ngFor="let devtype of EmpTaskCreateObj.devtypelist"
+                  (click)="getdevTypeId(dataIndex, devtype, 'type')">
+                  {{ devtype.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label> Planned Start Date</mat-label>
+              <input [disabled]="taskstatus===1 || taskstatus===3 || taskstatus===2  " placeholder="Start"
+                [matDatepicker]="picker1" formControlName="start_date" matInput [min]="taskstartdate"
+                [max]="tasksenddate" />
+              <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>                   
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Planned End Date</mat-label>
+              <input [disabled]="taskstatus===1 ||  taskstatus===3 || taskstatus===2 " placeholder="End"
+                [matDatepicker]="picker2" formControlName="end_date" matInput [max]="tasksenddate" 
+                [min]="this.EmpTaskCreate.get('start_date').value" />
+              <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <div *ngIf="this.unassigned != 'Unassigned'">
+              <mat-form-field>
+                <mat-label>Employee</mat-label>
+                <input [readonly]="taskstatus===0|| taskstatus===1||taskstatus===2 ||  taskstatus===3" type="text"
+                  formControlName="developer" autocomplete="off" matInput disabled />
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="unassigned === 'Unassigned'">
+              <div>
+                <mat-form-field style="width: 100%" (click)="developer(dataIndex)">
+                  <mat-label>Employee</mat-label>
+                  <input #developerinput placeholder="Select Employee" matInput formControlName="developer"
+                    [matAutocomplete]="developerrole" />
+                  <mat-autocomplete #developerrole="matAutocomplete" [displayWith]="displaydevelopclient">
+                    <ng-container>
+                      <mat-option *ngFor="let opt of empList" [value]="opt">
+                        {{ opt.name }}
+                      </mat-option>
+                    </ng-container>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <!-- <div class="">
+                              <mat-form-field style="padding: 5px;">
+                                  <mat-select formControlName="dependency_id">
+                                      <mat-option [value]="dependency.id" *ngFor="let dependency of EmpTaskCreateObj.dependencylist" (click)='getdependencyTypeId(dataIndex, data.get("dependency_id").value, "dependency_id")'>
+                                          {{dependency.text}} </mat-option>
+                                  </mat-select>
+                              </mat-form-field>
+                              
+                          </div> -->
+            <mat-form-field (click)="dependencysearch(dataIndex)">
+              <mat-label>Dependency</mat-label>
+              <input #depInput matInput formControlName="dependency_id" [matAutocomplete]="dep" autocomplete="off" />
+              <mat-icon matSuffix>unfold_more</mat-icon>
+              <mat-autocomplete #dep="matAutocomplete" [displayWith]="displayFnDep">
+                <mat-option *ngFor="let dep of EmpTaskCreateObj.dependencylist" [value]="dep">
+                  {{ dep.task }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Priority Type</mat-label>
+              <mat-select formControlName="priority_type">
+                <mat-option [value]="pry.id" *ngFor="let pry of EmpTaskCreateObj.priorityList" (click)="
+                      getprioritytype(
+                        dataIndex,
+                        data.get('priority_type').value,
+                        'priority_type'
+                      )
+                    ">
+                  {{ pry.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="(taskstatus===1 ||taskstatus===3 || taskstatus===2 ) && (actualstartdate!='')">
+            <mat-form-field appearance="outline">
+              <mat-label> Actual Start Date</mat-label>
+              <input placeholder="Start" [matDatepicker]="picker3" formControlName="actual_start_date"
+                [min]="spstartdate" [max]="spenddate" matInput />
+              <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker3">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div *ngIf="(taskstatus===1 ||taskstatus===3 || taskstatus===2) && (actualenddate!='')">
+            <mat-form-field appearance="outline">
+              <mat-label> Actual End Date</mat-label>
+              <input placeholder="Start" [matDatepicker]="picker4" formControlName="actual_end_date" matInput (dateChange)="checkEndDateValidity()"
+                [max]="spenddate" [min]="spstartdate" />
+              <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker4" >
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div  *ngIf="isEndDateValid">
+            <mat-form-field appearance="outline">
+              <mat-label>Remarks</mat-label>
+              <input placeholder="Remarks"  formControlName="remarks" matInput />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.unassigned==='Unassigned'">
+      <div class="cus-taskEditBtnDiv" style="width: 100%">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="Submitassign()"
+            style="background-color: #044063;color: white;">
+            Assign
+          </button>
+          <!-- <button class="btn" id="WhiteBtn" (click)="BackToSummary()">
+            Close
+          </button> -->
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="BackToSummary()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="this.unassigned!=='Unassigned'">
+      <div class="cus-taskEditBtnDiv" style="width: 100%">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="SubmitTask()"
+            style="background-color: #044063;color: white;">
+            Update
+          </button>
+          <!-- <button class="btn" id="WhiteBtn" (click)="BackToSummary()">
+            Close
+          </button> -->
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="BackToSummary()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

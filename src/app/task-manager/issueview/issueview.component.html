@@ -1,0 +1,467 @@
+<div *ngIf="issueView">
+    <!-- <div class="row marginset"> -->
+    <div>
+      <p
+        class="cus-issueViewBack pointer"
+        (click)="issueView_backnavigate()"
+        style="padding: 10px; font-weight: bold;"
+      >
+        <span class="material-icons">arrow_back</span>&nbsp;
+        Issue view
+      </p>
+  
+      <mat-card style="padding: 0px; box-shadow: none">
+        <div>
+          <div>
+            <div class="cus-issuesContainer1Sub1">
+              <div class="cus-issuesSub1-1">
+                <!-- IssuesTitle -->
+                <div>
+                  <p class="cus-issueHead-p1">{{ singleissueViewData?.code }}</p>
+                </div>
+  
+                <!-- IssuesDesc -->
+                <div>
+                  <p style="margin-top: 2px">
+                    <b>Issue: </b>
+                    {{ singleissueViewData?.description }}
+                  </p>
+                </div>
+              </div>
+  
+              <div class="cus-issuesSub1-2">
+                <!-- Action -->
+                <div>
+                  <div
+                    class="dropdowns"
+                    *ngIf="singleissueViewData?.issue_status?.name === 'Open'"
+                  >
+                    <button
+                      mat-button
+                      [matMenuTriggerFor]="menu"
+                      style="
+                        background-color: #044063;
+                        color: #ededfd;
+                        width: 112px;
+                      "
+                    >
+                      Action <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="movetoTaskData()">
+                        Valid
+                      </button>
+                      <button mat-menu-item (click)="InvalidIssue()">
+                        Invalid
+                      </button>
+                      <button mat-menu-item (click)="DuplicateIssue()">
+                        Duplicate
+                      </button>
+                    </mat-menu>
+                  </div>
+                  <!-- <div  > -->
+                  <!-- style="margin-top: 7%;text-align: center;margin-bottom: 5%;" -->
+                  <!-- <div> -->
+                  <!-- <div class="dropdown" *ngIf="singleissueViewData.issue_status.name === 'Open'">
+                                                                        <button class="dropbtn" class="btn btn-outline-primary"
+                                                                            style="width: 160px;">Action</button>
+                                                                        <div class="dropdown-content">
+                                                                            <button class="btn btn-outline-primary" (click)="movetoTaskData()"
+                                                                                style="width: 100%;border: none;">Valid</button><br>
+                                                                            <button class="btn btn-outline-primary" (click)="InvalidIssue()"
+                                                                                style="width: 100%;border: none;">Invalid</button><br>
+                                                                            <button class="btn btn-outline-primary" (click)="DuplicateIssue()"
+                                                                                style="width: 100%;border: none;">Duplicate</button><br>
+                                                                        </div>
+                                                                    </div> -->
+                  <!-- </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="row">
+                                                                <h4 style="color: #6c757d;">Activity</h4>
+                                                            </div> -->
+                  <!-- <div class="row"> -->
+                  <!-- <div class="col-sm-2">
+                                                                  <button   class="btn btn-outline-secondary" [ngStyle]="button1Styles" (click)="toggleButton(1)">All</button>
+                                                                </div> -->
+                  <!-- <div class="col-sm-2">
+                                                                  <button  style="margin-left: -28%;" class="btn btn-outline-secondary" [ngStyle]="button2Styles" (click)="toggleButton(2)">Actions</button>
+                                                                </div> -->
+                  <!-- <div class="col-sm-2">
+                                                                  <button class="btn btn-outline-secondary" [ngStyle]="button3Styles" (click)="toggleButton(3)">Comments</button>
+                                                                </div>
+                                                            </div> -->
+                </div>
+              </div>
+            </div>
+  
+            <hr style="width: 100%" />
+            <div class="cus-issuesContainer1-1">
+              <div class="cus-issuesContainer1Sub2">
+                <!-- Flag -->
+                <div>
+                  <mat-icon
+                    *ngIf="singleissueViewData?.priority_type?.text === 'High'"
+                    style="background-color: #f50000"
+                    class="cus-flag2"
+                    title="High"
+                    >flag</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="singleissueViewData?.priority_type?.text === 'Normal'"
+                    style="background-color: #ffcc00"
+                    class="cus-flag2"
+                    title="Normal"
+                    >flag</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="singleissueViewData?.priority_type?.text === 'Low'"
+                    style="background-color: #6fddff"
+                    class="cus-flag2"
+                    title="Low"
+                    >flag</mat-icon
+                  >
+                </div>
+  
+                <!-- Status -->
+                <div>
+                  <span class="cus-badgeBlue">{{
+                    singleissueViewData?.issue_status?.name
+                  }}</span>
+                </div>
+  
+                <!-- Path -->
+                <div>
+                  <span class="cus-badgeLightBlack">
+                    <!-- <span class="material-icons fontsize alignvertical">lock</span> -->
+                    <i class="fa-solid fa-lock"></i>
+                    <span class="alignvertical">
+                      {{ singleissueViewData?.project?.client }}
+                    </span>
+                    <i class="fa-solid fa-angles-right"></i>
+                    <!-- <span class="material-icons fontsize alignvertical">arrow_forward_ios</span> -->
+                    {{ singleissueViewData?.project?.app }}
+                    <i class="fa-solid fa-angles-right"></i>
+                    <!-- <span class="material-icons fontsize alignvertical">arrow_forward_ios</span> -->
+                    <span class="alignvertical">
+                      {{ singleissueViewData?.project?.module }}
+                    </span>
+                  </span>
+                </div>
+              </div>
+  
+              <!-- Attached Files -->
+              <div>
+                <button
+                  data-toggle="modal"
+                  data-target="#myModal3"
+                  class="btn btn-outline-primary"
+                  style="border-radius: 4px; font-size: 14px"
+                >
+                  Attachments
+                </button>
+                <!-- <i class="fa-solid fa-file fa-fade" [matTooltip]="singleissueViewData?.file[0]?.file_name"></i> -->
+              </div>
+            </div>
+            <hr style="width: 100%" />
+            <!-- <div class="row">
+                          
+                      </div> -->
+            <!-- <div class="row">
+                          <div class="col">
+                                                      </div>
+                        
+                      </div> -->
+  
+            <!-- Comment Box -->
+            <div class="cus-issuesContainer1Sub3">
+              <!-- Card 1 -->
+              <div class="cus-issueCard1">
+                <p style="margin-bottom: 6px; font-size: 18px; font-weight: 500">
+                  Task Details
+                </p>
+  
+                <div class="cus-issueCard1Deatils">
+                  <!-- Task Details -->
+                  <div *ngIf="singleissueViewData?.task?.code!= null && singleissueViewData?.task?.code!= undefined &&singleissueViewData?.task?.code!=''" (click)="story_TaskView(singleissueViewData?.task?.id)">
+                    <p class="cus-issueHead-p1" style="cursor: pointer;">
+                      {{ singleissueViewData?.task?.code }}
+                      <!-- {{ singleissueViewData?.task?.task }} -->
+                    </p>
+                  </div>
+  
+                  <div
+                    class="circlecirclecircle-badge2"
+                    title="{{ singleissueViewData?.task?.assigned_to[0]?.name }}"
+                  >
+                    <p style="margin-bottom: 0">
+                      {{
+                        singleissueViewData?.task?.assigned_to[0]?.name
+                          | uppercase
+                      }}
+                    </p>
+                  </div>
+  
+                  <!-- Name: One letter -->
+                  <div>
+                    <ng-container>
+                      <div
+                        class="circle-badge"
+                        title="{{ singleissueViewData?.created_by?.full_name }}"
+                      >
+                        <div>
+                          {{
+                            singleissueViewData?.created_by?.full_name | uppercase
+                          }}
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+  
+                  <!-- <div
+                    class="circle-badge-type"
+                    title="{{ singleissueViewData?.task?.type }}"
+                  >
+                    <p style="margin-bottom: 0">
+                      {{ singleissueViewData?.task?.type | uppercase }}
+                    </p>
+                  </div> -->
+  
+                  <div
+                    class="circle-badge-status"
+                    title="{{ singleissueViewData?.task?.task_status }}"
+                  >
+                    <p style="margin-bottom: 0">
+                      {{ singleissueViewData?.task?.task_status | uppercase }}
+                    </p>
+                  </div>
+  
+                  <!-- <div
+                      class="circle-badge-status"
+                      title="{{ singleissueViewData?.task?.priority_type?.text }}"
+                    >
+                      <p style="margin-bottom: 0">
+                        priority type:
+                        {{
+                          singleissueViewData?.task?.priority_type?.text | uppercase
+                        }}
+                      </p>
+                    </div> -->
+  
+                  <!-- Flag -->
+                  <div>
+                    <mat-icon
+                      *ngIf="singleissueViewData?.priority_type?.text === 'High'"
+                      style="background-color: #f50000"
+                      class="cus-flag"
+                      title="High"
+                      >flag</mat-icon
+                    >
+                    <mat-icon
+                      *ngIf="
+                        singleissueViewData?.priority_type?.text === 'Normal'
+                      "
+                      style="background-color: #ffcc00"
+                      class="cus-flag"
+                      title="Normal"
+                      >flag</mat-icon
+                    >
+                    <mat-icon
+                      *ngIf="singleissueViewData?.priority_type?.text === 'Low'"
+                      style="background-color: #6fddff"
+                      class="cus-flag"
+                      title="Low"
+                      >flag</mat-icon
+                    >
+                  </div>
+                </div>
+  
+                <div class="cus-issueCard1Date">
+                  <p style="margin-bottom: 0">
+                    <b>Start Date:</b>
+                    <span>
+                      {{
+                        singleissueViewData?.task?.start_date
+                          | date : "dd/MM/yyyy"
+                      }}
+                    </span>
+                  </p>
+                  <p style="margin-bottom: 0">
+                    <b>End Date:</b>
+                    <span>
+                      {{
+                        singleissueViewData?.task?.end_date | date : "dd/MM/yyyy"
+                      }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+  
+              <!-- Card 2 -->
+              <div class="cus-issueCard2">
+                <!-- Comment Div -->
+                <div class="cus-commentDiv">
+                  <div>
+                    <label
+                      style="
+                        margin-bottom: 6px;
+                        font-size: 18px;
+                        font-weight: 500;
+                      "
+                      >Comments</label
+                    >
+                    <textarea
+                      [(ngModel)]="commentText"
+                      placeholder="Type your comment..."
+                      style="width: 100%; height: 80px"
+                      matInput
+                    ></textarea>
+                  </div>
+  
+                  <div class="cus-commentDivBtns">
+                    <div class="file-upload" style="margin-bottom: 0">
+                      <label for="file-input" style="margin-bottom: 0">
+                        <i class="fas fa-file-upload"></i> Attach File
+                      </label>
+                      <input
+                    id="file-input"
+                    type="file"
+                    multiple
+                    (change)="onFileSelect($event)"
+                    accept="image/*"
+                  />
+                    </div>
+  
+                    <div>
+                      <button
+                        class="btn btn-outline-primary"
+                        style="font-size: 14px"
+                        (click)="saveComment()"
+                      >
+                       Comment
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div *ngFor="let file of reuploadfileArr;let index = index" class="cus-attachCard">
+                  
+                  <span>{{ file.name }}</span>
+                  <button mat-icon-button type="button" (click)="attachmentDelete(file.name, index)">
+                    <mat-icon style="color: blue" aria-label="Delete">delete</mat-icon>
+                  </button>
+                </div>
+                <!-- Comment View -->
+                <div class="cus-taskView-comment2">
+                  <div *ngFor="let item of commenthistoryarr">
+                    <mat-card>
+                      <mat-card-header>
+                        <mat-card-title><span style="font-weight: bold;">Comment: </span>{{ item.comment }} </mat-card-title>
+                        <div class="cus-taskView-comment2-sub">
+                          <mat-card-subtitle
+                            ><span  style="font-weight: bold;">Created by:</span>
+                            {{ item.created_by.name  }}</mat-card-subtitle>
+                          <mat-card-subtitle 
+                          > <span style="font-weight: bold;">Created Time :</span>
+                          {{
+                            formatCreatedDate(item.created_date)
+                          }}</mat-card-subtitle>
+                         
+                        </div>
+                        <div class="cus-popupIconsDiv">
+                          <button
+                            mat-icon-button
+                            class="btn btn-outline-secondary"
+                            (click)="deleteComment(item.id)" 
+                          >
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                          <span class="cus-taskViewFlagsDiv" *ngIf="item.file">
+                            <button
+                              mat-icon-button
+                              data-toggle="modal"
+                              data-target="#myModal4"
+                              class="btn btn-outline-secondary"
+                              (click)="fileview(item)"
+                            >
+                              <mat-icon style="font-size: 16px"
+                                >file_open</mat-icon
+                              >
+                            </button>
+                          </span>
+                        </div>
+                      </mat-card-header>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  
+    <div
+      class="modal fade"
+      id="myModal3"
+      data-backdrop="static"
+      data-keyboard="false"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header" style="background-color: #044063;color: white;">
+            <p class="modal-title" style="margin-bottom: 0">Issues Attachemnts</p>
+            <button type="button" class="close" data-dismiss="modal" style="color: white;">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngFor="let file of singleissueViewData?.file">
+              <a (click)="downloadfile(file)">{{ file.file_name }}</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #044063;color: white;">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="myModal4"
+      data-backdrop="static"
+      data-keyboard="false"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header" style="background-color: #044063;color: white;">
+            <p class="modal-title" style="margin-bottom: 0">Issues Attachemnts</p>
+            <button type="button" class="close" data-dismiss="modal" style="color: white;">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngFor="let file of commentfile">
+              <a (click)="downloadfile(file)">{{ file.file_name }}</a>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #044063;color: white;">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="taskview">
+    <app-taskviews
+      (OnSubmit)="backtoTaskSummary()"
+      (OnCancel)="backtoTaskSummary()"
+    ></app-taskviews>
+  </div>
+  

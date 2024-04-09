@@ -1,0 +1,239 @@
+<div class="container" style="margin-top: 2%;">
+
+    <form [formGroup]="attendanceReportsearchForm">
+        <div class="row">
+            <div class="col-md-3">
+                <mat-label> Employee </mat-label>
+                <mat-form-field   (click)="getemployee('')">
+                    <input #empInput placeholder="Select Employee"  matInput
+                        formControlName="emp" [matAutocomplete]="emp"
+                        (keyup)="getemployee(attendanceReportsearchForm.value.emp)">
+                    <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                        <mat-option *ngFor="let emp of employeeList" [value]="emp"
+                        title="{{emp.full_name}}">{{emp.full_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+            </div>
+            <!-- <div class="col-md-3">
+                <input type="month" id="start" name="start" formControlName="monthyear" min="2015-01"
+                    style="width: 200px; margin-top: 30px;">
+            </div> -->
+            <div class="col-md-3">
+                <mat-label> Month </mat-label>
+                <mat-form-field dateFormat2>
+                    <input matInput [matDatepicker]="dp" [formControl]="monyear"
+                    (dateChange)='ChangeDateFormat("monthyear")'
+                     placeholder="Month and Year" formControlName="monthyear">
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker #dp startView="multi-year"
+                                    (yearSelected)="chosenYearHandler($event)"
+                                    (monthSelected)="chosenMonthHandler($event, dp)"
+                                    panelClass="example-month-picker">
+                    </mat-datepicker>
+                  </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+                <div style="margin-top: 26px;">
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        aria-label="Search" (click)="AttendanceReportSearch('')">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        (click)="resetAttendanceReport()">Clear</button>
+
+                    <button mat-raised-button type="button" style="margin-left: 20px;"
+                        (click)="Attendanceexceldownload()">
+                        <span class="material-icons">download</span>Export </button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <!-- <pre>{{attendanceReportsearchForm.value | json}}</pre> -->
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+        <span class="badge badge-primary leftspace">Holiday - H </span>
+        <span class="badge badge-secondary leftspace">Weekend - W</span>
+        <span class="badge badge-success leftspace">Present - P</span>
+        <span class="badge badge-danger leftspace">Absent - A</span>
+        <span class="badge badge-dark leftspace">Present on DayOff - P</span>
+
+        <div class="table-responsive tableFixHeaddiv">
+
+            <table class="table table-bordered outertable" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th class="tablecolumn">S.No</th>
+                        <th class="tablecolumn">Employee</th>
+                        <th class="tablecolumn">Days Present <br><small>(in a Month)</small></th>
+                        <!-- <th>Hours Present <br><small>(in a Month)</small></th> -->
+                        <th *ngFor="let days of ListOfDaysInSelectedMonth; let i = index"
+                            style="text-align: center;"> <span style="padding: 20px;"> {{days?.day}} </span>
+                            <small> {{days?.date | date: 'EEEEEE'}} </small>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of arrReport?.data; let index = index">
+                        <td  class="tablecolumn">{{index+1}}</td>
+                        <td  class="tablecolumn">({{data?.code}}) {{data?.name}}</td>
+                        <td class="tablecolumn">{{data?.present_count}}</td>
+                        <!-- <td>{{data?.duration}}</td> -->
+                        <td *ngFor="let datascheck of ListOfDaysInSelectedMonthFull; let indextwo = index;"
+                            class="attendanceMark">
+                            <span data-toggle="modal" data-target=".popupReport" data-backdrop='static'
+                                data-keyboard='false'
+                                (click)="getAttendanceBasedOnEmployee(data, datascheck); getSelectedEMP(datascheck, 'summary'); activityData(datascheck,'summary', data);"
+                                [ngClass]="data[datascheck] == 'Present'?'presentstyle': data[datascheck]=='Absent'?'absentstyle': data[datascheck]=='Absent (PL)' ?'absentstyle': data[datascheck]=='Absent (CL)' ?'absentstyle':data[datascheck]=='Absent (SL)'?'absentstyle':data[datascheck]=='Absent (LOP)' ?'absentstyle':data[datascheck]=='WFH'?'weekendHolidayPresent': data[datascheck]=='COMP-OFF'?'weekendHolidayPresent':data[datascheck]=='Holiday' ?'holiday': data[datascheck]=='Weekend' ?'weekend': ''"
+                                class=" material-icons">
+                                {{data[datascheck] == "Present"?"done": data[datascheck] == 'Absent'?'close':
+                                data[datascheck] == 'Absent (PL)'?'close': data[datascheck] == 'Absent
+                                (CL)'?'close':data[datascheck] == 'Absent (SL)'?'close':data[datascheck] ==
+                                'Absent (LOP)'?'close':data[datascheck] == 'WFH'?'settings_remote':
+                                data[datascheck] == 'COMP-OFF'?'C':data[datascheck] == 'Holiday'?'H':
+                                data[datascheck] == 'Weekend'?'W': ''}}
+
+                            </span>
+
+
+
+
+
+                        </td>
+ 
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="arrReport?.attendance_data?.length==0 || arrReport == undefined ; else paginationarrReport"
+            class="NodataAlign text-center">No Records Found...</div>
+        <ng-template #paginationarrReport>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                <button type="button" mat-icon-button [disabled]="has_previousattreport === false"
+                    color="primary" (click)="AttendanceReportSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button> {{presentpageattreport}}
+                <button type="button" mat-icon-button [disabled]="has_nextattreport === false" color="primary"
+                    (click)="AttendanceReportSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade popupReport" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-8">
+                        <div id="NoteViewTable">
+                            <table class="table table-bordered size">
+                                <thead>
+                                    <tr>
+                                        <th scope="col tablecolumn">Day</th>
+                                        <th scope="col"> In</th>
+                                        <th scope="col"> Out</th>
+                                        <th scope="col">Duration
+                                            <br><small>(in Hrs)</small>
+                                        </th>
+                                        <th scope="col">Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let day of ListOfDaysInSelectedMonthFull; let indextwo = index">
+                                    <tr
+                                        [ngClass]="selectedclass== indextwo?'breadcrumbdataselected': 'breadcrumbdatawhite' ">
+                                        <td class="textdec tablecolumn">
+                                            <span (click)="activityData(day, 'popup' )"
+                                                (click)="getSelectedEMP(indextwo, 'popup')">{{day}} </span>
+                                        </td>
+                                        <ng-container *ngFor="let dataset of MonthlyActivityReport">
+                                            <ng-container *ngIf="day == dataset?.log_date;">
+                                                <td>{{dataset?.first_check_in | date:'shortTime'}}</td>
+                                                <td>{{dataset?.last_check_in | date:'shortTime'}}</td>
+                                                <td> {{dataset?.duration}} </td>
+                                                <td>{{dataset?.flag}}</td>
+                                            </ng-container>
+
+                                        </ng-container>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+
+                        <div class="card">
+                            <div class="card-body" id="NoteView">
+                                <h3 class="card-title"> Name:
+                                    ({{BasicDetails?.code}})
+                                    {{BasicDetails?.name}} </h3>
+                                <h3 class="card-title">
+                                    ({{ActivityDataList | date:
+                                    'dd-MMM-yyyy'}}) </h3>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Inside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.in_time}}
+                                            <small>hrs</small>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                        <h5>Outside Time</h5>
+                                        <div class="designBoxInOut">
+                                            {{logActivityList?.active_status?.out_time}}
+                                            <small>hrs</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br>
+                                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>In</th>
+                                            <th>Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let dataLog of logActivityList?.log">
+                                            <td>{{dataLog?.check_in |
+                                                date:'shortTime'}}</td>
+                                            <td>{{dataLog?.check_out |
+                                                date:'shortTime'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

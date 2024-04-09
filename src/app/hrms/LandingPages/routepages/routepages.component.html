@@ -1,0 +1,32 @@
+<div>
+    <nav>
+        <div class="nav nav-tabs">
+            <span class="nav-item nav-link" data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                *ngFor="let sub of LandingPageObjects.Menu_List;index as i">
+                {{sub.name}}
+            </span>
+           
+        </div>
+
+        
+    </nav>
+
+    <mat-card>
+        <router-outlet></router-outlet>
+    </mat-card>
+
+    
+</div>
+
+
+<!-- <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive #rla="routerLinkActive"
+      [active]="rla.isActive">
+      {{link.label}}
+    </a>
+</nav>
+<router-outlet></router-outlet> -->
+
+
+
+

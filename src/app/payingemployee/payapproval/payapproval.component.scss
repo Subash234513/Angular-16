@@ -1,0 +1,140 @@
+.highlight2
+{
+    background-color: #F3F7F0;
+}
+
+#heads
+{
+    font-size: smaller;
+    font-weight: bold;
+    width: 100px;
+    text-align: center;
+}
+
+.rowStyle
+{
+    text-align: center;
+  
+}
+.mismatch
+{
+    background-color:gray;
+}
+td
+{
+    font-size: smaller;
+}
+.maindiv
+{
+    margin:2%;
+}
+
+#heading
+{
+    margin-left: 2%;
+}
+
+#matfabs
+{
+    margin-left: 43%;
+    background-color: #f5c68b;
+}
+
+#monthss
+{
+    width: 145%;
+}
+#yearss
+{
+    width: 130%;
+    margin-left: 16%;
+}
+
+#filterss
+{
+    width: 78%;
+}
+
+#statuslabel
+{
+    margin-left: -30%;
+}
+#statusfield
+{
+    width: 86%;
+     margin-left: -30%;
+}
+#searchbtn
+{
+    margin-left: -24%;
+    background-color: white;
+    margin-top: 42%;
+}
+
+#clearbtn
+{
+    margin-left: -24%;
+    background-color: white;
+    margin-top: 43%;
+}
+#tablediv
+{
+    overflow-x: scroll;
+}
+
+#tablemain
+{
+    width: 182%;
+}
+#theader
+{
+    padding-left: 0px;
+    width: 2%;
+}
+#empheader
+{
+    font-size: small;
+    font-weight: bold;
+    text-align: center;
+    width: 100px; 
+    border-left: 1px dotted;
+    position:sticky; 
+    left: 42px !important;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+.mat-form-field,div,.mat-option,.mat-fab,.mat-button,button,.mat-menu-item,p {
+    font-family: 'Inter', sans-serif;
+  }
+
+
+.material-icons {
+    font-family: 'Material Icons', sans-serif;
+}
+#downbtn
+{
+    float: right;
+}
+#searchbtns
+{
+    margin-left: 90%;
+}
+
+.smallinput{
+    width: 120px;
+   
+  }
+
+  .spacingForm {
+    margin-left: 30px; 
+    // margin-left: 104%;
+    // margin-top: -2%;
+  }
+  #tablemains
+{
+    width: 100%;
+}
+

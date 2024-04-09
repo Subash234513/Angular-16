@@ -1,0 +1,447 @@
+<div>
+    <!-- <h3>
+        eClaim Tour
+    </h3>
+    <h3 style="color:deeppink;">
+        Tour
+    </h3> -->
+    <div class="col-md-12">
+        <p style="color: black;font-size: 20px;font-weight: 500px;">
+
+            eClaim Requierments Report
+            <!-- <button mat-icon-button matTooltip="Excel Download" style="float: right;background-color: #3ba8b9" (click)="pagexldownload()" ><mat-icon>file_download</mat-icon></button> -->
+        </p>
+
+    </div>
+
+
+    <!-- <form #reporttourdetailForm="ngForm">
+            <tr>
+                <td *ngIf="reportindex === 1">
+                <mat-form-field style="width:175px;">
+                    <mat-label>Tour No</mat-label>
+                    <input matInput placeholder="Tour No" [(ngModel)]="tourreportid" name="requestno" [disabled]="true">
+                </mat-form-field>
+            </td>
+            <td *ngIf="reportindex === 3">
+                <mat-form-field style="width:175px;">
+                    <mat-label>Tour No</mat-label>
+                    <input matInput placeholder="Tour No" [(ngModel)]="emptourreportid" name="requestno" [disabled]="true">
+                </mat-form-field>
+            </td>
+            <td>
+                <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 250px;color: blue;"
+                (click)="touradvance()"><span matTooltip="View Advance" class="fa fa-arrow-up" aria-hidden="true" ></span>
+            </button><br>
+            
+               
+            </td>
+            <td>
+                <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 180px;color:blueviolet;"
+                 (click)="tourexpense()"><span matTooltip="View Expense" class="fa fa-arrow-up" aria-hidden="true" ></span>
+                 </button><br>
+                 
+            </td>
+            <td>
+                <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 180px;"
+                color="primary" (click)="download()" ><i matTooltip="Download" class="fa fa-download" aria-hidden="true"></i></button>
+            </td> 
+            </tr><br><br>
+            <tr>
+            <td>
+                <div style="margin-left: 400px;">
+               View Advance
+            </div>
+            </td>
+            <td>
+            <div style="margin-left: 125px;">
+                <label>View Expense</label>
+                </div>
+            </td>
+        </tr>
+            </form> -->
+
+</div>
+
+<div *ngIf="tourrequirementid == '5' " >
+    <div class="row">
+        <div class="table-responsive"  style="padding-left:20px">
+            <table class="table" style="margin-top: 10px;width: 290%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th >S.No</th>
+                        <th >Travel NO</th>
+                        <th >Booking Date</th>
+                        <th >Employee ID</th>
+                        <!-- <th >Branch</th> -->
+
+                        <th >Employee Name</th>
+                        <th >Purpose</th>
+                        <th >Client Name</th>
+                        <th >Reference No</th>
+                        <th >Travel Status</th>
+
+                        <!--<th >Place of Visit</th>
+                        <th >Purpose of Visit</th> -->
+                        <!-- <th  > View </th> -->
+                        <th >Date Of Travel</th>
+                        <th >Difference in days (Booking date Vs DOT) </th>
+                        <th >Domestic/International</th>
+
+                        <th >From Place</th>
+                        <th >To Place</th>
+                        <th >From Time</th>
+                        <th >To Time</th>
+
+                        <th >Vendor Name</th>
+
+                        <th >Booking Type</th>
+                        <th >PNR</th>
+
+                        <th >Approved By</th>
+                        <!-- <th >Cost per pax</th> -->
+                        <th >Ticket Cost</th>
+                        <!-- <th >Fare Quoted</th> -->
+
+                        <!-- <th >Difference in amount |  currency:"INR"</th> -->
+
+                        <th >Sundays</th>
+                        <th >Website</th>
+
+
+                        <th >Issuance Type</th>
+
+                        <th >Ticket No</th>
+
+                        <th >Status</th>
+                        <th >Cancelled Date</th>
+
+
+
+                        <th >Loss of Cancellation</th>
+
+
+
+                        <th >Refund Amount</th>
+                        <th >Refund Date</th>
+                        <th >Reason for Cancellation/No-show</th>
+
+
+                        <th >Official/Personal</th>
+                        <th >Remarks</th>
+
+                        <!-- <th  >Ticket Cost</th> -->
+
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let detail of gettourdetailreportList; index as i">
+                        <td >{{(presentpage - 1)*10+i+1}}</td>
+                        <td >{{detail.tour_id}}</td>
+                        <td >{{detail.created_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+                        <td >{{detail.empcode}}</td>
+                        <!-- <td >{{detail.branch_name}}</td> -->
+
+                        <td >{{detail.empname}}</td>
+                        <td >{{detail.purpose_ofvisit}}</td>
+                        <td >{{detail.client}}</td>
+                        <td >{{detail.ref_no}}</td>
+
+                        <td >{{detail.tour_status}}</td>
+
+                        <td >{{detail.from_time | date:'dd-MMM-yyyy, EEE HH:mm'}}</td>
+                        <td >{{detail.difference_indays}}</td>
+                        <td >{{detail.domestic}}</td>
+
+
+                        <td >{{detail.from_place}}</td>
+                        <td >{{detail.to_place}}</td>
+                        <td >{{detail.fromtime}}</td>
+                        <td >{{detail.totime}}</td>
+
+                        <td >{{detail.vendor_name}}</td>
+
+
+                        <td >{{detail.booking_needed}}</td>
+                        <td >{{detail.pnr_no}}</td>
+
+                        <td >{{detail.approver}}</td>
+
+                        <!-- <td >{{detail.costper_head}}</td> -->
+                        <td >{{detail.ticket_amount |  currency:"INR"}}</td>
+                        <!-- <td >{{detail.fare_quoted}}</td> -->
+
+                        <!-- <td >{{detail.difference_inamount |  currency:"INR"}}</td> -->
+                        <td >{{detail.weekend_travel}}</td>
+
+                        <td >{{detail.website}}</td>
+
+
+                        <td >{{detail.issuance_type}}</td>
+
+                        <td >{{detail.ticket_no}}</td>
+
+
+                        <td >{{detail.booking_status}}</td>
+
+                        <td >{{detail.cancelled_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+                        <td >{{detail.loss_of_cancelation}}</td>
+
+
+
+                        <td >{{detail.refund_amount |  currency:"INR"}}</td>
+                        <td >{{detail.refund_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+                        <td >{{detail.cancel_reason}}</td>
+
+                        <td >{{detail.official}}</td>
+                        <td >{{detail.comments}}</td>
+
+
+                        <!-- <td >{{detail.ticket_amount |  currency:"INR"}}</td> -->
+
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12 ">
+            <div *ngIf="gettourdetailreportList?.length==0; else paginationreport" class="NodataAlign text-center">No
+                Records Found...
+            </div>
+            <ng-template #paginationreport>
+                <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;float: right;">
+                    <button mat-icon-button [disabled]="has_previous === false" color="primary"
+                        (click)="previousClick()">
+                        <mat-icon>arrow_back
+                        </mat-icon>
+                    </button> {{presentpage}}
+                    <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+                        <mat-icon>arrow_forward
+                        </mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="col-md-12 " style="margin-top: 2%;"> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                style="border-radius: 40px;margin-left: 10px;">Back</button> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-light" id="secondarybtn"
+            style="border-radius: 11px;">Back</button>
+    </div> -->
+    </div>
+</div>
+
+<div *ngIf="tourrequirementid == '1' " >
+    <div class="row">
+        <div class="table-responsive"  style="padding-left:20px">
+            <table class="table" style="margin-top: 10px;width: 230%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th >S.No</th>
+                        <th >Travel NO</th>
+                        <th >Request Date</th>
+
+                        <th >Booking Date</th>
+                        <th >Employee ID</th>
+                        <!-- <th >Branch</th> -->
+
+                        <th >Employee Name</th>
+                        <th >Team</th>
+
+                        <th >Purpose</th>
+                        <!-- <th >Entity</th> -->
+
+                        <th >Approval Status</th>
+                        <th >Location</th>
+                        <th >Hotel Name</th>
+                        <th >Room Type</th>
+                        <th >CheckIn</th>
+                        <th >CheckOut</th>
+                        <th >No of Nights</th>
+                        <th >Rack rate/night</th>
+                        <th >Total(A)</th>
+                        <th >NAC Rate</th>
+                        <th >Total(B)</th>
+                        <th >Cost Saved(A-B)</th>
+                        <th >Web site</th>
+                        <th >Booked By</th>
+                        <th >Remarks 1</th>
+                        <th >Remarks</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let detail of gettourdetailreportList; index as i">
+                        <td >{{(presentpage - 1)*10+i+1}}</td>
+                        <td >{{detail.tour_id}}</td>
+                        <td >{{detail.request_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+
+                        <td >{{detail.created_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+                        <td >{{detail.empcode}}</td>
+                        <!-- <td >{{detail.branch_name}}</td> -->
+
+                        <td >{{detail.empname}}</td>
+                        <td >{{detail.team_name}}</td>
+
+                        <td >{{detail.purpose_ofvisit}}</td>
+                        <!-- <td >{{detail.entity}}</td> -->
+
+                        <td >{{detail.tour_status}}</td>
+                        <td >{{detail.location}}</td>
+                        <td >{{detail.hotel_name}}</td>
+                        <td >{{detail.room_type }}</td>
+                        <td >{{detail.from_time | date:'dd-MMM-yyyy, EEE HH:mm'}}</td>
+                        <td >{{detail.to_time | date:'dd-MMM-yyyy, EEE HH:mm'}}</td>
+                        <td >{{detail.night}}</td>
+                        <td >{{detail.ratenight}}</td>
+                        <td >{{detail.total_a}}</td>
+                        <td >{{detail.nac_rate}}</td>
+                        <td >{{detail.total_b}}</td>
+                        <td >{{detail.cost_saved}}</td>
+                        <td >{{detail.website}}</td>
+                        <td >{{detail.booked_by}}</td>
+                        <td >{{detail.remarks_1}}</td>
+                        <td >{{detail.remark}}</td>
+                       
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12 ">
+            <div *ngIf="gettourdetailreportList?.length==0; else paginationreport" class="NodataAlign text-center">No
+                Records Found...
+            </div>
+            <ng-template #paginationreport>
+                <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;float: right;">
+                    <button mat-icon-button [disabled]="has_previous === false" color="primary"
+                        (click)="previousClick()">
+                        <mat-icon>arrow_back
+                        </mat-icon>
+                    </button> {{presentpage}}
+                    <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+                        <mat-icon>arrow_forward
+                        </mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="col-md-12 " style="margin-top: 2%;"> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                style="border-radius: 40px;margin-left: 10px;">Back</button> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-light" id="secondarybtn"
+            style="border-radius: 11px;">Back</button>
+    </div> -->
+    </div>
+</div>
+
+<div *ngIf="tourrequirementid == '2' " >
+    <div class="row">
+        <div class="table-responsive"  style="padding-left:20px">
+            <table class="table" style="margin-top: 10px;width: 230%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th >S.No</th>
+                        <th >Travel NO</th>
+                        <th >Request Date</th>
+
+                        <th >Booking Date</th>
+                        <th >Employee ID</th>
+                        <!-- <th >Branch</th> -->
+
+                        <th >Employee Name</th>
+                        <th >Team</th>
+                        <th >Cab Type</th>
+                        
+                        <th >Purpose</th>
+                        <!-- <th >Entity</th> -->
+
+                        <th >Approval Status</th>
+                        <th >Location</th>
+                        <th >Pick up date(DD/MM/YYYY)</th>
+                        <th >Reporting Place</th>
+                        <th >Reporting Time</th>
+                        <th >Instructions</th>
+                        <th >Car Segment</th>
+                        <th >Vendor</th>
+                        <th >Payment Mode</th>
+                        <th >Invoice Date(DD/MM/YYYY)</th>
+                        <th >Invoice no</th>
+                        <th >Invoice Amount</th>
+                        <th >Official/Personal</th>
+                        <th >Remarks</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let detail of gettourdetailreportList; index as i">
+                        <td >{{(presentpage - 1)*10+i+1}}</td>
+                        <td >{{detail.tour_id}}</td>
+                        <td >{{detail.request_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+
+                        <td >{{detail.created_date | date: 'dd-MMM-yyyy, EEE' }}</td>
+                        <td >{{detail.empcode}}</td>
+                        <!-- <td >{{detail.branch_name}}</td> -->
+
+                        <td >{{detail.empname}}</td>
+                        <td >{{detail.team_name}}</td>
+                        <td >{{detail.cab_type}}</td>
+
+                        <td >{{detail.purpose_ofvisit}}</td>
+                        <!-- <td >{{detail.entity}}</td> -->
+
+                        <td >{{detail.tour_status}}</td>
+                        <td >{{detail.location}}</td>
+                        <td >{{detail.pickuptime}}</td>
+                        <td >{{detail.to_place}}</td>
+                        <td >{{detail.to_time}}</td>
+                        <td >{{detail.instructions}}</td>
+                        <td >{{detail.car_segment}}</td>
+                        
+                        <td >{{detail.vendor_name}}</td>
+                        <td >{{detail.payment_mode}}</td>
+                        <td >{{detail.invoice_Date}}</td>
+                        <td >{{detail.invoice_no}}</td>
+                        <td >{{detail.invoice_amount |  currency:"INR"}}</td>
+                        <td >{{detail.official}}</td>
+                        <td >{{detail.remarks}}</td>
+     
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12 ">
+            <div *ngIf="gettourdetailreportList?.length==0; else paginationreport" class="NodataAlign text-center">No
+                Records Found...
+            </div>
+            <ng-template #paginationreport>
+                <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;float: right;">
+                    <button mat-icon-button [disabled]="has_previous === false" color="primary"
+                        (click)="previousClick()">
+                        <mat-icon>arrow_back
+                        </mat-icon>
+                    </button> {{presentpage}}
+                    <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+                        <mat-icon>arrow_forward
+                        </mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="col-md-12 " style="margin-top: 2%;"> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                style="border-radius: 40px;margin-left: 10px;">Back</button> -->
+        <!-- <button type="button" (click)="onCancelClick()" class="btn btn-light" id="secondarybtn"
+            style="border-radius: 11px;">Back</button>
+    </div> -->
+    </div>
+</div>

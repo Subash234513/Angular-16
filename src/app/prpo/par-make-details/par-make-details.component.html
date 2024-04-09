@@ -1,0 +1,191 @@
+<div>
+    <form [formGroup]="PARmakerForm">
+        <div class="header">
+            <h2>
+                Budget Proposal Approval (BPA Maker)
+            </h2>
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label>BPA Number</mat-label>
+                            <input matInput placeholder="BPA Number" autocomplete="off" disabled >
+                        </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field class="inputformat" style="width:175px;margin-left: 50px;">
+                            <mat-label> Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" 
+                                placeholder="Start Date" formControlName="date" required>
+                            <mat-datepicker-toggle matSuffix  [for]="picker1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;" >
+                            <mat-label>Year</mat-label>
+                            <mat-select formControlName="year">
+                                <mat-option *ngFor="let year of FinancialYearList" [value]="year.text">
+                                    {{year.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> BPA Amount</mat-label>
+                            <input matInput type="number" placeholder="BPA Amount" (keypress)="numberOnly($event)"
+                               autocomplete="off" formControlName="amount" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="inputformatlongdesc">
+                            <mat-label> BPA Name</mat-label>
+                            <input matInput placeholder="BPA Name" formControlName="desc" autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td> <span class="material-icons" data-toggle="modal"
+                            data-target=".bd-example-modal-xl" style="margin-left: 15px;">description</span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">
+                            Note Pad
+                        </h2>
+                    </div>
+                    <br>
+                    <div style="margin-left: 50px;width:90%;height: 70%;">
+                        <div>
+                            
+                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                (mediaDelete)="onDelete($event)" (summernoteInit)="summernoteInit($event)"
+                                formControlName="content">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                            class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="margin-left: 4%;">BPA Details</h2>
+        <div>
+        <button type="button" class="btn btn-outline-success" (click)="addSection(this.PARmakerForm.get('pardetails').value)"
+        style="margin-left: 1000px; border-radius:40px;"><span class="fa fa-plus"></span></button></div>
+        <div class="table-responsive" id="styleScroll" style="margin-top: 2%;width: 90%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header>
+                        <th>S.No</th>
+                        <th>Expense Type</th>
+                        <th>Request For</th>
+                        <th>Description</th>
+                        <th>Year</th>
+                        <th>Amount</th>
+                        <th>Remarks</th>
+                        <th>File Uploads</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="pardetails" *ngFor="let section of getSections(PARmakerForm); let i = index">
+                    <tr [formGroupName]="i">
+
+                        <td>{{i+1}}</td>
+                        <td>
+                            <mat-form-field style="width: 175px;" >
+                                <mat-label>Expense</mat-label>
+                                <mat-select formControlName="exptype">
+                                    <mat-option *ngFor="let type of expensetype" 
+                                    (click)="duplicateCheckExpense()"
+                                    [value]="type.text">{{type.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="inputformatlong" (click)="getreqforFK()">
+                                <mat-label>Request For</mat-label>
+                                <input #rforInput placeholder="Search Request For" matInput formControlName="requestfor"
+                                    [matAutocomplete]="rfor">
+                                <mat-autocomplete #rfor="matAutocomplete" [displayWith]="displayFnrfor.bind(this)"
+                                    (opened)="autocompleterforScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let rfor of requestforList" [value]="rfor.name">
+                                            {{rfor.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Description" formControlName="desc" autocomplete="off"
+                                    required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Year" formControlName="year" autocomplete="off" min=1 (keypress)="omit_special_num($event)" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput type="number" pattern="\d*" maxlength="16" placeholder="Amount" (keypress)="omit_special_num($event)"
+                                    formControlName="amount" (focusout)="datasums()" autocomplete="off" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off"
+                                    required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+
+                            <input type="file" #fileInput id="uploadFile" class="choose-file"
+                                (change)="onFileSelected($event, i)" style="width:250px;" name="uploadFile" />
+                        </td>
+                        <td>
+                            <!-- <span (click)="addSection()" class="material-icons"> note_add</span>  *ngIf="getSections(PARmakerForm).length > 1"-->
+                            <span  (click)="removeSection(i)"
+                                class="material-icons">delete</span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tr>
+                    <th class="totaldisplay" colspan="5">Total Amount:</th>
+                    <td class="rightaligntotal">{{sum | amountPipeCustom }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="submitCancel">
+            <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary"
+                (click)="parmakerSubmit()" [disabled]="clicked">Submit</button>
+            <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()">Cancel</button>
+        </div>
+    </form>
+</div>
+<!-- <pre>
+    {{PARmakerForm.value | json}}
+</pre> -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>
+
+<!-- [disabled]="PARmakerForm.invalid || clicked" -->

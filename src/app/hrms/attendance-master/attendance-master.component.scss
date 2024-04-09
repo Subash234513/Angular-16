@@ -1,0 +1,250 @@
+
+// ::ng-deep .mat-form-field-outline {
+//     color:grey !important;
+//   }
+//   ::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+//     color: red!important;
+//     opacity: 0.8!important;
+//   }
+// //   .matformfieldstyle{
+// //     font-size:7px;
+// //     margin-top: 5px
+// //   }
+//   .matformfieldinputstyle{
+//     font-size:16px ;
+//   }
+//   .maticonsize{
+//     font-size:15px;
+//   }
+  
+//   .mat-option:hover {
+//     background:#EDF8FA !important;
+//   }
+//   // button:hover {
+//   //   background:#EDF8FA !important;
+//   // }
+  
+//   // table
+//   #commonstyle{
+//     border:15px none #f6f6f6
+//     }
+  
+//     tr:nth-child(even) {background: #EDF8FA}
+//     tr:nth-child(odd) {background: #FFF}
+//   table,th,td{
+//     text-align: left;
+//     // padding: 5px;
+//   }
+
+
+// .navbar-light .navbar-nav .nav-link {
+//   color: black;
+//   font-size: 18px;
+//   cursor: pointer;
+// }
+
+// .tab-btn {
+//   margin-left: 81%;
+//   position: relative;
+// }
+
+// .nav-item.show .nav-link,
+// .nav-tabs .nav-link.active {
+//   background-color: transparent !important;
+//   color: #21cbe5 !important;
+//   text-decoration: underline;
+//   cursor: pointer;
+// }
+
+// .nav-tabs .nav-link:hover {
+//   border: none !important;
+//   cursor: pointer;
+// }
+
+// .nav-tabs .nav-link {
+//   border: none;
+//   cursor: pointer;
+// }
+
+// .aligncenter{
+//   text-align: center;
+// }
+
+// .table th td{
+//   text-align: center;
+// }
+
+// .cursor{
+//   cursor: pointer;
+// }
+// .mat-chip{
+//   background-color: white !important;
+//   border: 1px solid #B7B8BB;
+//   border-radius: 16px;
+// }
+
+// .container {
+//   margin: 10px 15px 100px 10px;
+// }
+// .alignvertical {
+//   vertical-align: middle;
+//   cursor: pointer;
+// }
+
+// .ddheight {
+//   padding: 3px 3px 3px 3px;
+// }
+
+// .positiontext{
+//   font-size: 14px;
+// }
+// .buttonwidth {
+//   font-size: 20px;
+// }
+
+// .tablepaddingsizeheader{
+//   width: 50%;
+//   margin-left: 20px;
+// }
+// .tablepaddingsizeheader tr th{
+//   padding: 5px;
+//   margin:10px;
+// }
+
+// .matformfieldstyle {
+//   font-size: 7px;
+//   margin-top: 5px
+// }
+// .matformfieldinputstyle {
+//   font-size: 16px;
+// }
+// .maticonsize {
+//   font-size: 15px;
+// }
+
+
+.matformfieldstyle{
+    font-size:8px;
+    margin-top: 5px
+  
+}
+
+.matformfieldinputstyle{
+    font-size:15px ;
+}
+.maticonsize{
+    font-size:16px;
+}
+
+
+.tick-mark {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 20px;
+  }
+  
+  .tick-mark::before {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 50%;
+    width: 3px;
+    background-color: green;
+    content: "";
+    transform: translateX(3px) rotate(-44deg);
+    transform-origin: left bottom;
+  }
+  
+  .tick-mark::after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: green;
+    content: "";
+    transform: translateX(3px) rotate(-45deg);
+    transform-origin: left bottom;
+  }
+
+  .un-tick-mark {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 20px;
+  }
+  
+  .un-tick-mark::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: red;
+    content: "";
+    transform: translateX(22px) rotate(-45deg);
+    transform-origin: left bottom;
+  }
+  
+  .un-tick-mark::after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: red;
+    content: "";
+    transform: translateX(7px) rotate(-45deg);
+    transform-origin: left bottom;
+  }
+
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+
+//   .nav-item.show .nav-link,
+// .nav-tabs .nav-link.active {
+// background-color: transparent !important;
+// color: #21cbe5 !important;
+
+// cursor: pointer;
+// }
+
+
+
+  .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  background-color: transparent !important;
+  color: #044063 !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+// .nav-tabs .nav-link:hover {
+//   border: none !important;
+//   cursor: pointer;
+// }
+
+// .nav-tabs .nav-link {
+//   border: none;
+//   cursor: pointer;
+// }
+
+// #commonstyle {
+//   border: 15px none #f6f6f6
+// }
+
+// .table tr:nth-child(even) {
+//   background: #EDF8FA
+// }
+
+// .table tr:nth-child(odd) {
+//   background: #FFF
+// }
+
+// .table tr{
+//   text-align: left;
+// }
+
+  

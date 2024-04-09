@@ -1,0 +1,25 @@
+<div class="wholemargin" >
+    <mat-card class="mat-elevation-z0">
+
+    <div class="alingleft">
+        <div class="col-md-12 row">
+                
+          <nav>
+            <div class="nav nav-tabs" style="margin-top: 1%;">
+              <span class="nav-item nav-link" id="subname" (click)="tabselect(i,menu)"
+                [ngClass]="(currenttabindex == i)? 'active':''" role="tab" *ngFor='let menu of urls;let i= index'
+                routerLink="/fet/main{{menu.url}}">
+                {{menu.name}}
+              </span>
+            </div>
+          </nav>
+      
+        </div>
+        <br>
+        <router-outlet></router-outlet>
+      
+      </div>
+      </mat-card>
+</div>
+
+<!-- <p>{{urls | json}}</p> -->

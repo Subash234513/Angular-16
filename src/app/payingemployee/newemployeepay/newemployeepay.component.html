@@ -1,0 +1,165 @@
+
+<div class="mainsect">    
+    <div *ngIf="isshowemployeedetails">            
+        <div class="container">
+            <div class="row" style="margin-bottom: 1%;">
+                <div class="col-md-10" style="font-size: large;">
+                    Employee Details
+                </div>
+                <div class="col-md-2">
+                    <button mat-flat-button color="primary" style="    width: 75%;">+ Add</button>
+                </div>
+            </div>
+        <mat-card>
+        <div class="row" style="margin-bottom: 1%;">  
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <form [formGroup]="empSearchForm" class="formposition">
+                    <div class="row" style="    background-color: whitesmoke;
+                    padding-top: 2%;
+                    border-radius: 15px;"> 
+                        <div class="col-md-4">
+                            <mat-form-field style="display: block;width: 105%;">
+                                <mat-icon matPrefix (click)="empSearch('')" style="color: #673ab7;;">search</mat-icon>
+                                <mat-icon matSuffix (click)="clear()" style="color: #673ab7;;">close</mat-icon>
+                                <input type="text" matInput autocomplete="off" formControlName="code" placeholder="Search Employee"
+                                (keyup.enter)="empSearch('')">
+                                <!-- <mat-placeholder>Code</mat-placeholder> -->
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2" style="margin-top: 1%;">
+                            <!-- <mat-icon svgIcon="filter" matTooltip="filters" (click)="showFilters()"></mat-icon> -->
+                            <button mat-stroked-button type="button" style="background-color: white;"
+                             (click)="showFilters()"> More Filters
+                            <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="col-md-3" *ngIf="isShowFilters">
+                                    <mat-form-field
+                                        (click)="functionalHead()" style="margin-left: -18%;
+                                        ">
+                                        <input #fnInput matInput formControlName="functional_head" placeholder="Select Functional Head" [matAutocomplete]="fn">
+                                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                            <!-- <mat-icon matSuffix class="maticonsize" >close</mat-icon> -->
+                                        <mat-autocomplete #fn="matAutocomplete" [displayWith]="displayFnFunHead"
+                                        (opened)="autocompleteFunctionalHeadScroll()"  (optionSelected)="empSearch('')">
+                                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                            <ng-container *ngIf="!isLoading">
+                                                <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                                                    {{fun.full_name}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                        </div>
+                        <div class="col-md-2"  *ngIf="isShowFilters" style="    margin-left: -5%;">
+                            <!-- <mat-label>Status</mat-label><br> -->
+                                    <mat-form-field >
+                                        <mat-select formControlName="status" [placeholder]="'Status'" >
+                                            <!-- <mat-icon matPrefix class="maticonsize" >close</mat-icon> -->
+                                            <mat-option *ngFor="let status of statusList" [value]="status.id" (optionSelected)="empSearch('')">
+                                                {{status.text}}
+                                            </mat-option>
+                                        </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-1" style="margin-top: 1%;margin-left: 4%;" *ngIf="isShowFilters">
+                            <mat-icon  (click)="removeFilters();" matTooltip="remove filters">close</mat-icon>
+                        </div>
+
+                        <!-- <div class="col-md-2" style="font-size: medium;margin-top: 1%;">
+                            <button mat-stroked-button color="primary" matTooltip="Add" (click)="getAddScreen()">+ Add</button>
+                        </div> -->
+                    </div>
+                </form>
+
+                
+            </div> 
+            <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-bordered" style="max-width: 100%;margin-top: 10px;">
+                    <thead class="table_header">
+                        <tr style="font-size: medium;text-align: center;">
+                            <th>S.no</th>
+                            <th>Code</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Grade</th>
+                            <th>Email ID</th>
+                            <th>Phone No</th>
+                            <th>Functional Head</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Pay</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of empList; index as i">
+                            <td>{{(presentpageemp - 1)*pagesizeemp +i+1 }}</td>
+                            <td> {{ (type?.code != "") ? type?.code : "-" }}</td>
+                            <td class="summarytextstyle" (click)="getemployeeviewclick(type.id)">{{type?.full_name}}</td>
+                            <td>{{type?.designation}}</td>
+                            <td>{{type?.grade}}</td>
+                            <td>{{type?.email_id}}</td>
+                            <td>{{type?.phone_no}}</td>
+                            <td>{{type?.functional_head}}</td>
+                            <td>{{type?.department_id.name}}</td>
+                            <td>{{type?.approve_status.text}}</td>
+                            <td  class="summarytextstyle" (click)="paystructure_creation(type)"><img src="../../../assets/images/3790140.png" alt="Avatar" width="30px" class="image"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="empList?.length==0 || empList == undefined ; else paginationpro"
+                class="NodataAlign text-center">No Records Found...</div>
+            <ng-template #paginationpro>
+                <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                    <button type="button" mat-icon-button [disabled]="has_previousEmp === false" color="primary"
+                        (click)="empSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpageemp}}
+                    <button type="button" mat-icon-button [disabled]="has_nextEmp === false" color="primary"
+                        (click)="empSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        
+            </div>
+            </div>
+        </div>
+        </mat-card>
+        </div>
+    </div>
+
+
+    <div *ngIf="addempcreate">
+        <app-empdetail-creation (onSubmit)="empDetailSubmit()" (onCancel)="empDetailCancel()"></app-empdetail-creation>
+    </div>
+
+    <div *ngIf="isshowEmployeeView">
+       <app-empdetail-view (onCancel)="empviewCancel()"></app-empdetail-view>
+    </div>
+
+
+
+
+    
+    <div *ngIf="ismasterForm">
+        <!-- <span *ngIf="isTaxForm"> -->
+            <app-payrollmaster></app-payrollmaster>
+        <!-- </span> -->
+    </div>
+
+    
+
+    <div *ngIf="paysummary">
+        <app-payrollsummary (onSubmit)="gotopaysummary()" (onCancel)="backtomain()"></app-payrollsummary>
+    </div>
+    
+</div>
+
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen]="true" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

@@ -1,0 +1,156 @@
+<div *ngIf="Screens['SpecialPermissionCreate']">
+
+    <form [formGroup]="SpecialPermissionForm">
+        <table class="tableform">
+            <tr>
+                <td>
+                    <mat-label> Employee </mat-label><br>
+                    <mat-form-field (click)="getemployee('')" class="spacingForm">
+                        <input #empInput placeholder="Select Employee" matInput formControlName="employee_id"
+                            [matAutocomplete]="emp" (keyup)="getemployee(SpecialPermissionForm.value.employee_id)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                            <mat-option *ngFor="let emp of SpecialPermissionObjects.employeeList" [value]="emp"
+                                title="{{emp.full_name}}">{{emp.full_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td class="padsize">
+                    <mat-label>From Date</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <input matInput readonly [matDatepicker]="picker3" class="matformfieldinputstyle"
+                            (dateChange)='ChangeDateFormat("effective_from")' formControlName="effective_from">
+                        <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker3">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker3></mat-datepicker>
+                    </mat-form-field>
+                </td>
+                <td class="padsize">
+                    <mat-label>To Date</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <input matInput readonly [matDatepicker]="picker4" class="matformfieldinputstyle"
+                            [min]="SpecialPermissionForm.value.effective_from"
+                            (dateChange)='ChangeDateFormat("effective_to")' formControlName="effective_to">
+                        <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker4">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker4 [disabled]="SpecialPermissionForm.value.effective_from == null|| 
+                            SpecialPermissionForm.value.effective_from == ''"></mat-datepicker>
+                    </mat-form-field>
+
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <div style="margin-left: 7px;
+        margin-top: 20px;">
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black;
+                    background-color: white;" (click)="ScreensModules('SpecialPermissionView')">Cancel</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                    (click)="onSubmitClick()">Submit</button>
+
+            </div>
+        </div>
+
+
+        <!-- <pre>{{SpecialPermissionForm.value | json}}</pre> -->
+    </form>
+
+</div>
+
+<div *ngIf="Screens['SpecialPermissionView']">
+
+    <h2>SpecialPermission View</h2>
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <form [formGroup]="SpecialPermissionRequestSearchForm">
+
+            <table>
+                <tr>
+                    <td class="padsize">
+                        <mat-label> Employee </mat-label><br>
+                        <mat-form-field (click)="getemployee('')" class="spacingForm">
+                            <input #empInput placeholder="Select Employee" matInput formControlName="employee_id"
+                                [matAutocomplete]="emp" (keyup)="getemployee(SpecialPermissionForm.value.employee_id)">
+                            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                            <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                <mat-option *ngFor="let emp of SpecialPermissionObjects.employeeList" [value]="emp"
+                                    title="{{emp.full_name}}">{{emp.full_name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+
+                        <button mat-stroked-button type="button" style="margin-left: 10px;background-color: white;"
+                            aria-label="Search" (click)="SpecialPermissionReqSearch('')">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 10px;background-color: white;"
+                            (click)="SpecialPermissionRequestSearchForm.reset();SpecialPermissionReqSearch('')">
+                            Reset
+                        </button>
+
+                        <button type="button" style="border-radius: 10px;margin-left: 20px;border-color: #f5c68b;
+                                background-color: #f5c68b;" class="btn btn-light"
+                            (click)="ScreensModules('SpecialPermissionCreate')"><i class="fa fa-plus-circle"></i>Add
+                            Special Permission</button>
+
+                    </td>
+
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+
+
+
+    <table class="table table-bordered" style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+
+        <thead class="table_header">
+            <tr>
+                <th>S.No</th>
+                <th>Employee</th>
+                <th>Effective date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let SpecialPermission of SpecialPermissionObjects.SpecialPermissionViewLists; index as i">
+                <td>
+                    {{i+1 }}
+                </td>
+                <td>({{SpecialPermission?.employee_id?.code}}) {{SpecialPermission?.employee_id?.full_name}} </td>
+                <td>{{SpecialPermission?.effectivefrom | date: 'dd-MM-yyyy'}} - {{SpecialPermission?.effectiveto | date:
+                    'dd-MM-yyyy' }} </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="SpecialPermissionObjects.SpecialPermissionViewLists ?.length == 0; else SpecialPermissionpage"
+        style="margin-left: 42%;">
+        <h3>No Records Found.. </h3>
+    </div>
+    <ng-template #SpecialPermissionpage>
+        <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+            <button mat-icon-button [disabled]="SpecialPermissionObjects.has_previousPermission === false"
+                color="primary" (click)="SpecialPermissionReqSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{SpecialPermissionObjects.presentpagePermission}}
+            <button mat-icon-button [disabled]="SpecialPermissionObjects.has_nextPermission === false" color="primary"
+                (click)="SpecialPermissionReqSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+
+
+
+</div>

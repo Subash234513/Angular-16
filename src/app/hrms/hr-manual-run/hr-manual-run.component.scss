@@ -1,0 +1,24 @@
+.rotate-search{
+    animation: box 2s linear infinite;
+
+}
+@keyframes box{
+    from{transform: rotate(0deg)}
+    to{transform: rotate(360deg)}
+}
+.display{
+    display: flex;
+    justify-content: space-between;
+}
+.displaySearch{
+    display: flex;
+    width: 50%;
+    column-gap: 40px;
+}
+.ManualRun{
+    margin-left: -20px;
+}
+.buttonManualRun{
+    background-color: white;
+    color: green;
+}

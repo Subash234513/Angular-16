@@ -1,0 +1,259 @@
+.alignvertical {
+    vertical-align: middle;
+}
+
+input,
+mat-select,
+textarea {
+    font-size: 15px;
+}
+
+mat-form-field {
+    font-size: 8px;
+}
+
+
+
+// stepper
+
+.stepsdiv {
+    width: 100%;
+    padding: 0 50px;
+  }
+
+  .progressstepper {
+    display: table;
+    width: 60%;
+    position: relative;
+  }
+
+
+  .progressstepper .stepsshow,
+  .progressstepper .stepflow {
+    display: table-cell;
+  }
+
+  .progressstepper .stepsshow {
+    width: 70px;
+    text-align: center;
+  }
+
+//   .progressstepper .stepsshow .stepcircle {
+//     background-color: #b5e8b1;
+//   }
+
+  .stepcircle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    line-height: 40px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .progressstepper .processname {
+    display: block;
+  }
+
+
+  #collapseNoteView {
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 500px;
+    padding: 5px;
+    // border: 1px solid black;
+    overflow: hidden;
+    overflow: scroll;
+}
+
+#collapseNoteView::-webkit-scrollbar {
+    width: 2px;
+}
+
+/* Track */
+#collapseNoteView::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+#collapseNoteView::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.tab-btn {
+    margin-left: 81%;
+    position: relative;
+}
+
+.nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #044063 !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link:hover {
+    border: none !important;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    cursor: pointer;
+}
+
+.commentsection {
+    margin: 10px;
+    padding: 10px;
+}
+
+.buttonwidth {
+    // width: 100px;
+    font-size: 20px;
+}
+
+.placingOnRight {
+    float: right;
+}
+.ddheight {
+    padding: 3px 3px 3px 3px;
+}
+.tablepaddingsizeheader {
+    width: 85%;
+    margin-left: 10px;
+}
+
+.tablepaddingsizeheader tr th {
+    padding: 5px;
+    margin: 10px;
+}
+.smallsize {
+    font-size: 14px;
+}
+
+.textareaset {
+    width: 80%;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    resize: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+//   .replyinput{
+//     width: 60%;
+//     height: 30px;
+//     border-bottom: 1px solid grey;
+
+//   }
+
+.commentsviewspace {
+    margin: 5px;
+    padding: 5px;
+}
+
+.leftsidemargin {
+    margin-left: 20px;
+    color: rgba(128, 128, 128, 0.876);
+}
+
+.timeschedule {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.textareasetreply {
+    width: 80%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    resize: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.spacingfile {
+    margin: 2px;
+}
+
+.inputCMTFile01 {
+    width: 200px;
+}
+
+.bordercomments {
+    margin-left: 10px;
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 1000px;
+    overflow-x: hidden;
+    overflow: scroll;
+    border: 1px solid rgba(0, 0, 0, 0.082);
+}
+
+
+.bordercomments::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+.bordercomments::-webkit-scrollbar-track {
+    background: #e4e3e3;
+}
+
+.bordercomments::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.jumbotronView {
+    min-width: 500px;
+    max-width: 900px;
+    max-height: 500px;
+    margin: 5px;
+    padding: 5px;
+    background-color: #e9ecef;
+    overflow: hidden;
+    overflow: scroll;
+}
+
+.textdecorationatag {
+    text-decoration: underline;
+    color: #044063;
+    cursor: pointer;
+}
+
+.lenthoftextfieldRemarks{
+    width: 700px;
+}
+.smallsize {
+    font-size: 14px;
+}
+.inlineprint {
+    display: inline-block;
+    margin: 5px;
+}
+.btncolor{
+    background-color: #e0e0e0;
+}
+
+.matformfieldinputstyletextarea{
+    width: 500px
+}

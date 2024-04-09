@@ -1,0 +1,785 @@
+<div class="Container" style="margin-left: 20px;">
+    <div class="nav nav-tabs" style="margin-top: 1%;">
+        <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+            *ngFor="let sub of prpoPRList">
+            {{sub.name}}
+        </span>
+    </div>
+</div>
+
+<div *ngIf="isPrCreateScreenTab">
+    <app-pr-maker (onSubmit)="PRCreateSubmit()" (onCancel)="PRCreateCancel()"></app-pr-maker>
+</div>
+
+<div *ngIf="isPrApproverScreenTab">
+    <app-prapprover (onSubmit)="PRApproveSubmit()" (onCancel)="PRApproveCancel()"></app-prapprover>
+</div>
+
+
+<div *ngIf="isPrmakerTab">
+    <!-- <div style="margin-left: 3%;"> -->
+        <h2 style="margin-left: 3%;">Purchase Request Summary </h2>
+        <form [formGroup]="PRSummarySearch">
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                            <input class="toolbar-search" type="text" matInput autocomplete="off" formControlName="no"
+                                (keypress)="only_numalpha($event)">
+                            <mat-placeholder>PR Number</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                            <!-- <input class="toolbar-search" type="text" matInput autocomplete="off"
+                                formControlName="prheader_status" (keypress)="only_numalpha($event)">
+                            <mat-placeholder>PR Status</mat-placeholder> -->
+
+                            
+                                    <mat-label>PR Status</mat-label>
+                                    <mat-select formControlName="prheader_status">
+                                        <mat-option *ngFor="let status of statuslist" [value]="status.text"
+                                            >
+                                            {{status.text}}
+                                        </mat-option>
+                                    </mat-select>
+                              
+                           
+                        </mat-form-field>
+                    </td>
+                    
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;">
+                            <mat-label>Branch</mat-label>
+                            <input #branchInput placeholder="Select Branch Code" matInput formControlName="branch_id"
+                                 [matAutocomplete]="branch">
+                            <mat-autocomplete  [panelWidth]="400"  #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                                (opened)="autocompletebranchScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                        {{branch.code}}-{{branch.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getSupplier()">
+                            <mat-label>Supplier Name</mat-label>
+                            <input matInput #supplierInput placeholder="Select supplier" formControlName="supplier_id"
+                            [matAutocomplete]="supplier">
+                        <mat-autocomplete  [panelWidth]="400" #supplier="matAutocomplete" [displayWith]="displayFnsupplier"
+                            (opened)="autocompletesupplierScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let supplier of supplierList" [value]="supplier">
+                                     {{supplier.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    </td>
+                    
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getPCA()">
+                                <mat-label>PCA Number</mat-label>
+                                <input matInput #PCAInput placeholder="Select PCA Number" formControlName="mepno"
+                                [matAutocomplete]="pcano">
+                            <mat-autocomplete  [panelWidth]="400"  #pcano="matAutocomplete" [displayWith]="displayFnPCANo"
+                                (opened)="autocompletepcaScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let pca of PCAList" [value]="pca">
+                                        {{pca.mepno}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>PR Date</mat-label>
+                                <input matInput readonly [matDatepicker]="picker1" placeholder="PR Date"
+                                    formControlName="date">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <input class="toolbar-search" type="text" matInput autocomplete="off" formControlName="amount"
+                                    (keypress)="numberOnly($event)">
+                                    <mat-placeholder>PR Amount</mat-placeholder>
+                            </mat-form-field>
+                        </td>
+                    <td>
+                        <button class="btn btn-outline-primary" type="submit" (click)="getPRsummary('')"
+                            style="border-radius:40px;margin-left: 20px;" color="primary"><i class="fa fa-search"
+                                aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary" (click)="reset()" type="submit"
+                            style="border-radius:40px;margin-left: -163px;" color="primary">Reset</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-success" (click)="addpr()"
+                            style="border-radius:40px;margin-left: -75px;"><span class="fa fa-plus"></span></button>
+                    </td>
+                    <td>
+                        <button [disabled]="prSummaryExport" style="border-radius:40px;margin-left: -13px;cursor: pointer" type="button"
+                    class="btn btn-outline-success" (click)="makerexceldownload()">
+                    <span></span>Export </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    <!-- </div> -->
+    <div class="table-responsive" style="margin-top: 2%;margin-left: 50px; width: 94%;">
+        <table class="table scrolltable table-bordered" fixed-header>
+            <thead>
+                <tr class="table_header" fixed-header>
+                    <th>S.No</th>
+                    <th>PR No</th>
+                    <th>PR Date</th>
+                    <!-- <th>Commodity Name</th> -->
+                    <th>Supplier Name</th>
+                    <th>Branch</th>
+                    <th>PR Raised By</th>
+                    <th>PR Amount</th>
+                    <th>PR Status</th>
+                    <th>PCA</th>
+                    <th>Header Files</th>
+                    <th>PR PDF View</th>
+                    <th>View</th>
+                    <th>Tran History</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let  prsummary of prSummaryList; index as i">
+                    <td>{{(presentpage - 1)*pageSize +i+1 }}</td>
+                    <td>{{prsummary?.no}}</td>
+                    <td>{{prsummary?.date | date:'dd-MM-yyyy'}}</td>
+                    <!-- <td>{{prsummary?.commodity_id.name}}</td> -->
+                    <td>{{prsummary?.supplier}}</td>
+                    <td>{{prsummary?.branch_id.code +' -- '+  prsummary?.branch_id.name}}</td>
+                    <td>{{prsummary?.created_by?.full_name}}</td>
+                    <td class="rightalign">{{prsummary?.totalamount  | amountPipeCustom }}</td>
+                    <td>{{prsummary?.prheader_status}}</td>
+                    <td>{{prsummary?.mepno}} -- {{prsummary?.mepname}}</td>
+                    <td><span class="fa fa-download" aria-hidden="true" (click)="HeaderFilesPRdownload(prsummary)"
+                            data-toggle="modal" data-target=".bd-examplepopHeaderfiles-modal-lg"></span></td>
+
+                    <td><span class="material-icons" (click)="PRPDf(prsummary)">
+                            picture_as_pdf</span>
+                    </td>
+                    <td>
+                        <button mat-icon-button matTooltip="View" class="iconbutton" color="primary" mat-button
+                            data-toggle="modal" data-target="#PRDetailModal">
+                            <span class="material-icons" style="color: gray;" (click)="getprdetails(prsummary)"
+                                (click)="dataOnHeader(prsummary)">
+                                visibility
+                            </span>
+                        </button>
+                        <div *ngIf="prsummary.prheader_status === 'REJECTED' ; else enablecon">
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                (click)="predit(prsummary)" title="PR Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="prsummary.prheader_status === 'DRAFT'">
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                (click)="predit(prsummary)" title="PR Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
+
+                        <ng-template #enablecon>
+                            <div *ngIf="prsummary.prheader_status === 'PENDING_FOR_APPROVAL'">
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" title="PR Status">
+                                    <mat-icon style="color: gray;">edit</mat-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+                    </td>
+
+                    <td>
+                        <button mat-icon-button matTooltip="history" class="iconbutton" color="primary" mat-button
+                            data-toggle="modal" data-target="#PRHistoryModal">
+                            <span class="material-icons" style="color: gray;" (click)="gettranhistory(prsummary)">
+                                description
+                            </span>
+                        </button>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="prSummaryList?.length==0; else paginationPR" class="NodataAlign">No Records Found...</div>
+        <ng-template #paginationPR>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                <button mat-icon-button [disabled]="has_previous === false" color="primary" (click)="getPRsummary('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button> {{presentpage}}
+                <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="getPRsummary('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+        aria-hidden="true" id="PRDetailModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="Container">
+                    <div class="modal-header" style="background-color: #ddefdd;">
+                        <h2 class="modal-title">PR Details</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div style="margin-left: 3%;">
+                        <table>
+                            <tr>
+                                <td><b> Type: </b>{{typedata}}&nbsp;&nbsp; </td>
+                                <td><b> DTS :</b>{{dtsdata}} &nbsp;&nbsp; </td>
+                                <td><b> NO:</b> {{prnodata}}&nbsp;&nbsp; </td>
+                                <td><b> Date:</b> {{prdate |date:'dd-MM-yyyy'}}&nbsp;&nbsp;</td>
+                                <td><b> Raised by:</b> {{prraised}}&nbsp;&nbsp; </td>
+                                <td><b> Commodity Name:</b> {{prcommodity}}&nbsp;&nbsp;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="table-responsive" style="margin-top: 2%;margin-left: 40px; width: 94%;">
+                        <div class="tablescroll">
+                            <table class="table scrolltable table-bordered" fixed-header>
+                                <thead>
+                                    <tr class="table_header" fixed-header>
+                                        <th>S.No</th>
+                                        <!-- <th>Product Category</th>
+                                        <th>Product Type</th> -->
+                                        <th>Product Name</th>
+                                        <th>Item</th>
+                                        <th>Supplier Name</th>
+                                        <th>UOM</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Amount</th>
+                                        <th>Download File</th>
+                                        <!-- <th>View File</th> -->
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let  prdetails of prdetailsList; index as i">
+                                        <td> {{(presentpageprdetail - 1)*pageSize +i+1 }} </td>
+                                        <!-- <td>{{prdetails.product_id.productcategory_id.name}}
+                                        </td>
+                                        <td>{{prdetails.product_id.producttype_id.name}}</td> -->
+                                        <td>{{prdetails?.product_name}}</td>
+                                        <td>{{prdetails?.item_name}}</td>
+                                        <td>{{prdetails?.supplier_id.name}}</td>
+                                        <td>{{prdetails?.uom}}</td>
+                                        <td>{{prdetails?.qty}}</td>
+                                        <td>{{prdetails?.unitprice  | amountPipeCustom }}</td>
+                                        <td>{{prdetails?.qty * prdetails?.unitprice  | amountPipeCustom }}</td>
+                                        <td style="cursor: pointer;margin-top: 0%;width: 50%;"><i
+                                                class="fa fa-download"></i><br>
+                                            <div *ngIf="prdetails.file_data?.length==0; else filePR"
+                                                class="NodataAlign">No
+                                                Records Found...</div>
+                                            <ng-template #filePR>
+                                                <p *ngFor="let a of prdetails.file_data ;index as i;"
+                                                    title="{{a.file_name }}"
+                                                    (click)="fileDownloads(a.file_id,a.file_name )"
+                                                    class=" btn-btn-link">
+                                                    {{i+1}}. {{a.file_name }}<br>
+                                                </p><br>
+                                            </ng-template>
+                                        </td>
+                                        <!-- <td style="margin-left:-1%">
+                                            <div *ngIf="prdetails.file_data?.length==0; else fileactionPR"
+                                                class="NodataAlign">No
+                                                Records Found...</div>
+                                            <ng-template #fileactionPR>
+                                                <p class="btn btn-link"
+                                                    *ngFor="let a of prdetails.file_data ;index as i;"
+                                                    style="margin-left:-1%" data-target="#my-modalpopupimage" data-toggle="modal"
+                                                    (click)="commentPopup(a.file_id,a.file_name)">
+                                                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                                    <br>
+                                                    (Note:Only image file can be viewed)
+                                                </p>
+                                            </ng-template>
+                                        </td> -->
+                                        <div *ngIf="showimagepopup" id="my-modalpopupimage" class="modal fade"
+                                            aria-labelledby="my-modalLabel" aria-hidden="true" tabindex="-1"
+                                            role="dialog">
+                                            <div class="modal-dialog modal-xl" data-dismiss="modal"
+                                                style="width: 60%;height: 80%;">
+                                                <div class="modal-content">
+
+                                                    <div class="modal-body">
+                                                        <img src="{{jpgUrls}}" class="img-responsive"
+                                                            style="width: 100%;">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                            <button mat-icon-button [disabled]="has_previousdetail == false" color="primary"
+                                (click)="previousClickdetail()">
+                                <mat-icon>arrow_back
+                                </mat-icon>
+                            </button>
+                            {{presentpageprdetail}}
+                            <button mat-icon-button [disabled]="has_nextdetail == false" color="primary"
+                                (click)="nextClickdetail()">
+                                <mat-icon>arrow_forward
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+        aria-hidden="true" id="PRHistoryModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="Container">
+                    <div class="modal-header" style="background-color: #ddefdd;">
+                        <h2 class="modal-title">View Transaction History</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="table-responsive" style="margin-top: 2%;margin-left: 50px; width: 94%;">
+                        <table class="table scrolltable table-bordered" fixed-header>
+                            <thead>
+                                <tr class="table_header" fixed-header>
+                                    <th>S.No</th>
+                                    <th>PR Header No</th>
+                                    <th>Transaction Date</th>
+                                    <th>Status</th>
+                                    <th>Raiser Name</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let tran of PrTranHistoryList; index as i">
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{tran?.ref_id.no}}</td>
+                                    <td>{{tran?.created_date | date:'medium'}}</td>
+                                    <td>{{tran?.comments}}</td>
+                                    <td>{{tran?.from_user_id.full_name}}</td>
+                                    <td>{{tran?.remarks}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showHeaderimagepopup" class="modal fade bd-examplepopHeaderfiles-modal-lg" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#DDEFDD;">
+                    <h2 class="modal-title">Header Files</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <table class="table table-bordered" fixed-header
+                    style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.no</th>
+                            <th>File Name</th>
+                            <th>Download File</th>
+                            <!-- <th>View File</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let file of fileListHeader;index as i">
+                            <td>{{ i+1 }}</td>
+                            <td>{{file?.file_name}}</td>
+                            <td>
+                                <a (click)="fileDownloadheader(file.file_id,file.file_name )"><i class="fa fa-download"
+                                        style="color: green;">
+
+                                    </i></a>
+                            </td>
+                            <!-- <td style="margin-left:-1%">
+                                <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                    data-toggle="modal" (click)="commentPopupHeaderFiles(file.file_id,file.file_name)">
+                                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                    <br>
+                                    (Note:Only image file can be viewed)
+                                </p>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="showimageHeader" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+        tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PR Approval Summary -->
+<div *ngIf="isPrapproverTab">
+    <!-- <div class="Container" style="margin-left: 40px;"> -->
+        <h2 style="margin-left: 3%;">Purchase Request Approval Summary </h2>
+        <!-- <div class="table-responsive" style="margin-top: 1%;width: 90%; -ms-overflow-style: none;">
+            <div style="margin-left: 3%;"> -->
+                <form [formGroup]="PRApproverSearch">
+                    <table>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                    <input class="toolbar-search" type="text" matInput autocomplete="off"
+                                        formControlName="no" (keypress)="only_numalpha($event)">
+                                    <mat-placeholder>PR Number</mat-placeholder>
+                                </mat-form-field>
+                            </td>
+                            <td>
+
+                                <mat-form-field style="width: 200px; margin-left:50px;" (click)="getCommodityFK()">
+                                    <mat-label>Commodity Name</mat-label>
+                                    <input #commodityInput placeholder="Select commodity" matInput formControlName="commodityname" [matAutocomplete]="commodity">
+                                    <mat-autocomplete  [panelWidth]="400"  #commodity="matAutocomplete" [displayWith]="displayFncommodity" (opened)="autocompletecommodityScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                            <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let commodity of commodityList" [value]="commodity">
+                                                            {{commodity.name}}
+                                                    </mat-option>
+                                                </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                            </td>
+                            
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 50px;">
+                                    <mat-label>Branch Code</mat-label>
+                                    <input #branchInput placeholder="Select Branch Code" matInput formControlName="branch_id"
+                                         [matAutocomplete]="branch">
+                                    <mat-autocomplete  [panelWidth]="400"  #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                                        (opened)="autocompletebranchScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                                {{branch.code}}-{{branch.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getSupplier()">
+                                    <mat-label>Supplier Name</mat-label>
+                                    <input matInput #supplierInput placeholder="Select supplier" formControlName="supplier_id"
+                                    [matAutocomplete]="supplier">
+                                <mat-autocomplete  [panelWidth]="400"  #supplier="matAutocomplete" [displayWith]="displayFnsupplier"
+                                    (opened)="autocompletesupplierScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let supplier of supplierList" [value]="supplier">
+                                            {{supplier.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td>
+                           
+                            
+                            </tr>
+                            <tr>
+                                <td>
+                                    <mat-form-field style="width: 200px; margin-left: 50px;">
+                                        <mat-label>PR Status</mat-label>
+                                        <mat-select formControlName="prheader_status">
+                                            <mat-option *ngFor="let status of statuslist" [value]="status.text"
+                                                >
+                                                {{status.text}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+    
+                                <td>
+                                    <mat-form-field style="width: 200px; margin-left: 50px;" (click)="getPCA()">
+                                        <mat-label>PCA Number</mat-label>
+                                        <input matInput #PCAInput placeholder="Select PCA Number" formControlName="mepno"
+                                        [matAutocomplete]="pcano">
+                                    <mat-autocomplete  [panelWidth]="400"  #pcano="matAutocomplete" [displayWith]="displayFnPCANo"
+                                        (opened)="autocompletepcaScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let pca of PCAList" [value]="pca">
+                                                {{pca.mepno}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                        <mat-label>PR Date</mat-label>
+                                        <input matInput readonly [matDatepicker]="picker1" placeholder="PR Date"
+                                            formControlName="date">
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                        <input class="toolbar-search" type="text" matInput autocomplete="off" formControlName="amount"
+                                            (keypress)="numberOnly($event)">
+                                            <mat-placeholder>PR Amount</mat-placeholder>
+                                    </mat-form-field>
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-outline-primary" type="submit" (click)="getPRAppsummary('')"
+                                    style="border-radius:40px;margin-left: 50px;" color="primary"><i
+                                        class="fa fa-search" aria-hidden="true"></i></button>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-primary" (click)="resetapp()"
+                                    style="border-radius:40px;margin-left: -130px;" color="primary">Reset</button>
+                            </td>
+                            <td>
+                                <button [disabled]="isPRApproverExport"style="border-radius:40px;margin-left: -280px;cursor: pointer" type="button"
+                            class="btn btn-outline-success" (click)="checkerexceldownload()">
+                            <span></span>Export </button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </form>
+
+
+            <!-- </div> -->
+            <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 50px;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <th>PR No</th>
+                            <th>PR date</th>
+                            <!-- <th>Commodity</th> -->
+                            <th>Branch</th>
+                            <th>Supplier Name</th>
+                            <th>PR Raised By</th>
+                            <th>PR Status</th>
+                            <th>Amount</th>
+                            <th>PCA</th>
+                            <th>Header Files</th>
+                            <th>Action</th>
+                            <th>Tran History</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let prapprove of approverlist; index as i">
+                            <td> {{(presentpageapp - 1)*pageSize +i+1 }} </td>
+                            <td>{{prapprove?.no}}</td>
+                            <td>{{prapprove?.date | date:'dd-MM-yyyy'}}</td>
+                            <!-- <td>{{prapprove?.commodity_id?.name}}</td> -->
+                            <td>{{prapprove?.branch_id.code +' -- '+  prapprove?.branch_id.name}}</td>
+                            <td>{{prapprove?.supplier}}</td>
+                            <td>{{prapprove?.created_by?.full_name}}</td>
+                            <td>{{prapprove?.prheader_status}}</td>
+                            <td>{{prapprove?.totalamount | amountPipeCustom }}</td>
+                            <td>{{prapprove?.mepno}} -- {{prapprove?.mepname}}</td>
+                            <td><span class="fa fa-download" aria-hidden="true"
+                                    (click)="HeaderFilesPRdownloadapp(prapprove)" data-toggle="modal"
+                                    data-target=".bd-examplepopHeaderfilesapp-modal-lg"></span></td>
+                            <td>
+                                <button mat-icon-button matTooltip="View" class="iconbutton" color="primary"
+                                    (click)="approver(prapprove)">
+                                    <span class="material-icons" style="color: gray;">
+                                        visibility
+                                    </span>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-icon-button matTooltip="history" class="iconbutton" color="primary"
+                                    mat-button data-toggle="modal" data-target="#PRApproverHistoryModal">
+                                    <span class="material-icons" style="color: gray;"
+                                        (click)="gettranhistoryapp(prapprove)">
+                                        description
+                                    </span>
+                                </button>
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div *ngIf="approverlist?.length==0 ; else showpaginationClose" style="text-align: center;">No Records
+                    Found...</div>
+                <ng-template #showpaginationClose>
+                    <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                        <button mat-icon-button [disabled]="has_previousapp === false" color="primary"
+                            (click)="getPRAppsummary('previous')">
+                            <mat-icon>arrow_back
+                            </mat-icon>
+                        </button>
+                        {{presentpageapp}}
+                        <button mat-icon-button [disabled]="has_nextapp === false" color="primary"
+                            (click)="getPRAppsummary('next')">
+                            <mat-icon>arrow_forward
+                            </mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+
+            </div>
+        <!-- </div> -->
+    <!-- </div> -->
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+        aria-hidden="true" id="PRApproverHistoryModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="Container">
+                    <div style="background-color: #ddefdd;">
+                        <h2 style="text-align:center">View Transaction History</h2>
+                    </div>
+                    <div class="table-responsive" style="margin-top: 1%;width: 90%; -ms-overflow-style: none;">
+
+                        <div class="table-responsive" style="margin-left: 40px;">
+                            <table class="table" style="width: 99%;">
+                                <thead class="table_header" style="text-align: left;">
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>PR Header No</th>
+                                        <th>Transaction Date</th>
+                                        <th>Status</th>
+                                        <th>Raiser Name</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let prapptransummary of PrTranHistoryListapp;index as i">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{prapptransummary?.ref_id?.no}}</td>
+                                        <td>{{prapptransummary?.created_date | date:'dd-MMM-yyyy'}}</td>
+                                        <td>{{prapptransummary?.comments}}</td>
+                                        <td>{{prapptransummary?.from_user_id?.full_name}}</td>
+                                        <td>{{prapptransummary?.remarks}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showHeaderimagepopupapp" class="modal fade bd-examplepopHeaderfilesapp-modal-lg" tabindex="-1"
+        role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#DDEFDD;">
+                    <h2 class="modal-title">Header Files</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <table class="table table-bordered" fixed-header
+                    style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.no</th>
+                            <th>File Name</th>
+                            <th>Download File</th>
+                            <!-- <th>View File</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let file of fileListHeader;index as i">
+                            <td>{{ i+1 }}</td>
+                            <td>{{file?.file_name}}</td>
+                            <td>
+                                <a (click)="fileDownloadheaderapp(file.file_id,file.file_name )"><i
+                                        class="fa fa-download" style="color: green;">
+
+                                    </i></a>
+                            </td>
+                            <!-- <td style="margin-left:-1%">
+                                <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                    data-toggle="modal"
+                                    (click)="commentPopupHeaderFilesapp(file.file_id,file.file_name)">
+                                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                    <br>
+                                    (Note:Only image file can be viewed)
+                                </p>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="showimageHeaderapp" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+        tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

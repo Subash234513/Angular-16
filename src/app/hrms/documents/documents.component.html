@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row topset">
+        <div class="col-md-2">
+            <mat-label>Type Of Document</mat-label>
+            <mat-form-field id="longInput" >
+                <mat-select 
+                    placeholder="Document">
+                    <mat-option *ngFor="let data of DocumentTypeList" title="{{data.text}}"
+                        [value]="data.id"  (click)="TypeOfDocument(data)"   >
+                        {{data.text}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+    </div>
+
+</div>

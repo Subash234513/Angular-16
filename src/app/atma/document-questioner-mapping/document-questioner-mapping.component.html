@@ -1,0 +1,231 @@
+<!-- <div style="margin-left: 20px;margin-right: 80%;margin-top: 3%; width: 100%;">
+
+    <h3  style="margin-left:3%;font-size:20px;font-weight:bold;font-family:Times New Roman;color:blue">
+        Vendor Document/Questioner Mapping
+    </h3><hr>
+
+    <div> -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+            <h2 style="margin-left: -65px;"> Vendor Document/Questioner Mapping</h2>
+        <form style="margin-left:-50px;" [formGroup]="MappingForm"  autocomplete="off">
+            <table>
+                <tr>
+                    <span (click)="addSection()" style="margin-left: 20px;">
+                        <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                    </span>
+                </tr>
+            </table>
+
+            <div class="table-responsive" style="width:95%;margin-top: 1%;">
+                <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                    <thead class="table_header" style="text-align: left;"> 
+                        <tr>
+                            <th>S.No</th>
+                            <th>Relationship Category</th>
+                            <th>Vendor Type</th>
+                            <th>Criticality</th>
+                            <th>Category Type</th>
+                            <th>Questioner/Document</th>
+                            <th>DocGroup</th>
+                            <th>Department</th>
+                            <th>Vendor/Activity</th>
+                            <th>Process</th>
+                            <th>Period</th>
+                            <!-- <th>Expiry Date</th> -->
+                            <th>Order</th>
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <ng-container formArrayName="mappingheader"
+                                    *ngFor="let section of getSections(MappingForm); let i = index">
+                                    <tr [formGroupName]="i">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <mat-form-field style="width: 200px;" >
+                                                <mat-label>Relationship Category</mat-label>
+                                                <mat-select formControlName="rel_cat">
+                                                    <mat-option *ngFor="let lists of categorylist" [value]="lists.id">
+                                                        {{lists.text}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field> 
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 150px;">
+                                                <mat-label>Vendor Type</mat-label>
+                                                <mat-select formControlName="vendor_type">
+                                                    <mat-option *ngFor="let ven of Ventypelist" [value]="ven.id">
+                                                        {{ven.text}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>  
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 150px;">
+                                                <mat-label>Criticality</mat-label>
+                                                <mat-select formControlName="criticality">
+                                                    <mat-option *ngFor="let data of criticallist" [value]="data.id">
+                                                        {{data.text}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>   
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 200px;" (click)="getqueslists()">
+                                                <mat-label>Category Type</mat-label>
+                                                <input type="text" #typeinput matInput formControlName="type_id" autocomplete="off"  [matAutocomplete]="typeauto"  (keypress)="kyenbdata($event)">
+                                                <mat-autocomplete [panelWidth]="300" #typeauto="matAutocomplete" [displayWith]="getquestypelist" (opened)="questypescroll()">
+                                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let type of questypelist" [value]="type">{{type.name}}</mat-option>
+                                                </ng-container>
+                                                </mat-autocomplete>
+                                                 </mat-form-field> 
+                                        </td>
+                                        <td>
+                                            <mat-radio-group formControlName="is_doc">
+                                                <mat-radio-button *ngFor="let n of quesdoc" [value]="n.value"
+                                                (click)="radiocheck(n,i)">
+                                                {{n.display}}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </td>
+                                        <td >
+                                        <div *ngIf="MappingForm?.value?.mappingheader[i]?.is_doc == true;else other_content ">
+                                            <mat-form-field style="width: 200px;" (click)="getdocumentlists()">
+                                                <mat-label>DocGroup</mat-label>
+                                                <input type="text" #docinput matInput formControlName="document_group_id" autocomplete="off"  [matAutocomplete]="docauto"  (keypress)="kyenbdata($event)">
+                                                <mat-autocomplete [panelWidth]="300" #docauto="matAutocomplete" [displayWith]="getdocgrplist" (opened)="docgroupscroll()">
+                                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let group of docgrouplist" [value]="group" >{{group.name}}</mat-option>
+                                                </ng-container>
+                                                </mat-autocomplete>
+                                                 </mat-form-field> 
+                                            </div>
+                                            <ng-template #other_content>-</ng-template>
+                                        </td>
+                                        <td>
+                                           
+                                            <mat-form-field style="width: 200px;"  (click)="getdepartmentlists()">
+                                                <mat-label>Department</mat-label>
+                                                <!-- <input matInput placeholder="Department" formControlName="dept_id" autocomplete="off" 
+                                                   (keypress)="numberOnly($event)" > -->
+                                                <input type="text" #deptinput matInput formControlName="dept_id" autocomplete="off"  [matAutocomplete]="deptauto"  (keypress)="kyenbdata($event)">
+                                                <mat-autocomplete [panelWidth]="300" #deptauto="matAutocomplete" [displayWith]="getdeptlist" (opened)="departmentscroll()">
+                                                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                <ng-container *ngIf="!isLoading">
+                                                    <mat-option *ngFor="let dept of deptlist" [value]="dept">{{dept.name}}</mat-option>
+                                                </ng-container>
+                                                </mat-autocomplete>
+
+
+
+
+                                                <!-- <mat-chip-list #deptchiplist>
+                                                    <mat-chip style="font-size: small;"
+                                                        *ngFor="let empdept of chipSelectedDept" [selectable]=true
+                                                        [removable]=true (removed)="removeEmployeedept(empdept)">
+                                                        {{empdept.full_name}}
+                                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                                    </mat-chip>
+                                                    <input #deptinput formControlName="department_id"
+                                                        [matAutocomplete]="deptauto" [matChipInputFor]="deptchiplist"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]=true>
+                                                </mat-chip-list>
+                                                <mat-autocomplete [panelWidth]="300" #deptauto="matAutocomplete" [displayWith]="getdeptlist" (opened)="departmentscroll()"
+                                                (optionSelected)="employeedeptSelected($event)">
+                                                    <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                    <ng-container *ngIf="!isLoading">
+                                                        <mat-option *ngFor="let dept of employeelist" [value]="dept">{{dept.full_name}}</mat-option>
+                                                    </ng-container>
+                                                    </mat-autocomplete> -->
+                                                 </mat-form-field> 
+                                        </td>
+                                        <td>
+                                            <mat-radio-group formControlName="is_activity">
+                                                <mat-radio-button *ngFor="let check of venact" [value]="check.value"
+                                               >
+                                                {{check.display}}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 150px;">
+                                                <mat-label>Process</mat-label>
+                                                <mat-select formControlName="process">
+                                                    <mat-option *ngFor="let list of processlist" [value]="list.id">
+                                                        {{list.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 150px;" >
+                                                <mat-label>Period</mat-label>
+                                                <mat-select formControlName="period">
+                                                    <mat-option *ngFor="let period of periodlist" [value]="period.id">
+                                                        {{period.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field> 
+                                        </td>
+                                        <!-- <td>
+                                        <mat-form-field style="width: 150px;">
+                                            <mat-label>Date</mat-label>
+                                            <input matInput [matDatepicker]="picker1" placeholder="Expiry Date"
+                                                formControlName="expiration_date" 
+                                                readonly >
+                                            <mat-datepicker-toggle matSuffix [for]="picker1">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker1></mat-datepicker>
+                                        </mat-form-field>
+                                    </td> -->
+                                    <td>
+                                        <mat-form-field style="width: 150px;">
+                                           <input matInput type="number" placeholder="Order" formControlName="order">
+                                        </mat-form-field>
+                                    </td>
+                                        <td>
+
+                                            <button *ngIf="!MappingForm.value.mappingheader[i].id" mat-icon-button type="button">
+                                                <mat-icon style="color: black;" aria-label="Edit"
+                                                    (click)=removeSection(i)>
+                                                    delete</mat-icon>
+                                            </button>
+                                        </td>
+                                        
+                                    </tr>
+                                </ng-container>
+                            </table>
+                        </div>
+                        <!-- <br>
+                        <div style="margin-bottom:5%">
+                        <button type="submit" style="border-radius: 40px;margin-left: 590px;"
+                         class="btn btn-outline-primary" (click)="submitform()">Submit</button>
+                        <button type="button" (click)="ondocCancel()" class="btn btn-outline-primary"
+                        style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+                        </div>    -->
+
+                        <div style="margin: 30px;">
+
+
+                            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 500px;
+                            border-color: black; 
+                            background-color: white;" (click)="ondocCancel()">Cancel</button>
+            
+                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b; 
+                            background-color: #f5c68b;" class="btn btn-light" (click)="submitform()">Submit</button>
+            
+                        </div>
+                    </form>
+                </div>
+                    </div>
+                                      
+
+</div>

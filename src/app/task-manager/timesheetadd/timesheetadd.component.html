@@ -1,0 +1,521 @@
+<!-- timesheetpagestart-->
+<div class="timesheet-container" *ngIf="isShowtimesheet">
+  <!-- forms -->
+  <form [formGroup]="dateForm">
+    <div class="cus-timesheetHead">
+      <div>
+        <!--datepicker -->
+        <mat-form-field (click)="StartDate()">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="timesheetControl"
+            (dateInput)="handleDateChange($event)" [max]="getCurrentDate()" />
+          <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- timesheet table and timesheet popup custompopview component-->
+      <!-- <div class="popup-btn">
+        <button (click)="openPopup()">+ Timesheet</button>
+      </div> -->
+
+      <div class="popup-btns-div">
+        <div class="popup-btn">
+          <button type="button" class="btn btn-primary" style="background-color: #044063" data-toggle="modal"
+            #closeaddpopup data-target="#exampleModalCenter">
+            <span>+</span><span> &nbsp;Add</span>
+          </button>
+        </div>
+
+        <div class="popup-btn">
+          <button class="btn btn-primary" style="background-color: #044063" type="button" data-toggle="modal"
+            (click)="Ontemplatetimesheet()">
+            <span> &nbsp; Template</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TimeSheet Add Popup -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #044063; color: white">
+              <p style="margin-bottom: 0">Time Sheet Log</p>
+            </div>
+            <div class="modal-body">
+              <!-- forms -->
+              <form [formGroup]="popupAddForm" autocomplete="off">
+                <div class="row">
+                  <!-- <div style="padding-left: 84%;">
+                    <mat-checkbox formControlName="isdefault" class="example-margin"
+                      (change)="defaultapi($event)">default
+                    </mat-checkbox>
+                  </div> -->
+                </div>
+                <div class="popup-main-container">
+                  <!-- otherspart datepicker -->
+                  <div class="popup-common-div">
+                    <mat-form-field>
+                      <mat-label>Date</mat-label>
+                      <input matInput [matDatepicker]="pickerOne" formControlName="log_date"
+                        (dateInput)="otherDateChange($event)" />
+                      <mat-datepicker-toggle matSuffix class="maticonsize" [for]="pickerOne"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerOne></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <!-- timespend -->
+                  <div class="popup-common-div">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Time Spend</mat-label>
+                      <input style="width: 100%" type="number" [max]="12" [min]="1" formControlName="duration"
+                        matInput />
+                    </mat-form-field>
+                  </div>
+
+                  <!-- logtype -->
+                  <div class="custom-container popup-common-div">
+                    <mat-form-field>
+                      <mat-label>Log Type</mat-label>
+                      <input #logTypeInput matInput formControlName="ref_type" [matAutocomplete]="logTypeRef"
+                        required />
+                      <mat-autocomplete #logTypeRef="matAutocomplete" [displayWith]="displayFnLogType">
+                        <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                        <ng-container *ngIf="!popupIsLoading">
+                          <mat-option *ngFor="let itemsLogType of logTypeArr"
+                            (click)="updateViewConditions(itemsLogType)" [value]="itemsLogType">
+                            {{ itemsLogType.name }}
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                 
+
+                  <div class="copy-div" *ngIf="activityPopMenuNgif" class="cus-activityDiv">
+                    <div class="popup-common-div">
+                      <mat-form-field (click)="ActivityDropDown('')">
+                        <mat-label>Saved Templates</mat-label>
+                        <input matInput [matAutocomplete]="ActivityComplete" (keyup)="ActivityDropDown($event.target.value)" formControlName="Templates">
+                        <mat-autocomplete #ActivityComplete="matAutocomplete">
+                          <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+                          <ng-container *ngIf="!popupIsLoading">
+                            <mat-option  *ngFor="let data of ActivityDropDownData" (click)="ActivityClickdata(data)" [value]="data.activity_info.activity">
+                              {{data?.activity_info?.activity}}
+                            </mat-option>
+                          </ng-container>
+                      
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <!--client-->
+                    <div class="custom-container popup-common-div">
+                      <mat-form-field (click)="getclient('')">
+                        <mat-label>Client</mat-label>
+                        <input #cltInput matInput (click)="clearClient()" formControlName="client"
+                          [matAutocomplete]="clt" (keypress)="getclient(this.popupAddForm.get('client').value)" />
+
+                        <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclient"
+                          (opened)="autocompleteCltScroll()">
+                          <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                          <ng-container *ngIf="!popupIsLoading">
+                            <mat-option *ngFor="let clt of popupClientList" (click)="FocusOut_select_client(clt)"
+                              [value]="clt">
+                              {{ clt.name }}
+                            </mat-option>
+                          </ng-container>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+
+                    <!--module-->
+                    <div class="popup-common-div">
+                      <mat-form-field class="matformfieldstyle" (click)="getApplication('')">
+                        <mat-label>Project</mat-label>
+
+                        <input #appnmInput class="matformfieldinputstyle" matInput formControlName="app_id"
+                          [matAutocomplete]="appnm" />
+
+                        <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnApp">
+                          <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                          <ng-container *ngIf="!popupIsLoading">
+                            <mat-option *ngFor="let modulee of popupAppList" (click)="FocusOut_select_module(modulee)"
+                              [value]="modulee">
+                              {{ modulee.name }}
+                            </mat-option>
+                          </ng-container>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+
+                    <!--activity-->
+                    <div class="popup-common-div">
+                      <mat-form-field class="matformfieldstyle" (click)="getActivity('')">
+                        <mat-label>Activity</mat-label>
+
+                        <input #activityInput class="matformfieldinputstyle" matInput formControlName="ref_id"
+                          [matAutocomplete]="act" />
+
+                        <mat-autocomplete #act="matAutocomplete" [displayWith]="displayFnActivity">
+                          <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                          <ng-container *ngIf="!popupIsLoading">
+                            <mat-option *ngFor="let act of activityArr" (focusout)="FocusOut_select_app(act)"
+                              [value]="act">
+                              {{ act.activity }}
+                            </mat-option>
+                          </ng-container>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- description -->
+                  <div *ngIf="othersPopMenuNgif" class="cus-othersDiv">
+                    <div class="popup-common-div">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Description</mat-label>
+
+                        <input type="text" style="width: 100%;" matInput formControlName="description" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" (click)="SubmitTms()" style="background-color: #044063; color: white">
+                <!-- [disabled]="!popupAddForm.valid" -->
+                Add
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="cancelForm()" data-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table1 -->
+    <div class="cus-tableContainer">
+      <table class="cus-table">
+        <thead>
+          <tr>
+            <th style="width: 15%">
+              <i class="fa-solid fa-list" style="margin-right: 5px"></i>
+              S.No
+            </th>
+            <th class="ba-name" style="width: 50%">
+              <i class="fa-solid fa-hashtag"></i>
+              Description
+            </th>
+            <th class="ba-organization">
+              <i class="fa-regular fa-clock"></i>
+              Time
+            </th>
+            <th class="ba-organization">
+              <i class="fa-regular fa-file"></i>
+              Type
+            </th>
+            <th class="ba-organization">
+              <i class="fa-regular fa-clock"></i>
+              Total Duration
+            </th>
+            <th class="ba-organization">
+              <i class="fa-solid fa-arrow-right"></i>
+
+              Action
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of timeSheetList; index as i">
+            <td style="text-align: center">
+              {{ (snotimesheet - 1) * sizetimesheet + i + 1 }}
+            </td>
+            <td>
+              <span class="timeline-highlight">{{ item?.code }}</span>
+              <span>{{ item?.name }}</span>
+            </td>
+            <td style="text-align: center">{{ item?.duration }}</td>
+            <td style="text-align: center">{{ item?.ref_type?.name }}</td>
+            <!-- <td style="text-align: center">{{ item?.total_duration }}</td> -->
+            <td *ngIf="i === 0" style="text-align: center" [attr.rowspan]="dataLength">
+              {{ item?.total_duration }} 
+            </td>
+            <td>
+              <i class="fa-solid fa-pen" style="margin-left: 10%;cursor: pointer;" data-target="#updateModal" data-toggle="modal" (click)="editTemplate(item)"></i>
+              <i class="fa-solid fa-trash" style="margin-left: 10%;cursor: pointer;" (click)="deleteTemplate(item)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!timeSheetList?.length" class="NoRecords">No Records Found..</div>
+    </div>
+  </form>
+</div>
+
+<!-- template timesheet -->
+<div *ngIf="isShowAddTemplate">
+  <div class="cus-templateHead">
+    <div class="cus-templateHead1">
+      <span class="material-icons" (click)="Onreturnsummary()">arrow_back</span>
+      <p style="margin-bottom: 0;font-weight: bold;">Timesheet Template</p>
+    </div>
+
+    <div class="popup-btn">
+      <button class="btn btn-primary" style="background-color: #044063" type="button" data-toggle="modal"
+        data-target="#exampleAdd" #closeaddtemppopup>
+        +
+      </button>
+    </div>
+  </div>
+
+  <!-- TimeSheet Popup 2 -->
+  <div class="modal fade" id="exampleAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered timebootmodal" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #044063; color: white">
+        <p style="margin-bottom: 0">Time Sheet Template</p>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="popupAddTemplateForm">
+            <!-- *ngIf="activityPopMenuNgif" -->
+            <div class="popup-main-container">
+              <div class="cus-popup2">
+                <div class="custom-container popup-common-div">
+                  <mat-form-field (click)="getclient('')">
+                    <mat-label>Client</mat-label>
+                    <input #cltInput matInput (click)="clearClient()" (input)="onClientInputChange($event)"
+                      formControlName="client" [matAutocomplete]="clt" />
+
+                    <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclient"
+                      (opened)="autocompleteCltScroll()">
+                      <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                      <ng-container *ngIf="!popupIsLoading">
+                        <mat-option *ngFor="let clt of popupClientList" (click)="FocusOut_select_client(clt)"
+                          [value]="clt" title="{{clt.name}}">
+                          {{ clt.name }}
+                        </mat-option>
+                      </ng-container>
+                      <mat-option *ngIf="!popupClientList || !popupClientList.length">
+                        No Records Found
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <!-- module -->
+                <div class="popup-common-div">
+                  <mat-form-field class="matformfieldstyle" (click)="getApplication('')">
+                    <mat-label>Project</mat-label>
+
+                    <input #appnmInput class="matformfieldinputstyle" matInput formControlName="app_id"
+                      (input)="onProjectInputChange($event)" [matAutocomplete]="appnm" />
+
+                    <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnApp">
+                      <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                      <ng-container *ngIf="!popupIsLoading">
+                        <mat-option *ngFor="let modulee of popupAppList" (click)="FocusOut_select_module(modulee)"
+                          [value]="modulee" title="{{modulee.name}}">
+                          {{ modulee.name }}
+                        </mat-option>
+                      </ng-container>
+                      <mat-option *ngIf="!popupAppList ||!popupAppList.length">
+                        No Records Found
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <!-- activity -->
+                <div class="popup-common-div">
+                  <mat-form-field class="matformfieldstyle" (click)="getActivity('')">
+                    <mat-label>Activity</mat-label>
+
+                    <input #activityInput class="matformfieldinputstyle" matInput formControlName="ref_id"
+                      [matAutocomplete]="act" />
+
+                    <mat-autocomplete #act="matAutocomplete" [displayWith]="displayFnActivity">
+                      <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+                      <ng-container *ngIf="!popupIsLoading">
+                        <mat-option *ngFor="let act of activityArr" (focusout)="FocusOut_select_app(act)" [value]="act" title="{{act.activity}}">
+                          {{ act.activity }}
+                        </mat-option>
+                      </ng-container>
+                      <mat-option *ngIf="!activityArr ||!activityArr.length">
+                        No Records Found
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <!-- <mat-checkbox formControlName="is_default" class="example-margin">default
+                </mat-checkbox> -->
+              </div>
+
+              <!-- <div *ngIf="othersPopMenuNgif" class="cus-othersDiv">
+                <div class="popup-common-div">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <input type="text" matInput formControlName="description" />
+                  </mat-form-field>
+                </div>
+              </div> -->
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="temptimesubmit()" style="background-color: #044063; color: white"
+            [disabled]="!popupAddTemplateForm.get('ref_id').value">
+            Add
+          </button>
+          <button type="button" class="btn btn-primary" (click)="cancelFormTwo()" data-dismiss="modal"
+            style="background-color: #044063; color: white">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <button style="left: 5px;" (click)="Onreturnsummary()">back</button> -->
+  <form [formGroup]="temptimesheet" class="cus-tableContainer">
+    <table class="table cus-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Activity</th>
+          <th>Client</th>
+          <th>Project</th>
+          <th>Action</th>
+          <!-- <th>Default Template</th> -->
+          <!-- <th class="ba-organization">Default</th> -->
+        </tr>
+      </thead>
+
+      <tbody class="tableBody-center">
+        <tr *ngFor="let temtimesum of temptimesummlist; index as i">
+          <td>{{ (snotimesheet - 1) * sizetimesheet + i + 1 }}</td>
+          <td>
+            <span>{{ temtimesum?.activity_info?.activity }}</span>&nbsp;
+            <!-- <span *ngIf="temtimesum.is_default == true" class="timeline-highlight">
+              Default
+            </span>
+            <span *ngIf="temtimesum.is_default == false" class="timeline-highlight">
+            </span> -->
+          </td>
+          <td>
+            <!-- <span class="timeline-highlight">{{ temtimesum.code }}</span> -->
+            <span>{{ temtimesum?.client?.name }}</span>
+          </td>
+
+          <td>{{ temtimesum?.module?.name }}</td>
+          <td>
+            <mat-icon (click)="deletetemp(temtimesum)" matTooltip="Delete Template">delete_outline</mat-icon>
+          </td>
+          <!-- <td>
+            <mat-checkbox [checked]="temtimesum.is_default" (click)="setdefault(temtimesum)"></mat-checkbox>
+
+          </td> -->
+
+          <!-- <td *ngIf="temtimesum.is_default === true">
+                  {{ temtimesum.is_default }}
+                </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+
+
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <p class="modal-title" id="exampleModalLabel" style="margin-bottom: 0">
+          Timesheet Update
+        </p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton style="color: white; padding: 1rem 1rem;
+        margin: -1rem -1rem -1rem auto;"
+          (click)="popclose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    
+       
+<form [formGroup]="timsheetForm" class="cus-sprintCreateMain">
+  <div class="modal-body" style="padding: 10px">
+    <div class="cus-sprintContainer1">
+      <div class="cus-sprintContainer100">
+        <mat-form-field style="width: 100%;">
+          <mat-label>Description</mat-label>
+          <input
+            type="text"
+            matInput
+            autocomplete="off"
+            formControlName="description" 
+            readonly
+          />
+          <!-- <mat-placeholder>Description</mat-placeholder> -->
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field style="width: 100%;">
+          <mat-label>Time</mat-label>
+          <input matInput  formControlName="duration">
+          </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field style="width: 100%;">
+          <mat-label>Log Type</mat-label>
+          <input #logTypeInput matInput formControlName="ref_type" [matAutocomplete]="logTypeRefs"
+            required readonly/>
+          <mat-autocomplete #logTypeRefs="matAutocomplete" [displayWith]="displayFnLogType">
+            <mat-option *ngIf="popupIsLoading" class="is-loading">Loading...</mat-option>
+
+            <ng-container *ngIf="!popupIsLoading">
+              <mat-option *ngFor="let itemsLogType of logTypeArr"
+                (click)="updateViewConditions(itemsLogType)" [value]="itemsLogType">
+                {{ itemsLogType.name }}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="cus-sprintContainer2">
+      <!-- <button class="btn btn-outline-secondary" (click)="BackToSummary()">
+        Cancel
+      </button> -->
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" >
+        Close
+      </button>
+      <button
+        class="btn btn-primary"        
+        style="background-color: #044063;color: white;" (click)="updateTemplate()">
+        Update
+      </button>
+    </div>
+  </div>
+</form>
+
+    </div>
+  </div>
+</div>

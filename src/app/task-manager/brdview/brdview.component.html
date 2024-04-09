@@ -1,0 +1,68 @@
+<div [formGroup]="brdviewform">
+    <div style="margin-left: 9px;">
+        <i class="fa fa-arrow-left" (click)="cancelbrd()" aria-hidden="true"></i>
+        <span style="margin-top: -3px; margin-left: 6px;">BRD View</span>
+    </div>
+    <div class="cus-brdAddContainer"></div>
+        <div class="row col-12" style="margin-left: -3px;">
+            <div class="col-8 row">
+            <div class="col-lg-4">
+                <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input    readonly="true" matInput formControlName="query" required/>
+                </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                <mat-form-field class="matformfieldstyle" 
+                    (click)="appName()">
+                    <mat-label>Project</mat-label>
+                    <input   readonly="true" #appnmInput class="matformfieldinputstyle" matInput placeholder="Select Project"
+                        formControlName="project" [matAutocomplete]="appnm" required>
+                    <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let appnm of appNameList"
+                                [value]="appnm">
+                                {{appnm.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field (click)="clientdopdown()">
+                <mat-label>Client</mat-label>
+                <input
+                readonly="true"
+                    #clientclientInput
+                    placeholder="Select Client"
+                    matInput
+                    formControlName="client_id"
+                    [matAutocomplete]="clientteamrole"
+                    (click)="clientclick()"/>
+                <mat-autocomplete
+                    #clientteamrole="matAutocomplete"
+                    [displayWith]="displayccclient">
+                    <ng-container>
+                    <mat-option
+                        *ngFor="let opt of clientdrop"
+                        [value]="opt"
+                        (focusout)="FocusOut_select_client(opt)">
+                        {{ opt.name }}
+                    </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
+
+<div style="border: 1px solid rgba(0, 0, 0, 0.086);padding: 3px; margin-top: 55px;margin-left: 19px;" class="col-sm-9 col-md-9 col-lg-9">
+    <div [ngxSummernote]="config" #textbox (keyup)="gettingPreviewValue"
+        [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()" (mediaDelete)="onDelete($event)"
+        placeholder="Description" id="notebook" (summernoteInit)="summernoteInit($event)"
+        (keyup)="sanitizedHtml; selectedposition" formControlName="details"  [ngxSummernoteDisabled]="true"  >
+</div>
+</div>
+</div>

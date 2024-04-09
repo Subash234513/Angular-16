@@ -1,0 +1,326 @@
+<div style="  width: 100%; ">
+  <div class="row">
+    <div class="col-sm-1 col-md-1 col-1 col-lg-1 col-xl-1">
+      <div class="cardspaceListProfile color display">
+        {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+      </div>
+    </div>
+    <div class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3">
+      <p style="color: #046ba8;font-size:x-large;font-weight: 700;margin-top: 7%;">Experience</p>
+    </div>
+    <div class="col-sm-4 col-md-4 col-4 col-lg-4 col-xl-4">
+    </div>
+    <!-- <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+
+    </div> -->
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;padding-left:6%;margin-left:12%">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;" type="button" (click)="showSaveButton()"
+          data-toggle="modal" data-target="#expModal">
+          <span>+ Add</span>
+        </button>
+      </div>
+    </div>
+    <!-- <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;" type="button" data-toggle="modal" data-target="#docsModal">
+          <span>Upload</span>
+        </button>
+      </div>
+    </div> -->
+  </div>
+  <hr>
+  <div *ngFor="let exp of EmpExperienceInfo; let i = index" class="newCard">
+
+
+    <div class="d-flex">
+      <div class="p-2 flex-grow-1">
+        <p><span class="color" style="font-weight: 600; font-size: medium;">{{ exp.role }}</span> | {{ exp.company }}|
+          <span class="cus-badgeGreen">{{exp.city}}</span>
+        </p>
+        <p>
+          <span class=" cus-badgeBlue" *ngIf="exp.dor !== 'undefined NaN NaN'">
+            {{ exp.doj }} to {{ exp.dor }}
+          </span>
+          <span class="cus-badgeBlue" *ngIf="exp.dor == 'undefined NaN NaN'">
+            Working Since {{ exp.doj }}
+          </span>
+        </p>
+      </div>
+      <div class="p-2" style="width: 100px;">
+        <a (click)="editRowExp(exp)" data-toggle="modal" data-target="#expModal">
+          <i class="fa solid fa-pencil" style="margin-left: -44%;"></i>
+        </a>
+        <i style="margin-left: 5px;" class="fa solid fa-trash-can" (click)="deleteExperience(exp?.id)"></i>
+        <span *ngIf="exp?.employee_document !== null" class="col-md-1" style="margin-left: -10px;margin-top: 2px;">
+          <i class="fa solid fa-download" (click)="downloadfiles(exp)"></i>
+        </span>
+
+
+        <!-- <i *ngIf="exp?.employee_document !== null" style="margin-left: 20%;" class="fa solid fa-eye" data-toggle="modal"
+          data-target="#viewDownload" (click)="viewfile(exp)"></i> -->
+      </div>
+
+
+
+
+    </div>
+
+
+  </div>
+
+</div>
+<div class="modal fade bottom-modal" id="expModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Experience</b>
+
+        </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButton
+          style="color: white;opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="experienceForm" class="formAbove">
+          <div class="container">
+            <div class="row">
+              <div class="col smallfield">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Company</mat-label>
+                  <input matInput placeholder="Company" name="companyName" formControlName="company">
+                </mat-form-field>
+              </div>
+
+              <div class="col smallfieldDegree">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Joining date</mat-label>
+                  <input formControlName="doj" name="joiningDate" matInput [matDatepicker]="picker">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="col smallfield">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Relieving date</mat-label>
+                  <input formControlName="dor" matInput [matDatepicker]="pickern"
+                    [disabled]="experienceForm.get('disableField').value">
+                  <mat-datepicker-toggle matSuffix [for]="pickern"></mat-datepicker-toggle>
+                  <mat-datepicker #pickern></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="row rolecityRow">
+              <div class="col smallfield">
+                <mat-form-field class="dateFormat shortinput">
+                  <mat-label>Role</mat-label>
+                  <input matInput name="expRole" placeholder="Role" formControlName="role">
+                </mat-form-field>
+                <br>
+              </div>
+              <div class="col smallfield">
+                <mat-form-field class="form-field shortinputPercentage">
+                  <mat-label>City</mat-label>
+                  <input name="cityName" name="expCity" #titleInputCity placeholder="Select City" matInput
+                    formControlName="city" [matAutocomplete]="empcity" (input)="getCityAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #empcity="matAutocomplete" [displayWith]="displayCity">
+                    <mat-option *ngFor="let city of CityDropdownList" [value]="city" title="{{city.name}}">
+                      {{ city.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <br>
+                <br>
+              </div>
+              <div class="col smallfield">
+                <!-- <form [formGroup]="fileUploadForm" class="form-group">
+                  <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                  accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+                </form> -->
+              </div>
+            </div>
+            <div class="row" *ngIf="addingMode || fileupdate">
+              <div class="col-sm-7">
+                <label style="margin-right: 1em;">
+                  <input type="file" class="borderremove" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                  .dotx,.dotm,.docb,
+                  .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" multiple="true" name="images"
+                    (change)="fileChange($event)">
+                </label>
+              </div>
+            </div>
+            <div class="row" *ngIf="!fileupdate">
+              <div class="col-sm-9" style="margin-left: 2%;">
+                <div class="cus-attachCard" *ngIf="reuploadfileArr?.file_name !== null" style="margin-left: -2%;">
+                  <!-- H -->
+                  <span>{{ reuploadfileArr?.file_name }}</span>
+                  <button mat-icon-button type="button" (click)="viewfiles(reuploadfileArr)" data-target="#viewDownload"
+                    data-toggle="modal" style="    margin-left: 37%;">
+                    <mat-icon aria-label="View" style="font-size: x-large;color: blue;
+                      margin-top: -19px;">visibility</mat-icon>
+
+                  </button>
+                  <button mat-icon-button type="button" (click)="deletefile(reuploadfileArr)">
+
+                    <mat-icon aria-label="Delete" style="font-size: x-large;color: blue;
+                       margin-top: -19px;">delete</mat-icon>
+
+                  </button>
+                </div>
+              </div>
+              <!-- <div *ngIf="fileupdate" class="col-sm-5" style="    margin-top: 3%;">
+                  <label style="margin-right: 1em;">
+                    <input type="file" class="borderremove" style="margin-left: 5%;" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                    .dotx,.dotm,.docb,
+                    .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" multiple="true" name="images"
+                      (change)="fileChanges($event)">
+                  </label>
+                </div> -->
+            </div>
+            <div class="row">
+              <div class="col-sm-7"></div>
+              <div class="col-sm-2"></div>
+              <div class="col-sm-2" style="    margin-top: -1%;
+              margin-left: 5%;">
+                <button class="btn btn-primary" *ngIf="addingMode" (click)="onSubmitss()"
+                  style="background-color: #044063;margin-top: -3%;">Submit</button>
+                <button class="btn btn-dark" *ngIf="!addingMode" (click)="onUpdateVals()"
+                  style="background-color: #044063;margin-top: -3%;">Update</button>
+              </div>
+            </div>
+
+
+          </div>
+
+
+
+
+          <!-- <div class="container">
+            <div class="row">
+              
+              <div class="col">
+               
+                    <button class="btn btn-primary"  *ngIf="addingMode"
+                      (click)="onSubmitss()" style="background-color: #044063;margin-top: -3%;">Save</button>
+                    <button class="btn btn-dark" *ngIf="!addingMode"
+                      (click)="onUpdate()" style="background-color: #044063;margin-top: -3%;">Update</button>
+                
+              </div>
+              <div class="col">
+              </div>
+            </div>
+          </div> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal bottom-modal" id="docsModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b> Upload Work
+            Experience </b>
+
+
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+          #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+
+            </div>
+            <div class="col-md-4">
+
+              <mat-form-field class="remarks">
+                <mat-label>Remarks</mat-label>
+                <input type="text" matInput placeholder="Remarks" name="remarkInfo" formControlName="remarks" />
+              </mat-form-field>
+              <br>
+              <span class="error-message" *ngIf="(!remarkInfo?.valid && (remarkInfo?.touched || remarkInfo?.dirty))">
+                *Remarks required
+              </span>
+
+            </div>
+
+            <div class="col-md-1">
+
+              <button class="inputFile" type="submit"><mat-icon>cloud_upload</mat-icon></button>
+
+            </div>
+          </div>
+          <br>
+          <!-- <span class="error-message" *ngIf="(!docsFile?.valid && (docsFile?.touched || docsFile?.dirty))">
+        *File required
+                 </span> -->
+
+        </form>
+
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="viewDownload" role="dialog" aria-labelledby="bankModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;">
+          View File
+        </h5>
+        <!-- <mat-icon  style="margin-left: 7%;
+        font-size: 25px; cursor: pointer;" (click)="onDownload()">cloud_download</mat-icon> -->
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton
+          style="color: white; opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12 col-sm-12" fxLayoutAlign="space-between">
+            <pdf-viewer *ngIf="pdfshow" [src]="filesrc" [original-size]="false" [render-text]='false'
+              [show-borders]="true" [fit-to-page]="true" [show-all]="true" style="display: block; height: 500px;"
+              [fit-to-page]="true">
+            </pdf-viewer>
+            <br>
+            <img *ngIf="imgshow" src="{{filesrc}}" class="img-responsive"
+              style="display: block;border-width: 2px;border-style: solid;width: 100%;" />
+          </div>
+
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>

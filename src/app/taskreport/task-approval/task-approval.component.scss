@@ -1,0 +1,767 @@
+
+
+// .tableheader {
+  
+//     text-align: center;
+//     font-size: 13px;
+// }
+ 
+.example-card:hover{
+    transform: translateY(-7px);
+    box-shadow: 0px 10px 20px 2px #8ed0f5;
+    border :black;
+      // box-shadow: 0px 5px 10px 0px rgba(4, 153, 212, 0.5);
+    // filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
+  }
+  .emp-card{
+   // background-color:#8ed0f5;
+    box-shadow: 2px;
+  }
+  mat-card-title{
+     
+     color:#2626EE;
+    
+     border-radius: 5px;
+    }
+  
+  // .emp-card{
+  //  // transform: translateY(-5px);
+  //   //background-color: 0px 5px 10px 0px rgba(118, 206, 238, 0.5);
+  //  // box-shadow: 0px 10px 20px 2px rgba(24, 118, 177, 0.25);
+  
+  // }
+  .filter-btn {
+      margin-left: 30px;
+  }
+  // th, td{
+  //     text-align:center;
+  //     font-size: 14px;
+  //   }
+  //   tbody td {
+  //     padding: 0.5em 0.1em 0.1em;
+  //     border: 1px solid #dddddd;
+  //     border-right: hidden;
+  // }
+  
+  // .styled-table {
+  //     // border-collapse: collapse;
+  //     margin: 25px 0;
+  //     font-size: 0.9em;
+  //     font-family: "Montserrat";
+  //     // min-width: 400px;
+  //     // box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  // }
+  // .styled-table tbody tr:nth-of-type(even) {
+  //     background-color: #F3FAFF;
+  // }
+  // .styled-table thead tr {
+  //     // background-color: #009879;
+  //     // color: #ffffff;
+  //     // text-align: left;
+  // }
+  
+  // .styled-table th,
+  // .styled-table td {
+  //     padding: 12px 15px;
+  // }
+  
+  // .styled-table tbody tr {
+  //     border-bottom: 1px solid #dddddd;
+      
+  // }
+  
+  
+  
+  // .styled-table tbody tr:last-of-type {
+  //     border-bottom: 2px solid #009879;
+  // }
+  
+  // .styled-table tbody tr.active-row {
+  //     font-weight: bold;
+  //     color: #009879;
+  // }
+  
+  // ::ng-deep .mat-form-field-outline {
+  //   color:grey !important;
+  // }
+  // ::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+  //   color: red!important;
+  //   opacity: 0.8!important;
+  // }
+  // .matformfieldstyle{
+  //   font-size:7px;
+  //   margin-top: 5px
+  // }
+  // .matformfieldinputstyle{
+  //   font-size:16px ;
+  // }
+  .maticonsize{
+    font-size:15px;
+  }
+  
+  .mat-option:hover {
+    background:#EDF8FA !important;
+  }
+  // button:hover {
+  //   background:#EDF8FA !important;
+  // }
+  
+  // table
+  #commonstyle{
+    border:15px none #f6f6f6;
+    // tr:nth-child(even) {background: #EDF8FA}
+    // tr:nth-child(odd) {background: #FFF}
+    }
+  
+  
+    .portflag{
+      background-color: #daf0ec;
+    }
+    .teamlead{
+       margin-top: 50px;
+       margin-left: 25px; 
+       //overflow-x: scroll; 
+       //overflow-y: scroll; 
+       //width: 900px;
+       //height: 400px;
+    }
+  table,th,td{
+    text-align: left;
+    // padding: 5px;
+  }
+  .approved{
+    color: green;
+  }
+  .notapproved{
+    color: black;
+  }
+  
+  .portflag td:first-child::after{
+        color: red;
+        content: "*";
+  }
+  .textdecorationatag{
+    text-decoration: underline;
+    color: #044063;
+    cursor: pointer;
+  }
+  .verified{
+    color: green;
+  }
+  .notverified{
+    color: black;
+  }
+  .Deleted{
+    color: red;
+  }
+  
+  
+  .navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .tab-btn {
+    margin-left: 81%;
+    position: relative;
+  }
+  
+  #navshow{
+    width: 95%;
+    margin-left: 10px;
+  }
+  
+  .nav-item.show .nav-link,
+  .nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #044063 !important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link:hover {
+    border: none !important;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link {
+    border: none;
+    cursor: pointer;
+  }
+  
+  .status{
+    color: green;
+    // border-radius: 10px;
+    // display: inline-block;
+    // width: 121px;
+  }
+  
+  td, th {
+    padding: 13px;
+  }
+  
+  .notify:hover {
+    background-color: #49728d;
+    color: whitesmoke;
+   }
+  
+  
+   .container {
+    margin: 10px 15px 100px 10px;
+  }
+  
+   
+  // .container {
+  //   margin: 10px 15px 100px 10px;
+  // }
+  .smallinput{
+    width: 120px;
+  }
+  
+  .placingOnRight {
+    float: right;
+  }
+  
+  .tablepaddingsizeheader {
+    width: 50%;
+    margin-left: 16px;
+  }
+  
+  .tablepaddingsizeheader tr th {
+    padding: 5px;
+    margin: 10px;
+  }
+  
+  .buttonwidth { 
+    font-size: 20px;
+  }
+  
+  .inlineprint {
+    display: inline-block;
+    margin: 10px;
+  }
+  
+  .inputCMTFile01 {
+    width: 200px;
+  }
+  
+  .btncolor {
+    background-color: #e0e0e0;
+  }
+  
+  
+  .cursor {
+    cursor: pointer;
+  }
+  
+  .spacingfile {
+    margin: 2px;
+  }
+  
+  .textdecorationatag {
+    text-align: center;
+  }
+  
+  .inlineprint {
+    display: inline-block;
+    margin: 10px;
+  }
+   
+  ////////////////////////////////
+  .tablesize {
+    width: var(--widthTableFull);
+  }
+  
+  .tablesizeCalender {
+    width: var(--widthTableFull);
+  }
+  
+  .padsize thead tr th {
+    text-align: center;
+    background-color: rgb(215, 215, 250);
+  }
+  
+  .padsize tbody tr td {
+    width: 100px;
+    height: 100px;
+  }
+  
+  
+  .topleftcorner {
+    float: right;
+    font-weight: 700;
+  }
+  
+  .tableborder,
+  .tableborder thead tr th,
+  .tableborder tbody tr td {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .contentside {
+    height: 100px;
+  }
+  
+  .colorsicons {
+    font-size: 16px;
+    color: rgb(96, 93, 93);
+  }
+  
+  .aligniconBtn {
+    vertical-align: middle;
+  }
+  
+  .sizepill {
+    font-size: 8px;
+  }
+  
+  .tablesizeonwidth tr th {
+    padding: 20px;
+    white-space: nowrap; 
+  }
+  
+  .attendanceMark {
+    text-align: center;
+  }
+  
+  .attendanceMark span {
+    font-size: 16px;
+  }
+  
+  .presentstyle, .absentstyle, .weekend, .weekendHolidayPresent {
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .LP {
+    color: #FFDCBE;
+  }
+  
+  .presentstyle { 
+    color: #28a745; 
+  }
+  
+  .absentstyle { 
+    color: #dc3545; 
+  }
+  
+  .weekend { 
+    color: #6c757d; 
+  }
+   
+  .holidaypopup { 
+    color: #49728D; 
+  }
+  
+  .weekendHolidayPresent { 
+    color: #343a40; 
+  }
+  
+  .leftspace {
+    margin-left: 20px;
+  }
+  
+  #NoteView { 
+    max-height: 500px;
+    padding: 5px;
+    overflow: hidden;
+    overflow: scroll;
+  }
+  
+  #NoteView::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  /* Track */
+  #NoteView::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  #NoteView::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  .checkInAndout {
+    background-color: #f9f9f9;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+  }
+  
+  .duration {
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 5px solid #e3e3e3;
+    border-radius: 50%;
+    display: flex;
+    font-size: 18px;
+    height: 120px;
+    justify-content: center;
+    margin: 0 auto;
+    width: 120px;
+  }
+  
+  .designBoxInOut {
+    padding: 10px;
+    border: 5px solid #e3e3e3;
+    text-align: center;
+  }
+  
+  .textdec {
+    color: #49728D;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  
+  #NoteViewTable { 
+    max-width: 500px;
+    max-height: 500px;
+    padding: 5px;
+    overflow: scroll;
+  
+  }
+  
+  #NoteViewTable table thead tr th,
+  #NoteViewTable table tbody tr td,
+  #NoteViewTable table tbody tr td span {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  
+  #NoteViewTable::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  /* Track */
+  #NoteViewTable::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  #NoteViewTable::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  .listfontsize {
+    font-size: 14px;
+  }
+  
+  .breadcrumbdatawhite {
+    background-color: white;
+  }
+  
+  .breadcrumbdataselected {
+    background-color: #dbe5ec;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .calenderview {
+      display: none;
+    } 
+  }
+  
+  .outertable td:first-child, .outertable th:first-child {
+    position: sticky;
+    left: 0px;
+    z-index: 10;
+    background-color: white;
+  }
+  
+  .outertable td:nth-child(2), .outertable th:nth-child(2) {
+    position: sticky;
+    left: 40px;
+     z-index: 11;
+    background-color: white;
+  }
+  
+  .outertable th:nth-child(3) {
+    position: sticky;
+    left: 130px;
+    // z-index: 12;
+    background-color: white;
+  }
+  
+  .outertable td:nth-child(3) {
+    position: sticky;
+    left: 130px;
+    // z-index: 13;
+    background-color: white;
+  }
+  
+  .tableFixHeaddiv th {
+    position: sticky;
+    top: 0;
+    // z-index: 14
+  }
+  .tablefixFixHeaddiv th{
+    position: sticky;
+    top: 0;
+    background-color: #044063; 
+    color:#fff   
+  }
+  .tableFixHeaddiv{
+    height: 500px;
+    position: relative;
+  }
+  .tablefixFixHeaddiv{
+    height: 500px;
+    .outertable thead th { 
+  
+      background-color: #044063;
+      
+    position: sticky;
+      top: 0;
+      // border: 1px solid #3c3b3b;
+      z-index: 1;
+     
+    
+    }
+    .outertable tbody td{
+  
+       background-color: #fff;
+    }
+  
+  }
+  
+  .outertable thead th { 
+  
+      background-color: #f2f2f2;
+      
+    position: sticky;
+      top: 0;
+      // border: 1px solid #3c3b3b;
+      z-index: 2;
+     
+    
+    }
+  
+  .togglePosition {
+    position: absolute;
+    top: 0px;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  .outertable th:first-child, .outertable th:nth-child(2),.outertable th:nth-child(3) {
+  
+    background-color: #f2f2f2;
+    position: sticky;
+  
+    left: 0;
+    z-index: 3 !important;
+  // z-index: 12;
+  
+  
+  }
+  
+  .outertable td:first-child, .outertable td:nth-child(2),  .outertable td:nth-child(3){
+        background-color: #f2f2f2;
+        
+      position: sticky;
+        left: 0; 
+      
+      
+      // z-index: 14
+      }
+    
+  .outertable td:nth-child(2), .outertable th:nth-child(2){
+    left: 53px;
+  }
+  
+  .outertable td:nth-child(3),  .outertable th:nth-child(3){
+    left: 133px;
+  }
+  
+  
+  .outertable td:first-child, .outertable td:nth-child(2),.outertable,.outertable td:nth-child(3) {
+    z-index: 2;
+  }
+  
+  .indicatorOnCornerPermission {
+    content: '';
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background-color:#ff0000b8;
+    width: 14px;
+    height: 14px;
+    border-radius: 50px;
+    /* border-bottom-right-radius: 50px 50px; */
+    /* -webkit-animation: perm 1s linear infinite; */
+    //animation: perm 1s linear infinite;
+  }
+  
+  @keyframes perm {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .indicatorOnCornerEdited { 
+    position: relative;
+    top: 0px;
+    left: 0px;
+    font-size: 10px;
+    color: #7a7979;
+  }
+  
+  .AttendanceTableView {
+    display: flex;
+    flex-direction: row;
+    margin: 8px;
+  }
+  
+  // .displayMultiple {
+  //   border-radius: 50px;
+  //   width: 30px;
+  //   height: 30px;
+  //   padding: 4px;
+  //   margin-left: -10px;
+  //   color: white;
+  // } 
+  
+  .present {
+    // background-color: #28a745;
+    border: 1px solid #ffffff;
+  }
+  
+  .absent {
+    // background-color: #dc3545d1;
+    border: 1px solid #ffffff;
+  }
+  
+  .weekend {
+    // background-color: #6c757d;
+    border: 1px solid #ffffff;
+    border: 1px solid #ffffff;
+  }
+  
+  .holiday {
+    // background-color: #49728D;
+    border: 1px solid #ffffff;
+  }
+  
+  .others {
+    // background-color: #FFDCBE;
+    border: 1px solid #ffffff;
+    color: #000000;
+  }
+  
+  .colorsset {
+    color: red
+  }
+  
+  .spacing {
+    margin: 5px;
+    color: #ffffff;
+  }
+  .spacingForm {
+    margin-left: 5px; 
+  }
+  
+  .tablePrevious th:nth-child(n+4):nth-child(-n+10),
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10),
+  .tablePrevious td:nth-last-child(-n+7),
+  .tablePrevious th:nth-last-child(-n+7) {
+    color: #9b8f8f;
+  }
+  
+  
+  //// previous Dates
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .present,
+  .tablePrevious td:nth-last-child(-n+7) .present {
+    background-color: #28a74670;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .absent,
+  .tablePrevious td:nth-last-child(-n+7) .absent {
+    background-color: #dc35465e;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .weekend,
+  .tablePrevious td:nth-last-child(-n+7) .weekend {
+    background-color: #6c757d6d;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .holiday,
+  .tablePrevious td:nth-last-child(-n+7) .holiday {
+    background-color: #49728D6a;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .others,
+  .tablePrevious td:nth-last-child(-n+7) .others {
+    background-color: #FFDCBE6a;
+  }
+  
+  /////// hovers dates
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .present:hover,
+  .tablePrevious td:nth-last-child(-n+7) .present:hover {
+    background-color: #28a745;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .absent:hover,
+  .tablePrevious td:nth-last-child(-n+7) .absent:hover {
+    background-color: #dc3545d1;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .weekend:hover,
+  .tablePrevious td:nth-last-child(-n+7) .weekend:hover {
+    background-color: #6c757d;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .holiday:hover,
+  .tablePrevious td:nth-last-child(-n+7) .holiday:hover {
+    background-color: #49728D;
+  }
+  
+  .tablePrevious td:nth-child(n+4):nth-child(-n+10) .others:hover,
+  .tablePrevious td:nth-last-child(-n+7) .others:hover {
+    background-color: #FFDCBE;
+  } 
+  
+  .tableTogle th:nth-child(n+4):nth-child(-n+10),
+  .tableTogle td:nth-child(n+4):nth-child(-n+10),
+  .tableTogle td:nth-last-child(-n+7),
+  .tableTogle th:nth-last-child(-n+7) {
+    display: none;
+  } 
+   
+  .togglePosition {
+    position: absolute;
+    top: 0px;
+    right: -17px;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  
+  .presentDate{
+    background-color: #115db0;
+  }
+  
+  .dateFilter{
+    visibility: hidden;
+  }
+  
+   
+  .filterData{
+  
+    font-size: 15px;
+    color: #585656; 
+    margin: 10px;
+  }
+  
+  .coloring{
+    color: #ffffff
+  }
+  .row{
+    width: 98%;
+    margin-left: 21px;
+  }
+  .fa-pencil{
+    color:black
+  }
+  
+   

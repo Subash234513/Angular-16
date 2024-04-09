@@ -1,0 +1,125 @@
+<div style="margin-left: 30px;">
+<div class="row" *ngIf="clientviewsummary">
+    <div class="col-sm-12 col-md-12 col-lg-12 MarginLeft">
+         <h2>Client Summary</h2>
+
+    
+    
+
+    </div>
+    <div class="row col-5 "  >
+        <div class="col-5 SearchLeft">
+            <mat-form-field>
+                <mat-label>Client</mat-label>
+                <input matInput [formControl]="SearchClient">
+            </mat-form-field>
+        </div>
+        <div class="col-7 display">
+            <button mat-stroked-button (click)="Search()">
+                <i class="fa fa-search"></i>
+            </button>
+            <button mat-stroked-button (click)="Clear()">
+                Clear
+            </button>
+            <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+            (click)="addClient('Creation','')">
+                <mat-icon matTooltip="Add">add</mat-icon>
+            </button>
+        </div>
+    </div>
+   
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <div style="margin-left: 15px;">
+        <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                            id='commonstyle'>
+                            <thead class="table_header">
+                <tr>
+                    <th>S.no</th>
+                    <th>Code</th>
+                    <th>Client</th>
+                    <th>Pipeline</th>
+                    <th>Approver</th>                    
+                    <th>Edit</th>
+                    <th>Action</th>
+                
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let type of clientList; index as i">
+                    <td>{{(presentpageclient - 1)*pagesizeclient +i+1 }}</td>
+                    <td>{{type?.code}}</td>
+                    <td>{{type?.name}}</td>
+                    <td>{{type?.pipline_template?.name}}</td>
+                    <td>{{type?.approved_by.full_name}}</td>
+                    <td><span class="material-icons cursor" (click)="addClient('Edit',type)">edit</span></td>
+                    <td> 
+                        <span class="material-icons" (click)="clientActiveInactive(1, type)" *ngIf="type?.status == 0 " matTooltip="Click to Active" style="color: red;cursor: pointer;">wb_sunny </span>
+                        <span class="material-icons" *ngIf="type?.status == 1" style="color: green;cursor: pointer;" matTooltip="Click to Inactive" (click)="clientActiveInactive(0, type)">wb_sunny </span>
+                     </td>
+                     
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="clientList?.length==0 || clientList == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_previousclient === false" color="primary"
+                (click)="clientSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{presentpageclient}}
+            <button type="button" mat-icon-button [disabled]="has_nextclient === false" color="primary"
+                (click)="clientSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    </div>
+</div>
+</div>
+<div *ngIf="clientcreation">
+    <h2>Client {{TypeOfForm}}</h2>
+    <form [formGroup]="clientForm"  autocomplete="off">
+        <table>
+            <div>
+                <tr>
+                    <td>
+                    <div>
+
+                    </div>
+                        <mat-label style="margin-left: -162px;">Client Name <label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                            <input matInput class="matformfieldinputstyle" type="text"
+                                 formControlName="name" autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-label >Pipeline<label style="color:red">*</label> </mat-label><br>
+                        <mat-form-field class="matformfieldstyle"   style="width: 250px;margin-left: 38%;"  appearance="outline">
+                          <mat-select formControlName="pipeline_template_id">
+                            <mat-option *ngFor="let l of pipelinedropdown" [value]="l.id">
+                              {{l.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </td>
+                    
+                </tr>
+            </div>
+        </table>
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 0px;
+                                            border-color: black;
+                                            background-color: white;"
+                                        (click)="oncancelClient()">Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+        border-color: #f5c68b;
+        background-color: #f5c68b;" (click)="clientSubmit()" class="btn btn-light">Submit</button>
+    </form>
+</div>
+</div>
+
+
+

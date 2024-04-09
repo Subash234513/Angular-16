@@ -1,0 +1,478 @@
+.mat-form-field {
+  margin-top: 16px;
+}
+
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Style for the input fields and buttons in the popup */
+input[type="text"] {
+  width: 100%;
+  // padding: 10px;
+  // margin-bottom: 10px;
+
+  border-radius: 3px;
+}
+
+button {
+
+
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style for the "+Add" button */
+.add {
+  margin-bottom: 10px;
+  margin-left: 52rem;
+}
+
+
+//cus table
+
+
+/* cus-tableContainer */
+.cus-tableContainer {
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  border-color: #dedede;
+  padding: 16px 30px;
+}
+
+/* Table Search */
+.cus-tableSearch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 20px 0;
+}
+
+.cus-tableSearchContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cus-tableSearchHead {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+
+}
+
+
+.bigcard {
+  border: 1px solid black;
+  margin-top: 10px;
+  border-radius: 15px;
+  width: 65rem;
+  margin-left: 5rem;
+  height: 100px;
+  padding: 0;
+
+}
+
+.card-body {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+
+.cardTitleHeight {
+  height: 50px;
+}
+
+.row-heading {
+  display: flex;
+  align-items: center;
+  font-family: "Montserrat";
+  color: black;
+}
+
+small {
+  font-size: 10px;
+}
+
+.degree-title-heading {
+  flex: 1;
+  font-family: "Montserrat";
+  margin-left: 1rem;
+  font-size: 15px;
+}
+
+.instFont {
+  font-size: 20px;
+}
+
+  
+#editicon {
+  color: rgb(23, 111, 244);
+}
+
+#deleteicon {
+  color: rgb(23, 111, 244);
+}
+.cus-badgeBlue {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ededfd;
+  color: #2d2e8e;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+mat-icon {
+  font-size: 15px;
+}
+
+.month {
+  color: #575757;
+  font-family: "Montserrat";
+}
+
+.year {
+
+  margin-left: 5rem;
+}
+
+.insti {
+  color: #575757;
+  font-family: "Montserrat";
+}
+
+.percentage {
+  margin-left: 9rem;
+  font-size: 20px;
+  color: black;
+}
+
+#percentid {
+  margin-left: 2rem;
+}
+
+.percentsymbol {
+  margin-left: 2rem;
+}
+
+.insidePopup {
+  margin-top: 15px;
+}
+
+#saveEdu {
+  margin-right: 40rem;
+}
+
+// .bottom-modal {
+//   position: fixed;
+//   bottom: 5rem;
+//   width: 100%;
+//   margin-top: 17rem;
+//   margin-left: 10rem;
+//   padding: 0;
+//   transform: translateX(100%);
+//   transition: transform 0.3s;
+// }
+
+// .bottom-modal.show {
+//   transform: translateX(0);
+// }
+
+.dateFormat {
+  width: 7rem;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  position: relative;
+  bottom: 1rem;
+
+}
+
+.instiName {
+  width: 29rem;
+  margin-left: 0;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.shortinput {
+  width: 13rem;
+}
+
+.instspan {
+  color: #a29e9e;
+}
+
+#shortinputCity {
+  left: 2rem;
+  width: 13rem;
+}
+
+.shortinputCity {
+  margin-left: 15px;
+  width: 210px;
+}
+
+.shortinputPercentage {
+  // right: 129px;
+  width:210px;
+}
+
+.city {
+  font-size: 15px;
+}
+
+.addbutton {
+  background-color: #f5c68b;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#educationHeader {
+  background-color: #044063;
+  color: white;
+}
+
+.cityInst {
+  margin-left: 2rem;
+  height: 50px;
+  position: relative;
+  bottom: 15px;
+}
+
+.percent {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #044063;
+  color: white;
+  padding: 5px;
+}
+
+.close {
+  color: white;
+}
+
+#percentErr {
+  right: 8rem;
+}
+
+// .newcontain{
+//   border: 1px solid black;
+//   margin-top: 10px;
+//   border-radius: 10px;
+// }
+
+// .percentDegreeStream{
+//   position: relative;
+//   top: 13px;
+// }
+
+// .titlePos{
+//   position: relative;
+//   bottom: 10px;
+// }
+
+
+// .cus-badge {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   justify-content: center;
+//   gap: 20px;
+// }
+.cus-badgeLightGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #c2f8ff;
+  color: #007787;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.cus-badgeRed {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #fae6e6;
+  color: #7f1111;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeLightBlack {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #eeeeef;
+  color: #353537;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+// .headEdu{
+//   margin-top: 10px;
+// }
+.instHead{
+  background-color: #a9a4a4;
+  color: black;
+  padding: 5px;
+  border-radius: 20px;
+  width: 25rem;
+}
+
+.libIcon{
+  font-size: 20px;
+}
+
+.newCard{
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+.cardspaceListProfile{
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  font-size:32px;
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  font-family: 'Poppins', sans-serif;
+  // font-weight:bold;
+  // color: #044063;
+}
+.display{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color{
+  color:#525CEB;
+  // color:#046ba8
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.matCard{
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  // margin-top: 45px;
+  padding: 3px;
+}
+
+.fa-pencil {
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+}
+.fa-file{
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+}
+
+.fa-trash-can{
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+}
+.inputFile{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #f5c68b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+// margin-left: 30rem;
+}
+.inputFile mat-icon{
+  font-size: 20px;
+}
+.remarks{
+  margin-top: 0px;
+}
+.form-group{
+  margin-top: 20px;
+}
+
+ 
+// @media screen and (max-width: 1280px) {
+
+//   .modal {
+//     margin: 3rem;
+//     // width: calc(100% - 4rem);
+//     // height: auto;
+//     // max-height: 80vh; 
+//   }
+// }
+
+.fa-download{
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+  }
+
+  .cus-attachCard {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.171);
+    padding: 4px 10px;
+    max-width: 500px;
+    width: 100%;
+    margin: 10px 0 0 0;
+    border-radius: 6px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }

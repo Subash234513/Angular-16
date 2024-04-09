@@ -1,0 +1,338 @@
+<div class="Container" style="margin-left: 20px;">
+    <nav>
+        <div class="nav nav-tabs" style="margin-top: 1%;">
+            <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                *ngFor="let sub of prpoPARList">
+                {{sub.name}}
+            </span>
+        </div>
+    </nav>
+
+</div>
+<div *ngIf="isParcreateTab">
+    <app-par-make-details (onSubmit)="ParCreateSubmit()" (onCancel)="ParCreateCancel()"></app-par-make-details>
+</div>
+<div *ngIf="isParEditTab">
+    <app-parcreate-edit (onSubmit)="ParEditSubmit()" (onCancel)="ParEditCancel()"></app-parcreate-edit>
+</div>
+<div *ngIf="isParContigencyTab">
+    <app-par-make-details-edit (onSubmit)="ParContigencySubmit()" (onCancel)="ParContigencyCancel()">
+    </app-par-make-details-edit>
+</div>
+<div *ngIf="isParStatusTab">
+    <app-par-status-screen (onCancel)="ParStatusCancel()"></app-par-status-screen>
+</div>
+<div *ngIf="isParApproverScreenTab">
+    <app-par-checker-edit (onSubmit)="ParApproverSubmit()" (onCancel)="ParApproverCancel()"></app-par-checker-edit>
+</div>
+
+
+
+
+<div *ngIf="isParmakerTab">
+    <form [formGroup]="parsummarySearchForm" (ngSubmit)="parsummarySearch()">
+        <h2 style="margin-left: 3%;">Budget Proposal Approval (BPA Maker Summary)</h2>
+        <table>
+            <tr>
+                <td>
+                    <mat-form-field style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="no" matInput autocomplete="off"
+                            (keypress)="only_numalpha($event)">
+                        <mat-placeholder>BPA Number</mat-placeholder>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="desc" matInput autocomplete="off"
+                        >
+                        <mat-placeholder>BPA Name</mat-placeholder>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style=" margin-left: 50px;">
+                        <mat-label> Date</mat-label>
+                        <input matInput readonly [matDatepicker]="picker1" placeholder="Start Date"
+                            formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                </td>
+                <td>
+                    <!-- <mat-form-field style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="year" matInput autocomplete="off"
+                            (keypress)="numberOnly($event)">
+                        <mat-placeholder>BPA Year</mat-placeholder>
+                    </mat-form-field> -->
+
+                    <mat-form-field style="margin-left: 50px;" >
+                        <mat-label>BPA Year</mat-label>
+                        <mat-select formControlName="year">
+                            <mat-option *ngFor="let year of FinancialYearList" [value]="year.text">
+                                {{year.text}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field style="margin-left: 50px;">
+                        <input class="toolbar-search" type="number" formControlName="amount" matInput autocomplete="off"
+                            (keypress)="numberOnly($event)">
+                        <mat-placeholder>BPA Total Amount</mat-placeholder>
+                    </mat-form-field>
+                    
+                <td>
+                    <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 50px;"
+                        color="primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-primary" (click)="resetpar()" type="submit"
+                        style="border-radius:40px;margin-left:50px;" color="primary">Reset</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-success" style="border-radius:40px;margin-left: 50px"
+                        (click)="addpar()"><span class="fa fa-plus"></span></button>
+                </td>
+                <td>
+                    <button style="border-radius:40px;margin-left: 20px;cursor: pointer" [disabled]= "isexportButton" type="button"
+                class="btn btn-outline-success" (click)="makerexceldownload()"
+               >
+                <span></span>Export </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+    <div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 50px;">
+        <table class="table scrolltable table-bordered" fixed-header>
+            <thead>
+                <tr class="table_header" fixed-header style="text-align:center;">
+                    <th>S.No</th>
+                    <th>BPA Number</th>
+                    <th>BPA Name</th>
+                    <th>BPA Date</th>
+                    <th>BPA Year</th>
+                    <th>BPA Amount</th>
+                    <th>BPA Total Amount</th>
+                    <th>Utilized Amount</th>
+                    <th>Balance Amount</th>
+                    <th>BPA Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody style="padding: 0.5em 0.1em 0.1em;text-align:center;">
+                <tr *ngFor="let par of parList; index as i" style="text-align:center;padding: 0.5em 0.1em 0.1em;">
+                    <td> {{(presentpagepar - 1)*pageSize +i+1 }} </td>
+                    <td>{{ par?.no }}</td>
+                    <td>{{ par?.desc}}</td>
+                    <td><div class="alignsInTable">{{ par?.date | date:'dd-MM-yyyy'}}</div></td>
+                    <td>{{ par.year}}</td>
+                    <td class="rightalign">{{ par?.originalamount | amountPipeCustom }}</td>
+                    <td class="rightalign">{{ par?.amount | amountPipeCustom }}</td>
+                    
+                    <td class="rightalign">{{ par?.utilized | amountPipeCustom }}</td>
+                    <td class="rightalign">{{ par?.balance | amountPipeCustom }}</td>
+                    <td>{{ par?.par_status}}</td>
+                    <td>
+                        <div *ngIf="par?.par_status === 'MODIFICATION-APPROVAL'; else pendapp">
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                (click)="editparmake(par)" title="contigency percentage Form">
+                                <mat-icon aria-label="Edit">edit</mat-icon>
+                            </button>
+                        </div>
+                        <ng-template #pendapp>
+                            <div *ngIf="par?.par_status === 'PENDING-APPROVAL'; else enablecon">
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="parcreateedit(par)" title="BPA Edit">
+                                    <mat-icon style="color: gray;">edit</mat-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #enablecon>
+                            <div *ngIf="par?.par_status === 'REJECTED'; else enablestatus">
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="StatusScreen(par)" title="BPA Status">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+
+
+                        <ng-template #enablestatus>
+                            <div *ngIf="par?.contigency === 0 ; else enable">
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    title="Edit contigency" (click)="editparmake(par)" title="BPA Contigency Edit">
+                                    <mat-icon style="color: gray;">edit</mat-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #enable>
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                (click)="StatusScreen(par)" title="contigency percentage already assigned">
+                                <mat-icon aria-label="Edit">edit</mat-icon>
+                            </button>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="parList?.length==0; else paginationpar" class="NodataAlign">No Records Found...</div>
+        <ng-template #paginationpar>
+            <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                <button mat-icon-button [disabled]="has_previouspar === false" color="primary"
+                    (click)="previousClickpar()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpagepar}}
+                <button mat-icon-button [disabled]="has_nextpar === false" color="primary" (click)="nextClickpar()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<div *ngIf="isParapproverTab">
+    <form [formGroup]="parAppsummarySearchForm" (ngSubmit)="parAppsummarySearch()">
+        <h2 style="margin-left: 3%;">Budget Proposal Approval Summary</h2>
+        <table>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="no" matInput autocomplete="off">
+                        <mat-placeholder>BPA Number</mat-placeholder>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="desc" matInput autocomplete="off">
+                        <mat-placeholder>BPA Name</mat-placeholder>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style="margin-left: 50px;">
+                        <mat-label> Date</mat-label>
+                        <input matInput readonly [matDatepicker]="picker1" placeholder="Start Date"
+                            formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                </td>
+                <td>
+                    <!-- <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="year" matInput autocomplete="off">
+                        <mat-placeholder>BPA Year</mat-placeholder>
+                    </mat-form-field> -->
+
+                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                        <mat-label>BPA Year</mat-label>
+                        <mat-select formControlName="year">
+                            <mat-option *ngFor="let year of FinancialYearList" [value]="year.text">
+                                {{year.text}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                        <input class="toolbar-search" type="text" formControlName="amount" matInput autocomplete="off">
+                        <mat-placeholder>BPA Amount</mat-placeholder>
+                    </mat-form-field>
+                <td>
+                    <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 50px;"
+                        color="primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </td>
+                <td><button class="btn btn-outline-primary" (click)="resetparApp()" type="submit"
+                        style="border-radius:40px;margin-left: 50px;" color="primary">Reset</button></td>
+                        <td>
+                            <button [disabled]= "isBPAApproverexportButton" style="border-radius:40px;margin-left: 20px;cursor: pointer" type="button"
+                        class="btn btn-outline-success" (click)="checkerexceldownload()"
+                       >
+                        <span></span>Export </button>
+                        </td>
+
+            </tr>
+        </table>
+    </form>
+    <div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 50px;">
+        <table class="table scrolltable table-bordered" fixed-header>
+            <thead>
+                <tr class="table_header" fixed-header>
+                    <th>S.No</th>
+                    <th>BPA Number</th>
+                    <th>BPA Name</th>
+                    <th>BPA Date</th>
+                    <th>BPA Year</th>
+                    <th>BPA Amount</th>
+                    <th>BPA Total Amount</th>
+                    <th>Utilized Amount</th>
+                    <th>Balance Amount</th>
+                    <th>BPA Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let par of parAppList; index as i">
+                    <td> {{(presentpageparApp - 1)*pageSizeApp +i+1 }} </td>
+                    <td>{{ par?.no }}</td>
+                    <td>{{ par?.desc }}</td>
+                    <td>{{ par?.date | date:'dd-MM-yyyy'}}</td>
+                    <td>{{ par?.year}}</td>
+                    <td class="rightalign">{{ par?.originalamount | amountPipeCustom }}</td>
+                    <td class="rightalign">{{ par?.amount | amountPipeCustom }}</td>
+                    <td class="rightalign">{{ par?.utilized | amountPipeCustom }}</td>
+                    <td class="rightalign">{{ par?.balance | amountPipeCustom }}</td>
+                    <td>{{ par?.par_status}}</td>
+                    <td>
+                        <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                            (click)="approveorreject(par)">
+                            <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="parAppList?.length==0; else paginationpar" class="NodataAlign">No Records Found...</div>
+        <ng-template #paginationpar>
+            <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                <button mat-icon-button [disabled]="has_previousparApp === false" color="primary"
+                    (click)="previousClickparApp()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpageparApp}}
+                <button mat-icon-button [disabled]="has_nextparApp === false" color="primary"
+                    (click)="nextClickparApp()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

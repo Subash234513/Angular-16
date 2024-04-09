@@ -1,0 +1,130 @@
+<div *ngIf="Screens['PenaltyCreate']">
+
+    <form [formGroup]="PenaltyForm">
+        <table class="tableform">
+            <tr>
+                <td>
+                    <mat-label>Penalty</mat-label><br>
+                    <mat-form-field class="widthOfField">
+                        <mat-select formControlName="penalty" placeholder="Penalty">
+                            <mat-option *ngFor="let type of penaltyObjects.PenaltyDD_Lists" [value]="type?.id">
+                                {{type.text}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-label>Effective From Date</mat-label><br>
+                    <mat-form-field class="inputSizeWidth">
+                        <input matInput readonly [matDatepicker]="picker1"
+                            (dateChange)="ChangeDateFormat('effective_from');" formControlName="effective_from">
+                        <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                </td>
+                <td>
+                    <mat-label>Shift</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <input class="matformfieldinputstyle" type="number" matInput autocomplete="off"
+                            placeholder="Shift" formControlName="shift">
+                    </mat-form-field>
+                </td>
+
+
+
+
+
+            </tr>
+
+        </table>
+
+
+
+
+
+        <div>
+            <div style="margin-left: 7px;
+        margin-top: 20px;">
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black;
+                    background-color: white;" (click)="ScreensModules('penaltyView')">Cancel</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                    (click)="onSubmitClick()">Submit</button>
+
+            </div>
+        </div>
+
+
+        <!-- <pre>{{PenaltyForm.value | json}}</pre> -->
+    </form>
+
+</div>
+
+<div *ngIf="Screens['penaltyView']">
+
+    <h2>Penalty View</h2>
+
+    <button type="button" style="border-radius: 10px;margin-left: 20px;border-color: #f5c68b;
+                                background-color: #f5c68b;" class="btn btn-light"
+        (click)="ScreensModules('PenaltyCreate')"><i class="fa fa-plus-circle"></i>Add Penalty</button>
+
+
+    <table class="table table-bordered" style="margin-top: 10px;max-width: 800px;" id='commonstyle'>
+
+        <thead class="table_header">
+            <tr>
+                <th>S.No</th>
+                <th>Penalty</th>
+                <th>Effective date</th>
+                <th>Shift</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let penalty of penaltyObjects.PenaltyViewLists; index as i">
+                <tr>
+                    <td>
+                        <h4><span class="badge badge-pill badge-danger"> {{i+1}} </span></h4>
+                    </td>
+                    <td> <span (click)="showDetails(penalty)" class="penaltyRule">{{penalty?.penalty?.text}}
+                            <span class="material-icons iconstyle">info</span> </span> </td>
+                    <td>{{penalty?.effectivefrom == 'None'? '-': penalty?.effectivefrom}} / {{penalty?.effectiveto==
+                        'None'? '-': penalty?.effectiveto}} </td>
+                    <td>{{penalty?.shift}} </td>
+                </tr>
+                <tr *ngIf="penalty?.show">
+                    <td colspan="10">
+                        <h3>Penalty Rule</h3>
+
+                        <table class="table table-bordered" style="margin-top: 10px;max-width: 800px;" id='commonstyle'>
+
+                            <thead class="table_header">
+                                <tr>
+                                    <td>Sl.No</td>
+                                    <td>Max upto <small>(in hrs) </small> </td>
+                                    <td>Limit</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let rule of penalty?.penalty_rule; let index = index">
+                                    <td>{{index + 1}}</td>
+                                    <td> {{rule?.p_value}} {{rule?.p_type?.text}} </td>
+                                    <td> {{rule?.limit}} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+
+
+
+
+</div>

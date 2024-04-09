@@ -1,0 +1,95 @@
+.reportContainer {
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 20px;
+}
+
+.reportContainer .mat-form-field {
+  width: 240px;
+}
+
+.reportContainer-sub {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap:10px;
+}
+
+.reportBtn {
+  padding: 8px 12px;
+  background-color: #044063;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+.cus-badgeGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #d7f8e1;
+  color: #057926;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.cus-badgered {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ffcfcf;
+  color: #be2424;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeRed {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #fae6e6;
+  color: #7f1111;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.pointer {cursor: pointer;}
+
+.cus-taskPageBtnsDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 20px 40px 20px;
+}
+
+.cus-taskPageBtnsDiv button {
+  background-color: #044063;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  border-radius: 4px;
+}
+
+.cus-taskBtnDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 23px;
+}
+
+.cus-btnActive {
+  background-color: #eeeeef;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+}

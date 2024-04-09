@@ -1,0 +1,69 @@
+<div class="timesheet-container">
+    <div class="col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+        <span (click)="backtoTaskSummary()" class="material-icons pointer">arrow_back</span>
+        <span style="margin-top: 2px;font-weight: bold;">Timesheet Month Report</span>
+    </div>
+
+
+    <form [formGroup]="ReportMonthly" class="reportContainer">
+        <div>
+            <mat-form-field>
+                <mat-label>Month/Year</mat-label>
+                <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+                formControlName="monthyear" />
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+              </mat-datepicker>
+            
+            </mat-form-field>
+        </div>
+        <div>
+            <button class="btn btn-primary searchBtn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+     
+        <div>
+   
+            <button class="reportBtn" (click)="reportDownload()" style="margin-top: 7%;">Download</button>
+            
+        </div>
+        <div>
+            <button class="btn btn-secondary" type="button" style="margin-top: 10%;" (click)="resetTasks()">Reset
+            </button>
+         
+            
+        </div>
+        
+
+    </form>
+    <div class="table-responsive">
+        <table class="ml-4">
+            <thead >
+                <th>S.no</th>
+                <th>Employee</th>
+                <th *ngFor="let data of Date">{{data}}</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of Summary;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{data.Empname}}</td>
+                    <ng-container *ngFor="let date of data.Date">
+                        <td [ngClass]="{'BackGreen':date.currentStatus=='weekend','BackRed':date.currentStatus==null}">{{date.currentStatus}}</td>
+                    </ng-container>
+                   
+                    <!-- <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> -->
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

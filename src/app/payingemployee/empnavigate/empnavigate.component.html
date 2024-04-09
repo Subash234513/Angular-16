@@ -1,0 +1,163 @@
+<!-- <div>
+    <nav *ngIf="isShowNavs">
+        <div class="nav nav-tabs">
+            <span class="nav-item nav-link " data-toggle="tab" role="tab" *ngFor="let sub of payrollsubmoduleList">
+                <span *ngIf="sub.url !=='/landing'">
+                    <span *ngIf="sub.url !=='/payapproval'">
+                        <span *ngIf="sub.url !=='/paysummary'">
+                            <span *ngIf="sub.url !=='/offertemplate'">
+                                <span *ngIf="sub.url !=='/bulkupload'">
+                                    <span *ngIf="sub.url !=='/yearlysummary'">
+                                        <span *ngIf="sub.url !=='/employeeadvance'">
+                                            <span *ngIf="sub.url !== '/master'">
+                                                <span *ngIf="adminUser">
+                                                    <span *ngIf="sub?.url!='/payrollsmry'" (click)="empdetails()">
+                                                        {{sub.name}}
+                                                    </span>
+                                                </span>
+                                                <span *ngIf="sub?.url=='/payrollsmry'" (click)="paysummary()">
+                                                    {{sub.name}}
+                                                </span>
+                                            </span>
+
+                                        </span>
+
+                                        <span *ngIf="sub?.url=='/employeeadvance'" (click)="payadvance()">
+                                            {{sub.name}}
+                                        </span>
+                                    </span>
+
+                                    <span *ngIf="sub?.url=='/yearlysummary'" (click)="yearsummary()">
+                                        {{sub.name}}
+                                    </span>
+                                </span>
+
+                                <span *ngIf="adminUser">
+                                    <span *ngIf="sub?.url=='/bulkupload'" (click)="bulkUpload()">
+                                        {{sub.name}}
+                                    </span>
+                                </span>
+                            </span>
+
+                            <span *ngIf="adminUser">
+                                <span *ngIf="sub?.url=='/offertemplate'" (click)="offerTemplate()">
+                                    {{sub.name}}
+                                </span>
+                            </span>
+                        </span>
+
+                        <span *ngIf="sub?.url=='/paysummary'" (click)="getSummary()">
+                            {{sub.name}}
+                        </span>
+                    </span>
+                
+
+
+
+                <span *ngIf="adminUser">
+                    <span *ngIf="sub?.url=='/payapproval'" (click)="getApproval()">
+                        {{sub.name}}
+                    </span>
+                </span>
+            </span>
+        
+           
+            
+            </span>
+            <span *ngIf="adminUser" class="padding">
+                <span (click)="MonthPayroll()" >
+                    MonthlyPayroll
+                </span>
+            </span>
+           
+
+        </div>
+
+    </nav>
+</div> -->
+
+
+<nav id="navshow" class="cus-tmsNavContainer">
+    <div class="nav nav-tabs cus-tmsNav">
+      <p
+        #myDiv
+        class="nav-item nav-link"
+        id="subname"
+        [ngClass]="i == returnnav ? 'active' : ''"
+        data-toggle="tab"
+        (click)="subModuleData(sub)"
+        role="tab"
+        *ngFor="let sub of payrollsubmoduleList; index as i"
+      >
+        {{ sub.name }}
+      </p>
+      <p (click)="AttendSummary()" style="margin-bottom:-7px;padding-left:10px; cursor:pointer">Attendance Summary</p>
+      <!-- <p (click)="ExcelUpload()" style="margin-bottom:-7px;padding-left:10px; cursor:pointer">Employee Upload</p> -->
+      <!-- <p (click)="AttendanceUpload()" style="margin-bottom:-7px;padding-left:10px;cursor:pointer"> Attendance Upload</p> -->
+      <!-- <p  #myDiv
+      class="nav-item nav-link"
+      id="subname"
+      [ngClass]="i == returnnav ? 'active' : ''"
+      data-toggle="tab"
+      (click)="subModuleData(sub)"
+      role="tab">Monthly Payroll</p>
+      <p  #myDiv
+      class="nav-item nav-link"
+      id="subname"
+      [ngClass]="i == returnnav ? 'active' : ''"
+      data-toggle="tab"
+      (click)="subModuleData(sub)"
+      role="tab">Bank Template</p> -->
+    </div>
+  </nav>
+<!-- <div *ngIf="adminUser"></div> -->
+<div *ngIf="isEmpDetails">
+    <app-emp-detail-summary></app-emp-detail-summary>
+</div>
+<div *ngIf="isPaySummary">
+    <app-payrollsummary></app-payrollsummary>
+</div>
+<!-- <div *ngIf="isPayMaster">
+    <app-payrolmasters></app-payrolmasters>
+</div> -->
+<div *ngIf="isAdvancePay">
+    <!-- <app-employeeadvances></app-employeeadvances> -->
+    <app-newadvance></app-newadvance>
+</div>
+<div *ngIf="isYearlySummary">
+    <app-yearlysummary></app-yearlysummary>
+</div>
+<div *ngIf="isBulkUpload">
+    <app-bulkupload></app-bulkupload>
+</div>
+<div *ngIf="isOfferTemplate">
+    <app-offertemplate></app-offertemplate>
+</div>
+<div *ngIf="isPayStatement">
+    <app-paysummary></app-paysummary>
+</div>
+<div *ngIf="isPayApprove">
+    <app-payapproval></app-payapproval>
+</div>
+<div *ngIf="isMonthlyPay">
+    <app-monthly-payroll-report></app-monthly-payroll-report>
+</div>
+<div *ngIf="isBankTemplate">
+    <app-banktemplate></app-banktemplate>
+</div>
+<div *ngIf="isEmployeeUpload">
+    <app-excel-upload-data></app-excel-upload-data>
+</div>
+<div *ngIf="isAttendanceUpload">
+    <app-emp-attend-upload></app-emp-attend-upload>
+</div>
+<div *ngIf="isAttendanceSummary">
+    <app-emp-attend-summary></app-emp-attend-summary>
+</div>
+<!-- isBanktempreport -->
+<div *ngIf="isBanktempreport">
+    <app-banktemplatereport></app-banktemplatereport>
+</div>
+<div *ngIf="isIncementView">
+    <app-incrementview></app-incrementview>
+</div>

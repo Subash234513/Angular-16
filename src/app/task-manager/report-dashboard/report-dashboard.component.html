@@ -1,0 +1,188 @@
+<div class="Main">
+    <div class="Search row">
+        <div class="col-md-2">
+           
+            <mat-form-field>
+                <mat-label>Team Lead</mat-label>
+                <input matInput [matAutocomplete]="auto1">
+                <mat-autocomplete #auto1="matAutocomplete">
+                    <mat-option></mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+           
+            <mat-form-field>
+                <mat-label>Employee</mat-label>
+                <input matInput [matAutocomplete]="auto2">
+                <mat-autocomplete #auto2="matAutocomplete">
+                    <mat-option></mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+           
+            <mat-form-field>
+                <mat-label>Deployed Site</mat-label>
+                <input matInput [matAutocomplete]="auto3">
+                <mat-autocomplete #auto3="matAutocomplete">
+                    <mat-option></mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <mat-form-field dateFormat2 class="smallinput spacingForm">
+                <mat-label> Month </mat-label>
+                <input matInput [matDatepicker]="dp" [formControl]="monyear"
+                    placeholder="Month and Year">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                    (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                </mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <mat-form-field>
+                <mat-label>
+                    Status
+                </mat-label>
+                <mat-select>
+                    <mat-option></mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+           
+            <mat-form-field>
+                <mat-label>BS</mat-label>
+                <input matInput [matAutocomplete]="auto4">
+                <mat-autocomplete #auto4="matAutocomplete">
+                    <mat-option></mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+           
+            <mat-form-field>
+                <mat-label>CS</mat-label>
+                <input matInput [matAutocomplete]="auto5">
+                <mat-autocomplete #auto5="matAutocomplete">
+                    <mat-option></mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-raised-button>
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        <div>
+            <button mat-raised-button>
+                Clear
+            </button>
+        </div>
+    </div>
+    <div style="width:92%">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <th>Name</th>
+                    <ng-container *ngFor="let data of MonthDate">
+                        <th>{{data}}</th>
+                    </ng-container>
+                </thead>
+                <tbody>
+                   <tr *ngFor="let sum of summaryData">
+                        <td>{{sum.NAME}}</td>
+                   </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="table-responsive tableFixHeaddiv">
+
+                        <table class="table table-bordered outertable" style="margin-top: 10px;max-width: 100%;"
+                            id='commonstyle'>
+                            <thead class="table_header">
+                                <tr [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious">
+                                    <th class="tablecolumn">S.No</th>
+                                    <th class="tablecolumn">Employee
+                                        <span class="material-icons togglePosition" (click)="Toggle()"
+                                            title="{{showHide == false ? 'Collapse': 'Expand' }}">
+                                            {{showHide == false ? 'switch_right': 'switch_left' }}
+                                        </span>
+                                    </th>
+                                    <ng-container *ngIf="HRMSReportsObject.ListOfDaysInSelectedMonth?.length > 0">
+                                        <th *ngFor="let days of HRMSReportsObject.ListOfDaysInSelectedMonth; let i = index"
+                                            attr.name='{{i}}' title="{{days | date: 'dd-MMM-yyyy'}}"
+                                            style="text-align: center;">
+                                            <span> {{days | date:'d'}} <sup> {{HRMSReportsObject.PresentDate ==
+                                                    days? '*': ''}} </sup> </span>
+                                            <br>
+                                            <small> {{days | date: 'EEEEEE'}} </small>
+
+                                             
+                                                <mat-select class="inputs arrowClass filterData" [formControl]="individualDate">   
+                                                  <mat-option *ngFor="let typeOfAttendance of HRMSReportsObject?.ReportStatusList" 
+                                                  [value]="typeOfAttendance.id"  (click)="EmployeeReportSearch('', individualDate.value, days ); resetStatusFilter('inline')"      >
+                                                    {{typeOfAttendance.name}}
+                                                  </mat-option>
+                                                </mat-select> 
+
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of HRMSReportsObject.arrReport; let index = index"
+                                    [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious">
+                                    <td class="tablecolumn">{{index+1}}</td>
+                                    <td class="tablecolumn" title="({{data?.code}}) {{data?.name}}">({{data?.code}})
+                                        {{data?.name}}
+                                    </td>
+
+                                    <ng-container *ngIf="HRMSReportsObject.ListOfDaysInSelectedMonth?.length > 0">
+                                        <td *ngFor="let days of HRMSReportsObject.ListOfDaysInSelectedMonth; let i = index"
+                                            attr.name='{{i}}' 
+                                            style="text-align: center;">
+                                            <div class="wraping">
+                                                <ng-container *ngFor="let loop of data[days]; let dateindex = index">
+                                                    <span class="badge coloring spacing" 
+                                                      title='{{days | date: "dd-MMM-yyyy"}} - ({{data?.code}}) {{data?.name}} - {{loop?.type == "Late check in" ? "Late Check In - " + loop?.duration + " hrs" : loop?.type == "Early check out" ? "Early Check Out - " + loop?.duration + " hrs" : loop?.type == "Permission" ? "Permission - " + loop?.duration + " hrs" : loop?.type == "Leave" ? "L - " + loop?.is_taken :
+                                                      loop?.type == "WFH" ? "WFH - " + loop?.is_taken : "-"}}'
+                                                        [ngClass]='loop?.type == "Late check in" ? "lateIn" :  loop?.type == "Early check out" ? "EarlyOut" :
+                                                          loop?.type == "Permission" ? "permissionsclass" :  "-"'>
+                                                        {{loop?.type == "Late check in" ? "LI - " + loop?.duration + " hrs" :
+                                                         loop?.type == "Early check out" ? "EO - " + loop?.duration + " hrs" :
+                                                          loop?.type == "Permission" ? "PRM - " + loop?.duration + " hrs" :  
+                                                          "-"}}
+                                                          
+                                                    </span> 
+
+                                                    <span class="badge" [ngClass]=' loop?.approve_status == "Pending" ? "pendingClass" :
+                                                    loop?.approve_status == "Approved" ? "ApprovedClass" : ""'
+
+
+
+                                                    title='{{days | date: "dd-MMM-yyyy"}} - ({{data?.code}}) {{data?.name}} - 
+
+                                                    {{loop?.type == "Leave" ? "Leave - " + loop?.approve_status :
+                                                    loop?.type == "WFH" ? "Work From Home - " + loop?.approve_status : ""}}' 
+                                                    
+                                                    
+                                                    >{{loop?.type == "Leave" ? "L - " + loop?.approve_status :
+                                                        loop?.type == "WFH" ? "WFH - " + loop?.approve_status : ""}}</span>
+                                                    
+                                                    <span [ngClass]='loop?.is_taken ==  "Taken" ? "greenClass smallfont" : loop?.is_taken ==  "Not Taken" ? "redClass smallfont" : ""  ' > {{loop?.is_taken}}  </span> 
+                                                </ng-container>
+                                            </div>
+
+                                        </td>
+                                    </ng-container>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> -->
+    </div>
+</div>  

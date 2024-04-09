@@ -1,0 +1,359 @@
+<div class="container mt-3">
+    <div class="matCard">
+    <div class="row">
+        <div class="col-lg-10">
+            <div class="HeaderView">
+                <!-- <div class="ProfileDisplayName backgroundColors"> -->
+                <div class="cardspaceListProfile color display">
+                    <i *ngIf="!filesrc" class="fa-solid fa-user"  >
+
+                    </i> 
+                    <div *ngIf="filesrc">
+                        <img style="height: 95px;width: 95px;object-fit: cover;object-position: center;" src="{{filesrc}}">
+                      </div>
+                    <!-- {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter  | uppercase}}  -->
+
+                <!-- </div> -->
+                </div>
+
+                <div class="detailsView">
+
+                    <h2 class="m-0 font color" > {{EmpObjects.employeeList?.full_name == null ? 'VS': EmpObjects.employeeList?.full_name | uppercase}} <sup> <span
+                                *ngIf="EmpObjects.ActivityStatus?.status == 1"
+                                class="badge badge-pill badge-success sizepill aligniconBtn"
+                                matTooltip="Logged In"><span style="color:#28a745">.</span></span>
+                            <span *ngIf="EmpObjects.ActivityStatus?.status != 1"
+                                class="badge badge-pill badge-danger sizepill aligniconBtn" matTooltip="Logged Out" style="margin-top: 1%;"><span
+                                    style="color: red;">.</span></span> </sup>
+                                    
+                                    <!-- <span class="material-icons badgesPaddings spaceBtwn" (click)="callemployeeInfo()">visibility</span> -->
+                                    <!-- <span class="material-icons badgesPaddings spaceBtwn" (click)="callemployeeView()">visibility</span> -->
+                                    <!-- <span class="material-icons badgesPaddings spaceBtwn" (click)="callEmployeeInfoRoutes()">visibility</span>
+                                     -->
+
+                                
+                                </h2>
+                    <h3 class="m-0 font">{{EmpObjects?.employeeList?.code == null ? 'VS': EmpObjects?.employeeList?.code }}</h3>
+
+                    <div class="detailsdepth" style="width: 152%; margin-top:17px">
+                        <br>
+                        <div class="font"> <span *ngIf="EmpObjects.employeeList?.designation?.name" class="material-icons iconssize" matTooltip="Designation">work</span> {{EmpObjects.employeeList?.designation?.name}}
+                        </div>
+                        <!-- <p> <span class="material-icons iconssize">call</span> {{EmpObjects.employeeList?.phone_no}}
+                        </p> -->
+                        <div class="font" *ngIf="EmpObjects.employeeList?.employee_branch_id?.name"> <span *ngIf="EmpObjects.employeeList?.employee_branch_id?.name" class="material-icons iconssize"  matTooltip="Branch">business</span> {{EmpObjects.employeeList?.employee_branch_id?.name}}
+                        </div>
+                        <div class="font"> <span *ngIf="EmpObjects.employeeList?.functional_head?.code" class="material-icons iconssize" matTooltip="Functional Head">frame_person</span><span *ngIf="EmpObjects.employeeList?.functional_head?.code">(</span> {{EmpObjects.employeeList?.functional_head?.code}}<span *ngIf="EmpObjects.employeeList?.functional_head?.code">)</span> {{EmpObjects.employeeList?.functional_head?.name | uppercase}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="logside">
+
+                <!-- <button mat-raised-button class="whitebuttons"
+                    *ngIf="EmpObjects.ActivityStatus?.status == 2 || EmpObjects.ActivityStatus?.status == null"
+                    (click)="getWIFILocation(1)" matTooltip="Check In">
+                    <mat-icon>login</mat-icon> In
+
+                </button> -->
+                <!-- <button mat-icon-button 
+                *ngIf="EmpObjects.ActivityStatus?.status == 2 || EmpObjects.ActivityStatus?.status == null"
+                (click)="getWIFILocation(1)" matTooltip="Check In">
+                    <mat-icon style="color: green;">login</mat-icon>
+                  </button> -->
+
+                <!-- <button *ngIf="EmpObjects.ActivityStatus?.status == 1" mat-raised-button class="whitebuttons"
+                    matTooltip="Check Out" (click)="getWIFILocation(2)">
+                    <mat-icon>logout</mat-icon>Out
+
+                </button> -->
+                <!-- <button mat-icon-button 
+                *ngIf="EmpObjects.ActivityStatus?.status == 1"
+                (click)="getWIFILocation(2)" matTooltip="Check Out">
+                    <mat-icon style="color: red;">logout</mat-icon>
+                  </button> -->
+                <!-- <button mat-mini-fab class="whitebuttons spaceBtwn" [matMenuTriggerFor]="menu">
+                    <mat-icon>history</mat-icon>
+                </button> -->
+                <button  mat-icon-button
+                [matMenuTriggerFor]="menu">
+                    <i class="fa-regular fa-user color" (click)="callEmployeeInfoRoutes()" matTooltip="My Info"></i>
+                </button>
+                <button mat-icon-button class="spaceBtwn"
+                [matMenuTriggerFor]="menu" matTooltip="Day Log">
+                    <mat-icon class="color">history</mat-icon>
+                  </button>
+                <button mat-icon-button class="spaceBtwn"> <i class="fa-solid fa-hospital-user color" (click)="EmergencyInfo()"  matTooltip="Emergency"></i></button>
+
+
+
+                <mat-menu #menu="matMenu" id="menuclass">
+                    <div *ngIf=" EmpObjects.TimeLogList?.length == 0">
+                        <p>No Logs Found !!</p>
+                    </div>
+                    <ng-container *ngFor="let dataAttendance of EmpObjects.TimeLogList; let index = index">
+                        
+                        <ul class="stepperSteps">
+                            <!-- <div class="sizeofwidthdiv"> -->
+                            <li> <span *ngIf="dataAttendance?.log_type == 1" class="badge badge-success badgesPaddings">
+                                In</span>
+                            <span *ngIf="dataAttendance?.log_type == 2" class="badge badge-danger badgesPaddings">
+                                Out</span>
+                                {{dataAttendance?.log_time | date:'hh:mm a'}}
+                                <span class="material-icons sizeicon">{{dataAttendance?.check_in_mode?.check_in_mode
+                                    == 'Mobile' ? 'smartphone':'laptop_mac' }}</span>
+                                
+                            </li>
+                            <!-- </div> -->
+                        </ul>
+                    </ng-container>
+                </mat-menu>
+            </div>
+        </div>
+ 
+    </div>
+</div>
+
+    <div class="row mt-5">
+        <!-- <div class="col-sm-1"></div> -->
+        <div class="col-sm-3">
+            <!-- <div class="card cardspaceList" matBadge="{{EmpObjects?.pendingCounts?.task_count}}" matBadgeOverlap="true" matBadgeSize="medium" matBadgeColor="warn"> -->
+                <div class="cardspaceList display" matBadge="{{EmpObjects?.pendingCounts?.task_count}}" matBadgeOverlap="true" matBadgeSize="medium" matBadgeColor="warn">
+                <div class=" display">
+                    <!-- <img width="64" height="64" src="./assets/images/tasks.png" alt="Tasks" (click)="callTaskSummary()"/> -->
+                    <i class="fa-solid fa-list-check color fa-2xl" (click)="callTaskSummary()"></i>
+                    
+                    <!-- <div class="row">
+                        <div class="col-sm-6">
+                            <span style="font-family: 'Inter';font-size: 35px;color:#044063;margin-left: 27%;">{{EmpObjects?.pendingCounts?.task_count}}</span>  
+                        </div>
+                        <div class="col-sm-6" style="    font-size: x-large;
+                        margin-top: 3%;
+                        margin-left: -11%;">
+                          <span style="font-family: 'Inter';">Tasks</span>
+                        </div>
+                    </div>
+                   
+    
+                    
+
+
+                 </div> -->
+                <!-- <div class="card-footer" style="font-family: 'Inter';text-align: center;" >
+                    Tasks
+                </div>  -->
+                </div>
+            </div>
+            <!-- </div> -->
+
+            <p class="display cardName
+        ">Tasks</p>
+       
+        </div>
+        <div class="col-sm-3" style="    margin-left: -8%;">
+            <!-- <div class="card cardspaceList"> -->
+                <div class="cardspaceList display">
+                    <div class="display">
+                        <!-- <img width="64" height="64" src="./assets/images/Calendar.png" alt="Calendar" (click)="ShowCalendar()"/>               -->
+                        <i class="fa-regular fa-calendar color fa-2xl" (click)="ShowCalendar()"></i>
+
+                    </div>
+                </div>
+
+            <!-- </div> -->
+            <p class="display cardName
+        ">Calendar</p>
+        </div>
+        <div class="col-sm-3" style="    margin-left: -8%;">
+            <!-- <div class="card cardspaceList" matBadge=" {{EmpObjects?.pendingCounts?.leave_approval_count}}" matBadgeOverlap="true" matBadgeSize="medium" matBadgeColor="warn"> -->
+            <div class="cardspaceList display" matBadge=" {{EmpObjects?.pendingCounts?.leave_approval_count}}" matBadgeOverlap="true" matBadgeSize="medium" matBadgeColor="warn">
+                <div class="display">
+                    <!-- <img width="64" height="64" src="./assets/images/Leave.png" alt="Leave" (click)="callleavesummary()"/> -->
+                    <i class="fa-solid fa-umbrella-beach color fa-2xl" (click)="callleavesummary()"></i>
+
+                   
+    
+                    
+
+
+                </div>
+            </div>
+
+            <!-- </div> -->
+            <p class="display cardName
+        ">Leave Summary</p>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+
+
+    
+    <div class="row" *ngIf="isShowCalendar">
+        <div class="col-lg-11">
+            <app-attendance-log></app-attendance-log>
+        </div>
+
+        <!-- <div class="col-lg-3 cardborder"> 
+            <div class="card cardspaceList">
+                <div class="card-body">
+                    <h3 class="card-title">My Task</h3>
+
+                    <div class="parallel">
+                        <div>
+                            <button mat-raised-button (click)="callTaskSummary()" class="backgroundColors" matTooltip="My Task">
+                                <span class="material-icons">trending_flat </span> </button>
+                        </div>
+                        <div class="divset">
+                            <div class="process">
+
+                                {{EmpObjects?.pendingCounts?.task_count}}
+
+                            </div>
+                        </div>
+                    </div>
+    
+                    
+
+
+                </div>
+            </div>
+
+            <div class="card cardspaceList">
+                <div class="card-body">
+                    <h3 class="card-title">Leave Summary</h3>
+
+                    <div class="parallel">
+                        <div>
+                            <button mat-raised-button (click)="callleavesummary()" class="backgroundColors" matTooltip="Leave Summary">
+                                <span class="material-icons">trending_flat </span> </button>
+                        </div>
+                        <div class="divset">
+                            <div class="process">
+
+                                {{EmpObjects?.pendingCounts?.leave_approval_count}}
+
+                            </div>
+                        </div>
+                    </div>
+    
+                    
+                </div>
+            </div>
+
+
+        </div> -->
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 
+<div class="card row">
+    <div class="col-sm-12 col-md-12 col-lg-12 HeaderView">
+
+        <div class="ProfileDisplayName">
+
+            {{EmpObjects.employeeFirstLetter | uppercase}}
+
+        </div>
+
+        <div class="detailsView">
+
+            <h2>{{EmpObjects.employeeList?.full_name | uppercase}} <sup> <span
+                        *ngIf="EmpObjects.ActivityStatus?.status == 1"
+                        class="badge badge-pill badge-success sizepill aligniconBtn" matTooltip="Logged In"><span
+                            style="color:#28a745">.</span></span>
+                    <span *ngIf="EmpObjects.ActivityStatus?.status != 1"
+                        class="badge badge-pill badge-danger sizepill aligniconBtn" matTooltip="Logged In"><span
+                            style="color: red">.</span></span> </sup> </h2>
+
+            <div class="detailsdepth">
+                <p> <span class="material-icons iconssize">work</span> {{EmpObjects.employeeList?.designation}}</p>
+                <p> <span class="material-icons iconssize">call</span> {{EmpObjects.employeeList?.phone_no}} </p>
+                <p> <span class="material-icons iconssize">email</span> {{EmpObjects.employeeList?.phone_no}} </p>
+            </div>
+
+        </div>
+
+
+    </div>
+ 
+        <div style="margin-left: 50px;">
+
+            <button mat-raised-button color="primary"
+                *ngIf="EmpObjects.ActivityStatus?.status == 2 || EmpObjects.ActivityStatus?.status == null"
+                (click)="getWIFILocation(1)" matTooltip="Check In">
+                <mat-icon>login</mat-icon> In
+
+            </button>
+
+            <button *ngIf="EmpObjects.ActivityStatus?.status == 1" mat-raised-button color="primary"
+                matTooltip="Check Out" (click)="getWIFILocation(2)">
+                <mat-icon>logout</mat-icon>Out
+
+            </button> 
+        </div> 
+
+
+
+
+</div>
+
+
+<div class="row">
+    <div class=" col-sm-12 col-md-12 col-lg-9">
+        <app-attendance-log></app-attendance-log>
+    </div>
+    <div class=" col-sm-12 col-md-12 col-lg-3">
+
+        <div class="card cardspaceList">
+            <div class="card-body">
+                <h3 class="card-title">My Task</h3>
+
+                <button mat-raised-button (click)="callTaskSummary()" color="primary" matTooltip="My Task">
+                    <span class="material-icons">trending_flat </span> </button>
+            </div>
+        </div>
+
+        <div class="card cardspaceList">
+            <div class="card-body">
+                <h3 class="card-title">Leave Summary</h3>
+
+                <button mat-raised-button (click)="callTaskSummary()" color="primary" matTooltip="My Task">
+                    <span class="material-icons">trending_flat </span> </button>
+            </div>
+        </div>
+
+    </div>
+</div> -->

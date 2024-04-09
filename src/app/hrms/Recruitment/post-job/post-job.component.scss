@@ -1,0 +1,52 @@
+// .tabledesign{
+//     width: 100%;
+//     border: 1px solid rgb(163, 163, 163);
+// }
+.tableStyle{
+    width: 60%; 
+}
+
+.TableHeaderpad{
+    padding-left: 20px;
+}
+.trMargin{
+    margin: 10px; 
+}
+
+.leftPad{
+    padding-left: 30px;
+}
+
+.inlinebadge{
+    display: inline-grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    margin: 5px;
+}
+.alignicons{
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.placingOnRight {
+    float: right;
+}
+
+.padAll{
+    margin: 10px;
+}
+#hyperlinkview{
+    text-decoration: underline;
+    color:  #044063; 
+  }
+
+
+
+
+  .inlineprint {
+    display: inline-block;
+    margin: 10px;
+}
+
+.colors{
+    color: rgb(118, 118, 118)
+}

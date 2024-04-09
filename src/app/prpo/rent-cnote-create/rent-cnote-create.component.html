@@ -1,0 +1,336 @@
+<!-- <div class="row"> -->
+    <form [formGroup]="RcnSearchForm">
+        <h1 style="margin-top:2%;margin-left: 50px;">
+            Rent Confirmation Note Maker
+        </h1>
+        <table>
+            <tr>
+                <td>
+                    <mat-form-field style="width: 175px; margin-left: 60px;">
+                        <mat-label>Schedule Ref No</mat-label>
+                        <input matInput placeholder="Schedule Ref No" formControlName="pono" autocomplete="off">
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    <mat-form-field style="width: 200px; margin-left: 8px;">
+                        <mat-label>Branch Code</mat-label>
+                        <input #branchInput placeholder="Select Branch Code" matInput formControlName="branchcode" [matAutocomplete]="branch">
+                        <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch" (opened)="autocompletebranchScroll()">
+                           <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                           <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                    {{branch.code}}-{{branch.name}}
+                                </mat-option>
+                           </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <!-- <mat-form-field style="width: 175px; margin-left: 50px;">
+                        <mat-label>Landlord Name</mat-label>
+                        <input matInput placeholder="Landlord Name" formControlName="suppliername" autocomplete="off">
+                    </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                    <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getSuppliersearch()">
+                        <mat-label>Landlord Name</mat-label>
+                           <input #suppliersearchInput placeholder="Select supplier" matInput formControlName="suppliername" [matAutocomplete]="suppliersearch">
+                        <mat-autocomplete #suppliersearch="matAutocomplete" [displayWith]="displayFnsuppliersearch" (opened)="autocompletesuppliersearchScroll()">
+                           <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                           <ng-container *ngIf="!isLoading">
+                               <mat-option *ngFor="let supplier of suppliersearchList" [value]="supplier" >
+                               {{supplier.name}}
+                               </mat-option>
+                           </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;margin-left: 15px;"
+                        color="primary" (click)="GRNCreateEditForm()"><i class="fa fa-search"
+                            aria-hidden="true"></i></button>
+                </td>
+                <td>
+                    <button type="button" style="border-radius:40px;margin-left: 15px;" class="btn btn-outline-primary"
+                        (click)="dataclearinwardform()">
+                        Reset</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+<!-- </div> -->
+<div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 50px;">
+    <table class="table scrolltable table-bordered">
+        <thead>
+            <tr class="table_header">
+                <th>S.No</th>
+                <th>Schedule Ref No</th>
+                <th>Pay Period</th>
+                <th>Branch Location</th>
+                <th>Landlord Name</th>
+                <th>Landlord Info</th>
+                <th>Rent Type</th>
+                <th>Premise Identification</th>
+                <th>Current Term Rent Amount</th>
+                <!-- <th>Rent Payable Amount</th> -->
+                <!-- <th>Net Payable Amount</th> -->
+                <th>Action</th>
+                <th>Hold</th>
+            </tr>
+        </thead>
+        <!--  -->
+        <tbody>
+            <tr *ngFor="let grninward of rcnList;index as i">
+                <td>{{(this.presentpagegrninward - 1)*pageSizegrninward +i+1 }}</td>
+                <td>{{grninward?.poheader_id?.no}}</td>
+                <td style="padding: 0 10px 0 10px ;">{{grninward?.podetails_id?.payperiod_from }} - {{grninward?.podetails_id?.payperiod_to }} </td>
+                <td>{{grninward?.poheader_id?.branch_id?.code}}--{{grninward?.poheader_id?.branch_id?.name}}</td>
+                <td>{{grninward?.poheader_id?.supplierbranch_id?.code}}--{{grninward?.poheader_id?.supplierbranch_id?.name}}</td>
+                <td><span class="material-icons" (click)="getLandlordInfo(grninward)" data-toggle="modal" data-target=".bd-example-modal-xl">info</span></td>
+                <td>{{grninward?.podetails_id?.product_name}}</td>
+                <td>{{grninward?.podetails_id?.rcn_premises}}</td>
+                <td>{{grninward?.qty | currency:'INR'}}</td>
+                <!-- <td>{{grninward?.qty - grninward?.received_quantity | currency:'INR'}}</td> -->
+
+                <!-- <td><input class="inputStyle" type="number" [value]="grninward.qtyfield" min=0 #quantity (keypress)="numberOnly($event)"
+                        [disabled]=grninward.fieldtext /></td> -->
+
+                <td><input type="checkbox" class="checkboxsize" (click)="getdatagrn($event, grninward, i, grninward?.qty)"
+                        [disabled]="grninward.disabled" [checked]="grninward.CheckboxenableDiableArray == true"
+                        (click)="getBankGstTaxSubtaxValidation(grninward, $event)" />
+                </td>
+
+                <!-- <td> -->
+                <!-- <mat-form-field style="width: 150px;">
+                                                                <input matInput [formControl]="qty" (keypress)="numberOnly($event)"
+                                                                    [readonly]='isDisabledslidebar' id="yourText" (click)="plusfunction(grninward)"
+                                                                    (click)="eneblecheckbox(i,qty.value)">
+                                                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+
+                <!-- <td>
+                                        <input type="checkbox" [checked]='isDisabledcheckbox'
+                                            (change)="getdatagrn($event, grninward , qty.value)"
+                                            (click)="getBankGstTaxSubtaxValidation(grninward, $event)" [disabled]="disablebutton[i]">
+                                    </td> -->
+                <td>
+                    <button type="button" class="btn btn-outline-success" style="border-radius: 40px;margin-left: 10px;"
+                        data-toggle="modal" data-target=".bd-examples-modal-lg" (click)=" holddata(grninward) ">
+                        Hold
+                    </button>
+                </td>
+
+
+                <div class="modal fade bd-examples-modal-lg" tabindex="-1" role="dialog"
+                    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background:#DDEFDD;">
+                                <h1 class="modal-title" id="exampleModalLongTitle"> {{ROHeader}} </h1>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 15px;">
+                                    <table class="table scrolltable table-bordered">
+                                        <thead>
+                                            <tr class="table_header">
+                                                <th>Schedule Ref No</th>
+                                                <th>Branch Location</th>
+                                                <th>Landlord Name</th>
+                                                <th>Rent Type</th>
+                                                <th>Rent Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ROHeader}}</td>
+                                                <td>{{RObranchCode}}--{{ROBranchName}}</td>
+                                                <td>{{ROSupplierCode}}--{{ROSupplierName}}</td>
+                                                <td>{{RoType}}</td>
+                                                <td>{{RoAmount}}</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <form [formGroup]="Holdform">
+                                    <mat-form-field style="width:300px;margin-left: 25px;">
+                                        <mat-label> Reason for Hold</mat-label>
+                                        <textarea matInput placeholder="Remarks" autocomplete="off"
+                                            formControlName="remarks" required></textarea>
+                                    </mat-form-field>
+                                </form>
+                                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  -->
+                                <button type="submit" style="float: left;" class="btn btn-outline-success"
+                                    style="border-radius: 40px;margin-left: 10px;" data-dismiss="modal"
+                                    (click)="HoldRoSubmit()" (click)="this.Holdform.reset()">
+                                    Hold</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="rcnList ?.length == 0  || '' || undefined; else paginationpar">
+        <h3 style="margin-left: 42%;">Data not found!.. </h3>
+    </div>
+    <ng-template #paginationpar>
+        <div class="row" *ngIf="grninwardpage">
+            <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+                <button mat-icon-button [disabled]="has_previousgrninward === false" color="primary"
+                    (click)="previousClickgrninward()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpagegrninward}}
+                <button mat-icon-button [disabled]="has_nextgrninward === false" color="primary"
+                    (click)="nextClickgrninward()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</div>
+<br>
+<br>
+<div style="margin-left: 50px;">
+
+    <form [formGroup]="RcnCreateForm">
+        <table>
+            <div>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 200px;">
+                            <mat-label>Invoice Number</mat-label>
+                            <input matInput placeholder="Invoice Number" formControlName="invoiceno" autocomplete="off"
+                                (keypress)="only_numalpha($event)" required>
+                        </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <mat-form-field style="width:200px;">
+                            <mat-label>Invoice Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" placeholder="Invoice Date"
+                                formControlName="date" [max]="tomorrow">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+
+                    <td>
+                        <mat-form-field style="width: 200px;">
+                            <mat-label>Remarks</mat-label>
+                            <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off" required>
+                        </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <!-- <button type="button" mat-raised-button (click)="fileInput.click()"> +Choose File</button>  hidden-->
+                        <input type="file"  #fileInput name="image" formControlName="fileData"
+                            (change)="fileProgress($event)" />
+                        <!-- <span style="color: green;">{{fileName}}</span> -->
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td>
+                        <mat-checkbox class="example-margin" #savePaymodeCheckBox id="savePaymodeCheckBox"
+                            type="checkbox" [checked]="savePaymode"
+                            (change)="onSavePaymodeChanged(savePaymodeCheckBox.checked)">Pay Mode</mat-checkbox>
+                        </td>
+                    <td>
+                        <div *ngIf="ispaymode">
+                            <mat-form-field style="width: 175px;">
+                                <mat-label>Paymode Type</mat-label>
+                                <mat-select formControlName="paymodedetails_id">
+                                    <mat-option *ngFor="let type of paymodeTypeList" [value]="type.id">{{type.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+                    </td>
+
+                </tr> -->
+            </div>
+        </table>
+        <div style="margin: 50px 0 100px 0px;">
+            <!-- <button type="submit" style="float: left;" class="btn btn-outline-primary" [disabled]="clicked"
+                                                    style="border-radius: 40px;margin-left: 10px;">
+                                                        Submit</button> -->
+            <button type="submit" style="float: left;" class="btn btn-outline-success" [disabled]="clicked"
+                (click)="approveNameclick()" style="border-radius: 40px;margin-left: 10px;">
+                Approve</button>
+            <button type="submit" style="float: left;" class="btn btn-outline-danger" [disabled]="clicked"
+                (click)="RejectNameclick()" style="border-radius: 40px;margin-left: 10px;">
+                Reject</button>
+            <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#DDEFDD;">
+                <h1 class="modal-title" id="exampleModalLongTitle">Landlord Info</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" id="styleScroll" style="margin-top: 2%;width: 95%;margin-left: 25px;">
+                    <table class="table scrolltable table-bordered" fixed-header>
+                        <thead>
+                            <tr class="table_header" fixed-header>
+                                <th> Landlord</th>
+                                <th> Beneficiary</th>
+                                <th> Account Number</th>
+                                <th> Account Type</th>
+                                <th> Bank </th>
+                                <th> Bank Branch</th>
+                                <th> Paymode</th>
+                                <th> Gst No</th>
+                                <th> Pan No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let info of LandlordInfoList;index as i">
+                                <td> {{info?.supplier}} </td>
+                                <td> {{info?.beneficiary}}</td>
+                                <td> {{info?.account_no}} </td>
+                                <td> {{info?.account_type}} </td>
+                                <td> {{info?.bank_id?.code}}--{{info?.bank_id?.name}} </td>
+                                <td> {{info?.branch_id?.address_id?.line1}},{{info?.branch_id?.address_id?.line2}},{{info?.branch_id?.address_id?.line3}}
+                                    {{info?.branch_id?.address_id?.city_id?.name}},
+                                    {{info?.branch_id?.address_id?.district_id?.name}},
+                                    {{info?.branch_id?.address_id?.state_id?.name}}--{{info?.branch_id?.address_id?.pincode_id?.no}}
+                                </td>
+                                <td> {{info?.paymode_id?.code}}-- {{info?.paymode_id?.name}} </td>
+                                <td> {{info?.supplierbranch_id?.gstno}} </td>
+                                <td> {{info?.supplierbranch_id?.panno}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" style="border-radius:40px;margin-left: 15px;" class="btn btn-outline-primary"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <pre>
+    {{RcnCreateForm.value | json}}
+</pre> -->
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

@@ -1,0 +1,264 @@
+<div class="container row" *ngIf="LeaveObjects.LeaveRequestSummaryScreen">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <h2 (click)="BackToSummaryToEmpView()"> <span class="material-icons alignmiddle" *ngIf="this.LeaveObjects.backmenu">arrow_back</span>Leave Summary</h2>
+
+        <form [formGroup]="leaveRequestSearchForm">
+
+            <table>
+                <tr>
+                    <td class="padsize"> 
+
+                        <mat-label>For</mat-label><br>
+                            <mat-form-field class="matformfieldstyle widthSize">
+                                <mat-select class="matformfieldinputstyle" formControlName="type" placeholder="Status"
+                                (selectionChange)="leaveReqSearch('')">
+                                    <mat-option *ngFor="let type of LeaveObjects.TypeList" title=" {{type.text}}"
+                                        [value]="type.id">
+                                        {{type.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                    </td>
+                    <td class="padsize ">
+                        <mat-label>From Date</mat-label><br>
+                        <mat-form-field class="matformfieldstyle widthSize">
+                            <input matInput readonly [matDatepicker]="picker3" class="matformfieldinputstyle"
+                                (dateChange)='ChangeDateFormat("fromdate")' formControlName="fromdate">
+                            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker3">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker3></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td class="padsize ">
+                        <mat-label>To Date</mat-label><br>
+                        <mat-form-field class="matformfieldstyle widthSize">
+                            <input matInput readonly [matDatepicker]="picker4" class="matformfieldinputstyle"
+                                [min]="leaveRequestSearchForm.value.fromdate" (dateChange)='ChangeDateFormat("todate")'
+                                formControlName="todate">
+                            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker4">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker4
+                                [disabled]="leaveRequestSearchForm.value.fromdate == null|| leaveRequestSearchForm.value.fromdate == ''"></mat-datepicker>
+                        </mat-form-field>
+
+                    </td>
+                    <td class="padsize">
+                        <mat-label>Approval Status</mat-label><br>
+                        <mat-form-field class="matformfieldstyle">
+                            <mat-select class="matformfieldinputstyle" formControlName="approvalstatus"
+                                placeholder="Status">
+                                <mat-option *ngFor="let appstatus of LeaveObjects.ApprovalStatusList"
+                                    title=" {{appstatus.text}}" [value]="appstatus.id">
+                                    {{appstatus.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </td>
+                    <td>
+
+                        <button mat-stroked-button type="button" style="margin-left: 10px;background-color: white;"
+                            aria-label="Search" (click)="leaveReqSearch('')">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 10px;background-color: white;"
+                            (click)="resetRequestSearch();leaveReqSearch('')">
+                            Reset
+                        </button>
+
+                        <button type="button" style="border-radius: 10px;margin-left: 10px;border-color: #f5c68b;
+                                background-color: #f5c68b;" class="btn btn-light"
+                            *ngIf="leaveRequestSearchForm.value.type == 1" (click)="getAddScreen()"><i
+                                class="fa fa-plus-circle"></i> Apply Leave</button>
+
+                    </td>
+
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+    <!-- <pre>{{leaveRequestSearchForm.value | json}}</pre> -->
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+            <thead class="table_header">
+                <tr>
+                    <th>S.No</th>
+                    <th *ngIf="leaveRequestSearchForm.value.type == 2">Name</th>
+                    <th>Leave Type</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Total days</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- data-toggle="modal" data-target="#modalleavereqview"  leaveReqView(type.id)-->
+                <tr *ngFor="let type of LeaveObjects?.leavereqList; index as i">
+                    <td>{{(leaveRequestSummary?.presentpagelvereq - 1) * LeaveObjects.pagesize +i+1 }}</td>
+                    <td *ngIf="leaveRequestSearchForm.value.type == 2">({{type?.user_id?.code}})
+                        {{type?.user_id?.full_name}}</td>
+                    <td (click)="leaveRequestView(type)" data-toggle="modal" data-target=".bd-example-modal-lg"
+                        style="cursor: pointer;color:blue;text-decoration: underline;">
+                        {{type?.leave_type?.name}}
+                    </td>
+                    <td>{{type?.from_date | date:'dd-MMM-yyyy'}}</td>
+                    <td>{{type?.to_date | date:'dd-MMM-yyyy'}}</td>
+                    <td>{{type?.total_days}}</td>
+                    <td class="cursor">
+                        <div *ngIf="type?.approve_status?.text == 'Pending';else ApproveStatus"> <span
+                                class="badge badge-pill badge-secondary">Pending</span>
+                        </div>
+                        <ng-template #ApproveStatus>
+                            <div *ngIf="type?.approve_status?.text == 'Approved';else RejectStatus">
+                                <span class="badge badge-pill badge-success">Approved</span>
+                            </div>
+                        </ng-template>
+                        <ng-template #RejectStatus>
+                            <div *ngIf="type?.approve_status?.text == 'Rejected'">
+                                <span class="badge badge-pill badge-danger">Rejected</span>
+                            </div>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="LeaveObjects.leavereqList ?.length == 0; else leavereqpage" style="margin-left: 42%;">
+            <h3>No Records Found.. </h3>
+        </div>
+        <ng-template #leavereqpage>
+            <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                <button mat-icon-button [disabled]="leaveRequestSummary?.has_previouslvereq === false" color="primary"
+                    (click)="leaveReqSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{leaveRequestSummary?.presentpagelvereq}}
+                <button mat-icon-button [disabled]="leaveRequestSummary?.has_nextlverqe === false" color="primary"
+                    (click)="leaveReqSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+
+    </div>
+</div>
+
+
+
+<div *ngIf="LeaveObjects.LeaveRequestAddScreen">
+
+    <app-leave-request-create (onSubmit)="submitBack()" (onCancel)="CancelBack()"></app-leave-request-create>
+
+
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2> ({{this.LeaveObjects.LeaveRequestView?.user_id?.code}}) {{
+                    this.LeaveObjects.LeaveRequestView?.user_id?.full_name}} - <span
+                        class="badge badge-pill badge-primary">{{this.LeaveObjects.LeaveRequestView?.leave_type?.name}}
+                    </span>
+                </h2>
+                <h2 class="ml-5"> <b> Total Days </b> -
+                    <span class="badge badge-pill badge-primary"> {{this.LeaveObjects.LeaveRequestView?.total_days}}
+                    </span>
+                </h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <th>From: </th>
+                        <td> {{this.LeaveObjects.LeaveRequestView?.from_date| date: 'medium'}} -
+                            {{this.LeaveObjects.LeaveRequestView?.to_date | date:
+                            'medium'}}</td>
+
+
+
+                    </tr>
+
+                </table>
+                <br>
+
+                <div class="card" id="collapseNoteView">
+                    <b>Reason: </b>
+                    <p> "<i>{{this.LeaveObjects.LeaveRequestView?.reason}} </i>"</p>
+                </div>
+                <p *ngIf="this.LeaveObjects.LeaveRequestView?.dataView?.file?.length > 0"> Attachments:
+                    <ng-container
+                        *ngFor="let dataFile of this.LeaveObjects.LeaveRequestView?.dataView?.file; let fileindex = index">
+                        <h3> <span class="badge badge-light sizebadge" (click)="getFileData(dataFile)"> {{ fileindex +
+                                1}}. {{dataFile?.file_name}} </span> </h3>
+                    </ng-container>
+                </p>
+
+                <div class="card" id="collapseNoteView">
+                    <p>
+                        <b> Approver:</b> ({{this.LeaveObjects.LeaveRequestView?.approved_by?.code}})
+                        {{this.LeaveObjects.LeaveRequestView?.approved_by?.full_name}}<br>
+                        <b>Approver Comments:</b>
+                        "<i> {{this.LeaveObjects.LeaveRequestView?.dataView?.approve_message?.remarks}} </i>"
+                    </p>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+
+                <div *ngIf="AdminView && this.LeaveObjects.LeaveRequestView?.approve_status?.text == 'Pending'">
+                    <form [formGroup]="RemarksForm">
+                        <table>
+                            <div>
+                                <tr>
+                                    <td>
+                                        <div class="col-md-6">
+                                            <mat-label>Remarks</mat-label><br>
+                                            <mat-form-field style="width: 350px;">
+                                                <textarea type="text" matInput autocomplete="off" placeholder="Remarks"
+                                                    formControlName="remarks"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                        </table>
+                    </form>
+
+                </div>
+
+
+                <button type="button" class="btn-success spaceForBtn" mat-raised-button
+                    *ngIf="AdminView && this.LeaveObjects.LeaveRequestView?.approve_status?.text == 'Pending'"
+                    (click)="Approval_Reject_Review(this.LeaveObjects.LeaveRequestView, 1) "
+                    data-dismiss="modal">Approve</button>
+
+                <button type="button" mat-raised-button class="btn-danger spaceForBtn"
+                    *ngIf="AdminView && this.LeaveObjects.LeaveRequestView?.approve_status?.text == 'Pending'"
+                    (click)="Approval_Reject_Review(this.LeaveObjects.LeaveRequestView, 2)"
+                    data-dismiss="modal">Reject</button>
+
+                <button type="button" mat-raised-button class="btn-danger spaceForBtn"
+                    *ngIf="AdminView == false && this.LeaveObjects.LeaveRequestView?.approve_status?.text == 'Pending'"
+                    (click)="RequestProcess(this.LeaveObjects.LeaveRequestView, 'close')" data-dismiss="modal">Cancel
+                    Request</button>
+
+
+                <!-- <button type="button" class="btn btn-secondary spaceForBtn" data-dismiss="modal">Close</button> -->
+
+            </div>
+        </div>
+    </div>
+</div>

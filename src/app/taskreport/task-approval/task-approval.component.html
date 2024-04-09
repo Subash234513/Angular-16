@@ -1,0 +1,139 @@
+<div *ngIf="taskapprover">
+    <div class="col-md-12">
+        <h2 style="margin-left: 21px;">Task Approval Summary</h2>
+    </div>
+        <form action="" [formGroup]="search">
+            <div class="row">
+            <div class="col-2">
+                <mat-form-field (click)="ClientMaster('')">
+                    <mat-label>Client</mat-label>
+                    <input matInput [matAutocomplete]="auto1" (keyup)="ClientMaster($event.target.value)" formControlName="client">
+                    <mat-autocomplete #auto1="matAutocomplete">
+                        <mat-option *ngFor="let value of ClientMasterDrop" [value]="value.name" (focusout)="ClientMasterId(value)" title="{{value.name}}">
+                            {{value.name}}
+                        </mat-option>
+                        <mat-option *ngIf="!ClientMasterDrop.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field (click)="ProjectMaster('')">
+                    <mat-label>Project</mat-label>
+                    <input matInput [matAutocomplete]="auto2" (keyup)="ProjectMaster($event.target.value)" formControlName="project">
+                    <mat-autocomplete #auto2="matAutocomplete">
+                        <mat-option *ngFor="let value of ProjectMasterDrop" [value]="value.name" (focusout)="ProjectMasterId(value)" title="{{value.name}}">
+                            {{value.name}}
+                        </mat-option>
+                        <mat-option *ngIf="!ProjectMasterDrop.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field (click)="ModuleMaster('')">
+                    <mat-label>Module</mat-label>
+                    <input matInput [matAutocomplete]="auto3" (keyup)="ModuleMaster($event.target.value)" formControlName="module">
+                    <mat-autocomplete #auto3="matAutocomplete">
+                        <mat-option *ngFor="let value of ModuleMasterDrop" [value]="value.name" (focusout)="ModuleMasterId(value)" title="{{value.name}}">
+                            {{value.name}}
+                        </mat-option>
+                        <mat-option *ngIf="!ModuleMasterDrop.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-1 mt-1 ml-4">
+                <button mat-stroked-button (click)="Search()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+            <div class="col-1 mt-1">
+                <button mat-stroked-button (click)="clear()">
+                    Clear
+                </button>
+            </div>
+        </div>
+        </form>
+  
+
+    <div class="container">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive">
+        <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id ='commonstyle'>
+            <thead class="table_header">
+                <tr>
+                    <th>S.no</th>
+                    <th>Client</th>
+                    <th>Project Name</th>
+                    <th>Module Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let type of taskapprovalList; index as i">
+                    <td>{{(presentpageTaskapproval - 1)*pagesizetaskapproval +i+1 }}</td>
+                    <td>({{type?.client.code}}) {{type?.client.name}}
+                        <small style="color: red;font-size: 13px;">{{type?.client.message}}</small>
+                    </td>
+                    <td><mat-icon data-toggle="modal"
+                        data-target="#projectDetails" style="cursor: pointer;" (click)="project(type)">today</mat-icon> ({{type?.project.code}}) {{type?.project.name}}
+                        <small style="color: red;font-size: 13px;">{{type?.project.message}}</small>
+                    </td>
+                    <td>({{type?.module.code}}) {{type?.module.name}}
+                        <small style="color: red;font-size: 13px;">{{type?.module.message}}</small>
+                    </td>
+                    <td>
+                        <div *ngIf="type.status == 1" class="status">{{type?.message}}</div>
+                        <div *ngIf="type.status == 0">
+                            <button (click)="taskApproveClick(type.id)" mat-button class="btn btn-success" style="cursor: pointer;">
+                                <mat-icon>done</mat-icon>
+                                Approve
+                              </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div *ngIf="taskapprovalList?.length==0 || taskapprovalList == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_previousTaskapproval === false" color="primary"
+                (click)="TaskapprovalSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{presentpageTaskapproval}}
+            <button type="button" mat-icon-button [disabled]="has_nextTaskapproval === false" color="primary"
+                (click)="TaskapprovalSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    </div>
+    </div>
+    </div>
+    <div class="modal fade" id="projectDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color:#044063;color: white;">
+              <h5 class="modal-title" id="exampleModalLabel">({{projectdata?.project.code}}) {{projectdata?.project.name}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table>
+                  <tr>
+                      <th>Project Date:</th>
+                      <td> <span style="margin-left: 10px;" matTooltip="Start Date">{{projectstart_date | date:'dd-MM-yyyy'}}</span> -
+                          <span matTooltip="End Date">{{projectend_date | date:'dd-MM-yyyy'}}</span>
+                      </td>
+                  </tr>
+              </table>
+              <!-- <h3>{{projectstart_date | date:'dd-MM-yyyy'}} -- {{projectend_date | date:'dd-MM-yyyy'}}</h3> -->
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

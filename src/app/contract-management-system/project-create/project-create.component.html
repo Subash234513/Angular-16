@@ -1,0 +1,561 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 style="margin-left: 10px;">Project Creation</h2>
+            <form style="margin-left: 20px;" [formGroup]="ProjectForm">
+                <table border="0">
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Title</mat-label><br>
+                            <mat-form-field class=" lenthoftextfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Title"
+                                    formControlName="title" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Description(Project Scope)</mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                <textarea class="matformfieldinputstyle heightdesc" type="text"
+                                    placeholder="Description..." formControlName="description" matInput
+                                    autocomplete="off"></textarea>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label>Project Type</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #typeInput placeholder="Select Type" type="text" matInput
+                                    (keyup)="typeDD(ProjectForm.value.type)" class="matformfieldinputstyle"
+                                    formControlName="type" [matAutocomplete]="type">
+                                <mat-autocomplete #type="matAutocomplete" [displayWith]="displayFnType"
+                                    (opened)="autocompletetypeScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let Type of TypeList" [value]="Type">
+                                            {{Type.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        <!-- </tr>
+                    <tr> -->
+                        <td>
+                            <!-- <mat-label class="gapforfield">Category</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #catInput placeholder="Select Category" type="text" matInput
+                                    (keyup)="categoryDD(ProjectForm.value.cat_id)" class="matformfieldinputstyle"
+                                    formControlName="cat_id" [matAutocomplete]="cat">
+                                <mat-autocomplete #cat="matAutocomplete" [displayWith]="displayFncat"
+                                    (opened)="autocompleteCatScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let cat of CategoryList" [value]="cat">
+                                            {{cat.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field> -->
+                            <mat-label class="gapforfield">Commodity</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #commodityInput placeholder="Select Commodity" type="text" matInput
+                                    (keyup)="commodityDD(this.ProjectForm.value.commodity_id)"
+                                    class="matformfieldinputstyle" formControlName="commodity_id"
+                                    [matAutocomplete]="commodity">
+                                <mat-autocomplete #commodity="matAutocomplete" [displayWith]="displayFncom"
+                                    (opened)="autocompleteCommodityScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let com of commodityList" [value]="com">
+                                            {{com.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <!-- <mat-label class="gapforfield">SubCategory</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #subcatInput placeholder="Select Sub Cat" type="text" matInput
+                                    (keyup)="SubcategoryDD(ProjectForm.value.cat_id, ProjectForm.value.subcat_id)"
+                                    class="matformfieldinputstyle" formControlName="subcat_id"
+                                    [matAutocomplete]="subcat">
+                                <mat-autocomplete #subcat="matAutocomplete" [displayWith]="displayFnsubcat"
+                                    (opened)="autocompletesubCatScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let subcat of SubCategoryList" [value]="subcat">
+                                            {{subcat.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field> -->
+                            <mat-label class="gapforfield">Sub Commodity </mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="SubCommodity"
+                                    formControlName="subcommodity" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+                            <mat-label class="gapforfield">Beneficiary Group</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #OnBeHalfInput placeholder="Select group" type="text" matInput
+                                    (keyup)="OnBeHalfDD(ProjectForm.value.onbehalf_group)"
+                                    class="matformfieldinputstyle" formControlName="onbehalf_group"
+                                    [matAutocomplete]="OnBeHalf">
+                                <mat-autocomplete #OnBeHalf="matAutocomplete" [displayWith]="displayFnOnBeHalf"
+                                    (opened)="autocompleteOnBeHalfScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let obh of OnBeHalfList" [value]="obh">
+                                            {{obh.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <!-- </tr>
+                    <tr> -->
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label>Submission Start Date</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input matInput readonly placeholder="Start Date" [matDatepicker]="picker1"
+                                    [min]="today" formControlName="submission_start_date"
+                                    class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+
+
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Submission End Date</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input matInput readonly placeholder="End Date" [matDatepicker]="picker2" [min]="today"
+                                    formControlName="submission_end_date" class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <!-- </tr>
+                    <tr> -->
+                        <td>
+                            <mat-label class="gapforfield">Project Start Date</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input matInput readonly placeholder="Start Date" [matDatepicker]="picker3"
+                                    [min]="today" formControlName="project_start_date" class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker3">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field>
+
+
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Project End Date</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input matInput readonly placeholder="End Date" [matDatepicker]="picker4" [min]="today"
+                                    formControlName="project_end_date" class="matformfieldinputstyle">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker4">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker4></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <!-- </table>
+                    <table> -->
+                    <tr>
+                        <td>
+                            <mat-label>Audience</mat-label><br>
+                            <mat-form-field class="matformfieldstyle">
+                                <mat-select class="matformfieldinputstyle" formControlName="view_type"
+                                    placeholder="Type">
+                                    <mat-option *ngFor="let boolean of ViewTypeList" title=" {{boolean.text}}"
+                                        [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Relationship Category</mat-label><br>
+                            <mat-form-field class="matformfieldstyle gapforfield">
+                                <mat-select class="matformfieldinputstyle" formControlName="rel_cat"
+                                    placeholder="Type">
+                                    <mat-option *ngFor="let boolean of RelationShipCategoryList" title=" {{boolean.text}}"
+                                        [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Vendor Type</mat-label><br>
+                            <mat-form-field class="matformfieldstyle gapforfield">
+                                <mat-select class="matformfieldinputstyle" formControlName="vendor_type"
+                                    placeholder="Type">
+                                    <mat-option *ngFor="let boolean of VendorTypeList" title=" {{boolean.text}}"
+                                        [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Criticality</mat-label><br>
+                            <mat-form-field class="matformfieldstyle gapforfield">
+                                <mat-select class="matformfieldinputstyle" formControlName="criticality"
+                                    placeholder="Type">
+                                    <mat-option *ngFor="let boolean of criticalityList" title=" {{boolean.text}}"
+                                        [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label >Budget </mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Budget"
+                                    formControlName="budget" matInput autocomplete="off">
+                                <mat-hint>
+                                    <h3>{{ProjectForm.value.budget | amountPipe}}</h3>
+                                </mat-hint>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Estimated Current Spend </mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Estimated Current Spend"
+                                    formControlName="estimate_currentspent" (keyup)="amtclick($event);" matInput autocomplete="off">
+                                <mat-hint>
+                                    <h3>{{ProjectForm.value.estimate_currentspent | amountPipe}}</h3>
+                                </mat-hint>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Estimated Save </mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" readonly type="text" placeholder="Estimated Save"
+                                    formControlName="estimate_save" matInput autocomplete="off">
+                                <mat-hint>
+                                    <h3>{{ProjectForm.value.estimate_save | amountPipe}}</h3>
+                                </mat-hint>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <br>
+                <table border="0">
+                    <tr>
+                        <br>
+                        <td>
+                            <section class="example-section dateshow">
+                                <mat-checkbox formControlName="parallel_approval" class="example-margin">Parallel
+                                    Proposal Approval</mat-checkbox>
+                            </section>
+                        </td>
+                        <br>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4">
+                            <mat-label>Final Vendor Selection Approval Group </mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldinputstyle" (click)="getemp('', 0)">
+                                <mat-chip-grid #chipListemp>
+                                    <mat-chip-row *ngFor="let empl of chipSelectedemp" [removable]=true
+                                        (removed)="removedemp(empl)">
+                                        {{empl.name}}
+                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                    </mat-chip-row>
+                                    <input #empInput [formControl]="emp_id" [matAutocomplete]="emp"
+                                        placeholder="Select proposal Approver" class="matformfieldinputstyle"
+                                        (keyup)="getemp(emp_id.value, 0)" [matChipInputFor]="chipListemp"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]=true>
+                                </mat-chip-grid>
+
+                                <mat-autocomplete #emp="matAutocomplete" (optionSelected)="empSelected($event)"
+                                    (opened)="autocompleteempScroll('')">
+                                    <mat-option *ngFor="let emp of empList" [value]="emp">
+                                        {{emp.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Collaborators </mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldinputstyle" (click)="getemp('', 2)">
+                                <mat-chip-grid #chipListempcol>
+                                    <mat-chip-row *ngFor="let empl of chipSelectedempcol"  [removable]=true
+                                        (removed)="removedempcollaborators(empl)">
+                                        {{empl.name}}
+                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                    </mat-chip-row>
+                                    <input #empcolInput [formControl]="empcol_id" [matAutocomplete]="empcol"
+                                        placeholder="Select Collaborators" class="matformfieldinputstyle"
+                                        (keyup)="getemp(empcol_id.value, 2)" [matChipInputFor]="chipListempcol"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]=true>
+                                </mat-chip-grid>
+
+                                <mat-autocomplete #empcol="matAutocomplete" (optionSelected)="empcolSelected($event)"
+                                    (opened)="autocompleteempScroll(1)">
+                                    <mat-option *ngFor="let emp of empList" [value]="emp">
+                                        {{emp.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+
+                </table>
+
+
+
+
+
+
+
+                <div style="width:90%;height: 70%;">
+                    <div>
+                        <h2>Project Note(Detailed Spec)</h2>
+                        <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                            formControlName="content" (mediaDelete)="onDelete($event)" placeholder="Description"
+                            (summernoteInit)="summernoteInit($event)" (keyup)="sanitizedHtml">
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Strategy Note(Major Benefits)</h2>
+                        <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                            formControlName="strategy_note" (mediaDelete)="onDelete($event)" placeholder="Description"
+                            (summernoteInit)="summernoteInit($event)" (keyup)="sanitizedHtmltwo">
+                        </div>
+                    </div>
+                </div>
+                <div style="vertical-align: center;">Documents: </div>
+                <div class="input-group mb-3 inputCMTFile01">
+                    <div class="custom-file">
+                        <input type="file" (change)="onFileSelected($event)" multiple class="custom-file-input"
+                            id="inputGroupFile01">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                </div>
+
+                <div *ngIf="isEdit == true && EditFiles?.length >0">
+                    <p>Already Selected Attachments:</p>
+                    <div style="display:inline" *ngFor="let files of EditFiles; let indexfile = index">
+                        <!-- <mat-chip-row class="cursor spacingfile" [matMenuTriggerFor]="menu1">
+                            {{indexfile+1}}.{{files?.file_name}}</mat-chip-row>
+                        <mat-menu #menu1="matMenu">
+                            <span class="textdecorationatag" (click)="Files_Api_View(files)" data-toggle="modal"
+                                data-target="#my-modalpreview">File view</span>|
+                            <span class="textdecorationatagdelete"
+                                (click)="deleteInlineFile(indexfile, files)">Delete</span>
+                        </mat-menu> -->
+                        <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                            <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" data-toggle="modal" data-target="#my-modalpreview">{{indexfile+1}}.{{files?.file_name}}</button>
+                            <button  type="button" class="btn btncolor material-icons" (click)="filedownload(files)">download</button>
+                            <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button" class="btn btncolor" (click)="deleteInlineApiImageFile(indexfile, files)">X</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div *ngIf="Documentfilearray?.length > 0">
+                    <p> Attachments:</p>
+                    <div style="display:inline" *ngFor="let files of Documentfilearray; let indexfile = index">
+                        <!-- <mat-chip-row class="cursor spacingfile" (click)="filepreview(files)" [matMenuTriggerFor]="menu2">
+                            {{indexfile+1}}.{{files?.name}} 
+                        </mat-chip-row>
+
+                        <mat-menu #menu2="matMenu">
+                            <span class="textdecorationatag" (click)="Files_Api_View(files)" data-toggle="modal"
+                                data-target="#my-modalpreview">File view</span>|
+                            <span class="textdecorationatagdelete"
+                                (click)="deleteInlineFile(indexfile, files)">Delete</span>
+                        </mat-menu> -->
+                        <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                            <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" (click)="filepreview(files)" data-toggle="modal"
+                            data-target="#my-modalpreview" >{{indexfile+1}}. {{files?.name}} </button>
+                            <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button" class="btn btncolor" (click)="deleteInlineFile(indexfile, files)" >X</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <mat-label>Project Creation & Spec Approval group </mat-label><br>
+                    <mat-form-field class="lenthoftextfield matformfieldinputstyle" (click)="getemp('', 0)">
+                        <mat-chip-grid #chipListempapproval>
+                            <mat-chip-row *ngFor="let empl of chipSelectedempapproval"  [removable]=true
+                                (removed)="removedempapproval(empl)">
+                                {{empl.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                            </mat-chip-row>
+                            <input #empapprovalInput [formControl]="empapproval_id" [matAutocomplete]="empapproval"
+                                [readonly]="isEdit" placeholder="Select Approver" class="matformfieldinputstyle"
+                                (keyup)="getemp(empapproval_id.value, 0)" [matChipInputFor]="chipListempapproval"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]=true>
+                        </mat-chip-grid>
+
+                        <mat-autocomplete #empapproval="matAutocomplete" (optionSelected)="empapprovalSelected($event)"
+                            (opened)="autocompleteempScroll('')">
+                            <mat-option *ngFor="let emp of empList" [value]="emp">
+                                {{emp.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                </div>
+
+                <table>
+                    <h3 style="margin-left: 10px;">Send Invitation To: </h3>
+                    <tr>
+
+                        <td>
+                            <mat-label>Supplier Code</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #userInput placeholder="Select Code " type="text" matInput
+                                    [formControl]="vendorcode" (keyup)="userdd(this.vendorcode.value)"
+                                    class="matformfieldinputstyle" [matAutocomplete]="user">
+                                <mat-autocomplete #user="matAutocomplete" [displayWith]="displayFnuser"
+                                    (opened)="autocompleteuserScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let user of UserList" [value]="user"
+                                            (click)="SelectedVendor(user)">
+                                            {{user.code}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Name</mat-label><br>
+                            <mat-form-field class=" gapforfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" [formControl]="v_name"
+                                    placeholder="Name" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label class="gapforfield">Email</mat-label><br>
+                            <mat-form-field class=" gapforfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" [formControl]="email_id"
+                                    placeholder="Email" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                border-color: #f5c68b; 
+                                background-color: #f5c68b;position: relative; top: 10px;" class="btn btn-light"
+                                (click)="InvitorsAdd()">Add</button>
+
+                        </td>
+                    </tr>
+                </table>
+
+
+                <div class="usertable">
+                    <h3></h3>
+                    <table class="table table-bordered" style="margin-top: 10px;max-width: 70%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>User Id</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let invite of invitationList; index as index">
+                            <tr>
+                                <td>{{index+ 1}}</td>
+                                <td>{{invite.v_code}}</td>
+                                <td>{{invite.v_name}}</td>
+                                <td>{{invite.email_id}}</td>
+                                <td><span class="material-icons" (click)="deleteuser(index)">delete</span></td>
+                            </tr>
+                        </tbody>
+                        <div *ngIf="invitationList?.length == 0 || invitationList == undefined">No Selected Records
+                        </div>
+                    </table>
+                </div>
+
+                <div>
+
+
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" (click)="oncancel()">Cancel</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="projectSubmit()">{{isEdit == false?
+                        'Submit': 'Update'}}</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div *ngIf="showimageHeaderPreviewPDF" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#bce6ed;">
+                <h2 class="modal-title">PDF View</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <pdf-viewer [src]="pdfurl" [render-text]="true" [original-size]="false"
+                style="display: block;width: 500px; height: 800px;"></pdf-viewer>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div *ngIf="showimageHeaderPreview" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <pre>{{ProjectForm?.value | json}}</pre> -->
+
+<br>

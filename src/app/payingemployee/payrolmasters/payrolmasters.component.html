@@ -1,0 +1,70 @@
+<div>
+  <!-- <nav>
+      <div class="nav nav-tabs">
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="pfcategory()">Employee Contribution</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="compcontrib()">Company Contribution</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="paycomp()">PayComponent</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="paycomptype()">PayCategory</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="template()">Mapping</a>  
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="segments()">Segment</a>  
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="tempsegments()">Template</a>  
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="payrollmaster()">Payroll Mapping</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="grademaster()">Grade</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="ReportColumns()">ReportColumns</a>
+          <a class="nav-item nav-link" data-toggle="tab" role="tab" (click)="bankTemplate()">Bank Template</a>
+      </div>
+  </nav> -->
+  <nav>
+    <div class="nav nav-tabs cus-tmsNav">
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="pfcategory()">Employee Contribution</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="compcontrib()">Company Contribution</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="paycomp()">PayComponent</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="paycomptype()">PayCategory</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="template()">Mapping</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="segments()">Segment</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="tempsegments()">Template</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="payrollmaster()">Payroll Mapping</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="grademaster()">Grade</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="ReportColumns()">ReportColumns</p>
+      <p class="nav-item nav-link" data-toggle="tab" role="tab" (click)="bankTemplate()">Bank Template</p>
+    </div>
+  </nav>
+  
+
+  </div>
+
+  <div *ngIf="ispaycategory">
+      <app-pfcategory></app-pfcategory>
+  </div>
+
+  <div *ngIf="iscompcontrib">
+      <app-companycontrib></app-companycontrib>
+  </div>
+
+  <div *ngIf="ispaycompo">
+      <app-payrollcomponent></app-payrollcomponent>
+  </div>
+  <div *ngIf="ispaycompotype">
+      <app-paycomponentype></app-paycomponentype>
+  </div>
+  <div *ngIf="istemplatesmaster">
+    <app-templates></app-templates>
+  </div>
+  <div *ngIf="isSegmentMaster">
+    <app-segment-master></app-segment-master>
+  </div>
+  <div *ngIf="isTemplateMapping">
+    <app-templatemaster></app-templatemaster>
+  </div>
+  <div *ngIf="isPayrollMapping">
+  <app-payrollmapping></app-payrollmapping>
+  </div>
+  <div *ngIf="isGradeMasters">
+    <app-grademaster></app-grademaster>
+  </div>
+  <div *ngIf="isReportColumns">
+    <app-report-columns></app-report-columns>
+  </div>
+  <div *ngIf="isBankTemplate">
+    <app-banktemplate></app-banktemplate>
+  </div>

@@ -1,0 +1,1030 @@
+<div class="" style="margin: 2%;">
+  <mat-card class="custom-card">
+    <div class="row">
+      <div class="col-md-4 custom-text">
+        Choose an Option to Proceed
+      </div>
+      <div class="col-md-4">
+        <form [formGroup]="dropDownForm">
+          <mat-form-field>
+            <mat-label>Select an Option</mat-label>
+            <mat-select formControlName="droplist" placeholder="Select" [(value)]="selectedOption">
+              <mat-option *ngFor="let status of statusList" [value]="status.value">
+                {{ status.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </mat-card>
+  
+
+  <div *ngIf="selectedOption === 2">
+    <div class="maindiv">
+      <div id="summary">
+        <div class="row">
+          <div class="col-md-8">
+            <h2>Paystructure Upload</h2>
+          </div>
+
+        </div>
+      </div>
+      <div class="">
+        <div class="card cards">
+          <div class="card-body">
+            <form novalidate [formGroup]="uploadForms">
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                    (change)="fileChange($event, $event.target.files)">
+                  <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                  <i class="fas fa-file-import"></i> Upload
+                </button>
+                <button style="margin-left: 47%;" class="btn btn-outline-info" type="button" (click)="downloadTemplate()">
+                  Download Template
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedOption === 3">
+    <div class="maindiv">
+      <div class="row">
+      <h2>Additional Allowance</h2>
+      </div>
+      <div *ngIf="isShowSummarys">
+        <form [formGroup]="empSearchForms" class="formposition">
+          <div class="row">
+            <div class="col-md-3">
+              <mat-label>Employee</mat-label><br>
+              <mat-form-field (click)="functionalHeadss()">
+                <input #fnInput matInput formControlName="functional_head" placeholder="Select Employee"
+                  [matAutocomplete]="fnss">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #fnss="matAutocomplete" [displayWith]="displayFnFunHeadss"
+                  (opened)="autocompleteFunctionalHeadScrollss()">
+                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                  <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                      {{fun.full_name}}
+                    </mat-option>
+                  </ng-container>
+                  <mat-option *ngIf="!functionalHeadList ||  !functionalHeadList.length">
+                    NO RECORDS FOUND
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-label>Active Date</mat-label><br>
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker12" formControlName="from_date">
+                <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                <mat-datepicker #picker12></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-label>End Date</mat-label><br>
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker22" formControlName="to_date" [min]="empSearchForms.get('from_date').value">
+                <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+                <mat-datepicker #picker22></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3" style="    margin-left: -2%;
+          margin-top: 10px;">
+              <div>
+                <button mat-stroked-button type="button"class=SearchButton
+                  aria-label="Search" (click)="getSearchs()">
+                  <mat-icon>search</mat-icon>
+                </button>
+                <button mat-stroked-button type="button" class="ClearButton" 
+                  (click)=clearForm();>Clear</button>
+                  <button type="button" mat-fab class="AddButton"
+                  (click)="addNewAllowance()">
+                  <mat-icon matTooltip="Add" style="color: black;">add</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div id="summary" *ngIf="isShowTables">
+          <div class="table-responsive">
+            <table class="table table-bordered" fixed-header >
+              <thead class="">
+                <tr>
+                  <th class="text-center">S.no</th>
+                  <th class="text-center">Code</th>
+                  <th class="text-center">Employee Name</th>
+                  <th class="text-center">Active Date</th>
+                  <th class="text-center">End Date</th>
+                  <th class="text-center">Amount</th>
+                  <th class="text-center">Edit</th>
+                  <th class="text-center">Delete</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sum of Summarys; index as i">
+                  <td class="text-center">{{(pagination.index-1)*limit+i+1}}</td>
+                  <td class="text-center"> {{ (sum?.Employee_info?.Employeecode != "") ? sum?.Employee_info?.Employeecode : "-" }}
+                  </td>
+                  <td class="summarytextstyle text-center">{{sum?.Employee_info?.Employeename}}</td>
+                  <td class="text-center">{{sum?.active_date | date:'dd-MMM-yyyy'}}</td>
+                  <td class="text-center">{{sum?.end_date | date:'dd-MMM-yyyy'}}</td>
+                  <td class="text-center">{{sum?.amount}}</td>
+                  <td class="text-center">
+                    <!-- <mat-icon class="edit" (click)="editAllowance(sum)">edit</mat-icon> -->
+                    <i class="fa solid fa-pencil fa-fade" (click)="editAllowance(sum)"></i>
+                  </td>
+                  <td class="text-center">
+                    <!-- <mat-icon class="delete" (click)="deleteAllowance(sum)">delete</mat-icon> -->
+                    <i class="fa-solid fa-trash-can fa-fade" (click)="deleteAllowance(sum)"></i>
+                    <!-- <i class="fa fa-trash " style=" font-size:30px"></i> -->
+                    <!-- <img (click)="deleteAllowance(sum)" class="delete" src="../../../assets/images/trash-can-regular.svg" alt=""> -->
+                    <!-- src\assets\images\trash-can-regular.svg -->
+                  </td> 
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+              <button (click)="prevpages()" mat-icon-button [disabled]="pagination.has_previous === false"
+                color="primary">
+                <mat-icon class="customIconSize">arrow_back</mat-icon>
+              </button>
+              {{pagination.index}}
+              <button (click)="nextpages()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+                <mat-icon class="customIconSize">arrow_forward</mat-icon>
+              </button>
+            </div>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" *ngIf="isShowNewAdd">
+        <form [formGroup]="emp_paysrtuctureform" autocomplete="off" (ngSubmit)="EarnFormsubmission()">
+          <table>
+            <tr>
+              <span style="font-size: large;">Add New </span>
+              <span (click)="addSection()">
+                <mat-icon matTooltip="Add" style="color:sandybrown;">add_circle_outline</mat-icon>
+              </span>
+            </tr>
+          </table>
+
+          <div class="table-responsive" style="width:95%;margin-top: 1%;">
+            <table class="table " fixed-header >
+              <thead class="" style="text-align: left;">
+                <tr>
+                  <th>S.No</th>
+                  <th>Employee</th>
+                  <th>Paycomponent Type</th>
+                  <th>Active Date</th>
+                  <th>End Date</th>
+                  <th>Amount</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <ng-container formArrayName="employeepay_detail"
+                *ngFor="let section of getSections(emp_paysrtuctureform); let i = index">
+                <tr [formGroupName]="i">
+                  <td>{{i+1}}</td>
+                  <td>
+
+
+                    <mat-form-field (click)="functionalHeade()">
+                      <mat-label>Employee</mat-label>
+                      <input #fnInput matInput formControlName="functional_head" placeholder="Select Employee"
+                        [matAutocomplete]="fnd"  (keyup)="employeecomponent_search($event.target.value)"
+                        (keypress)="validation($event)">
+                      <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                      <mat-autocomplete #fnd="matAutocomplete" [displayWith]="displayFnFunHea"
+                        (opened)="autocompleteFunctionalHeadScrol()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                          <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                            {{fun.full_name}}
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                    </mat-form-field>
+
+
+                  </td>
+                  <td>
+                    <mat-form-field (click)="getpaymentcomponentinfos()">
+                      <mat-label>Paycomponent</mat-label>
+                      <input type="text" #typeinput matInput formControlName="paycomponent" autocomplete="off" required
+                        [matAutocomplete]="paycom" (keyup)="paycomponent_searches($event.target.value)"
+                        (keypress)="validation($event)">
+                      <mat-autocomplete [panelWidth]="300" #paycom="matAutocomplete" [displayWith]="displaycom">
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                          <mat-option *ngFor="let type of paycomponent_earn" (focusout)="type_info(type,i)"
+                            [value]="type">
+                            {{type.name}}
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field>
+                      <mat-label>Active Date</mat-label>
+                      <input matInput [matDatepicker]="picker1" formControlName="fromDate">
+                      <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field (click)="ActiveDate(i)">
+                      <mat-label>End Date</mat-label>
+                      <input matInput [matDatepicker]="picker" formControlName="toDate" [min]="emp_paysrtuctureform.get('employeepay_detail').value[i]?.fromDate">
+                      <!-- [min]="(emp_paysrtuctureform.get('employeepay_detail').get(i) as FormGroup).get('fromDate').value" -->
+                      <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+                      <mat-datepicker #picker (opened)="ActiveDate(i)"></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field>
+                      <mat-label>Amount</mat-label>
+                      <input matInput placeholder="Amount" formControlName="amount" autocomplete="off">
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- <button mat-icon-button type="button" (click)="deletepay(i);deleteAllowance(section);"> -->
+                      <!-- <i  aria-hidden="true"></i> -->
+                      <mat-icon style="    margin-top: 12px;
+                      margin-left: 8px;" (click)="deletepay(i);deleteAllowance(section);"  aria-hidden="true">delete</mat-icon>
+                    <!-- </button> -->
+                  </td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
+          <div style="margin: 30px;">
+            <button type="submit" class="btn btn-outline-success text-center"
+              style="border-radius: 40px;margin-left: 10px;">Submit</button>
+            <button type="button" class="btn btn-outline-primary text-center"
+              style="border-radius: 40px;margin-left: 10px;" (click)="cancelClicks()">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="isEditAllowance" style="margin-left: 22px;">
+        <form [formGroup]="editForms" autocomplete="off">
+          <table>
+            <tr>
+              <span style="font-size: large;">Allowance Update</span>
+
+            </tr>
+          </table>
+
+          <div class="table-responsive" style="width:95%;margin-top: 1%;">
+            <table class="table " fixed-header >
+              <thead class="" style="text-align: left;">
+                <tr>
+                  <th>Employee</th>
+                  <th>PayComponent Type</th>
+                  <th>Active Date</th>
+                  <th>End Date</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <ng-container>
+                <tr>
+                  <td>
+                    <mat-form-field (click)="functionalHead()">
+                      <mat-label>Employee</mat-label>
+                      <input matInput placeholder="employee" formControlName="functional_head" autocomplete="off"
+                        readonly="true">
+                    </mat-form-field>
+
+                  </td>
+                  <td>
+                    <mat-form-field>
+                      <mat-label>PayComponent Type</mat-label>
+                      <mat-select formControlName="type">
+                        <mat-option *ngFor="let type of paycomponent_arrays" [value]="type.id">
+                          {{type.name}}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <mat-label>Active Date</mat-label>
+                      <input matInput [matDatepicker]="picker35" formControlName="active_date">
+                      <mat-datepicker-toggle matSuffix [for]="picker35"></mat-datepicker-toggle>
+                      <mat-datepicker #picker35></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field>
+                      <mat-label>End Date</mat-label>
+                      <input matInput [matDatepicker]="picker66" formControlName="end_date" [min]="editForms.get('active_date').value">
+                      <mat-datepicker-toggle matSuffix [for]="picker66"></mat-datepicker-toggle>
+                      <mat-datepicker #picker66></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <mat-label>Amount</mat-label>
+                      <input matInput placeholder="amount" formControlName="amount" autocomplete="off">
+
+                    </mat-form-field>
+                  </td>
+                </tr>
+
+              </ng-container>
+
+
+            </table>
+          </div>
+          <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+            border-color: black;
+            background-color: white;" (click)="onCancels()">Cancel</button>
+          <button type="submit" style="border-radius: 10px;margin-left: 10px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;" (click)="onEdits()" class="btn btn-light">Submit</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="selectedOption === 4">
+    <h3>Additional Deductions</h3>
+    <div *ngIf="isShowDSummary">
+      <form [formGroup]="empDSearchForms" class="formposition">
+        <div class="row">
+
+          <div class="col-md-3">
+            <mat-label>Employee</mat-label><br>
+            <mat-form-field (click)="functionalHeadD()">
+              <input #fnInputD matInput formControlName="functional_head" placeholder="Select Employee"
+                [matAutocomplete]="fnsD">
+              <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+              <mat-autocomplete #fnsD="matAutocomplete" [displayWith]="displayFnFunHeadD"
+                (opened)="autocompleteFunctionalHeadScrollD()">
+                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                <ng-container *ngIf="!isLoading">
+                  <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                    {{fun.full_name}}
+                  </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!functionalHeadList || !functionalHeadList.length">
+                  NO RECORDS FOUND
+              </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-label>Active Date</mat-label><br>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker12" formControlName="from_date">
+              <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+              <mat-datepicker #picker12></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-label>End Date</mat-label><br>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker22" formControlName="to_date" [min]="empDSearchForms.get('from_date').value">
+              <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+              <mat-datepicker #picker22></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pr-0" style="    margin-left: -5%;
+          margin-top: 8px;">
+            <div style="    margin-left: 6%;"> 
+              <button mat-stroked-button type="button" class="SearchButton"
+                aria-label="Search" (click)="getDSearchs()">
+                <mat-icon>search</mat-icon>
+              </button>
+              <button mat-stroked-button type="button" class="ClearButton"
+                (click)=clearDForm();>Clear</button>
+              <button type="button" mat-fab class="AddButton"
+                (click)="addNewDeduction()">
+                <mat-icon matTooltip="Add" style="color: black ;">add</mat-icon>
+              </button>
+              <div class="uploadIcon">
+                <i class="fa-solid fa-file-csv fa-2xl fa-bounce" style="color:green" data-toggle="modal" data-target="#UploadScreen" matTooltip="Excel Upload"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div id="summary" *ngIf="isShowTables">
+        <div class="table-responsive">
+          <table class="table table-bordered" fixed-header >
+            <thead class="">
+              <tr>
+                <th class="text-center">S.no</th>
+                <th class="text-center">Code</th>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">Active Date</th>
+                <th class="text-center">End Date</th>
+                <th class="text-center">Amount</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Delete</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sum of DSummary; index as i">
+                <td class="text-center">{{(pagination.index-1)*limit+i+1}}</td>
+                <td class="text-center"> {{ (sum?.Employee_info?.Employeecode != "") ? sum?.Employee_info?.Employeecode : "-" }}
+                </td>
+                <td class="summarytextstyle text-center">{{sum?.Employee_info?.Employeename}}</td>
+                <td class="text-center">{{sum?.active_date | date:'dd-MMM-yyyy'}}</td>
+                <td class="text-center">{{sum?.end_date | date:'dd-MMM-yyyy'}}</td>
+                <td class="text-center">{{sum?.amount}}</td>
+                <td class="text-center">
+                  <i class="fa solid fa-pencil fa-fade" (click)="editDeduction(sum)"></i>
+                  <!-- <mat-icon (click)="editDeduction(sum)">edit</mat-icon> -->
+                </td>
+                <td class="text-center">
+                  <i class="fa solid fa-trash-can fa-fade" (click)="deleteDeductions(sum)"></i>
+                  <!-- <mat-icon (click)="deleteDeductions(sum)">delete</mat-icon> -->
+                  <!-- <img (click)="deleteAllowance(sum)" style="cursor:pointer" src=".icons/trash-can-regular.svg" alt="dfd"> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+            <button (click)="prevpageD()" mat-icon-button [disabled]="pagination.has_previous === false"
+              color="primary">
+              <mat-icon class="customIconSize">arrow_back</mat-icon>
+            </button>
+            {{pagination.index}}
+            <button (click)="nextpageD()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+              <mat-icon class="customIconSize">arrow_forward</mat-icon>
+            </button>
+          </div>
+          <br>
+          <br>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col" *ngIf="isShowNewAdds">
+      <form [formGroup]="deductsrtuctureform" autocomplete="off" (ngSubmit)="DeductFormsubmission()">
+        <!-- <table>
+          <tr> -->
+            <div class="AdditionalDeductionNav">
+              <div style="font-size: large;">Custom Deductions</div>
+            <div (click)="addSectionded()">
+              <mat-icon matTooltip="Add" style="color:sandybrown;">add_circle_outline</mat-icon>
+            </div>
+            <!-- <div class="uploadIcon">
+               <i class="fa-solid fa-file-csv fa-2xl" data-toggle="modal" data-target="#UploadScreen"></i>
+            </div> -->
+            <!-- <div class="DownloadButton">
+              <button class="btn btn-info">Download Template</button>
+            </div> -->
+            </div>
+            
+          <!-- </tr>
+        </table> -->
+       
+
+        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+          <table class="table " fixed-header >
+            <thead class="" style="text-align: left;">
+              <tr>
+                <th>S.No</th>
+                <th>Employee</th>
+                <th>Paycomponent Type</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Amount</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <ng-container formArrayName="employeepay_detail"
+              *ngFor="let section of getSectionsded(deductsrtuctureform); let i = index">
+              <tr [formGroupName]="i">
+                <td>{{i+1}}</td>
+                <td>
+                  <mat-form-field (click)="functionalHeades()">
+                    <mat-label>Employee</mat-label>
+                    <input #fnInputss matInput formControlName="functional_head" placeholder="Select Employee"
+                      [matAutocomplete]="fnds" (keyup)="employeecomponent_search($event.target.value)"
+                      (keypress)="validation($event)">
+                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                    <mat-autocomplete #fnds="matAutocomplete" [displayWith]="displayFnFunHeas"
+                      (opened)="autocompleteFunctionalHeadScrll()">
+                      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                          {{fun.full_name}}
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                </td>
+                <td>
+                  <mat-form-field (click)="getpaymentcomponentinfod()">
+                    <mat-label>Paycomponent</mat-label>
+                    <input type="text" #typeinput matInput formControlName="type" autocomplete="off" required
+                      [matAutocomplete]="paycom" (keyup)="paycomponent_searchD($event.target.value)"
+                      (keypress)="validation($event)">
+                    <mat-autocomplete [panelWidth]="300" #paycom="matAutocomplete" [displayWith]="displaycom">
+                      <mat-option *ngIf="isLoading">Loading..</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let type of paycomponent_deduct" (focusout)="type_infoded(type,i)"
+                          [value]="type">
+                          {{type.name}}
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="picker3" formControlName="toDate" [min]="deductsrtuctureform.get('employeepay_detail').value[i].fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Amount</mat-label>
+                    <input matInput placeholder="Amount" formControlName="amount" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td>
+                  <!-- <button mat-icon-button type="button" (click)="deletepayded(i);"> -->
+                    <!-- <i class="fa fa-trash-o" aria-hidden="true"></i> -->
+                    <mat-icon  style="margin-top: 12px;
+                    margin-left: 8px;"(click)="deletepayded(i);">delete</mat-icon>
+                  <!-- </button> -->
+                </td>
+              </tr>
+
+            </ng-container>
+
+          </table>
+        </div>
+        <div style="margin: 30px;">
+
+
+          <button type="submit" class="btn btn-outline-success text-center"
+            style="border-radius: 40px;margin-left: 10px;">Submit</button>
+          <button type="button" class="btn btn-outline-primary text-center"
+            style="border-radius: 40px;margin-left: 10px;" (click)="cancelClickD()">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="isEditDeduction" style="margin-left: 22px;">
+      <form [formGroup]="editFormD" autocomplete="off">
+        <table>
+          <tr>
+            <span style="font-size: large;">Deduction Update</span>
+
+          </tr>
+        </table>
+
+        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+          <table class="table " fixed-header >
+            <thead class="" style="text-align: left;">
+              <tr>
+                <th>Employee</th>
+                <th>PayComponent Type</th>
+                <th>Active Date</th>
+                <th>End Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <ng-container>
+              <tr>
+                <td>
+                  <mat-form-field (click)="functionalHead()">
+                    <mat-label>Employee</mat-label>
+                    <input matInput placeholder="employee" formControlName="functional_head" autocomplete="off"
+                      readonly="true">
+                  </mat-form-field>
+
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>PayComponent Type</mat-label>
+                    <mat-select formControlName="type">
+                      <mat-option *ngFor="let type of paycomponent_arrays" [value]="type.id">
+                        {{type.name}}
+                      </mat-option>
+                    </mat-select>
+
+                  </mat-form-field>
+                </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-label>Active Date</mat-label>
+                    <input matInput [matDatepicker]="picker35" formControlName="active_date">
+                    <mat-datepicker-toggle matSuffix [for]="picker35"></mat-datepicker-toggle>
+                    <mat-datepicker #picker35></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="picker66" formControlName="end_date" [min]="editFormD.get('active_date').value">
+                    <mat-datepicker-toggle matSuffix [for]="picker66"></mat-datepicker-toggle>
+                    <mat-datepicker #picker66></mat-datepicker>
+                  </mat-form-field>
+                </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-label>Amount</mat-label>
+                    <input matInput placeholder="amount" formControlName="amount" autocomplete="off">
+
+                  </mat-form-field>
+                </td>
+              </tr>
+            </ng-container>
+
+
+          </table>
+        </div>
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+            border-color: black;
+            background-color: white;" (click)="onCancelD()">Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;" (click)="onEditDed()" class="btn btn-light">Submit</button>
+      </form>
+    </div>
+
+  </div>
+  <div *ngIf="selectedOption === 5">
+    <h3>Payroll Process Change</h3>
+    <div *ngIf="isShowSummary">
+      <form [formGroup]="empSearchForm" class="formposition">
+        <div class="row">
+
+          <div class="col-md-3">
+            <mat-label>Employee</mat-label><br>
+            <mat-form-field (click)="functionalHead()">
+              <input #fnInput matInput formControlName="functional_head" placeholder="Select Employee"
+                [matAutocomplete]="fn" (keyup)="employeecomponent_search($event.target.value)"
+                (keypress)="validation($event)">
+              <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+              <mat-autocomplete #fn="matAutocomplete" [displayWith]="displayFnFunHead"
+                (opened)="autocompleteFunctionalHeadScroll()">
+                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                <ng-container *ngIf="!isLoading">
+                  <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                    {{fun.full_name}}
+                  </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!functionalHeadList || !functionalHeadList.length">
+                  NO RECORDS FOUND
+              </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-label>From Date</mat-label><br>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker12" formControlName="from_date">
+              <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+              <mat-datepicker #picker12></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-label>To Date</mat-label><br>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker22" formControlName="to_date" [min]="empSearchForm.get('from_date').value">
+              <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+              <mat-datepicker #picker22></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3" style="    margin-left: -2%;
+          margin-top: 8px;">
+            <div>
+              <button mat-stroked-button type="button" class="SearchButton"
+                aria-label="Search" (click)="getSearch()">
+                <mat-icon>search</mat-icon>
+              </button>
+              <button mat-stroked-button type="button" class="ClearButton"
+                (click)=clearForms();>Clear</button>
+              <button type="button" mat-fab class="AddButton"
+                (click)="getAddScreen()">
+                <mat-icon matTooltip="Add" style="color: black;">add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div id="summary" *ngIf="isShowTable">
+        <div class="table-responsive">
+          <table class="table table-bordered" fixed-header >
+            <thead class="">
+              <tr>
+                <th class="text-center">S.no</th>
+                <th class="text-center">Code</th>
+                <th class="text-center">Employee Name</th>
+                <th class="text-center">From Date</th>
+                <th class="text-center">To Date</th>
+                <th class="text-center">Reason</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Delete</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sum of Summary; index as i">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center"> {{ (sum?.Employee_info?.Employeecode != "") ? sum?.Employee_info?.Employeecode : "-" }}
+                </td>
+                <td class="summarytextstyle text-center">{{sum?.Employee_info?.Employeename}}</td>
+                <td class="text-center">{{sum?.from_date | date:'dd-MMM-yyyy'}}</td>
+                <td class="text-center">{{sum?.to_date | date:'dd-MMM-yyyy'}}</td>
+                <td class="text-center">{{sum?.reason}}</td>
+                <td class="text-center">{{sum?.pay_change?.name}}</td>
+                <td class="text-center">
+                  <!-- <mat-icon (click)="editPay(sum)">edit</mat-icon> -->
+                  <i class="fa solid fa-pencil fa-fade" (click)="editPay(sum)"></i>
+                </td>
+                <td class="text-center">
+                  <!-- <mat-icon (click)="deletePay(sum.id)">delete</mat-icon> -->
+                  <i class="fa solid fa-trash-can fa-fade" (click)="deletePay(sum.id)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+            <button (click)="prevpag()" mat-icon-button [disabled]="pagination.has_previous === false" color="primary">
+              <mat-icon class="customIconSize">arrow_back</mat-icon>
+            </button>
+            {{pagination.index}}
+            <button (click)="nextpag()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+              <mat-icon class="customIconSize">arrow_forward</mat-icon>
+            </button>
+
+          </div>
+          <br>
+          <br>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isShowAddPage" class="col">
+      <form [formGroup]="paystatusform" autocomplete="off" (ngSubmit)="Formsubmission()">
+        <table>
+          <tr>
+            <span style="font-size: large;">Payment Status</span>
+            <span (click)="addSections()">
+              <mat-icon matTooltip="Add" style="color:sandybrown;">add_circle_outline</mat-icon>
+            </span>
+          </tr>
+        </table>
+
+        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+          <table class="table" fixed-header >
+            <thead class="" style="text-align: left;">
+              <tr>
+                <th>S.No</th>
+                <th>Employee</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <ng-container formArrayName="paydetail" *ngFor="let section of getSectionss(paystatusform); let i = index">
+              <tr [formGroupName]="i">
+                <td>{{i+1}}</td>
+                <td>
+
+                  <mat-form-field (click)="functionalHeads()">
+                    <mat-label>Employee</mat-label>
+
+                    <input #fnInputs matInput formControlName="functional_head" placeholder="Select Employee"
+                      [matAutocomplete]="fns" (keyup)="employeecomponent_search($event.target.value)"
+                      (keypress)="validation($event)">
+                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                    <mat-autocomplete #fns="matAutocomplete" [displayWith]="displayFnFunHeads"
+                      (opened)="autocompleteFunctionalHeadScrolls()">
+                      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                          {{fun.full_name}}
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="picker5" formControlName="from_date">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="picker6" formControlName="to_date" [min]="paystatusform.get('paydetail').value[i].from_date">
+                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                    <mat-datepicker #picker6></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Reason</mat-label>
+                    <input matInput placeholder="Reason" formControlName="reason" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select matInput formControlName="pay_change" placeholder="">
+                      <mat-option *ngFor="let opt of droplist" [value]="opt.id">
+                        {{ opt.text }}
+                      </mat-option>
+                    </mat-select>
+
+                  </mat-form-field>
+                </td>
+                <td>
+                  <!-- <button mat-icon-button type="button" (click)="deletepays(i);"> -->
+                    <!-- <i class="fa fa-trash-o" aria-hidden="true"></i> -->
+                    <mat-icon style="margin-top: 12px;
+                    margin-left: 8px;" (click)="deletepays(i);">delete</mat-icon>
+                  <!-- </button> -->
+                </td>
+              </tr>
+
+            </ng-container>
+
+          </table>
+        </div>
+        <div style="margin: 30px;">
+
+
+          <button type="submit" class="btn btn-outline-success text-center"
+            style="border-radius: 40px;margin-left: 10px;">Submit</button>
+          <button type="button" class="btn btn-outline-primary text-center" (click)="addCancel()"
+            style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="isEditContribution" style="margin-left: 22px;">
+      <form [formGroup]="editForm" autocomplete="off">
+        <table>
+          <tr>
+            <span style="font-size: large;">Payment Update</span>
+
+          </tr>
+        </table>
+
+        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+          <table class="table " fixed-header >
+            <thead class="" style="text-align: left;">
+              <tr>
+                <th>Employee</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <ng-container>
+              <tr>
+                <td>
+                  <mat-form-field (click)="functionalHead()">
+                    <mat-label>Employee</mat-label>
+                    <input matInput placeholder="employee" formControlName="functional_head" autocomplete="off"
+                      readonly="true">
+                  </mat-form-field>
+
+                </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="picker5" formControlName="from_date">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="picker6" formControlName="to_date" [min]="editForm.get('from_date').value">
+                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                    <mat-datepicker #picker6></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Reason</mat-label>
+                    <input matInput placeholder="Reason" formControlName="reason" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select matInput formControlName="pay_change" placeholder="">
+                      <mat-option *ngFor="let opt of droplist" [value]="opt.id">
+                        {{ opt.text }}
+                      </mat-option>
+                    </mat-select>
+
+                  </mat-form-field>
+                </td>
+              </tr>
+
+            </ng-container>
+
+
+          </table>
+        </div>
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+            border-color: black;
+            background-color: white;" (click)="onCancel()">Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;" (click)="onEdit()" class="btn btn-light">Submit</button>
+      </form>
+    </div>
+
+
+  </div>
+  <div *ngIf="selectedOption===6">
+    <app-emp-attend-upload></app-emp-attend-upload>
+  </div>
+  <div class="modal fade" role="dialog" id="UploadScreen">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Upload</div>
+          <button data-dismiss="modal" class="close" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card cardDeduction mt-4 mb-4">
+            <div class="card-body">
+              <form novalidate [formGroup]="uploadForms">
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                      (change)="fileChangededuction($event)" accept=".xlsx,.csv">
+                    <label class="custom-file-label" #labelImportDeduction for="importFile">Choose file</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-warning" type="button" (click)="Upload()">
+                    <i class="fas fa-file-import"></i> Upload
+                  </button>
+                  <button class="btn btn-outline-info" type="button"  style="margin-left: 4%;" data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button class="btn btn-outline-info" type="button"  style="    margin-left:35%;" (click)="Download()">
+                    Download Template
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

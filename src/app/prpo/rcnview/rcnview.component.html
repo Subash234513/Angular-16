@@ -1,0 +1,275 @@
+<div style="margin-left: 50px;margin-top:2%;">
+    <h1 style="margin-left: 1px;">
+        Rent Confirmation Note Details View </h1>
+    <!-- <br><br> -->
+    <table width="100%" style="margin-top:3%">
+        <tbody>
+            <!-- <tr> -->
+            <!-- <td width="20%" valign="top">
+                    <table width="100%;" style="font-size:13px;">
+                        <tbody> -->
+
+            <tr>
+                <th> RCN No:</th>
+                <td> {{GRNNo}}</td>
+                <th> Landlord Name: </th>
+                <td> {{SupplierName}}</td>
+
+
+            </tr>
+            <tr>
+                <th> Invoice Date: </th>
+                <td> {{ReceivedDate}}</td>
+                <th> Invoice Number: </th>
+                <td> {{InvoiceNumber}}</td>
+
+            </tr>
+
+            <tr>
+                <th> Remarks:</th>
+                <td> {{Remarks}}</td>
+                <th> Raised By:</th>
+                <td> {{createdBy}} </td>
+            </tr>
+
+
+
+
+
+
+            <!-- <tr>
+                                <th>Raised By:</th>
+                                <td> {{createdBy}}  </td>
+                
+                                <th> Approver Remarks:  </th>
+                                <td> {{approverRemarks}} </td>
+                
+                            </tr> -->
+
+
+
+
+            <!-- 
+                            <tr>
+
+                                <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> RCN No: <span
+                                        style="color: black;margin-left: 2%;"> {{GRNNo}}</span></p> -->
+            <!-- <p style="color: #808080; margin: 0px 0 4px;margin-top: 5%;"> AWB Number: &nbsp;&nbsp;<span
+                                        style="color: black;margin-left: 3.2em;">{{DCNumber}}</span></p> -->
+            <!-- <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Invoice Date: <span
+                                        style="color: black;margin-left: 2%;">{{ReceivedDate}}
+                                    </span>
+                                </p>
+                                <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Landlord Name: <span
+                                        style="color: black;margin-left: 2%;">{{SupplierName}}</span></p>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="20%" valign="top">
+                    <table width="100%;" style="font-size:14px; margin-left: 5px;">
+                        <tbody>
+                            <tr>
+                                <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Invoice Number: <span
+                                        style="color: black;margin-left: 2%;">{{InvoiceNumber}}</span></p>
+                                <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Remarks: <span
+                                        style="color: black;margin-left: 2%;">{{Remarks}}</span></p>
+                                        <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Raised By: <span
+                                            style="color: black;margin-left: 2%;">{{createdBy}}</span></p>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="20%" valign="top">
+                    <table width="100%;" style="font-size:14px; margin-left: 5px;">
+                        <tbody>
+                            <tr>
+                                <button style="margin-left:5px;" type="button" (click)=" onCancelClick()"
+                                    class="btn btn-outline-primary">
+                                    Back</button> -->
+            <!-- </tr> -->
+        </tbody>
+    </table>
+    <!-- </td>
+            </tr>
+        </tbody>
+    </table> -->
+</div>
+
+<!-- <div class="table-responsive" style="margin-top: 2%;">
+    <table class="table table-bordered" fixed-header
+        style="width: 95%;margin-top: 10px;margin-left:25px;overflow-x: hidden;">
+        <thead class="table_header" style="text-align: center;overflow-x: hidden;">
+            <tr style="text-align:center;">
+
+                <th>Sl.No</th>
+                <th>Delivery Location</th>
+           
+                <th>Location </th>
+                <th>Date</th>
+                <th>PO Number</th>
+                <th>PR Number</th>
+
+                <th>Product Name</th>
+                <th>Received Quantity</th>
+
+                <th>UOM Name</th>
+              
+                <th>Asset Details</th>
+
+
+
+
+            </tr>
+        </thead>
+        <tbody *ngFor="let grn of dataaa; index as i">
+            <tr  *ngFor="let a of grn.pr_data;index as i" style="text-align:center;padding: 0.5em 0.1em 0.1em;">
+            <td> {{i+1}} </td>
+            <td>{{a.prccbs_id.branch_id.name}}</td>
+            <td>{{a.prccbs_id.branch_id.code}}</td>
+            <td>{{grn.inwardheader.date| date: 'dd/MM/yyyy'}}</td>
+            <td>{{grn.poheader.no}}</td>
+            <td>{{a.prdetails_id.prheader_id.no}}</td>
+            <td>{{a.podetails_id.product_id.name}}</td> 
+            <td>{{grn.quantity}}</td>
+            <td>{{a.podetails_id.product_id.uom_id.name}}</td> -->
+
+
+<!-- <td>{{grn.}}  </td>
+            <td >{{grn.}}</td>
+            <td >{{grn.}}</td>
+            <td >{{grn.}}</td>
+            <td >{{grn.}}</td>
+            <td >{{grn.}}</td>
+            <td>{{grn.}}</td>
+            <td >{{grn.}}</td>
+            <td >{{grn}}</td> -->
+
+<!-- <td style="text-align: center;">
+                <i class="fa fa-file" aria-hidden="true" data-toggle="modal" data-target="#exampleModalLongs"></i>  
+               </td>
+
+             
+            </tr>
+        </tbody>
+    </table>
+
+</div> -->
+<!------------------------------------------------------------------------------------------------------------------------>
+<div class="table-responsive" style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;" class="center">
+    <table class="table table-bordered" fixed-header>
+        <thead class="table_header">
+            <tr>
+                <th>S.no</th>
+                <th>Location Name</th>
+                <th>Location</th>
+                <!-- <th>Date</th> -->
+                <th>Schedule Ref No</th>
+                <!-- <th>RR Number</th> -->
+                <th>Rent Type</th>
+                <th>Net Payable Amount</th>
+                <!-- <th>UOM Name</th> -->
+                <!-- <th>Asset Details</th> -->
+            </tr>
+        </thead>
+        <tbody >
+            <tr *ngFor="let grndetailsview of grndetailsviewList;index as i">
+                <td>{{i+1 }}</td>
+                <td>{{grndetailsview?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.name}}</td>
+                <td>{{grndetailsview?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.code}}</td>
+                <td>{{grndetailsview?.inwardheader?.date| date: 'dd-MMM-yyyy'}}</td>
+                <td>{{grndetailsview?.podetails_id?.product_name}}</td>    
+                <td>{{grndetailsview?.quantity | number:'1.0-0'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="grndetailsviewList ?.length == 0" style="margin-left: 42%;">
+    <h3>Sorry data not found!.. </h3>
+</div>
+<div class="row" *ngIf="grndetailsviewpage">
+    <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+        <button mat-icon-button [disabled]="has_previousgrndetailsview === false" color="primary"
+            (click)="previousClickgrndetails()">
+            <mat-icon>arrow_back
+            </mat-icon>
+        </button>
+        {{presentpagegrndetailsview}}
+        <button mat-icon-button [disabled]="has_nextgrndetailsview === false" color="primary"
+            (click)="nextClickgrndetails()">
+            <mat-icon>arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</div>
+<div style="margin-left:50px;">
+<button  type="button" (click)=" onCancelClick()" class="btn btn-outline-primary">
+    Back</button>
+</div>
+<!--------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="assetinfodetails" aria-hidden="true"
+    id="assetdetails">
+    <div class="modal-dialog modal-xl" style="width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#DDEFDD;">
+                <h2 class="modal-title" style="color:black ;">Asset Data</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="table-responsive" style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                <table class="table table-bordered" fixed-header>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.no</th>
+                            <th>Asset</th>
+                            <th>Sno</th>
+                            <th>Manufacture</th>
+                            <th>Warranty Start Date</th>
+                            <th>Warranty End Date</th>
+                            <th>Installation Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <!-- <tr *ngFor="let asset of AssetdetailsList;index as i"> -->
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            No records found
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <!-- </tr> -->
+                        <!-- <tr *ngFor="let terminal of terminalList;index as i">
+                            <td scope="row" style="vertical-align: middle;">
+                                {{(this.presentterminalpage - 1)*pageSizeterminal +i+1 }}</td>
+                            <td style="vertical-align: middle;">{{terminal.occupancy_details.code}}</td>
+                            <td style="vertical-align: middle;">{{terminal.terminal_id}}</td>
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton"
+                                    (click)="TerminalEdit(terminal)" color="primary">
+                                    <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                                </button>
+                                <button mat-icon-button matTooltip=" Delete" class="iconbutton"
+                                    (click)="TerminalDelete(terminal)" color="primary">
+                                    <mat-icon style="color: gray;" aria-label="Delete">delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+                <tr>
+                    <button type="button" data-dismiss="modal"
+                        style="float: left;margin-left: 350px;margin-bottom: 20%; " class="btn btn-outline-primary">
+                        Back</button>
+                </tr>
+               
+            </div>
+        </div>
+    </div>
+</div>

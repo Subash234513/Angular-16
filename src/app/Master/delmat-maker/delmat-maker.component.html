@@ -1,0 +1,104 @@
+<div style="margin-left: 50px;margin-right: 80%;margin-top: 1%; width: 100%;">
+    <h1 style="font-size: 23px;font-family: 'Times New Roman', Times, serif;color: blue;">
+         Delmat Maker Form
+    </h1><hr>
+    <div>
+        <form [formGroup]="delmatmakerForm" (ngSubmit)="delmatmakerSubmit()">
+            <table>
+                <tr> 
+                    <td>
+                        <mat-form-field style="width: 250px;">
+                            <mat-label>Employee Name</mat-label>
+                            <input #empInput placeholder="Select Employee" matInput formControlName="employee_id" (keypress)="kyenbdata($event)"
+                                [matAutocomplete]="emp">
+                                <mat-error *ngIf="delmatmakerForm.controls.employee_id.errors?.incorrectValue">
+                                    {{delmatmakerForm.controls.employee_id.errors?.incorrectValue}}
+                                </mat-error>
+                            <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp" (opened)="autocompleteempScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let emp of employeeList" [value]="emp">{{emp.full_name}}
+                                    </mat-option>
+                                    
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td> 
+                    <td>
+                        <mat-form-field style="width: 250px;margin-left: 50px;">
+                            <mat-label>Commodity Name</mat-label>
+                            <input #comInput placeholder="Select Commodity" matInput formControlName="commodity_id" (keypress)="kyenbdata($event)"
+                                [matAutocomplete]="com">
+                                <mat-error *ngIf="delmatmakerForm.controls.commodity_id.errors?.incorrectValue ">
+                                    {{delmatmakerForm.controls.commodity_id.errors?.incorrectValue}}
+                                </mat-error>
+                            <mat-autocomplete #com="matAutocomplete" [displayWith]="displayFncom" (opened)="autocompletecomScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let com of commodityList" [value]="com">{{com.name}}
+                                    </mat-option>
+                                    <!-- <mat-option>No more datas</mat-option> -->
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td> 
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 250px;">
+                            <mat-label>Delmat Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let type of delmattypeList" [value]="type.id">{{type.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td> 
+                    <td>
+                        <mat-form-field style="width: 250px; margin-left: 50px;">
+                            <mat-label>Limit <small>(in Rs)</small></mat-label>
+                            <input matInput type="text" placeholder=" Limit" maxlength="16" (keypress)="omit_special_num($event)" autocomplete="off" formControlName="limit" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                       
+                            
+                            <mat-checkbox formControlName="enb" style="margin-left: 50px;" (click)="enb()">Two Level Header Needed</mat-checkbox>
+                        
+                    </td>
+                </tr>
+                <tr *ngIf="isvisible">
+                    <td>
+                        <mat-form-field style="width: 250px;">
+                            <mat-label>Two Level Employee Name</mat-label>
+                            <input #empInput placeholder="Select Employee" matInput formControlName="empname" (keypress)="kyenbdata($event)"
+                                [matAutocomplete]="emp">
+                                <mat-error *ngIf="delmatmakerForm.controls.employee_id.errors?.incorrectValue">
+                                    {{delmatmakerForm.controls.employee_id.errors?.incorrectValue}}
+                                </mat-error>
+                            <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp" (opened)="autocompleteempScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let emp of employeeList_new" [value]="emp">{{emp.full_name}}
+                                    </mat-option>
+                                    
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td> 
+                </tr>
+            </table>
+                <div style="margin-bottom: 5%; margin-left: 50px;">
+                    <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary">Submit</button>
+                    <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                        style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+                </div>
+        </form>
+    </div>
+</div>
+
+<!-- <pre>
+    {{ delmatmakerForm.value | json }}
+</pre> -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

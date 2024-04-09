@@ -1,0 +1,247 @@
+<h1 style="margin-left: 3%;margin-top: 1%;">Goods Received Note Details View</h1>
+<div style="margin-left: 60px;margin-top: 2%;">
+    <div>
+        <hr>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td width="50%" valign="top">
+                        <table width="100%;" style="font-size:14px;">
+                            <tbody>
+                                <tr>
+                                    <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> GRN
+                                        No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+                                            style="color: black;margin-left: 5%;">{{grnno}} </span></p><br>
+                                    <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> DC Number:&nbsp;
+                                        <span style="color: black;margin-left: 4%;"> {{dcno}}</span>
+                                    </p><br>
+                                    <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Received Date: <span
+                                            style="color: black;margin-left: 2%;"> {{recdate| date:
+                                            'dd/MM/yyyy'}}</span></p><br>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td width="50%" valign="top">
+                        <table width="100%;" style="font-size:14px;">
+                            <tbody>
+                                <tr>
+
+                                    <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;"> Supplier Name: <span
+                                            style="color: black;margin-left: 2%;">{{suppliername}} </span></p><br>
+                                    <p style="color:#808080; margin: 0px 0 4px;font-size: 15px;"> Invoice Number: <span
+                                            style="color: black;margin-left: 1%;">{{invoiceno}} </span>
+                                    </p><br>
+                                    <p style="color: #808080; margin: 0px 0 4px;font-size: 15px;">
+                                        Remarks:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span
+                                            style="color: black;margin-left: 3%;">{{remarks}}
+                                        </span></p><br>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 30px;">
+    <table class="table scrolltable table-bordered" fixed-header>
+        <thead>
+            <tr class="table_header" fixed-header style="text-align:center;">
+                <th>S.No</th>
+                <th>Delivery Location</th>
+                <th>Location </th>
+                <th>Date</th>
+                <th>PO Number</th>
+                <th>PR Number</th>
+                <th>Product Name</th>
+                <th>Received Quantity</th>
+                <th>UOM Name</th>
+                <th>Asset Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grn of grnclosedataList; index as i">
+                <td>{{i+1}} </td>
+                <td>{{grn?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.name}}</td>
+                <td>{{grn?.podelivery_id?.prpoqty_id?.prccbs_id?.branch_id?.code}}</td>
+                <td>{{grn?.inwardheader?.date| date: 'dd-MMM-yyyy'}}</td>
+                <td>{{grn?.poheader_id?.no}}</td>
+                <td>{{grn?.podelivery_id?.prpoqty_id?.prccbs_id?.prdetails?.prheader_id?.no}}</td>
+                <td>{{grn?.podetails_id?.product_name}}</td>    
+                <td>{{grn?.quantity | number:'1.0-0'}}</td>
+                <td>{{grn?.podetails_id?.uom}}</td>
+                <!-- <td>
+                    <button type="button" class="btn btn-outline-success" data-toggle="modal" (click)="getGrnAssetdata(grn)"
+                        data-target="#HistoryModal"><span class="fa fa-file"></span>
+                    </button>
+                </td> -->
+
+                <td>
+                    <div *ngIf="grn?.is_asset == 1 ; else lockasset">
+                        <button type="button" class="btn btn-outline-success" data-toggle="modal" (click)="getGrnAssetdata(grn)"
+                        data-target="#HistoryModal"><span class="fa fa-file"></span>
+                    </button>
+                    </div>
+                    <ng-template #lockasset> -- </ng-template>
+                </td>
+                <!-- <td>--</td>data-toggle="modal" data-target="#HistoryModal" -->
+                <!-- a.podetails_id.product_id.category_id.isasset -->
+
+                <!-- <td *ngIf="a.podetails_id.product_id.category_id.isasset === '0'" class='unselectable'>
+                    <i class="fa fa-file" aria-hidden="true" data-toggle="modal" data-target="#exampleModalLongs"></i>
+                </td>
+                <td *ngIf="a.podetails_id.product_id.category_id.isasset === '1'">
+                    <i class="fa fa-file" aria-hidden="true" data-toggle="modal" data-target="#exampleModalLongs"></i>
+                </td> -->
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div *ngIf="grnclosedataList ?.length == 0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...
+</div>
+<ng-template #paginationgrn>
+    <div class="cursor" style="font-size: small;text-align:right; margin-bottom:10px;">
+        <button mat-icon-button [disabled]="has_previousgrndetailsview === false" color="primary" (click)="previousClickgrndetails()">
+            <mat-icon>arrow_back
+            </mat-icon>
+        </button>
+        {{presentpagegrndetailsview}}
+        <button mat-icon-button [disabled]="has_nextgrndetailsview === false" color="primary" (click)="nextClickgrndetails()">
+            <mat-icon>arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true" id="HistoryModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" style="font-family:'Times New Roman', Times, serif;font-size:25px;">
+                    Asset data</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered" fixed-header
+                        style="width: 95%;margin-top: 10px;margin-left:25px;overflow-x: hidden;">
+                        <thead class="table_header" style="text-align: center;overflow-x: hidden;">
+                            <tr style="text-align:center;">
+
+                                <th>S.No</th>
+                                <th>Asset ID</th>
+                                <th>Asset Serial No</th>
+                                <th>Manufacture</th>
+                                <th>Warranty start date </th>
+                                <th>Warranty End Date</th>
+                                <th>Installation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let asset of assetList; index as i">
+                                <td>{{i+1}}</td>
+                                <td>{{asset?.assetid}}</td>
+                                <td>{{asset?.serialno}} </td>
+                                <td>{{asset?.manufacturer}} </td>
+                                <td>{{asset?.warranty_from_date | date:'dd-MM-yyyy'}} </td>
+                                <td>{{asset?.warranty_to_date | date:'dd-MM-yyyy'}} </td>
+                                <td>{{asset?.installation_date | date:'dd-MM-yyyy' }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="margin-bottom: 5% ;margin-left:45%">
+                <button type="submit" data-dismiss="modal" class="btn btn-outline-primary"
+                    style="border-radius: 40px;">BACK</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- <form  style="margin-left: 40%;">
+        <table>
+            <tr> 
+                <td>
+                    <mat-form-field  style="margin-left: 0px;">
+                        <input  type="text" formControlName="appremarks" matInput autocomplete="off" >
+                        <mat-placeholder>Approval Remarks</mat-placeholder>
+                    </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field  style="margin-left: 0px;">
+                            <input  type="text" formControlName="rejremarks" matInput autocomplete="off" >
+                            <mat-placeholder>Reject Remarks</mat-placeholder>
+                        </mat-form-field>
+                   </td>
+            </tr>
+            <button type="submit" data-dismiss="modal" style="border-radius: 40px;" class="btn btn-outline-success">Approve</button>
+            <button type="submit" data-dismiss="modal" style="border-radius: 40px;margin-left: 5%;" class="btn btn-outline-danger">Reject</button>
+            <button type="submit" data-dismiss="modal" style="border-radius: 40px;margin-left: 80%;margin-top:-28%" class="btn btn-outline-danger" (click)="onCancelClick()">Cancel</button>
+
+        </table>
+</form> -->
+<!-- <div class="row" style="margin-top: 2%;width: 94%;margin-left: 17px;">
+
+    <form [formGroup]="approvalForm">
+        <mat-form-field style="width: 400px; margin-left: 50px;">
+            <mat-label>Approval Remarks</mat-label>
+            <textarea matInput placeholder="APPROVE Remarks" formControlName="remarks" autocomplete="off"></textarea>
+        </mat-form-field>  
+        <button type="submit" data-dismiss="modal" (click)="approveClick()" class="btn btn-outline-success" style="border-radius: 40px;margin-left: 10px;">APPROVE</button>
+      </form>
+    
+      <form [formGroup]="rejectForm">
+        <mat-form-field style="width: 400px; margin-left: 50px;">
+            <mat-label>Rejected Remarks</mat-label>
+            <textarea matInput placeholder="REJECT Remarks" formControlName="remarks" autocomplete="off" ></textarea>
+        </mat-form-field> 
+        <button type="button" data-dismiss="modal" (click)="rejectClick()" class="btn btn-outline-danger" [disabled]="rejectForm.invalid"  style="border-radius: 40px;margin-left: 10px;">REJECT</button>
+      
+        <br>
+      <br>
+    </form>
+    <div style="margin-top: 3%;margin-left: 5%;">
+        <button type="button" class="btn btn-outline-primary"
+          style="border-radius: 40px;margin-left: 10px;" (click)="onCancelClick()">Cancel</button>
+  </div>
+  </div> -->
+<div class="row" style="margin-top: 2%;width: 94%;margin-left: 17px;">
+    <form [formGroup]="approvalForm">
+        <mat-form-field style="width: 250px; margin-left: 50px;">
+            <mat-label>Approval Remarks</mat-label>
+            <textarea matInput placeholder="APPROVE Remarks" formControlName="remarks" autocomplete="off"></textarea>
+        </mat-form-field>
+        <button type="submit" data-dismiss="modal" (click)="approveClick()" class="btn btn-outline-success"
+            style="border-radius: 40px;margin-left: 10px;" [disabled]="isapprove">APPROVE</button>
+    </form>
+
+    <form [formGroup]="rejectForm">
+        <mat-form-field style="width: 250px; margin-left: 50px;">
+            <mat-label>Rejected Remarks</mat-label>
+            <textarea matInput placeholder="REJECT Remarks" formControlName="remarks" autocomplete="off"></textarea>
+        </mat-form-field>
+        <button type="button" data-dismiss="modal" (click)="rejectClick()" class="btn btn-outline-danger"
+            [disabled]="isreject" style="border-radius: 40px;margin-left: 10px;">REJECT</button>
+        <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+            (click)="onCancelClick()">Cancel</button>
+    </form>
+
+</div>

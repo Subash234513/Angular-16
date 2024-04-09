@@ -1,0 +1,707 @@
+<div class="container">
+    <div class="d-flex mt-3 mb-3" style="justify-content:space-between;align-items:center;">
+    <div class="row" >
+        <!-- margin-bottom: 5%;margin-top: 2%;margin-left: 30%; -->
+        <!-- <button class="button-name" (click)="generateEmail()">Generate Email</button>  -->
+        <!-- <button *ngIf="this.empList?.pending_for_approval_button === true" type="button" class="btn btn-primary font"
+            (click)="submit_tochecker_approve('2')">Submit to checker</button>
+        <button *ngIf="this.empList?.approve_button === true" type="button" class="btn btn-success font"
+            (click)="submit_tochecker_approve('3')">Approve</button> -->
+        <button type="button" style="border-radius: 17px;
+                ;margin-left: 10px;border-color:grey" class="btn btn-light font"
+            data-toggle="modal" data-target="#exampleModalCenter" [disabled]="disabled" >Create User</button>
+            <!-- border-color: #f5c68b; background-color: #f5c68b -->
+        <button type="button" style="border-radius: 10px; 
+               ;margin-left: 10px; border-color:grey" class="btn btn-light font"
+            data-toggle="modal" data-target=".bd-example-modal-lg" (click)="preview_click()">Preview Pay
+            Structure</button>
+            <!-- border-color: #f5c68b; background-color: #f5c68b -->
+    </div>
+    <div class="row " style="margin-right: 1%;">
+        <!-- contentposition -->
+        <button type="button" class="btn btn-light font" style="border-radius: 7px;  border-color:red;" 
+                    (click)="onEmp_viewCancelClick()">Back</button>
+                   
+                    <!-- margin-left: 10px; -->
+    </div>
+</div>
+    <div class="mb-5">
+
+        <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="headingstyle">
+                        Personal Details
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+        <div class="col">
+            
+            <p style="color: #808080;"> First Name <span
+                    style="color: black;margin-left: 20%;">{{firstname }}
+                </span></p>
+            <p style="color: #808080;"> Middle Name <span
+                    style="color: black;margin-left: 16%;">{{middlename}}
+                </span></p>
+            <p style="color: #808080;"> Last Name <span
+                    style="color: black;margin-left: 20%;">
+                    {{ lastname}}
+                </span></p>
+            <p style="color: #808080;"> Full Name <span
+                    style="color: black;margin-left: 20%;">{{fullname}}
+                </span></p>
+                <p style="color: #808080;"> Gender <span
+                    style="color: black;margin-left: 24%;">{{gender}}
+                </span></p>
+                <p style="color: #808080;">Email Id <span
+                    style="color: black;margin-left: 22%;">{{email}}</span>
+            </p>
+            <p style="color: #808080;">Work Mode <span
+                style="color: black;margin-left: 17%;">{{work_mode}}</span>
+        </p>
+            
+
+        </div>
+        <div class="col">
+            <p style="color: #808080;">Date of Birth <span
+                    style="color: black;margin-left: 20%;">{{dob | date:'dd-MMm-yyyy'}}
+                </span></p>
+            <p style="color: #808080;">Date of Joining<span
+                    style="color: black;margin-left: 18%;">{{ doj | date:'dd-MMm-yyyy'}}
+                </span></p>
+            <p style="color: #808080;">Actual Date of Joining<span
+                    style="color: black;margin-left: 8%;">{{ expected_doj | date:'dd-MM-yyyy'  }}
+                </span></p>
+            <p style="color: #808080;"> Effective From <span
+                    style="color: black;margin-left: 18%;">{{ effective_from  | date:'dd-MM-yyyy'  }}
+                </span></p>
+                <p style="color: #808080;">Mobile No <span
+                    style="color: black;margin-left: 24%;">{{phoneno}}</span>
+            </p>
+            <p style="color: #808080;">Account Number <span
+                style="color: black;margin-left: 15%;">{{account_no}}</span>
+        </p>
+        <p style="color: #808080;">Code<span
+          style="color: black;margin-left: 15%;">{{code}}</span>
+  </p>
+    
+      
+
+        </div>
+        <div class="col">
+            <p style="color: #808080;">Designation<span
+                style="color: black;margin-left: 20%;">{{designation}}
+            </span></p>
+        <p style="color: #808080;">Grade<span
+                style="color: black;margin-left: 28%;">{{ grade}}
+            </span></p>
+        <p style="color: #808080;">Organization Type<span
+                style="color: black;margin-left: 10%;">{{ org_type  }}
+            </span></p>
+        <p style="color: #808080;"> Functional Head <span
+                style="color: black;margin-left: 12%;">{{ functional_head  }}
+            </span></p>
+            <p style="color: #808080;">Employee Branch <span
+                style="color: black;margin-left: 10%;">{{emp_branch}}</span>
+        </p>
+        <p style="color: #808080;">Business Segment<span
+            style="color: black;margin-left: 10%;">{{business_segment}}</span>
+            </p>
+            <p style="color: #808080;">Cost Center<span
+                style="color: black;margin-left: 33%;">{{cose_center}}</span>
+                </p>
+        </div>
+
+      </div> -->
+
+                <div class="row marginsize">
+                    <div class="col-sm-6 col-md-6 col-lg-6 borderright ">
+                        <div class="row">
+                            <div style="margin-left: 10px">
+                                <span class="material-icons iconemp alignvertical">
+                                    account_circle
+                                </span>
+                            </div>
+                            <div class="col">
+                                <h1 class="alignvertical aligns">{{fullname | uppercase}} <span
+                                        class="material-icons marginleftclass alignvertical"
+                                        title="Add/Edit">add_circle</span><span
+                                        class="fontsizeOne highlights alignvertical" style="font-size: medium;"
+                                        (click)="RouteToEmployeeCreate('Emp Info')">Add/Update</span></h1>
+                                <h3> <span class="SubDetails">First Name: </span> {{firstname}} </h3>
+                                <h3> <span class="SubDetails">Middle Name:</span> {{middlename}} </h3>
+                                <h3> <span class="SubDetails">Last Name: </span>{{lastname}} </h3>
+
+                                <h3> <span class="SubDetails">Gender: </span> {{gender}} </h3>
+
+                                <h3> <span class="SubDetails">Email Id: </span> {{email}} </h3>
+                                <h3> <span class="SubDetails"> Mobile No: </span> {{phoneno}} </h3>
+                                <h3> <span class="SubDetails">DOB: </span> {{dob | date:'dd-MMM-yyyy'}} </h3>
+                                <h3> <span class="SubDetails"> DOJ:</span>{{doj | date:'dd-MMM-yyyy'}} </h3>
+                                <h3> <span class="SubDetails"> Designation: </span> {{designation}} </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6 ">
+                        <div class="padings">
+                            <h3> <span class="SubDetails"> Department: </span> {{department}} </h3>
+                            <h3> <span class="SubDetails"> Grade: </span> {{grade}} </h3>
+                            <h3> <span class="SubDetails"> Work Mode: </span> {{work_mode}} </h3>
+                            <h3> <span class="SubDetails"> Account No: </span> {{account_no}} </h3>
+                            <h3> <span class="SubDetails"> Entity: </span> {{entity}} </h3>
+                            <h3> <span class="SubDetails"> Functional Head: </span> {{functional_head}} </h3>
+                            <h3> <span class="SubDetails"> Employee Branch: </span> {{emp_branch}} </h3>
+                            <h3> <span class="SubDetails"> Business Segment: </span> {{business_segment}} </h3>
+                            <h3> <span class="SubDetails"> Cost Center: </span> {{cose_center}} </h3>
+                            <h3> <span class="SubDetails"> Blood Group: </span> {{bloodgroup}} </h3>
+                            <h3> <span class="SubDetails"> Payroll Date: </span> {{payroll_date}} </h3>
+
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="headingstyle">
+                        Contact Details
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col">
+                        <h3>Temporary Address</h3>
+                        <p style="  margin: 0px 0 4px;">
+                            {{lineName1 | titlecase}},{{lineName2 | titlecase}}
+                        </p>
+                        <p style="  margin: 0px 0 4px;">
+                            {{lineName3 | titlecase}}
+                        </p>
+                        <p style="  margin: 0px 0 4px;">
+                            {{cityName }},{{districtName }},
+                        </p>
+                        <p style="  margin: 0px 0 4px;"> {{stateName }},{{pinCode}}</p>
+                    </div>
+                    <div class="col">
+                        <h3>Permanent Address</h3>
+                        <p style="  margin: 0px 0 4px;">
+                            {{per_lineName1 | titlecase}},{{per_lineName2 | titlecase}}
+                        </p>
+                        <p style="  margin: 0px 0 4px;">
+                            {{per_lineName3 | titlecase}}
+                        </p>
+                        <p style="  margin: 0px 0 4px;">
+                            {{per_cityName }},{{per_districtName }},
+                        </p>
+                        <p style="  margin: 0px 0 4px;"> {{per_stateName }},{{per_pinCode}}</p>
+                    </div>
+                </div>
+
+
+            </mat-expansion-panel>
+
+        </mat-accordion>
+
+    </div>
+
+
+   
+</div>
+
+
+
+<!-- employee check list -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLongTitle">Employee Check List</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="popupform">
+                    <mat-checkbox class="example-margin" [color]="setcolor" formControlName="ID_card">ID Card
+                    </mat-checkbox><br>
+                    <mat-checkbox class="example-margin" [color]="setcolor" formControlName="PC">PC
+                    </mat-checkbox><br>
+                    
+
+                </form>
+                <mat-checkbox class="example-margin" [color]="setcolor"  [formControl]="Payroll" (change)="postPayroll()">Payroll
+                </mat-checkbox><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"     (click)="create_user()">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- preview pay structure -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width:127%">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Officer Letter </h2>
+                <div  style="margin-left:765px;height:50px;margin-top:7px;outline:none;cursor:pointer;"  (click)="download_click()" matTooltip="Download Pdf"><i class="fa-solid fa-cloud-arrow-down fa-2xl pdfDownload" style="color: blue;" ></i> </div>
+                <button type="button" class="close closes" data-dismiss="modal" aria-label="Close" (click)="closes()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <mat-card>
+                    <table>
+
+                        <tr>
+                            <td><b>Name</b></td>
+                            <td>{{empList?.first_name}}</td>
+                            <td><b>Designation</b></td>
+                            <td>{{empList?.designation?.name}}</td>
+                            <th>Gross Pay</th>
+                            <td>{{payslip_data[0]?.gross_pay|currency:"INR":"symbol"}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>DOJ</b></td>
+                            <td>{{empList?.doj}}</td>
+                            <td><b>Department</b></td>
+                            <td>{{empList?.department_id.name}}</td>
+                        </tr>
+                    </table>
+
+
+                    <table class="table" style="margin-top: 4%;">
+
+                        <thead>
+                            <tr colspan="3" style="font-weight: bold;"> Earnings</tr>
+                            <tr>
+                                <th>Component</th>
+                                <th>Monthly</th>
+                                <th>Annual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let type of employeepay_detail; index as i">
+                                <td>{{type?.paycomponent?.name}}</td>
+                                <td>{{type?.amount|currency:"INR":"symbol"}}</td>
+                                <td>{{type?.amount*12|currency:"INR":"symbol"}}
+                                <td>
+
+                            </tr>
+                            <tr class="trhighlater">
+                                <td colspan="1">Total Earnings (Rs): </td>
+                                <td>{{amount_total|currency:"INR":"symbol"}}</td>
+                                <td>{{amount_total*12|currency:"INR":"symbol"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+                    <table class="table">
+
+                        <thead>
+                            <tr colspan="2">Deductions</tr>
+                            <tr>
+                                <th style="width: 48%;">Component</th>
+                                <th>Monthly</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let type of deduction_data; index as i">
+                                <td>{{type?.paycomponent?.name}}</td>
+                                <td>{{type?.amount |currency:"INR":"symbol"}}</td>
+
+
+                            </tr>
+                            <tr class="trhighlater">
+                                <td colspan="1">Total Earnings (Rs): </td>
+                                <td>{{deduction_sum |currency:"INR":"symbol"}}</td>
+                            </tr>
+                        </tbody>
+
+                        <tr>
+                            <td colspan="1">Net Pay: </td>
+                            <td style="font-weight: bolder;">{{amount_total-deduction_sum|currency:"INR":"symbol"}}</td>
+                        </tr>
+                    </table>
+
+                </mat-card> -->
+                <mat-card>
+                    <html>
+
+                    <body>
+                        <div class="page">
+                            <!-- <header>
+      <h1>Offer Letter</h1>
+    </header> -->
+
+                            <main>
+                                <section>
+                                    <div style="text-align: left;    margin-top: -7%; ">
+                                        <img src="./assets/images/vslovlogo.jpg">
+                                    </div>
+                                    <br>
+                                    <br>
+
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="align-self: flex-start;">
+                                            <div style="text-align: left;">
+
+                                                <p class="poppins">{{empList?.full_name | uppercase }}</p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.address_id[0]?.line1}}</p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.address_id[0]?.line2}}</p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.address_id[0]?.line3}}</p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.address_id[0]?.city_id.name}}
+                                                </p>
+                                                <p style="margin-top: -13px;" class="poppins">
+                                                    {{empList?.address_id[0]?.district_id.name}} -
+                                                    {{empList?.address_id[0]?.pincode_id.no}}</p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.address_id[0]?.state_id.name}}
+                                                </p>
+                                                <p style="margin-top: -13px;" class="poppins">{{empList?.phone_no}}</p>
+                                            </div>
+                                        </span>
+                                        <!-- <span style="align-self: flex-start;" class="poppins">{{newDate}}</span> -->
+                                    </div>
+                                    <br>
+
+
+
+                                    <br>
+                                    <br>
+                                    <div style="text-align: left;">
+                                        <p class="poppins">Dear <span style="font-weight:bold">{{empList?.full_name | uppercase }}</span></p>
+                                        <br>
+                                        <p class="poppins" style="margin-bottom:20px">Sub: Provisional Employment Offer</p>
+
+                                        <p class="poppins" style="margin-bottom:20px">We are pleased to offer you an appointment in our organization as
+                                            <span class="poppins" style="font-weight:bold">{{empList?.designation.name}}</span> with effect from Joining Date. Your Appointment will be
+                                            subject to Terms and Conditions of VSOLV Engineering India Pvt Ltd and the
+                                            Final Offer cum Appointment Letter will be issued at the time of Joining.</p>
+
+                                            <p class="poppins" style="margin-bottom:20px">Your offer has been made based on information furnished by you. However, if there is a discrepancy in the copies of documents or certificates given by you as a proof of above, we retain the right to review our offer of employment.</p>
+                                            
+
+                                            <p class="poppins" style="margin-bottom:20px">Employment as per this offer is subject to your being medically fit.</p>
+                                            
+                                            <p class="poppins" style="margin-bottom:20px">Please sign and return duplicate copy of this letter in token of your acceptance. </p>
+                                            
+                                            <p class="poppins" style="margin-bottom:20px">Your tentative joining date will be <span style="font-weight:bold">{{doj | date:'dd-MMM-yyyy'}}</span></p>
+                                            <!-- will be {{newDate}}. -->
+                                            
+                                            <!-- <p class="poppins">No.196, 1st Main Road, Nehru Nagar, Kottivakkam, OMR, Chennai – 600096. Ph:9941 300 600.</p>
+                                            <p class="poppins">www.guardianstabilisers.com</p> -->
+                                            <!-- <div style="text-align: center;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                                            font-size: smaller;margin-top: 10%;font-weight: 800;">
+                                            <p>No.196, 1st Main Road, Nehru Nagar, Kottivakkam, OMR, Chennai – 600096. Ph:9941 300 600.</p>
+                                            <p>www.guardianstabilisers.com</p>
+                                </div> -->
+                                    </div>
+
+                               
+                                </section>
+                                <!-- <div style="text-align: center;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                                font-size: smaller;margin-top: 26%;font-weight: 800;">
+                                <p>No.196, 1st Main Road, Nehru Nagar, Kottivakkam, OMR, Chennai – 600096. Ph:9941 300 600.</p>
+                                <p>www.guardianstabilisers.com</p>
+                                </div> -->
+                            </main>
+                        </div>
+
+                        <div class="page">
+                            <!-- <header>
+      <h1>Offer Letter (Page 2)</h1>
+    </header> -->
+
+                            <main>
+                                <section>
+                                    <!-- <div style="text-align: right;">
+          <img src="../../../assets/images/vslovlogo.jpg">
+        </div>
+        <br><br>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="align-self: flex-start;">HRD/REFNO/{{code}}</span>
+          <span style="align-self: flex-end;">{{newDate}}</span>
+        </div>
+        <br> -->
+                                    <!-- <div style="text-align: center;">
+        <p style="font-weight: bold;text-decoration: underline;">ANNEXURE-A</p>
+        <p style="margin-top: -2%;
+        font-size: smaller;">(All figures in INR)</p>
+        </div> -->
+
+                                    <!-- <div style="text-align: left;"> -->
+                                    <!-- <table>
+          <tr>
+            <th>Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</th>
+            <td>&nbsp;&nbsp;&nbsp;{{empList?.full_name | uppercase}}</td>
+            
+          </tr>
+          <tr>
+            <th>Role&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</th>
+            
+            <td>&nbsp;&nbsp;&nbsp;{{empList?.designation?.description}}</td>
+           
+          </tr>
+          <tr>
+            <th>Location &nbsp;&nbsp;:</th>
+            <td>&nbsp;&nbsp;&nbsp;OMR Office</td>
+          </tr>
+        </table> -->
+                                    <!-- </div> -->
+
+                                    <br>
+                                    <!-- <table class="table">
+            <thead>
+                <tr colspan="3" style="font-weight: bold;"> Earnings</tr>
+                <tr>
+                    <th>Component</th>
+                    <th>Monthly</th>
+                    <th>Annual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of employeepay_detail; index as i">
+                    <td>{{type?.paycomponent?.name}}</td>
+                    <td>{{type?.amount|currency:"INR":"symbol"}}</td>
+                    <td>{{type?.amount*12|currency:"INR":"symbol"}}
+                    <td>
+
+                </tr>
+                <tr class="trhighlater">
+                    <td colspan="1">Total Earnings (Rs): </td>
+                    <td>{{amount_total|currency:"INR":"symbol"}}</td>
+                    <td>{{amount_total*12|currency:"INR":"symbol"}}</td>
+                </tr>
+            </tbody>
+       
+
+        </table>
+        <table class="table">
+
+            <thead>
+                <tr colspan="2">Deductions</tr>
+                <tr>
+                    <th style="width: 48%;">Component</th>
+                    <th>Monthly</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of deduction_data; index as i">
+                    <td>{{type?.paycomponent?.name}}</td>
+                    <td>{{type?.amount |currency:"INR":"symbol"}}</td>
+
+
+                </tr>
+                <tr class="trhighlater">
+                    <td colspan="1">Total Earnings (Rs): </td>
+                    <td>{{deduction_sum |currency:"INR":"symbol"}}</td>
+                </tr>
+            </tbody>
+
+            <tr>
+                <td colspan="1">Net Pay: </td>
+                <td style="font-weight: bolder;">{{amount_total-deduction_sum|currency:"INR":"symbol"}}</td>
+            </tr>
+        </table> -->
+
+                                    <div id="tablesection" class="mt-5">
+                                        <table style="width: 100%;font-family: Calibri;margin-left: 2%;"
+                                            id="previewTable">
+                                            <tr>
+                                                <th colspan="3" id="ths" class="bg-info text-white" style="font-size: large;text-align: center;font-weight: bold;">
+                                                    Pay Structure</th>
+                                            </tr>
+
+                                            <tr>
+                                                <!-- <th id="ths" >S. No</th> -->
+                                                <th id="ths" style="font-weight: bold;">Description</th>
+                                                <th id="ths" style="font-weight: bold;">Gross Amount</th>
+                                                <th id="ths" style="font-weight: bold;">Gross Amount</th>
+                                            </tr>
+                                            <tr>
+                                                <th id="ths" style="font-weight: bold;">Earnings</th>
+                                                <th id="ths" style="font-weight: bold;">MONTHLY</th>
+                                                <th id="ths" style="font-weight: bold;">YEARLY</th>
+                                            </tr>
+
+
+
+                                            <ng-container
+                                                *ngIf="userdata && userdata.length > 0 && userdata[0]?.employeepay_detail">
+                                                <tr *ngFor="let user of userdata[0].employeepay_detail; let i = index">
+                                                    <ng-container *ngIf="!user.company_contribution">
+                                                        <ng-container
+                                                            *ngIf="user.paycomponent.allowance_type.name !== 'BONUS'">
+                                                            <td id="tds">{{ user.company_contribution?
+                                                                user.company_contribution.name :
+                                                                user.paycomponent?.name }}</td>
+                                                            <td id="tds">{{ user.amount | currency:'INR'}}</td>
+                                                            <td id="tds">{{ user.yearly_amount | currency:'INR'}}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                </tr>
+                                            </ng-container>
+                                            <!-- <ng-container
+                                                *ngIf="userdata && userdata.length > 0 && userdata[0]?.employeepay_detail">
+                                                <tr style="background-color: gainsboro;" *ngFor="let user of userdata[0].employeepay_detail; let i = index">
+                                                    <ng-container *ngIf="!user.company_contribution">
+                                                        <ng-container
+                                                            *ngIf="user.paycomponent.allowance_type.name !== 'BONUS'">
+                                                            <td id="tds">{{ user.company_contribution?
+                                                                user.company_contribution.name :
+                                                                user.paycomponent?.name }}</td>
+                                                            <td id="tds">{{ user.total_component_amount | currency:'INR'}}</td>
+                                                            <td id="tds">{{ user.yearly_amount * 12 | currency:'INR'}}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                </tr>
+                                            </ng-container> -->
+                                            <tr style="background-color: #17a2b8 ;color:white;" >
+                                                
+                                                <td id="tds" style="font-weight: bold;">Total(A)</td>
+                                                <td id="tds" style="font-weight: bold;">{{totalA | currency:'INR'}}
+                                                </td>
+                                                <td id="tds" style="font-weight: bold;">{{totalA*12 | currency:'INR'
+                                                    }}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th colspan="3" id="ths" style="font-weight: bold;">Bonus</th>
+                                            </tr>
+
+                                            <ng-container
+                                                *ngIf="userdata && userdata.length > 0 && userdata[0]?.employeepay_detail">
+                                                <tr *ngFor="let user of userdata[0].employeepay_detail; let i = index">
+                                                    <ng-container *ngIf="!user.company_contribution">
+                                                        <ng-container
+                                                            *ngIf="user.paycomponent.allowance_type.name === 'BONUS'">
+                                                            <td id="tds">{{ user.company_contribution?
+                                                                user.company_contribution.name :
+                                                                user.paycomponent?.name }}</td>
+                                                            <td id="tds">{{ (user.amount) | number:'1.2-2' }}</td>
+                                                            <td id="tds">{{ user.yearly_amount | currency:'INR'}}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                </tr>
+                                            </ng-container>
+                                            <tr style="background-color: #17a2b8 ;font-weight: bold;color:white;">
+                                                <td id="tds" style="font-weight: bold;">Total(B)</td>
+                                                <td id="tds" style="font-weight: bold;">{{ totalB| number:'1.2-2' }}
+                                                </td>
+                                                <td id="tds" style="font-weight: bold;">{{totalB*12 | currency:'INR'}}
+                                                </td>
+                                            </tr>
+
+
+                                            <tr>
+                                                <th colspan="3" id="ths" style="font-weight: bold;">Deductions</th>
+                                            </tr>
+
+
+                                            <ng-container
+                                                *ngIf="userdata && userdata.length > 0 && userdata[0]?.deduction_data">
+                                                <tr *ngFor="let user of userdata[0].deduction_data; let i = index">
+
+                                                    <td id="tds">{{ user.paycomponent?.name }}</td>
+                                                    <td id="tds">{{ user.amount | currency:'INR'}}</td>
+                                                    <td id="tds">{{ user.yearly_amount | currency:'INR' }}</td>
+
+                                                </tr>
+                                            </ng-container>
+
+                                            <tr style="background-color: #17a2b8 ;font-weight: bold;color:white;">
+                                                <td id="tds" style="font-weight: bold;">Total(C)</td>
+                                                <td id="tds" style="font-weight: bold;">{{totalC | currency:'INR'}}</td>
+                                                <td id="tds" style="font-weight: bold;">{{totalC*12 | currency:'INR'
+                                                    }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" id="ths" style="font-weight: bold;">Company Contribution
+                                                </th>
+                                            </tr>
+
+                                            <ng-container
+                                                *ngIf="userdata && userdata.length > 0 && userdata[0]?.employeepay_detail">
+                                                <tr *ngFor="let user of userdata[0].employeepay_detail; let i = index">
+                                                    <ng-container *ngIf="user.company_contribution">
+                                                        <td id="tds">{{ user.company_contribution.name }}</td>
+                                                        <td id="tds">{{ user.amount | currency:'INR' }}</td>
+                                                        <td id="tds">{{ (user.yearly_amount) | currency:'INR' }}</td>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-container>
+                                            <tr style="background-color: #17a2b8 ;color:white;font-weight: bold;">
+                                                <td id="tds" style="font-weight: bold;">Total(D)</td>
+                                                <td id="tds" style="font-weight: bold;">{{totalD| currency:'INR'}}</td>
+                                                <td id="tds" style="font-weight: bold;">{{totalD*12  | currency:'INR'
+                                                    }}</td>
+                                            </tr>
+
+                                            <!-- <tr>
+                    <th id="ths">Take Home</th>
+                    <td ids="tds">{{totals}}</td>
+                </tr> -->
+
+                                            <tr>
+                                                <td id="tds" style="font-weight: bold;">Take Home</td>
+                                                <td id="tds" style="font-weight: bold;">{{takeHome | currency:'INR'}}
+                                                </td>
+                                                <td id="tds" style="font-weight: bold;">{{takeHome*12 |
+                                                    currency:'INR'}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th id="ths" style="font-weight: bold;">Total CTC</th>
+                                                <td id="tds" style="font-weight: bold;font-size: large;">{{totals  |
+                                                    currency:'INR'}}</td>
+                                                <td id="tds" style="font-weight: bold;font-size: large;">{{totals*12 | currency:'INR'}}</td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+
+
+
+
+                                    <br>
+                                    
+
+                                </section>
+                                <div style="text-align: center;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                                font-size: smaller;margin-top: 50%;font-weight: 800;">
+                                <p>No.196, 1st Main Road, Nehru Nagar, Kottivakkam, OMR, Chennai – 600096. Ph:9941 300 600.</p>
+                                <p>www.guardianstabilisers.com</p>
+                                </div>
+                            </main>
+                        </div>
+                    </body>
+
+                    </html>
+                </mat-card>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

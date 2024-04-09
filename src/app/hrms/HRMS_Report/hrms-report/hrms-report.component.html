@@ -1,0 +1,536 @@
+<div class="container">
+
+
+    <h3>Today's Report</h3>
+    <div class="remainingStatus">
+
+        <div class="minicards status cardTotalEmp">
+            <span class="material-icons emp">groups</span>
+            <h3>Total Employee</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.total_count}}</span>
+        </div>
+
+        <div class="minicards status cardPresent">
+            <span class="material-icons presentstatus">check_circle</span>
+            <h3>Present</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.present_count}}</span>
+        </div>
+
+        <div class="minicards status cardAbsent">
+            <span class="material-icons absentstatus">help</span>
+            <h3>Absent</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.absent_count}}</span>
+        </div>
+
+        <div class="minicards status cardLeave">
+            <span class="material-icons leave">logout</span>
+            <h3>Leave</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.leave_count}}</span>
+        </div>
+
+
+    </div>
+
+    <div class="remainingStatus">
+
+        <div class="remainingRecords status">
+            <span class="material-icons emp">assignment_late</span>
+            <h3>Late Comers</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.permission_count}}</span>
+        </div>
+
+        <div class="remainingRecords status">
+            <span class="material-icons emp">arrow_outward</span>
+            <h3>Permissions</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.permission_count}}</span>
+        </div>
+
+        <div class="remainingRecords status">
+            <span class="material-icons emp">home</span>
+            <h3>Work From Home</h3>
+            <span class="RemainingCounts">{{HRMSReportsObject?.counts?.permission_count}}</span>
+        </div>
+
+    </div>
+
+    <h3> Report</h3>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+            <!-- <div class="dataRecord">
+                    <form [formGroup]="searchStatusEMP">
+                        <table>
+                            <tr>
+                                <td class="paddingstabletd">
+                                    <mat-label>Type</mat-label><br>
+                                    <mat-form-field class="inputSizeWidthSmall">
+                                        <mat-select formControlName="type"
+                                            (selectionChange)="searchStatusEMP.get('subtype').reset(); searchStatusEMP.get('fromdate').reset(); searchStatusEMP.get('todate').reset()">
+                                            <mat-option *ngFor="let type of HRMSReportsObject?.type" [value]="type">
+                                                {{type.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td class="paddingstabletd">
+                                    <mat-label>Status</mat-label><br>
+                                    <mat-form-field class="inputSizeWidthSmall">
+                                        <mat-select formControlName="subtype" (selectionChange)="resetfromAndTodate()">
+                                            <mat-option *ngFor="let sub of searchStatusEMP?.value?.type?.type"
+                                                [value]="sub">
+                                                {{sub.text}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+
+                                <td class="paddingstabletd" *ngIf="searchStatusEMP.value.type?.id == 2">
+                                    <mat-label>From Date</mat-label><br>
+                                    <mat-form-field class="fieldwidth">
+                                        <input matInput readonly [matDatepicker]="picker3"
+                                            class="matformfieldinputstyle" (dateChange)='ChangeDateFormat("fromdate")'
+                                            formControlName="fromdate">
+                                        <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker3">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker3></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+
+                                <td class="paddingstabletd" *ngIf="searchStatusEMP.value.type?.id == 2">
+                                    <mat-label>To Date</mat-label><br>
+                                    <mat-form-field class="fieldwidth">
+                                        <input matInput readonly [matDatepicker]="picker4"
+                                            class="matformfieldinputstyle" [min]="searchStatusEMP.value.fromdate"
+                                            (dateChange)='ChangeDateFormat("todate")' formControlName="todate">
+                                        <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker4">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker4
+                                            [disabled]="searchStatusEMP.value.fromdate == null|| searchStatusEMP.value.fromdate == ''"></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+
+                                <td>
+                                    <button mat-stroked-button type="button"
+                                        style="margin-left: 10px;background-color: white;" aria-label="Search"
+                                        (click)="getSummaryListData()">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                    <button mat-stroked-button type="button"
+                                        style="margin-left: 10px;background-color: white;"
+                                        (click)="searchStatusEMP.reset();">
+                                        Reset
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </form> -->
+            <!-- <pre>{{searchStatusEMP.value | json}}</pre> -->
+
+            <!-- <div *ngIf="HRMSReportsObject?.todayDataView">
+                        <mat-accordion>
+
+                            <mat-expansion-panel *ngFor="let data of HRMSReportsObject?.summaryKeys">
+                                <mat-expansion-panel-header>
+                                    {{data}}
+
+                                </mat-expansion-panel-header>
+                                <div class="panelset">
+                                    <ng-container
+                                        *ngFor="let dateemp of HRMSReportsObject.employeesummaryReport[data]; let index = index">
+
+                                        <div class="card">
+                                            {{dateemp.code}}
+                                        </div>
+
+                                    </ng-container>
+
+
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                    <div *ngIf="HRMSReportsObject?.OtherDataView">
+
+                        <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                            <thead class="table_header">
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Employee</th>
+                                    <th>From - To date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of HRMSReportsObject.employeesummaryReport; let index=index">
+                                    <td>{{index + 1}}</td>
+                                    <td>{{data?.emp?.code}}</td>
+                                    <td> {{data?.from_date | date: 'dd-MMM-yyyy'}} -
+                                        {{data?.to_date | date: 'dd-MMM-yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div> -->
+
+
+
+            <form [formGroup]="EmployeeReportsearchForm">
+                <table>
+                    <tr>
+                        <td>
+
+                            <mat-form-field class="spacingForm" (click)="getTeamLead('')">
+                                <mat-label>Team Lead</mat-label>
+
+                                <input #teamldInput class="matformfieldinputstyle" matInput
+                                    (keyup)="getTeamLead(EmployeeReportsearchForm.value.lead_id)"
+                                    formControlName="lead_id" [matAutocomplete]="teamld">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                                    <mat-option *ngFor="let teamld of HRMSReportsObject.teamldList" [value]="teamld">
+                                        {{teamld.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+
+                            <mat-form-field
+                                (click)="getLeadBasedemployee(EmployeeReportsearchForm.value.lead_id?.id, EmployeeReportsearchForm.value.emp?.full_name)"
+                                class="spacingForm">
+                                <mat-label> Employee </mat-label>
+                                <input #empInput placeholder="Select Employee" matInput formControlName="emp"
+                                    [matAutocomplete]="emp"
+                                    (keyup)="getLeadBasedemployee(EmployeeReportsearchForm.value.lead_id?.id, EmployeeReportsearchForm.value.emp)">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                    <mat-option *ngFor="let emp of HRMSReportsObject.employeeList" [value]="emp"
+                                        title="{{emp.full_name}}">{{emp.full_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        <!-- <td>
+
+                            <mat-form-field class="spacingForm" (click)="getDepartment('')">
+                                <mat-label>Department</mat-label>
+                                <input #deptInput class="matformfieldinputstyle" matInput
+                                    (keyup)="getDepartment(EmployeeReportsearchForm.value.department)"
+                                    formControlName="department" [matAutocomplete]="dept">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #dept="matAutocomplete" [displayWith]="displayFnDept">
+                                    <mat-option *ngFor="let dept of HRMSReportsObject.deptList" [value]="dept">
+                                        {{dept.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td> -->
+
+                        <td>
+
+                            <mat-form-field (click)="getorg_id('')" class="spacingForm">
+                                <mat-label> Deployed Site </mat-label>
+                                <input #org_idInput placeholder="Select Deployed Site" matInput formControlName="org_id"
+                                    [matAutocomplete]="org_id"
+                                    (keyup)="getorg_id(EmployeeReportsearchForm.value.org_id)">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #org_id="matAutocomplete" [displayWith]="displayFnorg_id">
+                                    <mat-option *ngFor="let org_id of HRMSReportsObject.org_idList" [value]="org_id"
+                                        title="{{org_id.name}}">{{org_id.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+
+                            <mat-form-field dateFormat2 class="smallinput spacingForm">
+                                <mat-label> Month </mat-label>
+                                <input matInput [matDatepicker]="dp" [formControl]="monyear"
+                                    placeholder="Month and Year" formControlName="monthyear">
+                                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                                    (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                                </mat-datepicker>
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+                            <!-- class="inputs arrowClass filterData"  -->
+                            <!-- <mat-form-field>
+                            <mat-select formControlName="filter_key"  >
+                                    <mat-option [value]="typeOfAttendance.id" *ngFor="let typeOfAttendance of HRMSReportsObject?.ReportStatusList" >
+                                        {{typeOfAttendance.name}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>     -->
+
+
+                            <mat-form-field> 
+                                <mat-label> Status </mat-label>
+                                <mat-select formControlName="filter_key">  
+                                  <mat-option *ngFor="let typeOfAttendance of HRMSReportsObject?.ReportStatusList" [value]="typeOfAttendance.id"
+                                  (click)="resetStatusFilter('summary')">
+                                    {{typeOfAttendance.name}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+    
+                            <mat-form-field (click)="getbsdata('')" >
+                                <mat-label> BS </mat-label>
+                                <input #bsInput placeholder="Select BS" matInput formControlName="bs"
+                                    [matAutocomplete]="bs_id" (keyup)="getbsdata(EmployeeReportsearchForm.value.bs)">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #bs_id="matAutocomplete" [displayWith]="displayFnbs_id">
+                                    <mat-option *ngFor="let bs_id of HRMSReportsObject.bsdatalist" [value]="bs_id"
+                                        title="{{bs_id.name}}">{{bs_id.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+        
+                            <mat-form-field (click)="getccdata('')" class="marginleftField"   >
+                                <mat-label> CC </mat-label>
+                                <input #CC_idInput placeholder="Select CC" matInput formControlName="cc"
+                                    [matAutocomplete]="cc_id" (keyup)="getccdata(EmployeeReportsearchForm.value.cc)"> 
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #cc_id="matAutocomplete" [displayWith]="displayFncc">
+                                    <mat-option *ngFor="let cc of HRMSReportsObject.ccdatalist" [value]="cc"
+                                        title="{{cc.name}}">{{cc.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        <td colspan="2">
+                            <button mat-stroked-button type="button" style="background-color: white;" class="marginBtmBtn"
+                                aria-label="Search" (click)="EmployeeReportSearch('')">
+                                <mat-icon>search</mat-icon> </button>
+                            <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;" class="marginBtmBtn"
+                                (click)="resetAttendanceReport()">Clear</button>
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+
+                    <span class="badge lateIn coloring leftspace">Late Check In - LI </span>
+                    <span class="badge badge-secondary coloring leftspace">Permission - PRM</span>
+                    <span class="badge EarlyOut coloring leftspace">Early Check Out - EO</span> 
+                    <span class="badge ApprovedClass coloring leftspace">Work From Home - WFH</span> 
+                    <span class="badge ApprovedClass coloring leftspace">Leave - L</span> 
+
+                    <div class="table-responsive tableFixHeaddiv">
+
+                        <table class="table table-bordered outertable" style="margin-top: 10px;max-width: 100%;"
+                            id='commonstyle'>
+                            <thead class="table_header">
+                                <tr [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious">
+                                    <th class="tablecolumn">S.No</th>
+                                    <th class="tablecolumn">Employee
+                                        <span class="material-icons togglePosition" (click)="Toggle()"
+                                            title="{{showHide == false ? 'Collapse': 'Expand' }}">
+                                            {{showHide == false ? 'switch_right': 'switch_left' }}
+                                        </span>
+                                    </th>
+                                    <ng-container *ngIf="HRMSReportsObject.ListOfDaysInSelectedMonth?.length > 0">
+                                        <th *ngFor="let days of HRMSReportsObject.ListOfDaysInSelectedMonth; let i = index"
+                                            attr.name='{{i}}' title="{{days | date: 'dd-MMM-yyyy'}}"
+                                            style="text-align: center;">
+                                            <span> {{days | date:'d'}} <sup> {{HRMSReportsObject.PresentDate ==
+                                                    days? '*': ''}} </sup> </span>
+                                            <br>
+                                            <small> {{days | date: 'EEEEEE'}} </small>
+
+                                             
+                                                <mat-select class="inputs arrowClass filterData" [formControl]="individualDate">   
+                                                  <mat-option *ngFor="let typeOfAttendance of HRMSReportsObject?.ReportStatusList" 
+                                                  [value]="typeOfAttendance.id"  (click)="EmployeeReportSearch('', individualDate.value, days ); resetStatusFilter('inline')"      >
+                                                    {{typeOfAttendance.name}}
+                                                  </mat-option>
+                                                </mat-select> 
+
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of HRMSReportsObject.arrReport; let index = index"
+                                    [ngClass]="showHide? '': 'tableTogle' " class="tablePrevious">
+                                    <td class="tablecolumn">{{index+1}}</td>
+                                    <td class="tablecolumn" title="({{data?.code}}) {{data?.name}}">({{data?.code}})
+                                        {{data?.name}}
+                                    </td>
+
+                                    <ng-container *ngIf="HRMSReportsObject.ListOfDaysInSelectedMonth?.length > 0">
+                                        <td *ngFor="let days of HRMSReportsObject.ListOfDaysInSelectedMonth; let i = index"
+                                            attr.name='{{i}}' 
+                                            style="text-align: center;">
+                                            <div class="wraping">
+                                                <ng-container *ngFor="let loop of data[days]; let dateindex = index">
+                                                    <span class="badge coloring spacing" 
+                                                      title='{{days | date: "dd-MMM-yyyy"}} - ({{data?.code}}) {{data?.name}} - {{loop?.type == "Late check in" ? "Late Check In - " + loop?.duration + " hrs" : loop?.type == "Early check out" ? "Early Check Out - " + loop?.duration + " hrs" : loop?.type == "Permission" ? "Permission - " + loop?.duration + " hrs" : loop?.type == "Leave" ? "L - " + loop?.is_taken :
+                                                      loop?.type == "WFH" ? "WFH - " + loop?.is_taken : "-"}}'
+                                                        [ngClass]='loop?.type == "Late check in" ? "lateIn" :  loop?.type == "Early check out" ? "EarlyOut" :
+                                                          loop?.type == "Permission" ? "permissionsclass" :  "-"'>
+                                                        {{loop?.type == "Late check in" ? "LI - " + loop?.duration + " hrs" :
+                                                         loop?.type == "Early check out" ? "EO - " + loop?.duration + " hrs" :
+                                                          loop?.type == "Permission" ? "PRM - " + loop?.duration + " hrs" :  
+                                                          "-"}}
+                                                          
+                                                    </span> 
+
+                                                    <span class="badge" [ngClass]=' loop?.approve_status == "Pending" ? "pendingClass" :
+                                                    loop?.approve_status == "Approved" ? "ApprovedClass" : ""'
+
+
+
+                                                    title='{{days | date: "dd-MMM-yyyy"}} - ({{data?.code}}) {{data?.name}} - 
+
+                                                    {{loop?.type == "Leave" ? "Leave - " + loop?.approve_status :
+                                                    loop?.type == "WFH" ? "Work From Home - " + loop?.approve_status : ""}}' 
+                                                    
+                                                    
+                                                    >{{loop?.type == "Leave" ? "L - " + loop?.approve_status :
+                                                        loop?.type == "WFH" ? "WFH - " + loop?.approve_status : ""}}</span>
+                                                    
+                                                    <span [ngClass]='loop?.is_taken ==  "Taken" ? "greenClass smallfont" : loop?.is_taken ==  "Not Taken" ? "redClass smallfont" : ""  ' > {{loop?.is_taken}}  </span> 
+                                                </ng-container>
+                                            </div>
+
+
+                                            <!-- {{days | date: 'dd-MM-yyyy'}} -->
+                                        </td>
+                                    </ng-container>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div *ngIf="HRMSReportsObject.arrReport?.data?.length==0 || HRMSReportsObject.arrReport == undefined ||HRMSReportsObject.arrReport?.length==0  ; else paginationarrReport"
+                        class="NodataAlign text-center">No Records Found...</div>
+                    <ng-template #paginationarrReport>
+                        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+
+
+                            <button type="button" mat-raised-button
+                                [disabled]="HRMSReportsObject.has_nextEmpreport === false" color="primary"
+                                (click)="EmployeeReportSearch('next')">
+                                Load More
+                            </button>
+
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- </div> -->
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

@@ -1,0 +1,259 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.cus-tableDivss {
+  width: 95%;
+  height: 520px;
+}
+
+.cus-tableDivss1 {
+  width: 51%;
+  height: 90px;
+  margin-top: -47px;
+  margin-left: 5%;
+}
+
+.cus-tableDivss2 {
+  width: 51%;
+  height: 90px;
+  margin-top: 3px;
+  margin-left: 60px;
+}
+
+.cus-pageCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+}
+
+.savetable {
+  width: 100;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cus-taskViewDescDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 0 20px;
+  
+}
+
+.cus-taskViewHead-p1 {
+  margin-bottom: 10px;
+  background-color: #eeeeef;
+  color: #353537;
+  // box-shadow: 0 0 4px rgba(0, 0, 0, 0.273);
+  padding: 4px 16px;
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+.btn {
+  text-align: center;
+}
+
+.cus-meetingAddForms {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.cus-meetingAddForms1 {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: start;
+  justify-content: start;
+  gap: 10px
+}
+
+.cus-meetingAddForms2 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.cus-meetingAddForms100 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+// Custom Style
+.cus-meetingFormContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 10px 20px;
+}
+
+.cus-meetingFormContainer1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cus-meetingFormContainer2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cus-tableContainer {
+  border-width: 1px 0px 1px 0px;
+  // border-style: solid;
+  border-color: #dedede;
+  padding: 10px 20px 0 20px;
+}
+
+.cus-table {
+  position: sticky;
+  overflow-y: auto;
+}
+
+.cus-table thead {
+  --bs-table-bg: #eeeeef;
+}
+
+.cus-table thead th {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+  z-index: 1000;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #e2e1e1;
+}
+
+thead {
+  border-radius: 1px;
+}
+
+th {
+  background-color: #f7f7f7;
+}
+
+td {
+  border: 1px solid #e2e1e1;
+  margin: 0;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.cus-meetingPageBtnsDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 20px 40px 20px;
+}
+
+.cus-meetingPageBtnsDiv button {
+  background-color: #044063;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  border-radius: 4px;
+}
+
+.cus-btnActive {
+  background-color: #eeeeef;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.cus-meetingAddHead {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+}
+
+.cus-createMeet {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 512px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+.pointer {cursor: pointer;}
+
+.cus-badgeLightBlack {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ffa1a1;
+  color: #000000;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.blue{
+  color: blue;
+}
+
+
+@media screen and (max-width: 1290px) {
+  .divWidth{
+    width: 18%;
+    justify-content: flex-start;
+
+ 
+  }
+  #divWidths
+  {
+    margin-left: -10%;
+  }
+  .cus-meetingFormContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 10px 20px;
+    margin-left: -5%;
+  }
+  
+
+  
+}

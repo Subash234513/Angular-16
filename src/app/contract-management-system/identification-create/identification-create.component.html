@@ -1,0 +1,233 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 style="margin-left: 10px;">Project Proposal Request Creation</h2>
+            <form style="margin-left: 20px;" [formGroup]="identificationForm">
+                <table border="0">
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Title</mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Title"
+                                    formControlName="title" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <mat-label>Project Type</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #typeInput placeholder="Select Type" type="text" matInput
+                                    (keyup)="typeDD(identificationForm.value.type)" class="matformfieldinputstyle"
+                                    formControlName="type" [matAutocomplete]="type">
+                                <mat-autocomplete #type="matAutocomplete" [displayWith]="displayFnType"
+                                    (opened)="autocompletetypeScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let Type of TypeList" [value]="Type">
+                                            {{Type.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+
+                            <mat-label class="gapforfield">Beneficiary Group</mat-label><br>
+                            <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                <input #OnBeHalfInput placeholder="Select group" type="text" matInput
+                                    (keyup)="OnBeHalfDD(identificationForm.value.onbehalf_group)"
+                                    class="matformfieldinputstyle" formControlName="onbehalf_group"
+                                    [matAutocomplete]="OnBeHalf">
+                                <mat-autocomplete #OnBeHalf="matAutocomplete" [displayWith]="displayFnOnBeHalf"
+                                    (opened)="autocompleteOnBeHalfScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let obh of OnBeHalfList" [value]="obh">
+                                            {{obh.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                    </tr>
+                </table>
+                <div style="width:90%;height: 70%;">
+                    <div>
+                        <h2>Note(Purpose of Project)</h2>
+                        <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                            formControlName="content" (mediaDelete)="onDelete($event)" placeholder="Description"
+                            (summernoteInit)="summernoteInit($event)">
+                        </div>
+                    </div>
+                </div>
+                <table border="0">
+                    <tr>
+                        <td colspan="4">
+                            <mat-label>Approver </mat-label><br>
+                            <mat-form-field class="lenthoftextfield matformfieldinputstyle">
+                                <mat-chip-grid #chipListemp>
+                                    <mat-chip-row *ngFor="let empl of chipSelectedemp"  [removable]=true
+                                        (removed)="removedemp(empl)">
+                                        {{empl.name}}
+                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                    </mat-chip-row>
+                                    <input #empInput [formControl]="emp_id" [matAutocomplete]="emp"
+                                        placeholder="Select Approver" class="matformfieldinputstyle"
+                                        (keyup)="getemp(emp_id.value)" [matChipInputFor]="chipListemp"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [readonly]="isEdit == true"
+                                        [matChipInputAddOnBlur]=true>
+                                </mat-chip-grid>
+
+                                <mat-autocomplete #emp="matAutocomplete" (optionSelected)="empSelected($event)">
+                                    <mat-option *ngFor="let emp of empList" [value]="emp">
+                                        {{emp.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="vertical-align: center;">Documents: </div>
+                            <div class="input-group mb-3 inputCMTFile01">
+                                <div class="custom-file">
+                                    <input type="file" (change)="onFileSelected($event)" multiple
+                                        class="custom-file-input" id="inputGroupFile01">
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+
+
+                </table>
+
+                <div *ngIf="isEdit == true && EditFiles?.length >0">
+                    <p>Already Selected Attachments:</p>
+                    <div style="display:inline" *ngFor="let files of EditFiles; let indexfile = index">
+                        <!-- <mat-chip-row class="cursor spacingfile" [matMenuTriggerFor]="menu1">
+                            {{indexfile+1}}.{{files?.file_name}}</mat-chip-row>
+                        <mat-menu #menu1="matMenu">
+                            <span class="textdecorationatag" (click)="Files_Api_View(files)" data-toggle="modal"
+                                data-target="#my-modalpreview">File view</span>
+                        </mat-menu> -->
+
+                        <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                            <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" data-toggle="modal" data-target="#my-modalpreview">{{indexfile+1}}.{{files?.file_name}}</button>
+                            <button  type="button" class="btn btncolor material-icons" (click)="filedownload(files)">download</button>
+                            <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button" class="btn btncolor" (click)="deleteInlineApiImageFile(indexfile, files)">X</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div *ngIf="Documentfilearray?.length > 0">
+                    <p> Attachments:</p>
+                    <div style="display:inline" *ngFor="let files of Documentfilearray; let indexfile = index">
+                        <!-- <div> -->
+                        <!-- <button type="button" class="btn btn-primary"
+                            style="border-top-left-radius: 40px;border-bottom-left-radius: 40px;margin: 5px 0px 5px 5px;"
+                            (click)="filepreview(files)" data-toggle="modal" data-target="#my-modalpreview">
+                            {{indexfile+1}}.{{files?.name}}
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                            (click)="deleteInlineFile(indexfile, '')">X</button> -->
+
+
+
+
+                        <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                            <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" (click)="filepreview(files)" data-toggle="modal" data-target="#my-modalpreview">{{indexfile+1}}.{{files?.name}}</button>
+                            <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button" class="btn btncolor" (click)="deleteInlineFile(indexfile, '')">X</button>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+                        <!-- </div> -->
+
+                        <!-- <mat-chip-row class="cursor spacingfile">{{indexfile+1}}.{{files?.name}}
+                        </mat-chip-row> -->
+                        <!-- <mat-menu #menu1="matMenu">
+                            <span class="textdecorationatag" (click)="filepreview(files)" data-toggle="modal"
+                                data-target="#my-modalpreview">File view</span>|
+                            <span class="textdecorationatagdelete"
+                                (click)="deleteInlineFile(indexfile, '')">Delete</span>
+
+                                [matMenuTriggerFor]="menu1"
+                        </mat-menu> -->
+
+
+
+                    </div>
+                </div>
+                <div style="margin: 50px;">
+
+
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" (click)="oncancel()">Cancel</button>
+
+                    <button *ngIf="isEdit == false" type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light"
+                        (click)="IdentificationSubmit('create')">Submit</button>
+
+
+                    <button *ngIf="isEdit == true" type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light"
+                        (click)="IdentificationSubmit('Edit')">Update</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div *ngIf="showimageHeaderPreview" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showimageHeaderPreviewPDF" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+    aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#bce6ed;">
+                <h2 class="modal-title">PDF View</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <pdf-viewer [src]="pdfurl" [render-text]="true" [original-size]="false"
+                style="display: block;width: 500px; height: 800px;"></pdf-viewer>
+        </div>
+    </div>
+</div>

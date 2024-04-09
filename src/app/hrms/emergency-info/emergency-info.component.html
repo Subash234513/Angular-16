@@ -1,0 +1,80 @@
+<div class="main">
+    <div class="search">
+        <form [formGroup]="searchForm">
+            <div class="SearchDisplay">
+                <!-- <div>
+                    <mat-form-field>
+                        <mat-label>Code</mat-label>
+                        <input matInput formControlName="code">
+                    </mat-form-field>
+                </div> -->
+                <div>
+                    <mat-form-field>
+                        <mat-label>Code/Name</mat-label>
+                        <input matInput formControlName="name">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Blood Group</mat-label>
+                        <input matInput formControlName="bloodGroup">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-stroked-button class="mb-3" (click)="Search()">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div>
+                    <button mat-stroked-button class="mb-3" (click)="Clear()">
+                        Clear
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-secondary mb-3 back" (click)="Back()">Back</button>
+                </div>
+            </div>
+           
+
+        </form>
+    </div>
+    <div class="Summary">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <th>S.No</th>
+                    <th>code/name</th>
+                    <th>Blood Group</th>
+                    <th>Contact Number</th>
+                    <th>Emergency Contact Number</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of summaryData;let i=index">
+                        <td>{{(pagination.index-1)*10+i+1}}</td>
+                        <td>{{data?.code}}/{{data?.name}}</td>
+                        <td>{{data?.blood_grp}}</td>
+                        <td>{{data?.phone_no}}</td>
+                        <td>
+                            <div *ngFor="let emergency of data?.emergency_no;let e=index" class="tableEmergency">
+                                {{emergency?.name}} - {{emergency?.phone_no}} <span class="camma" *ngIf="e+1!==data?.emergency_no.length">,</span>
+                            </div>
+                           
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="!summaryData.length" class="NoRecords">
+                No Records Found
+            </div>
+        </div>
+        <div class="PaginationDisplay" *ngIf="summaryData.length">
+            <button mat-icon-button color="primary" (click)="hasPrev()" [disabled]="pagination.has_previous===false">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{pagination.index}}
+            <button mat-icon-button color="primary" (click)="hasNext()" [disabled]="pagination.has_next===false">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.button{
+    background-color: white;
+    color: green;
+    float: right;
+    margin-top: -20px;
+}
+.display{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.rotate{
+    animation: rotate 2s linear infinite;
+}
+@keyframes rotate{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    } 
+}

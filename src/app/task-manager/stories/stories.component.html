@@ -1,0 +1,230 @@
+<div class="modal-body" style="width: 100%">
+  <!-- 
+<br><br><br>
+<div class="card">
+  <div class="card-body">
+    <h1 class="storyheading">Story Creations</h1>
+
+    <form [formGroup]="storiesForm">
+      <table>
+          <tr>
+              <td>
+                  <mat-label >Name</mat-label><br>
+                          <mat-form-field class="inputSizeWidth">
+                              <input type="text" matInput autocomplete="off" formControlName="name">
+                              <mat-placeholder>Name</mat-placeholder>
+                  </mat-form-field>
+              </td>
+              <td class="padsize">
+                <mat-label >Sprint</mat-label><br>
+            <mat-form-field class="inputSizeWidth"
+                (click)="sprintClick()">
+                <input #sprintInput matInput
+                    formControlName="sprint" [matAutocomplete]="spt" required>
+                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                <mat-autocomplete #spt="matAutocomplete" [displayWith]="displayFn"
+                    >
+                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                    <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let sprint of sprintList" [value]="sprint">
+                            {{sprint.name}}
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+            </mat-form-field>
+              </td>
+          </tr>     
+      </table>
+      <table>
+        <tr>
+          <td>
+            <mat-label>Team </mat-label><br>
+            <mat-form-field style="width: 40rem;">
+              <mat-chip-grid #chipListteam>
+                  <mat-chip-row *ngFor="let tm of chipSelectedTeam" [selectable]=true [removable]=true
+                      (removed)="removedTeam(tm)">
+                      {{tm.name}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip-row>
+                  <input #teamInput  [formControl]="team_arr" [matAutocomplete]="tem" (keyup)="getemp(team_arr.value)"
+                       [matChipInputFor]="chipListteam"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]=true>
+              </mat-chip-grid>
+
+              <mat-autocomplete #tem="matAutocomplete" (optionSelected)="teamSelected($event)">
+                      <mat-option *ngFor="let team of teamList" [value]="team">
+                          {{team.name}}
+                      </mat-option>
+              </mat-autocomplete>
+          </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-label>Description</mat-label><br>
+            <mat-form-field style="width: 40rem;">
+                <textarea type="text" matInput
+                    autocomplete="off"
+                    formControlName="details"></textarea>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      
+    </form>
+
+    <br>
+
+    <div style="margin-bottom: 100px;">
+        <button class="btn btn-light" id="submitBtn" (click)="SubmitStories()">Submit</button>
+        <button class="btn btn-light" id="WhiteBtn" (click)="BackToSummary()">Back</button>
+
+
+    </div> -->
+
+  <!-- <form [formGroup]="contactForm" (submit)="createNewStory()" >
+  <div class="input-group mb-3 changeWidth"  >
+  
+      <input type="text" class="form-control" placeholder="Name" 
+      name="firstname" formControlName="name" aria-label="Name" aria-describedby="basic-addon1" >
+    </div>
+
+    <br>
+  
+  <div class="form-floating changeWidth">
+      <textarea name="details" formControlName="details"  class="form-control" placeholder="Details" id="floatingTextarea2" 
+      style="height: 100px"></textarea >
+      
+    </div>
+    <br>
+
+  <br>
+  <br>
+  <div class="d-grid gap-2 d-md-block">
+    <button class="btn btn-light" id="submitBtn" type="submit" [disabled]="!contactForm.valid" class="btn btn-light" id="submitBtn" >Submit</button>
+    <button class="btn btn-light" id="WhiteBtn" (click)="BackToSummary()">Back</button>
+
+
+  </div>
+</form> -->
+  <!-- </div>
+</div> -->
+
+  <!-- <div class="cus-createHeader">
+  <h3>New Story Creation</h3>
+  <nav class="cus-createHeaderNav">
+    <p class="cus-createHeaderNavActive" id="cus-createDetailsBtn">
+      New Story Creation
+    </p>
+  </nav>
+</div> -->
+
+  <form [formGroup]="storiesForm" class="cus-storiesCreationMain">
+    <div class="cus-storiesContainer1">
+      <div>
+        <mat-form-field>
+          <mat-label>Name <span style="color: red;">*</span>  </mat-label>
+          <input
+            type="text"
+            matInput
+            autocomplete="off"
+            formControlName="name"
+          />
+          <!-- <mat-placeholder>Name</mat-placeholder> -->
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field (click)="sprintClick()">
+          <mat-label>Sprint</mat-label>
+          <input
+            #sprintInput
+            matInput
+            formControlName="sprint"
+            [matAutocomplete]="spt"
+          />
+          <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+          <mat-autocomplete #spt="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngIf="isLoading" class="is-loading"
+              >Loading...</mat-option
+            >
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let sprint of sprintList" [value]="sprint" title="{{sprint.name}}">
+                {{ sprint.name }}
+              </mat-option>
+            </ng-container>
+            <mat-option *ngIf="!sprintList || !sprintList.length">
+              No Records Found 
+            </mat-option>
+
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Team <span style="color: red;">*</span></mat-label>
+          <mat-chip-grid #chipListteam>
+            <mat-chip-row
+              *ngFor="let tm of chipSelectedTeam"
+              
+              [removable]="true"
+              (removed)="removedTeam(tm)"
+            >
+              {{ tm.name }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip-row>
+            <input
+              #teamInput
+              [formControl]="team_arr"
+              [matAutocomplete]="tem"
+              (keyup)="getemp(team_arr.value)"
+              [matChipInputFor]="chipListteam"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+            />
+          </mat-chip-grid>
+
+          <mat-autocomplete
+            #tem="matAutocomplete"
+            (optionSelected)="teamSelected($event)"
+          >
+            <mat-option *ngFor="let team of teamList" [value]="team" title="{{team.name}}">
+              {{ team.name }}
+            </mat-option>
+            <mat-option *ngIf="!teamList ||!teamList.length">
+              No Records Found 
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="cus-storiesContainer100">
+        <mat-form-field>
+          <mat-label>Description<span style="color: red;">*</span></mat-label>
+          <textarea
+            type="text"
+            matInput
+            autocomplete="off"
+            formControlName="details"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer" style="width: 100%">
+  <div class="cus-storiesContainer2" style="width: 100%">
+    <!-- <button class="btn btn-outline-secondary" (click)="BackToSummary()">
+            Cancel
+          </button> -->
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="formreset()">
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" (click)="SubmitStories()" style="background-color:#044063;color: white;">
+      Save
+    </button>
+  </div>
+</div>

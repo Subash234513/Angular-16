@@ -1,0 +1,120 @@
+<section class="cus-tableContainer">
+  <div class="row">
+    <div class="col-sm-1 col-md-1 col-1 col-lg-1 col-xl-1">
+      <div class="cardspaceListProfile color display">
+        {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+      </div>
+    </div>
+    <div class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3">
+      <p style="color: #046ba8;font-size:x-large;font-weight: 700;margin-top: 7%;">Emergency Contact</p>
+    </div>
+    <div class="col-sm-4 col-md-4 col-4 col-lg-4 col-xl-4">
+    </div>
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+
+    </div>
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;margin-left: 34%;" type="button"
+          (click)="showSaveButton()" data-toggle="modal" data-target="#familyModal">
+          <span>+ Add</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngFor="let family of EmpFamilyDetails; let i = index" class="newCard">
+    <div class="d-flex">
+      <div class="p-2 flex-grow-1">
+        <p><span class="color" style="font-weight: 600; font-size: medium;">{{family?.name}} </span>|
+          {{family.relationship?.text}} | <span class="cus-badgeBlue">{{family.mobile_no}}</span>
+          <span *ngIf="family?.no" class=" cus-badgeBlue">
+            {{family?.no}}
+          </span>
+        </p>
+      </div>
+      <div class="p-2" style="width: 100px;">
+        <a data-toggle="modal" data-target="#familyModal">
+          <i class="fa solid fa-pencil" (click)="editRow(family)"></i>
+          
+        </a>
+        <i style="margin-left: 17%;" class="fa solid fa-trash-can" (click)="deleteBankRecord(family.id)"></i>
+      </div>
+      <!-- <div class="p-2" style="width: 100px;">
+        <a>
+        
+        </a>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+
+<div class="modal bottom-modal" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Emergency
+            Contact</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;" #closeButton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="familyInfoForm" class="formAbove">
+          <div class="container">
+
+            <div class="row g-3">
+              <div class="col">
+
+                <mat-form-field class="formField">
+                  <mat-label>Name</mat-label>
+                  <input matInput name="famName" formControlName="name">
+                </mat-form-field>
+
+              </div>
+              <div class="col">
+                <mat-form-field class="formField">
+                  <mat-select formControlName="relationship" name="famRelation" placeholder="Relationship"
+                    (selectionChange)="onSelectionChange($event)">
+                    <mat-option *ngFor="let rel of RelationshipList" [value]="rel.id">
+                      {{rel.text}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+              <div class="col">
+                <mat-form-field class="numberInput">
+                  <mat-label>Contact Number</mat-label>
+                  <input matInput placeholder="contact number" formControlName="no" maxlength="10" 
+                    (keypress)="keyPressNumbers($event)">
+                </mat-form-field>
+                <br>
+
+              </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <div class="saveUpdate">
+                  <div>
+                    <button class="btn btn-primary " (click)="onSave()" id="saveEdu" style="background-color: #044063;" *ngIf="addingMode">Save</button>
+                    <button class="btn btn-dark " id="saveEdu" *ngIf="!addingMode" style="background-color: #044063;" (click)="onUpdate()">Update</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

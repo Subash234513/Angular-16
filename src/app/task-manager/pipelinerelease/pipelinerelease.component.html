@@ -1,0 +1,417 @@
+<div *ngIf="ReleaseSummary">
+    <form [formGroup]="piplinesearchform">
+      <div class="cus-pipelineFormContainer">
+        <div>
+          <mat-form-field>
+            <mat-label>Collab Name</mat-label>
+            <input matInput formControlName="name" placeholder="Collab Name" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field (click)="getDropDown()">
+            <mat-label>Pipeline Status</mat-label>
+            <mat-select matInput formControlName="status">
+              <mat-option *ngFor="let opt of droplist" [value]="opt.id" title="{{opt.name}}">
+                {{ opt.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div (click)="getClientdrop()">
+          <mat-form-field>
+            <mat-label>Client</mat-label>
+            <input
+              #clientclientInput
+              placeholder="Select Client"
+              matInput
+              formControlName="client"
+              [matAutocomplete]="clientteamrole"
+              (click)="clientclick()"
+            />
+            <mat-autocomplete
+              #clientteamrole="matAutocomplete"
+              [displayWith]="displayccclient"
+            >
+              <ng-container>
+                <mat-option *ngFor="let opt of clientdrop" [value]="opt" title="{{opt.name}}">
+                  {{ opt.name }}
+                </mat-option>
+              </ng-container>
+              <mat-option *ngIf="!clientdrop ||!clientdrop.length">
+                No Records Found
+              </mat-option>
+
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+  
+        <div class="cus-piplineHeadBtns">
+          <button class="btn btn-primary" (click)="pipsearch()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="resetpipes()">
+            Clear
+          </button>
+        </div>
+      </div>
+    </form>
+  
+    <div class="cus-tableContainer">
+      <table class="table cus-table">
+        <thead style="background-color: #eeeeef">
+          <tr>
+            <th scope="col">S.No</th>
+            <th scope="col">Code</th>
+            <th scope="col">Release Name</th>
+            <th scope="col">Client</th>
+            <th scope="col">
+                Pipeline Status
+            </th>
+            <th scope="col">Release Status</th>
+            <th scope="col">Task</th>
+            <th  scope="col">Action</th>
+            <!-- <th scope="col">Select</th> -->
+          </tr>
+        </thead>
+        <tbody *ngFor="let type of pipeList; index as i">
+          <tr>
+            <td>
+              {{ (this.sprintpresentpage - 1) * pagesizeStoryTask + i + 1 }}
+            </td>
+  
+            <td>
+              {{ type.code }}
+            </td>
+  
+            <td>
+              {{ type.description }}
+            </td>
+            <td>
+              {{ type?.client }}
+            </td>
+            <td>
+                {{ type?.pipeline_status?.name }}
+              </td>
+              <td>
+                {{ type?.release_status?.text }}
+              </td>
+            <td>
+              <mat-icon  (click)="releaseview(type)" >visibility</mat-icon>
+               
+            </td>
+            <td>
+              <div *ngIf="type?.can_edit">
+                <ng-container *ngFor="let status of type?.release_status_key; let last = last">
+                  <i class="pointer" [matTooltip]="getTooltipText(status.id)" [ngClass]="getIconClass(status.id)" (click)="iconClicked(type,status.id)"></i>
+                  <span *ngIf="!last" class="icon-gap"></span>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- <div class="cus-pageCount">
+          <div class="cus-pageNumbers">
+              <p class="cus-btnActive">1</p>
+              <p>2</p>
+              <p>3</p>
+              <p>4</p>
+          </div>
+          <button class="cus-btnNext">
+              Next <mat-icon>arrow_forward</mat-icon>
+          </button>
+      </div> -->
+    <div class="cus-pipePageBtnsDiv">
+      <button
+        mat-icon-button
+        [disabled]="has_previousStoryTask === false"
+        (click)="previousPage()"
+      >
+        <mat-icon>arrow_backward</mat-icon>
+      </button>
+  
+      <div class="cus-pageNumbers">
+        <!-- <p style="text-align: center;">{{this.pageNumbers-1}}</p>  -->
+        <p class="cus-btnActive">{{ this.sprintpresentpage }}</p>
+        <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+               <p style="text-align: center;">{{this.pageNumbers+2}}</p>                -->
+      </div>
+      <button
+        mat-icon-button
+        [disabled]="has_nextStoryTask === false"
+        (click)="nextPage()"
+      >
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+    <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style=" background-color: #044063;">
+            <h5 class="modal-title" id="exampleModalLongTitle" style="color: white;">Pipeline Status</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="width: 600px;">
+         
+          
+              <form [formGroup]="formgroup" >
+                <mat-form-field style="width: 459px;" >
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let data of Status_list" [value]="data" (click)="Statusdata(data)">
+                      {{data.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closepopup()">Close</button>
+            <button type="button" class="btn btn-primary"  data-dismiss="modal" (click)="releaseupdate()" style="background-color: #044063;color: white;">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div *ngIf="ReleaseView">
+    <div class="cus-taskViewHead">
+      <div class="cus-back pointer">
+        <span (click)="backtoTaskSummary()" class="material-icons"
+          >arrow_back</span
+        >
+        <p style="margin-bottom: 0;font-weight: bold;">Pipeline Status</p>
+      </div>
+     
+      <div>
+       
+        <div class="cus-tableContainer">
+          <div style="display: flex; align-items: center; justify-content: flex-end; width: 100%">
+            <button type="button" class="btn btn-secondary" style="background-color: #044063;color: white;"  data-toggle="modal" data-target="#historypopup" (click)="historypopup()" matTooltip="Pipline History"> <i class="fa-solid fa-clock-rotate-left"></i></button>
+          </div>
+          <table class="table cus-table">
+            <thead>
+              <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">Task</th>
+                <th scope="col">Client</th>
+                <th scope="col">Type</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Assignee</th>
+                <!-- <th scope="col">Pipeline Status</th> -->
+                <th scope="col">Select</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let type of pipenewlist; index as i">
+              <tr>
+                <td>
+                  {{ (this.piplinecurrentpage - 1) * pagesizeStoryTask + i + 1 }}
+                </td>
+                <td>
+                  <div>
+                    <mat-icon
+                      *ngIf="type?.priority_type?.text === 'High'"
+                      style="color: #f50000"
+                      title="High"
+                      >flag</mat-icon
+                    >
+                    <mat-icon
+                      *ngIf="type?.priority_type?.text === 'Normal'"
+                      style="color: #ffcc00"
+                      title="Normal"
+                      >flag</mat-icon
+                    >
+                    <mat-icon
+                      *ngIf="type?.priority_type?.text === 'Low'"
+                      style="color: #6fddff"
+                      title="Low"
+                      >flag</mat-icon
+                    >
+                    <span
+                      class="cus-badgeLightBlack pointer"
+                      [ngClass]="'othersColor'"
+                      (click)="story_TaskView(type.id)"
+                      >{{ type?.code }}</span
+                    >
+                    -
+                    <span
+                    class="pointer blue"
+                      title="{{ type?.task }}"
+                      (click)="story_TaskView(type.id)"
+                    >
+                      {{
+                        type?.task.length > 25
+                          ? (type?.task | slice : 0 : 25) + ".."
+                          : type.task
+                      }}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  {{ type.client }}
+                </td>
+                <td>
+                  <span class="cus-badge">
+                    <span *ngIf="type?.type == 'New'" class="cus-badgeGreen"
+                      >New</span
+                    >
+                    <span *ngIf="type?.type == 'Bug Fix'" class="cus-badgeRed"
+                      >Bug Fix</span
+                    >
+                    <span
+                      *ngIf="type?.type == 'Enhancement'"
+                      class="cus-badgeBlue"
+                      >Enhancement</span
+                    >
+                    <span *ngIf="type?.type == 'Training'" class="cus-badgeYellow"
+                      >Training</span
+                    >
+                    <span
+                      *ngIf="type?.type == 'BAU Maintenance'"
+                      class="cus-badgeLightGreen"
+                      >BAU Maintenance</span
+                    >
+                  </span>
+                </td>
+                <td>
+                  {{ type.start_date | date : "dd/MM/yyyy" }}
+                </td>
+                <td>
+                  {{ type.end_date | date : "dd/MM/yyyy" }}
+                </td>
+                <td>
+                  <ng-container
+                    *ngIf="type?.assigned_to && type?.assigned_to.length > 0"
+                  >
+                    <div title="{{ type?.assigned_to[0]?.name }}">
+                      <div>
+                        <span
+                          *ngIf="
+                            type?.assigned_to[0]?.name.trim().split(' ')[0]
+                              .length > 1;
+                            else shortOrTwoWords
+                          "
+                        >
+                          {{
+                            type?.assigned_to[0]?.name.trim().split(" ")[0]
+                              | uppercase
+                          }}
+                        </span>
+                        <ng-template #shortOrTwoWords>
+                          <span
+                            *ngIf="
+                              type?.assigned_to[0]?.name.trim().split(' ')[0]
+                                .length === 1
+                            "
+                          >
+                            {{
+                              type?.assigned_to[0]?.name
+                                .trim()
+                                .split(" ")
+                                .slice(0, 2)
+                                .join(" ") | uppercase
+                            }}
+                          </span>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </ng-container>
+                </td>
+                <!-- <td>
+                  <span class="cus-badgeBlue">{{
+                    type?.pipeline_status?.name
+                  }}</span>
+                </td> -->
+                <td style="text-align: center">
+                  <mat-checkbox
+                    [(ngModel)]="type.ischecked"
+                    (ngModelChange)="check($event, type)"
+                  ></mat-checkbox>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cus-pipePageBtnsDiv">
+          <button
+            mat-icon-button
+            [disabled]="has_previouspipline === false"
+            (click)="newpreviousPage()"
+          >
+            <mat-icon>arrow_backward</mat-icon>
+          </button>
+  
+          <div class="cus-pageNumbers">
+            <p class="cus-btnActive">{{ this.piplinecurrentpage }}</p>
+          </div>
+  
+          <button
+            mat-icon-button
+            [disabled]="has_nextpipline === false"
+            (click)="newnextPage()"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+  
+          <button class="cus-btnNext" mat-icon-button (click)="removepipeline()">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="historypopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style=" background-color: #044063;">
+          <h5 class="modal-title" id="exampleModalLongTitle" style="color: white;">Pipeline History</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+          <table class="table aligncenter" style="margin-top: 10px;max-width: 98%;margin-left: 8px;" id='commonstyle'>
+            <thead class="table_header">
+                <tr style="text-align: center;">
+
+                    <th>Employee</th>
+                    <th>Actual Date</th>
+                    <th>Pipeline</th>
+                    <th>Status</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of historylist">
+                   
+                    <td>{{type.created_by?.full_name}}</td>
+                    <td>{{type.log_date}}</td>
+                    <td>{{type.pipeline_status.name}}</td>
+                    <td>{{type.release_status.text}}</td>
+                    
+                </tr>
+                
+
+            </tbody>
+        </table>
+        <div *ngIf="historylist?.length==0 || historylist == undefined "
+        class="NodataAlign text-center">No Records Found...</div>
+           
+        
+       
+       
+      </div>
+    </div>
+  </div>
+  <div *ngIf="taskview">
+    <app-taskviews
+      (OnSubmit)="backtoview()"
+      (OnCancel)="backtoview()"
+    ></app-taskviews>
+  </div>
+  

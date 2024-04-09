@@ -1,0 +1,351 @@
+// .AccessTags{
+//     display: inline-block;
+
+// }
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.paddingSpace {
+  padding: 5px;
+  margin: 5px;
+}
+.tags {
+  display: inline-block;
+}
+
+.badge-blue {
+  background-color: cadetblue;
+}
+
+.tags .badges {
+  margin: 5px;
+  padding: 10px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tags .badges:hover {
+  background-color: var(--global);
+  color: white;
+}
+
+.selectedDesign {
+  background-color: var(--global);
+  color: white;
+}
+.alignMiddle {
+  vertical-align: middle;
+}
+
+.padsize {
+  padding-left: 20px;
+}
+
+.marginset {
+  margin-top: 2px;
+}
+
+// .marginSetleft{
+//     margin: 20px;
+// }
+
+.noBorder .headers th {
+  border: 1px solid rgba(0, 0, 0, 0.164);
+  background-color: #ffffff;
+  padding: 5px;
+}
+
+.noBorder tr td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.164);
+  background-color: #ffffff;
+  // padding: 5px;
+  border-right: 1px solid rgba(0, 0, 0, 0.164);
+  border-left: 1px solid rgba(0, 0, 0, 0.164);
+}
+
+.inputslong {
+  width: 550px;
+}
+.titlelong {
+  width: 330px;
+}
+
+.inputs {
+  width: 1px;
+  outline: 0;
+}
+
+.outlinesnone {
+  border: none;
+  outline: none;
+}
+
+select {
+  outline: 0;
+  height: 50px;
+  width: 120px;
+  color: black;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  background-color: #ffffff;
+}
+
+.widthset {
+  width: 1px;
+}
+.inputWidthTop {
+  width: 200px;
+}
+
+.alignButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+// .tight-gutter {
+//     padding: 0 2px;
+// }
+.arrowClass .mat-select-arrow {
+  color: green;
+}
+
+.my-class .mat-select-arrow-wrapper {
+  // your preferences here.
+  background-color: red;
+}
+.fonts {
+  font-size: 10px;
+}
+.fullscreen {
+  overflow-x: scroll;
+}
+
+.circle-icon {
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed lightgray;
+  border-radius: 50%; /* Adjust the font size as needed */
+}
+
+.circle-border {
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed lightgray;
+  border-radius: 50%;
+}
+
+//   .icon-container {
+//     display: flex;
+//     align-items: center;
+//   }
+
+.badge {
+  margin-right: 10px; /* Adjust the margin to position the badge as desired */
+  background: #007acc; /* Add background color for the badge */
+  color: white; /* Text color for the badge */
+  border-radius: 4px; /* Add rounded corners for the badge */
+  padding: 3px 6px; /* Adjust padding to control the badge size */
+}
+
+.icon-badge {
+  position: relative;
+}
+
+.icon-badge::before {
+  content: "{{ icon }}";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #007acc; /* Add background color for the badge */
+  color: white; /* Text color for the badge */
+  border-radius: 4px; /* Add rounded corners for the badge */
+  padding: 3px 6px; /* Adjust padding to control the badge size */
+}
+
+.cus-badge p {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.cus-badgeGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #d7f8e1;
+  color: #057926;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeRed {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #fae6e6;
+  color: #7f1111;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeLightGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #c2f8ff;
+  color: #007787;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeYellow {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ffedcc;
+  color: #966200;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeBlue {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ededfd;
+  color: #2d2e8e;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeLightBlack {
+  border-radius: 100px;
+  // max-width: fit-content;
+  background-color: #eeeeef;
+  color: #353537;
+  padding: 2px 9px;
+  margin-bottom: 0;
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 5px;
+  width: 120px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+.mains {
+  height: 50px;
+  width: 95%;
+  border: 1px solid blue;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+}
+.inputs {
+  height: 100%;
+  flex: 30;
+}
+.inpt {
+  height: 100%;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+.main_1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex {
+  flex: 1;
+}
+.flex2 {
+  flex: 4;
+}
+.close {
+  margin-left: 10px;
+}
+.s div {
+  height: 30px;
+  width: 30px;
+
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  background-color: blueviolet;
+}
+.ctrl {
+  color: rgb(191, 185, 185);
+}
+.dot i {
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  border: 1px dashed grey;
+  align-items: center;
+}
+.cursor {
+  cursor: pointer;
+}
+
+// Custom Style
+.mat-form-field {
+  width: 100%;
+}
+
+.cus-taskEditContainer1 {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cus-taskEditContainer2 {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 10px;
+}
+
+.cus-taskEdit100 {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+.cus-taskEditBtnDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -1,0 +1,65 @@
+<section class="vh-100" *ngIf="redirect_tO_NAC == false">
+  <div class="container-fluid zindexclass">
+    <div class="row">
+
+      <div class="col-sm-8 px-0 d-none d-sm-block">
+        <img src="./assets/images/wisefin.png" alt="Login image" class="w-100 vh-100"
+          style="object-fit: cover; object-position: left;">
+      </div>
+
+      <div class="col-sm-3 text-black">
+
+        <div class="marginset" *ngIf="!mobile_flag">
+          <div>
+            <h2>Login</h2>
+          </div>
+
+          <form [formGroup]="loginForm" class="login-container" (ngSubmit)="login()">
+            <div>
+              <mat-label>Choose Entity</mat-label>
+              <mat-form-field id="mediumInput">
+                <mat-select formControlName="entity" [placeholder]="'Entity'">
+                  <mat-option *ngFor="let list of entityList" [value]="list.id">{{list.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div> 
+              <mat-label>User Code</mat-label>
+              <mat-form-field id="mediumInput">
+                <input matInput placeholder="User Code" formControlName="username">
+              </mat-form-field>
+            </div>
+            <div > 
+              <mat-label>Password</mat-label>
+              <mat-form-field id="mediumInput">
+                <input matInput type="password" placeholder="Password" formControlName="password">
+                <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+              </mat-form-field>
+            </div>
+            <br>
+
+
+            <button class="button-name"> Sign in</button>
+           
+
+          </form>
+
+
+
+
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen] = "true" type="ball-spin-clockwise">
+  <p style="color: white">Please Wait. </p>
+</ngx-spinner> -->

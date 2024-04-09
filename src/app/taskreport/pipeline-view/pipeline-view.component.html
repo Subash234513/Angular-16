@@ -1,0 +1,283 @@
+<div style="margin-left: 45px;">
+<div class="row" *ngIf="pipelineSummary">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h2 class="h2pipe">Pipeline Summary</h2>
+    
+    
+    
+        <form [formGroup]="pipelineform" autocomplete="off">
+             <!-- <button class="btn btn-outline-primary" id="team">Team</button> -->
+             <div class="row">
+                <div class="col-2">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input matInput [formControl]="Search">
+                    </mat-form-field>
+                </div>
+                <div class="col-1 mt-1">
+                    <button mat-stroked-button (click)="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="col-1 mt-1" (click)="Clear()">
+                    <button mat-stroked-button>
+                        Clear
+                    </button>
+                </div>
+                <div class="col-1">
+                    <button type="button" mat-fab style="background-color: #f5c68b;"
+                    (click)="addpipeline('','')">
+                    <mat-icon matTooltip="Add">add</mat-icon>
+                    </button>
+                </div> 
+                <div class="col-2 mt-1">
+                    <div class="popup-btn">
+                        <button type="button" data-toggle="modal"
+                            style=" max-width: 100%; background-color: #044063;"
+                            (click)="Ontemplatetimesheet()" class="btn btn-primary">
+                            <span> &nbsp; Template</span>
+                        </button>
+                    </div>
+    
+                </div>
+             </div>
+            
+                
+                
+        
+        </form>
+    
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div style="margin-left: -15px;">
+                <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                        <tr style="text-align: center;">
+                            <th>S.no</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+    
+                <tbody>
+                    <tr *ngFor="let type of pipelinelist; index as i" >
+                        <td>{{i+1 }}</td>
+                        <td>{{type.name}}</td>
+                    </tr>
+                </tbody>
+             </table>
+             <!-- <div>
+                <button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{pagination.index}}
+                <button>
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+             </div> -->
+             <!-- <div *ngIf="pipelinelist?.length==0 || pipelinelist == undefined ; else paginationpro"
+             class="NodataAlign text-center">No Records Found...
+            </div> -->
+         <!-- <ng-template #paginationpro> -->
+             <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                 <button type="button" mat-icon-button [disabled]="has_previousclient === false" color="primary"
+                     (click)="pipelineSearch('previous')">
+                     <mat-icon>arrow_back</mat-icon>
+                 </button> {{presentpagepipeline}}
+                 <button type="button" mat-icon-button [disabled]="has_nextclient === false" color="primary"
+                     (click)="pipelineSearch('next')">
+                     <mat-icon>arrow_forward</mat-icon>
+                 </button>
+             </div>
+         <!-- </ng-template> -->
+         </div>
+         </div>
+     </div>
+            
+    </div> 
+    <div *ngIf="pipelinecreation">
+        <br/>
+        <h2 class="h2pipel">Pipeline Creation</h2>
+        <form [formGroup]="pipelineform" autocomplete="off">
+            <table>
+                <div>
+                    <tr>
+                        
+                        <td class="names" style="margin-left: 40px;">
+                            <mat-label style="margin-left: 40px;"> Name </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 250px; margin-left:40px;" appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name"
+                                     formControlName="name" autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                      
+                          
+                    </tr>
+                </div>
+            </table>
+            <button type="button" class="btn btn-light" style="border-radius: 10px;margin-left: 40px;
+            border-color: black;
+            background-color: white;" (click)="oncancelpipeline()">Cancel</button>
+            <button type="submit" style="border-radius: 10px;margin-left: 20px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;" class="btn btn-light" (click)="pipelinesubmit()">Submit</button>
+        </form>
+    
+    </div> 
+    <div class="row" *ngIf="isShowspipeline" style="margin-left: 75px;">
+        <div class="template-head">
+
+            <div>
+               
+                <div style="margin-top: -30px;">
+                    <form [formGroup]="templateform">
+                    <div>
+                        <h2 style="margin-left: -50px; font-size: 14px;margin-top: 30px;" (click)="goBack()" ><span class="material-icons alignvertical">arrow_back</span><span
+                            class="highlights alignvertical" >Template</span></h2>   
+                        <mat-label style="margin-left: -50px;">Name </mat-label>
+                    </div>
+                    <mat-form-field appearance="outline" style="margin-left: -50px;">
+                        <input matInput type="name" formControlName="name" autocomplete="off" required>
+                    </mat-form-field>
+                </form>
+                    <div style="margin-left: 185px; margin-top: -64px;">
+                        <button mat-stroked-button type="button" (click)="searchtempform()"
+                            aria-label="Search"><mat-icon>search</mat-icon>
+                        </button>
+
+                        <button mat-stroked-button type="button" style="margin-left: 35px;"
+                            (click)="cleartempForm()">Reset
+                        </button>
+                       
+                        
+
+                        <!-- Button to trigger the modal -->
+                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModal" style="margin-left: 352px;">
+                            
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+                        <button  class="btn btn-outline-primary" type="button"   style=" margin-top: -8px; width: 99px;  height: 37px;  margin-left: 415px;  margin-right: 10px;" data-toggle="modal" data-target="#exampleModal"  >
+                            <!-- margin-right: -146px; -->
+                            <mat-icon >add</mat-icon>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: #044063;">
+                                        <h5 class="modal-title" id="exampleModalLabel" style="color: white;">Template Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" style="color: white;" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form [formGroup]="segmetform">
+                                        <!-- Angular Material input field -->
+                                        <mat-form-field style="width: 459px; margin-top: -4px;">
+                                            <mat-label>Name</mat-label>
+                                            <input matInput formControlName="name">
+                                        </mat-form-field>
+                                        <mat-form-field style="width: 459px; margin-top: -4px;" (click)="PipeLineDropdown('')">
+                                            <mat-label>Pipeline</mat-label>
+                                            <mat-chip-grid #chiplist>
+                                                <mat-chip-row *ngFor="let member of chipselectemember"  [removable]="true" (removed)="removedmember(member)">
+
+                                                {{member.name}}
+                                                <mat-icon matChipRemove>cancel</mat-icon>
+                                                </mat-chip-row>
+                                                <input #chipInput formControlName="segment" [matAutocomplete]="auto"
+                                                [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]=true (keyup)="PipeLineDropdown($event.target.value)">
+                                            </mat-chip-grid>
+                                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="memberSelected($event)">
+                                                <mat-option *ngFor="let thismember of pipelinelists" [value]="thismember" (click)="memberselect(thismember)" title="{{thismember.name}}">
+                                                    {{thismember.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <!-- Close and Submit buttons for the modal -->
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal" (click)="clicktoclose()">Close</button>
+                                        <button type="button" class="btn btn-primary" (click)="submitpipetemp()" style="background-color: #044063;" >Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+                  
+                </div>
+                <table class="table aligncenter" style="margin-top: 20px;max-width: 80%;margin-left: -50px;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr style="text-align: center;">
+                            <th>S.no</th>
+                            <th>Template</th>
+                            <th>View</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of pipetemplist; index as i">
+                            <td>{{(presentpagepipeline - 1)*pagesiz +i+1 }}</td>
+                            <td>{{type.name}}</td>
+                            <td (click)="viewpopup(type)">
+                                <span style="cursor: pointer;">
+                                    <mat-icon style="cursor: pointer;" data-toggle="modal"
+                                        data-target="#viewpipeline">visibility</mat-icon>
+                                </span>
+                            </td>
+
+                            <td class="delete-cell">
+                                <mat-icon matTooltip="Delete" (click)="deletepipetemp(type)">delete</mat-icon>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="viewpipeline" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="color: rgb(255, 255, 255);background-color: #044063;">
+                    <h5 class="modal-title">Template View </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  
+                       
+
+                    <table class="table aligncenter" style="margin-top: 10px;max-width: 98%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr style="text-align: center;">
+        
+                                <th>Pipeline</th>
+                                <th>Order</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let type of temp_id">
+                               
+                                <td>{{type.name}}</td>
+                                <td>{{type.order}}</td>
+                              
+                            </tr>
+    
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

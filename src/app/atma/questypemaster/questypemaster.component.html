@@ -1,0 +1,198 @@
+<!-- <div style="margin-left: 20px;margin-right: 80%;margin-top: 3%; width: 100%;">
+
+    <h3  style="margin-left:3%;font-size:20px;font-weight:bold;font-family:Times New Roman;color:blue">
+        Question Type Add Form
+    </h3><hr>
+    <div>
+        <form [formGroup]="QuesTypeaAddForm" (ngSubmit)="submitquesForm()" autocomplete="off">
+            <table>
+                <tr>
+                    
+                    <td>
+                        <mat-form-field style="width: 250px;">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="Name" formControlName="name" autocomplete="off" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 250px;margin-left: 50px;">
+                            <mat-label>Remarks</mat-label>
+                            <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 250px;margin-left: 50px;">
+                            <mat-label>Display Name</mat-label>
+                            <input matInput placeholder="Display Name" formControlName="display_name" autocomplete="off" required>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 250px;margin-left: 50px;" >
+                            <mat-label>Modules</mat-label>
+                            <mat-select formControlName="module_id">
+                                <mat-option *ngFor="let lists of moduleslist" [value]="lists.id">
+                                    {{lists.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                    </td>
+                </tr>
+            </table>
+             <button type="submit" style="border-radius: 40px;margin-left: 10px;"
+             class="btn btn-outline-primary">Submit</button>
+            <button type="button" (click)="ontypecancel()" class="btn btn-outline-primary"
+            style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+           
+           
+        </form>
+    </div>
+</div> -->
+
+<!-- <div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 style="margin-left: -65px;"> Question Type Form</h2>
+            <form style="margin-left:-50px;" [formGroup]="QuesTypeaAddForm">
+                <table>
+                    <tr>
+                        <td>
+                            <mat-label>Name</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                    formControlName="name" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 50px;">Remarks</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline"
+                            style="margin-left: 50px;">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Remarks"
+                                    formControlName="remarks" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 50px;">Display Name</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline"
+                            style="margin-left: 50px;">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Display Name"
+                                    formControlName="display_name" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 50px;">Modules</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline"
+                            style="margin-left: 50px;">
+                            <mat-select class="matformfieldinputstyle" placeholder="Modules"
+                            formControlName="module_id">
+                            <mat-option *ngFor="let lists of moduleslist"
+                            [value]="lists.id">
+                            {{lists.name}}
+                            </mat-option>
+                           </mat-select>
+                        </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+                <div style="margin: 30px;">
+
+
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: -30px;
+                    border-color: black; 
+                    background-color: white;" (click)="ontypecancel()">Cancel</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="submitquesForm()">Submit</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+    <h2 style="margin-left: -65px;"> Question Type Form</h2>
+    <form style="margin-left:-50px;" [formGroup]="QuesTypeaAddForm"  autocomplete="off">
+        <table>
+            <tr>
+                <span (click)="addSection()" style="margin-left: 20px;">
+                    <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                </span>
+            </tr>
+        </table>
+        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+            <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                <thead class="table_header" style="text-align: left;"> 
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Remarks</th>
+                        <th>Display Name</th>
+                        <th>Modules</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+
+                    <ng-container formArrayName="questypeheader"
+                                    *ngFor="let section of getSections(QuesTypeaAddForm); let i = index">
+                                    <tr [formGroupName]="i">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;">
+                                                <mat-label>Name</mat-label>
+                                                <input matInput placeholder="Name" formControlName="name" autocomplete="off">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;">
+                                                <mat-label>Remarks</mat-label>
+                                                <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;">
+                                                <mat-label>Display Name</mat-label>
+                                                <input matInput placeholder="Display Name" formControlName="display_name" autocomplete="off">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;" >
+                                                <mat-label>Modules</mat-label>
+                                                <mat-select formControlName="module_id">
+                                                    <mat-option *ngFor="let lists of moduleslist" [value]="lists.id">
+                                                        {{lists.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field> 
+                                        </td>
+                                        <td>
+                                            <button *ngIf="!QuesTypeaAddForm.value.questypeheader[i].id" mat-icon-button type="button">
+                                                <mat-icon style="color: black;" aria-label="Edit"
+                                                    (click)=removeSection(i)>
+                                                    delete</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </table>
+                        </div>
+                        <div style="margin: 30px;">
+
+
+                            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 500px;
+                            border-color: black; 
+                            background-color: white;" (click)="ontypecancel()">Cancel</button>
+            
+                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b; 
+                            background-color: #f5c68b;" class="btn btn-light" (click)="submitquesForm()">Submit</button>
+            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    

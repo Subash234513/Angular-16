@@ -1,0 +1,161 @@
+
+  
+  .logo {
+    width: 86px; 
+    text-align: left;
+  }
+  
+  .company-info {
+    text-align: center;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 0%;
+  }
+  
+  .tables {
+    flex-basis: 50%;
+    border: 1px solid black;
+  }
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  #detailmatcard {
+    width: 23%;
+    height: 91px;
+}
+  
+  
+
+
+.containers{
+  display: flex;
+}
+
+.tables1, .tables2 {
+  border-collapse: collapse;
+  margin-right: 20px;
+}
+
+
+
+.table-container {
+  display: flex;
+  margin-top: 2%;
+}
+
+.table1 {
+  width: 20%;
+}
+
+.table2 {
+  width: 70%;
+  padding: 8px;
+}
+
+ .tds {
+  padding: 8px;
+  text-align: left;
+  width: 15%;
+  // border-bottom: 1px solid #ddd;
+}
+.ths
+{
+  text-align: left;
+  padding: 8px;
+  text-align: left;
+  width: 15%;
+}
+.styled-table  {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.table1
+{
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  width: 150px;
+}
+.styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.table1 th,
+.table1 td
+{
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.table1 tr {
+  text-align: left;
+}
+
+.table1 tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.tableFixHeaddiv th {
+  position: sticky;
+  top: 0;
+  background: #eee;
+  z-index: 14
+}
+
+.outertable th:first-child, .outertable th:nth-child(2), .outertable th:nth-child(3), .outertable td:nth-child(3) {
+  z-index: 15
+}
+
+td:first-child, th:first-child {
+  position:sticky;
+  left:0;
+  z-index:1;
+  // background-color:grey;
+}
+td:last-child, th:last-child {
+  position:sticky;
+  right:0;
+  z-index:1;
+  // background-color:blue;
+}
+
+.maindiv
+{
+    margin:2%;
+}
+.width{
+  width: 100%;
+}
+.row{
+  width: 100%;
+}

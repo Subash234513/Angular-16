@@ -1,0 +1,224 @@
+<div class="timesheet-container"  *ngIf="isShowReport">
+  <div class="col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+    <span
+    (click)="backtoTaskSummary()"
+    class="material-icons pointer">arrow_back</span>
+    <span style="margin-top: 2px;font-weight: bold;">Time Sheet Report</span>
+  </div>
+
+
+  <div>
+    <form [formGroup]="ReportSummary" class="reportContainer">
+      <!-- <mat-form-field
+          style="width: 20%; margin-top: 1%; margin-left: 2%; margin-bottom: -2%">
+          <mat-label>Search Code</mat-label>
+          <input matInput formControlName="query" />
+        </mat-form-field> -->
+
+       
+        <!-- startdate -->
+        <div>
+          <mat-form-field>
+           <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="from_date" />
+           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+           <mat-datepicker #picker></mat-datepicker>
+         </mat-form-field>
+        </div>  
+
+        
+       <!-- enddate -->
+        <div>
+          <mat-form-field>
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="to_date" [min]="ReportSummary.value.from_date"/>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+         </div>
+
+        <div (click)="getteamdrop()">
+          <mat-form-field>
+              <mat-label>Team</mat-label>
+              <input  #teamInput placeholder="Select Team" matInput formControlName="team"  [matAutocomplete]="teamsrole"
+              (click)="teamclick()" >
+              <mat-autocomplete  #teamsrole="matAutocomplete"[displayWith]="displayFnteamclient">
+                  <ng-container>
+                  <mat-option *ngFor="let opt of teamdrop"[value]="opt"  title="{{opt.name}}">
+                 {{opt.name}}
+                  </mat-option>
+              </ng-container>
+              <mat-option *ngIf="!teamdrop || !teamdrop.length">
+                No Records Found
+              </mat-option>
+              </mat-autocomplete>                                 
+          </mat-form-field>
+      </div>
+
+      <div (click)="getTeamleaddrop()">
+        <mat-form-field >
+          <mat-label>Team Lead</mat-label>
+          <input
+            #teamlead
+            placeholder="Select TeamLead"
+            matInput
+            formControlName="team_lead"
+            [matAutocomplete]="teamrole"
+            (click)="teamleadclick()"
+          />
+          <mat-autocomplete
+            #teamrole="matAutocomplete"
+            [displayWith]="displayteamleadclient"
+          >
+            <ng-container>
+              <mat-option *ngFor="let opt of teams" [value]="opt" title="{{opt.name}}">
+                {{ opt.name }}
+              </mat-option>
+            </ng-container>
+            <mat-option *ngIf="!teams ||!teams.length">
+              No Records Found
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div (click)="getDeveloperdrop()">
+        <mat-form-field>
+            <mat-label> Employee</mat-label>
+            <input #developerinput placeholder="Select Employee" matInput
+                formControlName="developer_id" [matAutocomplete]="developerrole"
+                (click)="developerClick()">
+            <mat-autocomplete #developerrole="matAutocomplete" [displayWith]="displaydevelopclient">
+                <ng-container>
+                    <mat-option *ngFor="let opt of develop" [value]="opt" title="{{opt.name}}">
+                        {{opt.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!develop ||!develop.length">
+                    No Records Found
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+
+     
+        <!-- <div class="col-md-3"></div> -->
+
+       
+       <div  class="reportContainer-sub">
+        <div >
+          <button mat-flat-button  aria-label="search icon"  (click)="reportTime()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+        <!-- <div>
+          <i class="fa-solid fa-magnifying-glass gradient-icon" style="width: 10px;"></i>
+        </div> -->
+        <!-- <i class="fa-solid fa-xmark" style="margin-left: 23%;" (click)="resetTasks()"></i> -->
+        <button class="btn btn-secondary" type="button"
+            (click)="resetTasks()">Reset
+         </button>
+         
+         <button class="reportBtn" (click)="reportDownload()">Download</button>
+       </div>
+
+    </form>
+  </div>
+
+  <br>
+
+  <div >
+    
+    <table class="table cus-table" style="width: 100%;">
+      <thead style="background-color: #eeeeef">
+        <tr >
+          <!-- <th scope="col">S.No</th> -->
+          <th scope="col">Date</th>
+          <th scope="col">Developer</th>
+          <th scope="col">Task</th>
+          <th scope="col">Duration (In Hrs)</th>
+          <th scope="col">Total Duration (In Hrs)</th>
+        </tr>
+      
+      </thead>
+      <tbody *ngFor="let some of reportList?.data">
+        <tr>
+          <td rowspan="1000">
+            {{some?.log_date | date : "dd/MM/yyyy"}}        
+          </td>
+        </tr>
+        <tr *ngFor="let sometwo of some?.task_data">
+          <td rowspan="some.task_data.length">
+            {{sometwo?.developer?.name}}
+            <span *ngIf="sometwo?.developer?.first_check_in!='' && sometwo?.developer?.first_check_in !=undefined && sometwo?.developer?.first_check_in !=null"
+
+                    class="cus-badgeGreen"
+                    >{{sometwo?.developer?.first_check_in | date : "HH:mm" }}&nbsp;|&nbsp;{{sometwo?.developer?.last_check_in | date : "HH:mm" }}</span
+                  >
+                  <span style="margin-left: 10px;" *ngIf="sometwo?.developer?.total_hour!='' && sometwo?.developer?.total_hour !=undefined && sometwo?.developer?.total_hour !=null"
+
+                    class="cus-badgered"
+                    >{{sometwo?.developer?.total_hour }}</span>
+
+          </td>
+          <td>
+            <tr *ngFor="let somethree of sometwo?.task">
+              <!-- <td rowspan="1000"> -->
+                <span style="font-weight: bold;" (click)="reporttask(somethree)">{{somethree.code}}  </span>
+                
+               {{somethree?.name}}
+    
+  
+              <!-- </td> -->
+
+            </tr>
+            </td>
+            <td>
+
+            <tr *ngFor="let somefour of sometwo?.task">
+                
+                  <!-- <td rowspan="1000"> -->
+                    {{somefour?.duration}}
+                  <!-- </td> -->
+                   
+               </tr> 
+             
+            
+          </td>
+          <td>
+            <tr *ngFor="let somefour of sometwo?.task">
+              {{ somefour?.total_duration }}
+           </tr>
+          </td>
+   
+        </tr>
+                        
+            
+  
+      </tbody>
+
+      
+      
+    </table>
+  </div>
+  <div *ngIf="reportList?.data?.length == 0 || reportList == undefined" class="NodataAlign text-center">
+    No Records Found...
+  </div>
+  <div class="cus-taskPageBtnsDiv">
+    <button [disabled]="hasPrevious === false" (click)="previousPage()">
+      <mat-icon>arrow_backward</mat-icon>
+    </button>
+    <div>
+      <p class="cus-btnActive">
+        {{ this.pageNumbers }}
+      </p>
+    </div>
+    <button [disabled]="hasNext === false" (click)="nextPage()">
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+  
+</div>
+<div  *ngIf="isTaskView">
+  <app-taskviews (OnCancel1)="backtoreport()"></app-taskviews>
+</div>

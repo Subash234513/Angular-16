@@ -1,0 +1,56 @@
+.headertitle{
+    margin-left: 3%;
+} 
+
+.spacebtwfield{
+    margin-left: 50px;
+}
+
+.buttonsize{
+    border-radius:40px;
+    margin-left: 50px;
+}
+
+.radiobtnwdth{
+    margin-left: 10px;
+}
+
+.plusreset{
+    margin-top: -4%;
+    margin-left: 60%;
+}
+
+tbody td {
+	padding: 0.5em 0.1em 0.1em;
+}
+.cursor{
+    cursor: pointer;
+}
+th, td{
+    text-align:center;
+}
+.NodataAlign{
+    text-align: center;
+}
+
+.table td.rightalign {
+    text-align: right;
+}
+
+.table td.leftalign {
+    text-align: left;
+}
+
+// .block1, .plusreset
+// {
+//     display:inline;
+// }
+// #block_container {
+//     display: flex;
+//     justify-content: center;
+// }
+.tablescroll{
+    height:400px;
+    width:100%;
+    overflow:auto; 
+  }

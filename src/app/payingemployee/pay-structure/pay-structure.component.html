@@ -1,0 +1,267 @@
+<!-- <div class="container mt-5">
+    <form action="" [formGroup]="empdetails"> -->
+    <!-- <div class="form-group col-12">
+        <input type="text" name="" id="" placeholder="TakeHome" class="form-control col-3">
+    </div>
+    <div class="col-12 d-flex">
+        <input type="text" placeholder="CTC" class="form-control col-3">
+        <span class="col-1"></span>
+        <label for="" class="col-3 text-center">Monthly</label>
+        <span class="col-1"></span>
+        <label for="" class="col-3 text-center">Yearly</label>
+    </div> -->
+    <!-- <div class="col-12 name">
+        R. SELVAKUMAR's Pay Structure
+    </div>
+    <div class="col-12 mt-5 row">
+        <div class="col-4"> -->
+            <!-- <h4>Basic mat-select</h4> -->
+            <!-- <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-4"> -->
+            <!-- <h4>Basic mat-select</h4> -->
+            <!-- <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-4"> -->
+            <!-- <h4>Basic mat-select</h4> -->
+            <!-- <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="container " > -->
+        
+        <!-- <table class="table " style="height:50px" >
+            <thead class="bg-dark text-light">
+                <th>SALARY COMPONENTS
+                </th>
+                <th>CALCULATION</th>
+                <th>
+                    MONTHLY</th>
+                <th>
+                        YEARLY</th>
+            </thead>
+            <tbody class="body ">
+                <tr>
+                    <td>Take Home</td>
+                    <td></td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <input matInput formControlName="yrtakeHome" style="text-align: right;">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td >Gross Remuneration</td>
+                    <td></td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline">
+                            <input matInput formControlName="yrtakeHome" style="text-align: right;">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table> -->
+        <!-- start -->
+        <!-- <div class="row col-12 border d-flex align-items-center bg-dark text-light" style="height: 50px;">
+            <div class="col-md-3">SALARY COMPONENTS</div>
+            <div class="col-md-3">CALCULATION</div>
+            <div class="col-md-3">MONTHLY</div>
+            <div class="col-md-3">YEARLY</div>
+        </div>
+        <div class="">
+        <div class="row col-12 skyblue">
+            <div class="col-md-3 pt-3  ">Task Home</div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" >
+                </mat-form-field><span>%</span>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input type="number" matInput formControlName="monthtakeHome" >
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input matInput formControlName="yrtakeHome" >
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue" >
+            <div class="col-md-3" style="cursor: pointer;" (click)="Gross()">Gross Remuneration</div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" >
+                </mat-form-field><span>%</span>
+                </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input type="number" matInput formControlName="monthGrossGeneration" >
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input matInput formControlName="yrGrossGeneration" >
+                </mat-form-field>
+            </div>
+
+        </div>
+        
+        <div *ngIf="hide" formArrayName="GrossRemuneration" class="">
+            <div *ngFor="let emp of empdetails.get('GrossRemuneration')['controls']; let i=index;">
+                <div class="row col-12 d-flex align-items-center skyblue" [formGroupName]="i" *ngFor="let first of Sampledatafirst" >
+                    <div class="col-md-3">{{first.paycomponent_name}}</div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="perwidth">
+                            <input type="number" matInput formControlName="Grossper" >
+                        </mat-form-field><span>%</span>
+                        </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="alignValue">
+                            <input type="number" matInput formControlName="monthGrossGenerationFirst" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="alignValue">
+                            <input matInput formControlName="yrGrossGenerationFirst" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue" >
+            <div class="col-md-3" style="cursor: pointer;" (click)="showG()">Show Remuneration</div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" >
+                </mat-form-field><span>%</span>
+                </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input type="number" matInput formControlName="monthGrossGeneration" >
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="alignValue">
+                    <input matInput formControlName="yrGrossGeneration" >
+                </mat-form-field>
+            </div>
+
+        </div>
+        
+        <div *ngIf="show" formArrayName="showRemuneration" class="">
+            <div *ngFor="let emp of empdetails.get('GrossRemuneration')['controls']; let i=index;">
+                <div class="row col-12 d-flex align-items-center skyblue" [formGroupName]="i" *ngFor="let first of Sampledatafirst" >
+                    <div class="col-md-3">{{first.paycomponent_name}}</div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="perwidth">
+                            <input type="number" matInput formControlName="Grossper" >
+                        </mat-form-field><span>%</span>
+                        </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="alignValue">
+                            <input type="number" matInput formControlName="monthGrossGenerationFirst" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="alignValue">
+                            <input matInput formControlName="yrGrossGenerationFirst" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- stop -->
+            <!-- <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-md-3">2</div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" style="width: 30%;">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field><span>%</span>
+                    </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthGrossGenerationSecond" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrGrossGenerationSecond" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+    
+            </div>
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-md-3">3</div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" style="width: 30%;">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field><span>%</span>
+                    </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthGrossGenerationThird" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrGrossGenerationThird" style="text-align: right; "formControlName="">
+                    </mat-form-field>
+                </div>
+    
+            </div>
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-md-3">4</div>  
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" style="width: 30%;">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field><span>%</span>
+                    </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthGrossGenerationFourth" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrGrossGenerationFourth" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+    
+            </div> -->
+        
+    <!-- </div>
+    </div>
+</form>
+</div> -->

@@ -1,0 +1,240 @@
+<div class="pl-5 mt-5">
+    <div *ngIf="Searchform">
+        <h2 class="ReportColumns">ReportColumns</h2>
+        <div class="row col-md-10">
+            <div class="col-3 display pad">
+                <form action="">
+                <mat-form-field >
+                    <mat-label>Name</mat-label>
+                    <input  matInput [formControl]="NameSearch">
+                </mat-form-field>
+            </form>
+            </div>
+            <div class=" row col-5 display">
+                <div class="col-2">
+                    <button mat-stroked-button type="button" class="button"
+                aria-label="Search"
+                (click)="Search()">
+                <mat-icon>search</mat-icon>
+            </button>
+                </div>
+                <div class="col-2">
+                    <button mat-stroked-button type="button"  class="clear" (click)="clear()">Clear</button>
+                </div>
+                <div class="col-6">
+                    <!-- <button type="button" class="add"> -->
+                        <!-- <i class="fa-solid fa-plus-circle" style="color: #0259ed;font-size:32px;cursor:pointer" matTooltip="Add" (click)="Add()"></i> -->
+                        <button type="button" class="add" (click)="Add()" mat-fab>
+                            <mat-icon matTooltip="Add"  style="color: black;">add</mat-icon>
+                        </button>
+                    <!-- </button> -->
+            
+                        <button type="button" id="add" mat-fab 
+                        (click)="uploadfile()">
+                        <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                    </button>
+                </div>
+                
+            
+
+      
+
+            </div>
+            <div class="col-3">
+                
+            </div>
+        </div>
+    </div>
+    <div *ngIf="Createform">
+        <form [formGroup]="CreateForm">
+            <h2 class="ReportColumns">Report Columns Add</h2>
+            <!-- <mat-form-field> -->
+                <div class="col-12 row">
+                    <!-- <div class="col-6 row"> -->
+                        <div class="col-4">
+                            <!-- <div class="form-group"> -->
+                                <label>Name</label><br>
+                            <mat-form-field>
+                                <input type="text" matInput formControlName="name">
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                        <div class="col-4" style="    margin-left: -10%;">
+                            <!-- <div class="form-group"> -->
+                            <label>Type</label><br>
+                            <mat-form-field>
+                                <!-- <select name="" id="" formControlName="Dropdown" class="form-control pr-1" >
+                                    <option value="">a</option>
+                                    <option value="">B</option>
+                                    <option value="">C</option>
+                                </select> -->
+                                <mat-select formControlName="type" (selectionChange)="onSelectionChange($event.value)">
+                                    <mat-option *ngFor="let data of DropdownData" [value]="data.id">
+                                        {{data.type}}
+                                    </mat-option>
+                                    
+                                </mat-select>
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                        <div class="col-4" style="    margin-left: -10%;">
+                            <!-- <div class="form-group"> -->
+                            <label>Linked Columns</label><br>
+                            <mat-form-field>
+                                <!-- <select name="" id="" formControlName="Dropdown" class="form-control pr-1" >
+                                    <option value="">a</option>
+                                    <option value="">B</option>
+                                    <option value="">C</option>
+                                </select> -->
+                                <mat-select formControlName="link_columns">
+                                    <mat-option *ngFor="let data of linkeddata" [value]="data">
+                                        {{data}}
+                                    </mat-option>
+                                    
+                                </mat-select>
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                      
+                        
+                    <!-- </div> -->
+               
+            </div>
+            <div class="ml-3 mt-3">
+                <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                <button class="btn btn-primary ml-2" (click)="submit()" [disabled]="!CreateForm.valid">Submit</button>
+            </div>    
+            <!-- </mat-form-field> -->
+        </form>
+    </div>
+    <div *ngIf="Editform">
+        <form [formGroup]="EditForm">
+            <h2 class="ReportColumns">Report Columns Edit</h2>
+            <!-- <mat-form-field> -->
+                <div class="col-12 row">
+                    <!-- <div class="col-6 row"> -->
+                        <div class="col-4">
+                            <!-- <div class="form-group"> -->
+                                <label>Name</label><br>
+                            <mat-form-field>
+                                <input type="text" matInput formControlName="name">
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                        <div class="col-4" style="margin-left: -10%;">
+                            <!-- <div class="form-group"> -->
+                            <label>Type</label><br>
+                            <mat-form-field>
+                                <!-- <select name="" id="" formControlName="Dropdown" class="form-control pr-1" >
+                                    <option value="">a</option>
+                                    <option value="">B</option>
+                                    <option value="">C</option>
+                                </select> -->
+                                <mat-select formControlName="type">
+                                    <mat-option *ngFor="let data of DropdownData" [value]="data.id">
+                                        {{data.type}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                        <div class="col-4" style="margin-left: -10%;">
+                            <!-- <div class="form-group"> -->
+                            <label>Linked Columns</label><br>
+                            <mat-form-field>
+                                <!-- <select name="" id="" formControlName="Dropdown" class="form-control pr-1" >
+                                    <option value="">a</option>
+                                    <option value="">B</option>
+                                    <option value="">C</option>
+                                </select> -->
+                                <mat-select formControlName="link_columns">
+                                    <mat-option *ngFor="let data of linkeddata" [value]="data">
+                                        {{data}}
+                                    </mat-option>
+                                    
+                                </mat-select>
+                            </mat-form-field>
+                               
+                            <!-- </div> -->
+                        </div>
+                      
+                        
+                    <!-- </div> -->
+               
+            </div>
+            <div class="ml-3 mt-3">
+                <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                <button class="btn btn-primary ml-2" (click)="update()" [disabled]="!EditForm.valid">Update</button>
+            </div>
+                
+            <!-- </mat-form-field> -->
+        </form>
+    </div>
+    <div class="padTable" *ngIf="Summarytable">
+        <div class="table-responsive" style="width: 600px;">
+            <table class="table border text-center">
+                <thead class="border">
+                    <th class="border text-center">Name</th>
+                    <th class="border text-center">Type</th>
+                    <th class="border text-center">Linked Columns</th>
+                    <th class="border width text-center">Edit</th>
+                    <th class="border width text-center">Delete</th>
+                </thead>
+                <tbody class="border">
+                    <tr  *ngFor="let data of SummaryData; let i=index">
+                        <td class="border text-center">{{data.name}}</td>
+                        <td class="border text-center">{{data.type.type}}</td>
+                        <td class="border text-center">{{data.link_columns}}</td>                        
+                        <td class="border width text-center"><i class="fa-solid fa-pencil" (click)="edit(data.id)"></i></td>
+                        <td class="border width text-center"><i class="fa-solid fa-trash-can" (click)="delete(data.id)"></i></td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                <button type="button" (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                    color="primary" >
+                    <mat-icon>arrow_back</mat-icon>
+                </button> 
+                {{pagination.index}}
+                <button type="button" (click)="nextpage()" mat-icon-button color="primary" [disabled]="pagination.has_next === false"
+                    >
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+<div *ngIf="isFileUpload">
+    <div class="card">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="cancelupload()" style="margin-left: 4%;">
+                Cancel
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+                Download Template
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>

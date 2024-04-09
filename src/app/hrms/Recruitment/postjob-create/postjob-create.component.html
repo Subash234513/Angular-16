@@ -1,0 +1,299 @@
+<div class=" structure">
+    <form [formGroup]="CreateJobPostingForm">
+        <div class="row">
+
+            <div class=" col-lg-12">
+                <table>
+                    <tr>
+                        <td colspan="3">
+                            <mat-label>Job Title</mat-label><br>
+                            <mat-form-field class="longInput">
+                                <input type="text" matInput autocomplete="off" placeholder="Job Title"
+                                    formControlName="job_title">
+                            </mat-form-field>
+                        </td>
+                        <td class="spaceForField">
+
+                            <mat-label>Job Type</mat-label><br>
+                            <mat-form-field>
+                                <mat-select formControlName="job_type" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of PostJobCreateObjects.JobTypeList"
+                                        title=" {{boolean.text}}" [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label>Work Mode</mat-label><br>
+                            <mat-form-field>
+                                <mat-select formControlName="work_mode" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of PostJobCreateObjects.WorkModeList"
+                                        title=" {{boolean.text}}" [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+                            <mat-label>Department</mat-label><br>
+                            <mat-form-field>
+                                <input #deptInput placeholder="Select group" type="text" matInput
+                                    (keyup)="getdepartment(CreateJobPostingForm.value.department_id)"
+                                    class="matformfieldinputstyle" formControlName="department_id"
+                                    [matAutocomplete]="dept">
+                                <mat-autocomplete #dept="matAutocomplete" [displayWith]="displayFndepartment_id">
+                                    <mat-option *ngFor="let obh of PostJobCreateObjects.detartmentList" [value]="obh">
+                                        {{obh.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label>Hiring Manager</mat-label><br>
+                            <mat-form-field>
+                                <input #managerInput placeholder="Select group" type="text" matInput
+                                    (keyup)="getHiringmanger(CreateJobPostingForm.value.hiring_manager)"
+                                    class="matformfieldinputstyle" formControlName="hiring_manager"
+                                    [matAutocomplete]="manager">
+                                <mat-autocomplete #manager="matAutocomplete" [displayWith]="displayFnManger">
+                                    <mat-option *ngFor="let obh of PostJobCreateObjects.ManagerList" [value]="obh">
+                                        {{obh.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        <td>
+
+                            <mat-label>No of Positions.</mat-label><br>
+                            <mat-form-field class="widthFieldDual">
+                                <input type="text" matInput autocomplete="off" placeholder="No of Positions"
+                                    formControlName="no_opening">
+                            </mat-form-field>
+                        </td>
+
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-label>Salary Type</mat-label><br>
+                            <mat-form-field>
+                                <mat-select formControlName="salary_type" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of PostJobCreateObjects.salary_typeList"
+                                        title=" {{boolean.text}}" [value]="boolean.id">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td class="spaceForField">
+                            <mat-label>Currency Type</mat-label><br>
+                            <mat-form-field>
+                                <mat-select formControlName="currency_type" placeholder="Type">
+                                    <mat-option *ngFor="let boolean of PostJobCreateObjects.currency_typeList"
+                                        title=" {{boolean.text}}" [value]="boolean">
+                                        {{boolean.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td class="spaceForField">
+                            <mat-label>Salary Range</mat-label>
+                            <div class="input-group">
+                                <input type="number" class="form-control widthFieldDual" formControlName="min_salary">
+                                <input type="number" class="form-control widthFieldDual" formControlName="max_salary">
+                            </div>
+                            <mat-hint> {{this.CreateJobPostingForm.value.min_salary | amountPipe:
+                                this.CreateJobPostingForm.value.currency_type.symbol }} -
+                                {{this.CreateJobPostingForm.value.max_salary | amountPipe:
+                                this.CreateJobPostingForm.value.currency_type.symbol}}</mat-hint>
+                        </td>
+
+
+                        <td class="spaceForField">
+                            <mat-label>Experience Range</mat-label>
+                            <div class="input-group">
+                                <input type="number" class="form-control widthFieldDual" formControlName="min_exp">
+                                <input type="number" class="form-control widthFieldDual" formControlName="max_exp">
+                            </div>
+                            <mat-hint> In years (eg: 0.6 to 2 ) </mat-hint>
+                        </td>
+
+                    </tr>
+                </table>
+
+
+                <table>
+                    <tr>
+                        <mat-label> Location </mat-label><br>
+                        <mat-form-field class="example-chip-list longInput">
+                            <mat-chip-grid #chipListLocation aria-label="joblocation selection">
+                                <mat-chip-row
+                                    *ngFor="let joblocation of this.CreateJobPostingForm.get('location')['controls']"
+                                    [removable]="removable"
+                                    (removed)="removelocation(joblocation)">
+                                    {{joblocation}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip-row>
+                                <input placeholder="Location" [matChipInputFor]="chipListLocation"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addlocation($event)"
+                                    formControlName="locationInput">
+                            </mat-chip-grid>
+                        </mat-form-field>
+                    </tr>
+                    <tr>
+                        <mat-label> Skills </mat-label><br>
+                        <mat-form-field class="example-chip-list longInput">
+                            <mat-chip-grid #chipListSkills aria-label="skill_set selection">
+                                <mat-chip-row
+                                    *ngFor="let skill_set of this.CreateJobPostingForm.get('skill_set')['controls']"
+ [removable]="removable"
+                                    (removed)="removeskill_set(skill_set)">
+                                    {{skill_set}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip-row>
+                                <input placeholder="Skills" [matChipInputFor]="chipListSkills"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addskill_set($event)"
+                                    formControlName="skill_setInput">
+                            </mat-chip-grid>
+                        </mat-form-field>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-label> Approver </mat-label><br>
+                            <mat-form-field class="longInput" (click)="getemp('')">
+                                <mat-chip-grid #chipListempapproval>
+                                    <mat-chip-row *ngFor="let empl of chipSelectedempapproval"
+                                        [removable]=true (removed)="removedempapproval(empl)">
+                                        {{empl.name}}
+                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                    </mat-chip-row>
+                                    <input #empapprovalInput [formControl]="empapproval_id"
+                                        [matAutocomplete]="empapproval" placeholder="Select Approver"
+                                        class="matformfieldinputstyle" (keyup)="getemp(empapproval_id.value)"
+                                        [matChipInputFor]="chipListempapproval"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]=true>
+                                </mat-chip-grid>
+
+                                <mat-autocomplete #empapproval="matAutocomplete"
+                                    (optionSelected)="empapprovalSelected($event)">
+                                    <mat-option *ngFor="let emp of empList" [value]="emp">
+                                        {{emp.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+
+
+        </div>
+
+    </form>
+
+    <div class=" col-lg-12">
+
+        <h2>Additional Info</h2>
+        <small>Note:
+            For Additional Information please fill 'Label field' and 'Type of field' above (eg: Date field, Text
+            field,
+            Number field)
+        </small> <br>
+
+        <form [formGroup]="OptionalFields">
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="ml-4">
+                            <mat-label>Label</mat-label>
+                            <input matInput formControlName="name" type="text" #NameOfText>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="ml-4">
+                            <mat-label>Type Of Field</mat-label>
+                            <mat-select formControlName="type" placeholder="Choose">
+                                <mat-option *ngFor="let boolean of DataDropDown" title=" {{boolean.text}}"
+                                    [value]="boolean.type">
+                                    {{boolean.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td> <button class="mat-raised-button ml-4" (click)="SelectedCreateFormData()">Add</button>
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </form>
+
+
+
+
+        <form [formGroup]="additional_info">
+            <div *ngFor="let control of SelectedDataJson" class="row ml-2">
+
+                <div class="col" *ngIf="[ 'text', 'number', 'date'].includes(control.type)">
+                    <mat-form-field>
+                        <mat-label *ngIf="control.label !== ''">{{ control.label }}</mat-label>
+                        <input matInput [type]="control.type" [formControlName]="control.name" value="control.value">
+                    </mat-form-field>
+                    <mat-icon (click)="removecontrol(control.name)">close</mat-icon>
+
+                </div>
+
+                <div class="col" *ngIf="control.type == 'textarea' ">
+
+                    <!-- <mat-label *ngIf="control.label !== ''">{{ control.label }}</mat-label>
+                <textarea [formControlName]="control.name" cols="10" rows="10"></textarea> -->
+                    <mat-form-field>
+                        <mat-label *ngIf="control.label !== ''">{{ control.label }}</mat-label>
+                        <textarea matInput [formControlName]="control.name"></textarea>
+                    </mat-form-field>
+
+
+                    <!-- <div class="col"> -->
+                    <mat-icon (click)="removecontrol(control.name)">close</mat-icon>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+
+        </form>
+
+        <button id="submitBtn" class="btn btn-light" (click)="SubmitJobPost()"> Submit</button>
+        <button id="WhiteBtn" class="btn btn-light" (click)="BackToSummary()"> Back</button>
+
+    </div>
+</div>
+
+
+<!-- <pre>
+    1 {{CreateJobPostingForm.value | json}}
+    2 {{CreateJobPostingForm.get('skill_set')['controls'] | json}} 
+    3 {{CreateJobPostingForm.get('location')['controls'] | json}}
+    4 {{additional_info.value | json}} 
+</pre> -->
+
+
+
+
+
+<!-- "department_id": '',
+    "hiring_manager" : '' ,
+    "no_opening" : '',
+    "currency_type" : '',
+    "salary_type" : '',    -->

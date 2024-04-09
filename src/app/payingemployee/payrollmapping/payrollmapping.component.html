@@ -1,0 +1,51 @@
+<div class="table" >
+    
+    <div>
+        <h3 class="payrollmapping" >Payroll Mapping</h3>
+        <div class="table-responsive">
+
+            <table class="table border" id='commonstyle' >
+                <thead class="table_header border">
+                    <tr>
+                        <th class="border text-center">S.no</th>    
+                        <th class="border text-center">Grade</th>                        
+                        <th class="border text-center">Template Name</th>
+                        <th class="border text-center">Segment Name</th>
+                        <th class="border text-center">Paycomponent Name</th>
+                        <th class="border text-center">Percentage</th>
+                        <th class="border text-center">Amount</th>                       
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sum of summarylist;index as ind">
+                        <td class="border text-center">{{(pagination.index-1)*limit+ind+1}}</td>
+                        <td class="border text-center">{{sum?.template?.grade?.name}}</td>
+                        <td class="border text-center">{{sum?.template?.name}}</td>
+                        <td class="border text-center">
+                          {{sum?.segment?.name}}
+                        </td>
+                        <td class="border text-center">
+                            {{sum?.paycomponent?.name}} 
+                        </td>
+                
+                        <td class="border text-center">{{sum?.paycomponent?.percentage}} %</td>
+                        <td class="border text-center">{{sum?.amount | currency: 'INR'}}</td>
+                       
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-sm-12" id='prevpage' >
+              <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                  color="primary">
+                  <mat-icon class="customIconSize">arrow_back</mat-icon>
+              </button>
+              {{pagination.index}}
+              <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                  color="primary">
+                  <mat-icon class="customIconSize">arrow_forward</mat-icon>
+              </button>
+  
+          </div>
+        </div>
+    </div>
+</div>

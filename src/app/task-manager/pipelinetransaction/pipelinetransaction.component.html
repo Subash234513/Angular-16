@@ -1,0 +1,22 @@
+<div>
+    <nav>
+      <p
+      class="nav-links"
+        #myDiv
+        data-toggle="tab"
+        (click)="subModuleData(sub)"
+        [ngClass]="{ btnActive: sub.name == tabname }"
+        role="tab"
+        *ngFor="let sub of piplinelise; index as i"
+      >
+        {{ sub.name }}
+      </p>
+    </nav>
+  </div>
+  <div *ngIf="verified_task">
+    <app-pipeline> </app-pipeline>
+  </div>
+  <div *ngIf="pipeline">
+    <app-pipelinerelease></app-pipelinerelease>
+  </div>
+  

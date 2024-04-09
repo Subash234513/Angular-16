@@ -1,0 +1,45 @@
+<div>
+    <div class="card">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" >
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+              <button class="btn btn-outline-info" type="button"  style="margin-left: 4%;">
+                Cancel
+              </button>
+              <button class="btn btn-outline-info" type="button"  style="    margin-left:35%;">
+                Download Template
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+</div>
+<!-- <table cellspacing="0" cellpadding="0">
+    <tr>
+      <th *ngFor="let header of tableTitle">{{ header }}</th>
+    </tr>
+    <tr *ngFor="let data of tableRecords; let i = index">
+      <td *ngFor="let header of tableTitle">
+        {{ data[header] }}
+      </td>
+    </tr>
+  </table> -->
+<div class="table-responsive">
+  <table class="table table-bordered ">
+      <tr *ngFor="let row of data">
+        <td class="text-center" *ngFor="let fun of row">
+          {{fun}}
+        </td>
+      </tr>
+  </table>
+</div>

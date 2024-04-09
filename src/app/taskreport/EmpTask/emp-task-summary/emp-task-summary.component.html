@@ -1,0 +1,594 @@
+<div class="row marginset" *ngIf="EmpTaskObj.EmpTaskSummary">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h3 (click)="BackToSummaryToAttendanceLog()"> <span class="material-icons alignmiddle" *ngIf="this.EmpTaskObj.backmenu">arrow_back</span> My Tasks</h3>  
+        <form [formGroup]="EmpTaskSummary">
+            <table>
+                <tr>
+                    <!-- <td>
+                            <mat-label>From Date</mat-label><br>
+                            <mat-form-field>
+                                <input matInput readonly [matDatepicker]="picker1" formControlName="start_date">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td class="padsize">
+                            <mat-label>To Date</mat-label><br>
+                            <mat-form-field>
+                                <input matInput readonly [matDatepicker]="picker2" formControlName="end_date"
+                                    [min]="EmpTaskSummary.value.start_date">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+
+                        </td>
+                        <td class="padsize">
+                            <mat-label>Dev Type </mat-label><br>
+                            <mat-form-field>
+                                <mat-select formControlName="dev_type">
+                                    <mat-option *ngFor="let devtype of EmpTaskObj.devtypelist" [value]="devtype.id">
+                                        {{devtype.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </td> -->
+                    <!-- <td>
+                            <mat-label>Client</mat-label><br>
+                            <mat-form-field>
+
+                                <input #cltInput matInput formControlName="client" [matAutocomplete]="clt"
+                                    (keyup)="clientsearch(this.EmpTaskSummary.value.client)">
+                                <mat-icon matSuffix>unfold_more</mat-icon>
+                                <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt">
+
+                                    <mat-option *ngFor="let clt of EmpTaskObj.clientList" [value]="clt">
+                                        {{clt.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td> 
+
+
+                        <td class="padsize">
+                            <mat-label>Project Name</mat-label><br>
+                            <mat-form-field>
+                                <input #appnmInput matInput formControlName="app_id" [matAutocomplete]="appnm"
+                                    (keyup)="Projectsearch(this.EmpTaskSummary.value.app_id)">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm">
+
+                                    <mat-option *ngFor="let  appnm of EmpTaskObj.appNameList" [value]="appnm">
+                                        {{appnm.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        <td class="padsize">
+                            <mat-label>Module Name</mat-label><br>
+                            <mat-form-field>
+
+                                <input #modnmInput matInput formControlName="module_id"
+                                    (keyup)="getModule(this.EmpTaskSummary.value.module_id)" [matAutocomplete]="modnm">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #modnm="matAutocomplete" [displayWith]="displayFnmodnm">
+                                    <mat-option *ngFor="let modnm of EmpTaskObj.moduleNameList" [value]="modnm">
+                                        {{modnm.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td> -->
+                    <td>
+                        <mat-label>From Date</mat-label><br>
+                        <mat-form-field class="widthsmall">
+                            <input matInput readonly [matDatepicker]="picker1" formControlName="from_date"
+                                (dateChange)="ChangeDateFormatCommon('EmpTaskSummary', 'from_date', 'form')">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td class="padsize">
+                        <mat-label class="gapBtween">To Date</mat-label><br>
+                        <mat-form-field class="widthsmall gapBtween">
+                            <input matInput readonly [matDatepicker]="picker2" formControlName="to_date"
+                                (dateChange)="ChangeDateFormatCommon('EmpTaskSummary', 'to_date', 'form')"
+                                [min]="EmpTaskSummary.value.from_date">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+
+                    </td>
+                    <td class="padsize">
+                        <mat-label class="gapBtween">Status</mat-label><br>
+                        <mat-form-field class="widthsmall gapBtween">
+                            <mat-select formControlName="status">
+                                <mat-option *ngFor="let status of EmpTaskObj.statusList" [value]="status.id">
+                                    {{status.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+
+                    <!-- <td  class="padsize">
+                            <mat-label>Team Lead</mat-label><br>
+                            <mat-form-field>
+
+                                <input #teamldInput matInput formControlName="team_lead" [matAutocomplete]="teamld"
+                                    (keyup)="getTeamLead(this.EmpTaskSummary.value.team_lead)">
+                                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+
+                                    <mat-option *ngFor="let teamld of EmpTaskObj.teamldList" [value]="teamld">
+                                        {{teamld.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td> -->
+                    <!-- </tr>
+                    <tr> -->
+                    <td>
+                        <!-- <div class="col-md-4"> -->
+                            <button type="button" class="gapBtween" mat-stroked-button  style="background-color: white;"
+                            aria-label="Search"
+                                (click)="TaskSearch('')">
+                                <mat-icon matTooltip="Search">search</mat-icon>
+                            </button>
+
+                            <button type="button" class="gapBtween" mat-stroked-button  style="background-color: white;"
+                            aria-label="Search"  (click)="EmpTaskSummary.reset(); TaskSearch('')">
+                                Reset
+                            </button>
+
+                        <!-- </div> -->
+                    </td>
+                    <!-- <td>
+                        <div class="col-md-4">
+                            <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                (click)="TaskSearch('')">
+                                <mat-icon matTooltip="Search">search</mat-icon>
+                            </button>
+
+                        </div>
+                    </td> -->
+                    <td>
+                         
+                            <!-- <button type="button" style="  border-radius: 10px;margin-left: 10px;border-color: #f5c68b;
+                            background-color: #f5c68b;" class="btn btn-light" 
+                                (click)="getAddScreen()">
+                                <mat-icon matTooltip="Add">add</mat-icon> Add Task 
+                            </button> -->
+
+                            <button type="button" style="  border-radius: 10px ;border-color: #f5c68b;
+                                background-color: #f5c68b;" class="btn btn-light gapBtween" 
+                                    (click)="getAddScreen()"><i class="fa fa-plus-circle"></i> Add Task</button>
+ 
+                    </td>
+
+                    <td>
+                        <!-- data-toggle="modal" data-target="#exampleModal"  -->
+                        <button type="button" class="btn btn-primary gapBtween"   (click)="TaskHourReport()">
+                            Task History
+                        </button>
+
+
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered" style="width: 90%">
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Task</th>
+                        <th>Labels</th>
+                        <th>Status</th>
+                        <th>Due Date </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <ng-container *ngFor="let type of EmpTaskObj?.taskLists; index as i">
+                        <tr>
+                            <td>{{(EmpTaskObj?.presentpageTask - 1) * EmpTaskObj.pagesize +i+1 }}</td>
+                            <td>
+                                <div> <span class="badge" [ngClass]="'othersColor'">{{type?.code}}</span> - <span
+                                        title="{{type?.task}}"> {{ (type?.task.length>25)?
+                                        (type?.task | slice:0:25)+'..':(type.task) }} </span>
+                                </div>
+                            </td>
+
+                            <td> <span class="badge" [ngClass]="type?.dev_type == 'New' ? 'primarycolor': 
+                                    type?.dev_type == 'Bug Fix' ? 'othersColor':
+                                    type?.dev_type == 'Enhancement' ? 'infoStatement':
+                                    type?.dev_type == 'Training' ? 'othersColor': 'othersColor' ">
+                                    {{type?.dev_type}}
+                                </span> &nbsp;
+
+                            </td>
+                            <td><span class="badge" [ngClass]="type?.task_status == 'Completed' ? 'successStatus': 
+                            type?.task_status == 'Yet to Start' ? 'primarycolor': 
+                            type?.task_status == 'Verified' ? 'successStatus': 
+                            type?.task_status == 'Draft' ? 'infoStatement': 
+                            type?.task_status == 'Work in Progress' ? 'othersColor': 
+                            type?.task_status == 'Rejected' ? 'redcolor': 'othersColor'    ">
+                                    {{type?.task_status}}
+                                </span> </td>
+
+
+                            <!-- {id: 1, text: "New"} {id: 2, text: "Bug Fix"} {id: 3, text: "Enhancement"}
+                              {id: 4, text: "Training"} {id: 5, text: "BAU Maintenance"} -->
+                            <td>
+                                <span> {{type.end_date| date: 'dd-MMM-yyyy'}}
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <span class="material-icons" (click)="showPopUp(type); EndDateCalculate(type)"> visibility
+                                </span>
+
+
+                            </td>
+
+                        </tr>
+                        <tr *ngIf="type?.DynamicStatusCall == true">
+                            <td colspan="10">
+                                <div class="marginAndpadding">
+
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <h3> <span class="badge badge-secondary">{{type?.code}}</span> -
+                                                {{type?.task}} </h3>
+                                            <!-- <p class="createdby">By: {{type?.assigned_by?.full_name}} </p> -->
+
+                                            <div class="flexdirection">
+                                                <div class="marginsetMiddle">
+                                                    <span class="badge badge-pill badge-light">
+                                                        <span class="material-icons fontsize alignvertical">tag</span>
+                                                        <span class="alignvertical"> {{type?.client_name}} </span>
+                                                        <span
+                                                            class="material-icons fontsize alignvertical">arrow_forward_ios</span>
+                                                        {{type?.app_id}}
+                                                        <span
+                                                            class="material-icons fontsize alignvertical">arrow_forward_ios</span>
+                                                        <span class="alignvertical"> {{type?.module_id}} </span>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                    </span>
+                                                </div>
+
+                                                <div class="marginsetMiddle">
+                                                    <span class="badge"
+                                                        [ngClass]="type?.task_status == 'Completed' ? 'successStatus': 
+                                                        type?.task_status == 'Yet to Start' ? 'primarycolor': 
+                                                        type?.task_status == 'Verified' ? 'successStatus': 
+                                                        type?.task_status == 'Draft' ? 'infoStatement': 
+                                                        type?.task_status == 'Work in Progress' ? 'othersColor': 
+                                                        type?.task_status == 'Rejected' ? 'redcolor': 'othersColor'    ">
+                                                        {{type?.task_status}}
+                                                    </span>
+                                                </div>
+                                                <div class="marginsetMiddle">
+                                                    <span class="badge" [ngClass]="type?.dev_type == 'New' ? 'primarycolor': 
+                                                        type?.dev_type == 'Bug Fix' ? 'othersColor':
+                                                        type?.dev_type == 'Enhancement' ? 'infoStatement':
+                                                        type?.dev_type == 'Training' ? 'othersColor': 'othersColor' ">
+                                                        {{type?.dev_type}}
+                                                    </span> &nbsp;
+                                                </div>
+
+                                            </div>
+
+                                            <div *ngIf="type?.task_status == 'Completed'">
+                                                <br>
+                                                <p>Remarks/Reason: <b><i>{{type?.reason_for_delay}}</i></b> </p>
+                                                <br>
+                                                <p>Delay Days: <button mat-mini-fab [ngClass]="type?.delay_days > 0 ? 'redcolor': 'successStatus' " > {{type?.delay_days}} </button>  </p>
+
+                                            </div>
+
+                                            <div>
+                                                <br>
+
+
+                                                <div *ngIf="type?.task_status_id == 0">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <input readonly placeholder="Date"
+                                                                [matDatepicker]="dynamic1" style="width: 100px;"
+                                                                [ngModel]="type.DynamicDate"
+                                                                (ngModelChange)="type.DynamicDate = $event"
+                                                                (dateChange)='ChangeDateFormat(type)'>
+                                                            <mat-datepicker-toggle class="maticonsize" matSuffix
+                                                                [disabled]="type?.task_status == 'Completed'"
+                                                                [for]="dynamic1">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #dynamic1></mat-datepicker>
+                                                        </div>
+                                                        <div class="col">
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div *ngIf="type?.task_status_id == 1">
+                                                    <div class="table-responsive timertable">
+                                                        <table class="tablestyle">
+                                                            <tr>
+                                                                <th>Sl.No</th>
+                                                                <th>Task Days</th>
+                                                                <th>Hours</th>
+                                                                
+                                                            </tr>
+                                                            <tr *ngFor="let dateHours of type?.emp_hours?.hour_data; let index = index">
+                                                                <td>{{index + 1}}</td>
+                                                                <td> 
+                                                                    {{dateHours?.date | date: 'dd-MM-yyyy'}} 
+                                                                    <ng-container *ngFor="let leaves of dateHours?.adt_ref">
+                                                                        <div title="{{leaves | uppercase }}" class="radleave" 
+                                                                        [ngClass]="'othersColor'">
+                                                                            {{leaves == 'absent' ? 'A': leaves == 'weekend' ? 'W': leaves == 'holiday'? 'H': ''}}
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </td>
+                                                                <td>
+                                                                    <input placeholder="Date" style="width: 100px;"
+                                                                        [readOnly]="type?.task_status == 'Completed'"
+                                                                        [ngModel]="dateHours?.hour"
+                                                                        (ngModelChange)="dateHours.hour = $event">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div>
+                                                        <table>
+                                                            <tr>
+                                                                <td>Actual Date</td>
+                                                                <td>
+                                                                    {{type?.actual_start_date| date:
+                                                                        'dd-MM-yyyy'}} - 
+                                                                    <input readonly placeholder="Date"
+                                                                        [matDatepicker]="dynamic2" style="width: 100px;"
+                                                                        [ngModel]="type.DynamicDate"
+                                                                        (ngModelChange)="type.DynamicDate = $event"
+                                                                        (dateChange)='ChangeDateFormat(type); EndDateCalculate(type)'>
+                                                                    <mat-datepicker-toggle class="maticonsize" matSuffix
+                                                                        [for]="dynamic2"
+                                                                        [disabled]="type?.task_status == 'Completed'">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #dynamic2></mat-datepicker>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+
+                                                                <td colspan="100">
+                                                                    <input placeholder="Reason / Remarks"
+                                                                        style="border: 0; outline: 0;width: 400px"
+                                                                        [readOnly]="type?.task_status == 'Completed'"
+                                                                        [ngModel]="type?.reason_for_delay"
+                                                                        (ngModelChange)="type.reason_for_delay = $event">
+                                                                </td>
+
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <br>
+                                                    <button type="button" class="btn btn-primary gapBtween"
+                                                        *ngIf="type?.task_status_id == 0"
+                                                        (click)="ChaneStatus(1, type)">Open</button>
+                                                    <button type="button" class="btn btn-success gapBtween"
+                                                        *ngIf="type?.task_status_id == 1"
+                                                        (click)="ChaneStatus(2, type)">Complete</button>
+                                                    <button type="button" class="btn btn-secondary gapBtween"
+                                                        *ngIf="type?.task_status_id == 1"
+                                                        (click)="UpdateTask(type)">Update</button>
+
+                                                    <button type="button" class="btn btn-warning gapBtween"
+                                                        *ngIf="type?.task_status_id == 1 "
+                                                        (click)="ChaneStatus(3, type)">Hold</button>
+                                                    <button type="button" class="btn btn-primary gapBtween"
+                                                        *ngIf="type?.task_status_id == 3 "
+                                                        (click)="ChaneStatus(1, type)">Reopen
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-secondary gapBtween"
+                                                        (click)="showPopUp(type)">Close
+                                                    </button>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="centerOfList">
+
+                                                <ul class="list-group">
+
+                                                    <li class="list-group-item">
+                                                        <b>Assigned by:</b> {{type?.assigned_by?.full_name}}
+                                                    </li>
+                                                    <li class="list-group-item"><b>Head/Lead:</b>
+                                                        {{type?.unit_head?.full_name}}/{{type?.team_lead?.full_name}}
+                                                    </li>
+                                                    <li class="list-group-item"><b>Planned Date:</b> {{type?.start_date
+                                                        |
+                                                        date: 'dd-MM-yyyy'}} - {{type?.end_date| date:
+                                                        'dd-MM-yyyy'}}</li>
+                                                    <li class="list-group-item"
+                                                        *ngIf="type?.actual_start_date != 'None'">
+
+
+                                                        <b>Actual Date:</b> {{type?.actual_start_date| date:
+                                                        'dd-MM-yyyy'}}
+                                                        <span *ngIf="type?.actual_end_date != 'None'"> -
+                                                            {{type?.actual_end_date| date: 'dd-MM-yyyy'}} </span>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b> Total: </b> {{type?.hours == 'None' ? '0': type?.hours}} hrs
+                                                    </li>
+
+                                                    <li class="list-group-item" *ngIf="type?.task_status != 'Completed'"
+                                                        [ngClass]="type?.DynamicDelayDaysCount > 0 ? 'bgAlertColor': ''">
+                                                        <b>Delay Days: </b>
+                                                        <span class="blinks"> {{type?.DynamicDelayDaysCount > 0 ?
+                                                            type?.DynamicDelayDaysCount: 0 }} </span>
+                                                    </li>
+
+
+                                                </ul>
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <div *ngIf="EmpTaskObj.taskLists?.length == 0; else leavereqpage" style="margin-left: 42%;">
+                <h3>No Records Found.. </h3>
+            </div>
+            <ng-template #leavereqpage>
+                <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                    <button mat-icon-button [disabled]="EmpTaskObj?.hasPreviousTask === false" color="primary"
+                        (click)="TaskSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    {{EmpTaskObj?.presentpageTask}}
+                    <button mat-icon-button [disabled]="EmpTaskObj?.hasNextTask === false" color="primary"
+                        (click)="TaskSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- SelectedHourDate -->
+                        <div>
+                            <mat-label>Date</mat-label><br>
+                            <mat-form-field>
+                                <input matInput readonly [matDatepicker]="pickerSingle" [formControl]="SelectedHourDate"
+                                    (dateChange)="ChangeDateFormatCommon('EmpTaskSummary', 'end_date', '')">
+                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerSingle">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #pickerSingle></mat-datepicker>
+                            </mat-form-field>
+
+                            <button class="btn btn-light ml-50" id="WhiteBtn" (click)="getTaskHours()">Choose</button>
+                        </div>
+                        <!-- <pre>{{SelectedHourDate.value}}</pre> -->
+
+
+                        <cdk-accordion class="example-accordion">
+                            <cdk-accordion-item
+                                *ngFor="let item of this.EmpTaskObj.SelectedHoursList; let index = index;"
+                                #accordionItem="cdkAccordionItem" class="example-accordion-item" role="button"
+                                tabindex="0" [attr.id]="'accordion-header-' + index"
+                                [attr.aria-expanded]="accordionItem.expanded"
+                                [attr.aria-controls]="'accordion-body-' + index">
+                                <div class="example-accordion-item-header"
+                                    (click)="accordionItem.toggle(); getdataForSelectedDate(item)">
+                                    {{ item| date: 'dd-MM-yyyy' }}
+                                    <span class="example-accordion-item-description material-icons fontsizeicons">
+                                        {{ accordionItem.expanded ? 'expand_less' : 'expand_more' }}
+                                    </span>
+                                </div>
+                                <div class="example-accordion-item-body" role="region"
+                                    [style.display]="accordionItem.expanded ? '' : 'none'"
+                                    [attr.id]="'accordion-body-' + index"
+                                    [attr.aria-labelledby]="'accordion-header-' + index">
+
+                                    <h4>Task Details </h4>
+                                    <ng-container *ngFor="let datadate of EmpTaskObj?.taskHourList">
+                                        <ul class="list-group" *ngFor="let datatask of datadate?.task">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center">
+
+                                                <p><span class="badge badge-secondary">{{datatask?.code}}</span>
+                                                    {{datatask?.desc}} </p>
+                                                <span
+                                                    class="badge badge-primary badge-pill align-items-right">{{datatask?.hours}}</span>
+                                            </li>
+                                        </ul>
+                                    </ng-container>
+
+
+
+
+                                </div>
+                            </cdk-accordion-item>
+                        </cdk-accordion>
+
+
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<div *ngIf="EmpTaskObj.EmpTaskCreate">
+
+    <app-emptask-create (OnSubmit)="SubmitbackToSummary()" (OnCancel)="CancelbackToSummary()"></app-emptask-create>
+
+</div>
+
+
+
+
+<div *ngIf="EmpTaskObj.EmpHoursHistory">
+    <h3 (click)="BackToSummary()"> <span class="material-icons alignmiddle">arrow_back</span> Time Sheet</h3>
+
+    <!-- <app-time-sheet (OnCancel)="CancelbackToSummaryReport()"></app-time-sheet> -->
+    <app-time-sheet ></app-time-sheet>
+
+
+</div>

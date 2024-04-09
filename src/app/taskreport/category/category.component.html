@@ -1,0 +1,87 @@
+<div class="main">
+    <div class="search" *ngIf="isSearch">
+        <form [formGroup]="SearchForm">
+            <div class="SearchField">
+                <div>
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-raised-button>
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div>
+                    <button mat-raised-button>
+                        Clear
+                    </button>
+                </div>
+                <div>
+                    <button mat-raised-button (click)="Add()" class="">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+         
+        </form>
+       
+    </div>
+    <div class="Summarytable" *ngIf="isSummary">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><i class="fa-solid fa-pencil" (click)="Edit()"></i></td>
+                        <td><i class="fa-solid fa-trash-can"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="CreateData" *ngIf="isCreate">
+        <form [formGroup]="CreateForm">
+            <div>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+            </div>
+            <div class="d-flex">
+                <div>
+                    <button mat-raised-button>Cancel</button>
+                </div>
+                <div>
+                    <button mat-raised-button>Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="UpdateData" *ngIf="isUpdate">
+        <form [formGroup]="EditForm">
+            <div>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+            </div>
+            <div class="d-flex">
+                <div>
+                    <button mat-raised-button>Cancel</button>
+                </div>
+                <div>
+                    <button mat-raised-button>Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

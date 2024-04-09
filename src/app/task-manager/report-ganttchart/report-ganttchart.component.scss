@@ -1,0 +1,53 @@
+.reportclass{
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  // grid-template-columns: repeat(3, 1fr);
+  padding: 20px;
+}
+
+.reportBtn {
+  padding: 8px 10px;
+  background-color: #044063;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.reportBtn {
+  padding: 8px 10px;
+  background-color: #044063;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+// Custom Style
+
+.reportContainer {
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 20px;
+}
+
+.reportContainer .mat-form-field {
+  width: 240px;
+}
+
+.reportContainer-sub {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap:10px;
+}
+
+.reportBtn {
+  padding: 8px 12px;
+  background-color: #044063;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+.pointer {cursor: pointer;}

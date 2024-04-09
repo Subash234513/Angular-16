@@ -1,0 +1,27 @@
+.SearchDisplay{
+    display: flex;
+    column-gap: 30px;
+    align-items: center;
+}
+.tableEmergency{
+    font-family: 'Poppins', sans-serif;
+}
+.camma{
+    font-size: 20px;
+    font-weight: bold;
+}
+.NoRecords{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+}
+.PaginationDisplay{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+.back{
+    margin-left: 595px;
+}

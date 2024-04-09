@@ -1,0 +1,190 @@
+<div class="bgcolor">
+    <nav id="navshow">
+        <div class="nav nav-tabs">
+            <span #myDiv class="nav-item nav-link" id="subname" [ngClass]="(i==returnnav)?'active':''" data-toggle="tab"
+                (click)="subModuleData(sub)" role="tab" *ngFor="let sub of Tran_Menu_List;index as i"
+                style="color: black;font-size: medium;">
+                {{sub.name}}
+            </span>
+        </div>
+    </nav>
+
+
+    <div class="mainDiv">
+        <div class="row marginset" *ngIf="isShowTasksummary">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+
+                <h2 class="heading">Tasks</h2>
+                <form [formGroup]="taskSearchForm">
+                    <div class="row">
+                        <div class="col-md-4">                          
+                            <mat-form-field class="searchLabel">
+                                <mat-label>Search Tasks</mat-label>
+                                <input matInput formControlName="query">
+                                <mat-icon matSuffix class="maticonsize" (click)="TaskSearch('')">search</mat-icon>
+
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="filtersdrop">
+                                <mat-label>Filter</mat-label>
+                                <mat-select formControlName="dropfilter" >                                 
+                                  <mat-option>--</mat-option>
+                                  <mat-option *ngFor="let pep of assigns" [value]="pep.id">
+                                    {{pep.name}}
+                                  </mat-option>
+                                </mat-select>
+                              
+                              </mat-form-field>
+                        </div>
+                        <div class="col-md-1">
+                             <mat-icon class="filtersicon">filter_list</mat-icon>
+                        </div>
+                        <div class="col-md-1">
+                            <h3 class="filt">filter</h3>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn" id="addbtn" (click)="onclickTaskAdd()">
+                                + Task
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div  style="margin-left: -3%; width: 103%;">
+                    <table class="table cus-table">
+                        <thead style="background-color: #eeeeef;">
+                            <tr>
+                                <th style="text-align: center;">S.No</th>
+                                <th style="text-align: center;"><mat-icon style="margin-right: 3px;font-size: 18px;font-weight: bold;"> notes</mat-icon>Task</th>
+                                <th style="text-align: center;"><span style="margin-right: 10px;    font-size: 14px;
+                                    font-weight: bold;">@</span>Assignee</th>
+                                <th style="text-align: center;"><span style="margin-right: 10px;    font-size: 14px;
+                                    font-weight: bold;">#</span>Labels</th>
+                                <th style="text-align: center;"><mat-icon  style="margin-right: 3px;font-size: 15px;">arrow_circle_right</mat-icon>Status</th>
+                                <th style="text-align: center;"><mat-icon style="margin-right: 3px;font-size: 15px;font-weight: bold;">calendar_today</mat-icon>Due Date </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <ng-container *ngFor="let type of taskList; index as i">
+                                <tr>
+                                    <td style="text-align: center;">{{(presentpageTask - 1)*pagesizetask +i+1 }}</td>
+                                    <td style="text-align: left;">
+                                        <div> <mat-icon *ngIf="type?.priority_type?.text === 'High'"
+                                                style="color: #f50000" title="High">flag</mat-icon>
+                                            <mat-icon *ngIf="type?.priority_type?.text === 'Normal'"
+                                                style="color: #ffcc00" title="Normal">flag</mat-icon>
+                                            <mat-icon *ngIf="type?.priority_type?.text === 'Low'" style="color: #6fddff"
+                                                title="Low">flag</mat-icon>
+                                            <span class="cus-badgeLightBlack" [ngClass]="'othersColor'"
+                                                (click)="story_TaskView(type.id)">{{type?.code}}</span> - <span
+                                                title="{{type?.task}}" (click)="story_TaskView(type.id)"> {{
+                                                (type?.task.length>25)?
+                                                (type?.task | slice:0:25)+'..':(type.task) }}
+                                            </span>
+
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <div style="display: inline;">
+                                            <ng-container *ngIf="type?.assigned_to && type?.assigned_to.length > 0">
+                                                <div class="circle-badge"
+                                                    title="{{getEmployeeNames(type?.assigned_to)}}">
+                                                    <div *ngIf="type?.assigned_to.length  == 1">
+                                                        {{type?.assigned_to[0]?.name[0] | uppercase}}
+                                                    </div>
+
+                                                    <div *ngIf="type?.assigned_to.length > 1"
+                                                        [matBadge]="type?.assigned_to.length - 1"
+                                                        matBadgePosition="above after" matBadgeSize="small"
+                                                        matBadgeColor="warn">
+                                                        {{type?.assigned_to[0]?.name[0] | uppercase}}
+                                                    </div>
+                                                </div>
+
+                                            </ng-container>
+                                        </div>
+                                    </td>
+
+                                    <td style="text-align: center;">
+                                        <span class="cus-badge">
+                                            <span *ngIf="type?.type == 'New'" class="cus-badgeGreen">New</span>
+                                            <span *ngIf="type?.type == 'Bug Fix'" class="cus-badgeRed">Bug Fix</span>
+                                            <span *ngIf="type?.type == 'Enhancement'"
+                                                class="cus-badgeBlue">Enhancement</span>
+                                            <span *ngIf="type?.type == 'Training'"
+                                                class="cus-badgeYellow">Training</span>
+                                                <span *ngIf="type?.type == 'BAU Maintenance'"
+                                                class="cus-badgeLightGreen">BAU Maintenance</span>
+                                        </span>
+
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span class="cus-badge">
+                                            <span *ngIf="type?.task_status == 'Work in Progress'"
+                                                class="cus-badgeBlue">Work In Progress</span>
+                                            <span *ngIf="type?.task_status == 'Completed'"
+                                                class="cus-badgeGreen">Completed</span>
+                                            <span *ngIf="type?.task_status == 'Yet to Start'"
+                                                class="cus-badgeLightBlack">Yet to Start</span>
+                                            <span *ngIf="type?.task_status == 'Verified'"
+                                                class="cus-badgeYellow">Verified</span>
+                                            <span *ngIf="type?.task_status == 'Draft'"
+                                                class="cus-badgeLightGreen">Draft</span>
+                                            <span *ngIf="type?.task_status == 'Rejected'"
+                                                class="cus-badgeRed">Rejected</span>
+                                        </span>
+                                    </td>
+                                    <!-- <td style="text-align: center;">
+                                        <span> 
+                                            {{ (type?.end_date !== "None") ? (type?.end_date | date:
+                                            'dd/MM/yyyy') : "" }}
+                                        </span>
+                                    </td> -->
+                                    <td style="text-align: center;">
+                                        <span [ngStyle]="{'color': (type?.end_date !== 'None' && !(type?.end_date > today)) ? 'red' : 'black'}">
+                                          {{ (type?.end_date !== 'None') ? (type?.end_date | date: 'dd/MM/yyyy') : '' }}
+                                        </span>
+                                      </td>
+                                      
+                                      
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+                <div *ngIf="taskList?.length==0 || taskList == undefined ; "
+                class="NodataAlign text-center">No Records Found...</div>
+                <div class="cus-pageCount">
+                    <div *ngIf="this.pageNumbers == 1" class="cus-pageNumbers">
+                        <p class="cus-btnActive" style="text-align: center;">{{this.pageNumbers}}</p>    
+                        <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+2}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+3}}</p>            
+                   
+                    </div>
+                    <div *ngIf="this.pageNumbers != 1" class="cus-pageNumbers">
+                        <p style="text-align: center;">{{this.pageNumbers-1}}</p> 
+                        <p class="cus-btnActive" style="text-align: center;">{{this.pageNumbers}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                        <p style="text-align: center;">{{this.pageNumbers+2}}</p>               
+                   
+                    </div>
+                    <button  *ngIf="this.pageNumbers != 1"  class="cus-btnPrevious" (click)="previousPage()"><mat-icon>arrow_backward</mat-icon>Previous
+                    </button>
+                    <button class="cus-btnNext" (click)="nextPage()">
+                        Next <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

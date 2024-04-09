@@ -1,0 +1,81 @@
+<div class="overalldiv">
+    <form [formGroup]="searchform">
+
+        <div class="row col-md-11 filterdiv ">
+            <div class="col-md-3">
+                <mat-label>Employee Name</mat-label><br>
+                <mat-form-field>
+                    <input matInput formControlName="employee_name" placeholder="Employee Name">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-label>Customer Name</mat-label><br>
+
+                <mat-form-field>
+                    <input matInput formControlName="customer_name" placeholder="Customer Name">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-label>Frome Date</mat-label><br>
+
+                <mat-form-field>
+                    <input matInput formControlName="from_date" placeholder="From Date">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-label>To Date</mat-label><br>
+
+                <mat-form-field>
+                    <input matInput formControlName="to_date" placeholder="To Date">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+                <mat-label>Client Name</mat-label><br>
+
+                <mat-form-field>
+                    <input matInput formControlName="client_name" placeholder="To Date">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-2 centerdiv">
+                <mat-checkbox>with Hierarchy</mat-checkbox>
+            </div>
+
+            <div class="col-md-2 centerdiv">
+                <button class="btn btn-success" >SNAPSHOT</button>
+            </div>
+
+            <div class="col-md-2 centerdiv">
+                <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                    aria-label="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button mat-stroked-button type="button"
+                    style="margin-left: 20px;background-color: white;">Clear</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-md-12">
+        <table class="table">
+
+            <tr class="table_header">
+                <th class="seperatecolumn" >Date Range</th>
+                <th>S.No</th>
+                <th>Customer Code</th>
+                <th>Customer Name</th>
+                <th>Employee Name</th>
+                <th>Type</th>
+                <th>Schedule Status</th>
+                <th>Complete For</th>
+                <th>Followup Date</th>
+                <th>Reschedule Date</th>
+                <th>Comment</th>
+                <th>Review Status</th>
+                <th>TA</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </div>
+</div>

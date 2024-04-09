@@ -1,0 +1,318 @@
+<div *ngIf="isShowIssues">
+  <div>
+    <form [formGroup]="IssueSummaryForm" class="cus-issuesFormMain">
+      <div class="cus-issuesFormContainer">
+        <div class="cus-issuesFormContainer1">
+          <div>
+            <mat-form-field>
+              <mat-label>Search Issues</mat-label>
+              <input matInput formControlName="query" />
+
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Client</mat-label>
+              <mat-select formControlName="client" (selectionChange)="onClientChange($event)">
+                <mat-option *ngFor="let pep of clientdata" [value]="pep.id" title="{{pep.name}}">
+                  {{ pep.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div (click)="statusdrop()">
+            <mat-form-field style="width: 100%">
+              <mat-label>Status</mat-label>
+              <input #status placeholder="Select status" matInput formControlName="status"
+                [matAutocomplete]="statusrole" />
+              <mat-autocomplete #statusrole="matAutocomplete" [displayWith]="displaystatusleadclient">
+                <ng-container>
+                  <mat-option *ngFor="let opt of statusdrops" [value]="opt" title="{{opt.name}}">
+                    {{ opt.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="col-md-2">
+                    <mat-form-field class="filtersdrop" style="margin-top: -10%;">
+                        <mat-label>Module</mat-label>
+                        <mat-select formControlName="module">
+
+                            <mat-option *ngFor="let pep of moduledata" [value]="pep.id">
+                                {{pep.name}}
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                </div> -->
+          <button class="btn" type="button" (click)="resetTasks()" style="background-color: #e4e4e4; color: #044063">
+            Clear
+          </button>
+          <button class="btn" style="background-color: #044063; color: #e4e4e4;">
+            <i class="fa-solid fa-magnifying-glass" (click)="issueSearch('')"></i></button>
+          <div style="position: relative">
+
+            <!-- <i class="fa-solid fa-xmark" style="margin-left: 23%;" (click)="resetTasks()"></i> -->
+
+
+            <button class="btn cus-sprintFormIcon2" (click)="issuePopup()">
+              <span><i class="fa-solid fa-filter"></i></span>
+            </button>
+            <!-- Filter Popup -->
+            <div *ngIf="issuePopus">
+              <form [formGroup]="IssueSummaryForm" class="cus-filterSearchContainer">
+                <!-- <div >
+                        <mat-form-field class="matformfieldstyle" appearance="outline">
+                            <mat-select class="matformfieldinputstyle" placeholder="Filter"
+                                formControlName="dynamicdropdown">
+
+                                <mat-option (click)="issuefunction()"*ngFor="let type1 of issuefilter"
+                                    [value]="type1.id">{{type1.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+                <div class="cus-filterSearch">
+                  <div>
+                    <mat-form-field>
+                      <mat-label>Start date</mat-label>
+                      <input matInput [matDatepicker]="picker1" placeholder="Start Date" autocomplete="off"
+                        formControlName="start_date" (dateInput)="startdateclick($event)" />
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                      <!-- <mat-datepicker (dateChange)="startdateclick()" ></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                      <mat-label>End date</mat-label>
+                      <input matInput [matDatepicker]="picker2" placeholder="End Date" autocomplete="off"
+                        formControlName="end_date" (dateInput)="enddateclick($event)"
+                        [min]="IssueSummaryForm.value.start_date" />
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker #picker2> </mat-datepicker>
+                      <!-- <mat-datepicker (click)="enddateclick()"></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <!-- <div >
+                    <mat-form-field>
+                        <mat-label>Query</mat-label>
+                        <input matInput formControlName="query" placeholder="Query">
+                    </mat-form-field>
+                </div> -->
+                  <div (click)="getAppdrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Project</mat-label>
+                      <input #clientInput placeholder="Select Project" matInput formControlName="app_id"
+                        [matAutocomplete]="clientrole" (click)="appClick()" />
+                      <mat-autocomplete #clientrole="matAutocomplete" [displayWith]="displayFnclient">
+                        <!-- <mat-autocomplete> -->
+                        <ng-container>
+                          <mat-option *ngFor="let opt of appdrop" [value]="opt" title="{{opt.name}}">
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!appdrop || !appdrop.length">
+                          No Records Found
+                        </mat-option>
+                       
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <!-- <div>
+                    <mat-form-field style="width: 100%;margin-top: -7%;" (click)="getClientdrop()">
+                        <mat-label>client</mat-label>
+                         <mat-select matInput formControlName="client"
+                                                            >
+                         <mat-option *ngFor="let opt of clientdrop"[value]="opt.id">
+                        {{opt.name}}
+                         </mat-option>
+                                                        </mat-select>
+                        
+                                                    </mat-form-field>
+                </div> -->
+                  <div (click)="getModuledrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Module </mat-label>
+                      <input #moduleInput placeholder="Select Module" matInput formControlName="module_id"
+                        [matAutocomplete]="modulerole" (click)="moduleClick()" />
+                      <mat-autocomplete #modulerole="matAutocomplete" [displayWith]="displaymoduleclient">
+                        <ng-container>
+                          <mat-option *ngFor="let opt of moduledrop" [value]="opt" title="{{opt.name}}">
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!moduledrop || !moduledrop.length">
+                          No Records Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Priority</mat-label>
+                      <mat-select matInput formControlName="priority">
+                        <mat-option *ngFor="let opt of prioritydrop" [value]="opt" title="{{opt.text}}">
+                          {{ opt.text }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+                <div class="cus-filterSearch-btnDiv">
+                  <button class="btn btn-secondary" color="primary" (click)="resetsprinitform()">
+                    Reset
+                  </button>
+                  <div>
+                    <button class="btn btn-primary" type="submit" color="primary" (click)="issueSearch('')"
+                      style="margin-right: 10px;background-color: #044063;color: white;">
+                      Apply
+                    </button>
+
+                    <button class="btn btn-secondary" (click)="issuePopup()">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;display: flex;font-size: larger;
+                    margin-top: -4%;
+                    margin-left: 69%;"> <mat-icon style="margin-left: 2%;">filter_list</mat-icon>filter</span> -->
+          </div>
+        </div>
+
+        <div class="cus-issuesFormContainer2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#issuesAddModal"
+            style="background-color: #044063" (click)="onclickIssueAdd()">
+            <!-- (click)="onclickIssueAdd()" -->
+            + Issue
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="issuesAddModal" tabindex="-1" role="dialog" aria-labelledby="issuesAddModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header" style="background-color: #044063;color: white;">
+                  <p style="margin-bottom: 0" class="modal-title" id="issuesAddModalLabel">
+                    Add Issues
+                  </p>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;"
+                    #closebutton>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <app-issuecreation (OnSubmit)="issueView_backnavigate()"></app-issuecreation>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div>
+      <div class="cus-tableContainer">
+        <table class="table cus-table">
+          <thead>
+            <tr>
+              <th><i class="fa-solid fa-bars"></i>&nbsp; Code</th>
+              <th>
+                <i class="fa-solid fa-hashtag"></i>&nbsp; Issue Description
+              </th>
+              <th>
+                <i class="fa-solid fa-people-group"></i>&nbsp; Client
+              </th>
+              <th scope="col">
+                <i class="fa-regular fa-calendar-days"></i>&nbsp; Created Date
+              </th>
+              <th scope="col">
+                <i class="fa-regular fa-at"></i>&nbsp; Created By
+              </th>
+              <th scope="col">
+                <i class="fa-solid fa-rotate-right"></i>&nbsp; Status
+              </th>
+              <th scope="col">
+                <i class="fa-solid fa-location-arrow"></i>&nbsp; Action
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let type of issueList; index as i">
+            <tr>
+              <td>
+                {{ type?.code }}
+              </td>
+              <td class="pointer blue" (click)="viewIssue(type)">
+                {{ type?.description }}
+              </td>
+              <td>
+                {{ type?.client }}
+              </td>
+
+              <td>
+                {{ type?.created_date | date : "dd-MM-yyyy" }}
+              </td>
+              <td>
+                <span> {{ type?.created_by?.full_name }} </span>
+              </td>
+              <td style="text-align: center">
+                <!-- <span class="cus-badge">
+                                        <span class="cus-badgeGreen"> {{type?.issue_status?.name}}</span>
+                                    </span> -->
+                <span class="cus-badge">
+                  <span *ngIf="type?.issue_status?.name == 'Valid'" class="cus-badgeBlue">Valid</span>
+                  <span *ngIf="type?.issue_status?.name == 'Open'" class="cus-badgeGreen">Open</span>
+                  <span *ngIf="type?.issue_status?.name == 'Invalid'" class="cus-badgeRed">Invalid</span>
+                </span>
+              </td>
+              <td style="text-align: center;">
+                <i class="fa-solid fa-trash" (click)="deleteIssue(type)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="issueList?.length == 0 || issueList == undefined" class="NodataAlign text-center">
+          No Records Found...
+        </div>
+      </div>
+
+      <div class="cus-taskPageBtnsDiv">
+        <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                    <p style="text-align: center;">{{this.pageNumbers+2}}</p> 
+                    <p style="text-align: center;">{{this.pageNumbers+3}}</p>             -->
+        <!-- <div *ngIf="this.pageNumbi != 1" class="cus-pageNumbers">
+                    <p style="text-align: center;">{{this.pageNumbi-1}}</p>
+                    <p class="cus-btnActive" style="text-align: center;">{{this.pageNumbi}}</p>
+                    <p style="text-align: center;">{{this.pageNumbi+1}}</p>
+                    <p style="text-align: center;">{{this.pageNumbi+2}}</p>
+
+                </div> -->
+        <button mat-icon-button [disabled]="has_previousStoryTask === false" (click)="previousPage()">
+          <mat-icon>arrow_backward</mat-icon>
+        </button>
+        <p class="cus-btnActive" style="text-align: center">
+          {{ this.pageNumbers }}
+        </p>
+        <button mat-icon-button [disabled]="has_nextStoryTask === false" (click)="nextPage()">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="issuecreate">
+  <app-issuecreation
+    (OnSubmit)="issueView_backnavigate()"
+    (OnCancel)="issueView_backnavigate()"
+  ></app-issuecreation>
+</div> -->
+
+<div *ngIf="taskview">
+  <app-issueview (OnSubmit)="backtoTaskSummary()" (OnCancel)="backtoTaskSummary()"></app-issueview>
+</div>

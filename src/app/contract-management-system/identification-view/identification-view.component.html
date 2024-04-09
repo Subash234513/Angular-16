@@ -1,0 +1,336 @@
+<div *ngIf="identificationedit">
+    <app-identification-create (onSubmitedit)="Identificationedit()" (onCanceledit)="Identificationeditcancel()">
+    </app-identification-create>
+</div>
+<div class="container" *ngIf="identificationviewdiv">
+
+    <!---------------------------------- Title Part ------------------------------------->
+
+
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-lg-8">
+            <h2> <span class="material-icons alignvertical"
+                    (click)="backnavigate()">arrow_back</span>({{detailsIdeView?.code}}) {{detailsIdeView?.title}}
+
+                <span class="material-icons" (click)="editIdentification()" 
+                *ngIf="identificationViewList?.is_created_by == true && (identificationViewList?.approval_status?.text  == 'PENDING' || identificationViewList?.approval_status?.text  == 'REVIEW' ) ">edit</span>
+
+            </h2>
+            <!-- <h2>({{detailsIdeView?.code}}) {{detailsIdeView?.title}}</h2> -->
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <button type="button" mat-stroked-button (click)="ResubmitIdentification()" *ngIf="identificationViewList?.is_created_by == true && identificationViewList?.approval_status?.text == 'REVIEW'"
+            style="margin-left: 20px;background-color: white;">Resubmit</button>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="placingOnRight"
+                *ngIf="identificationViewList?.is_created_by == false && identificationViewList?.pending_approver?.length > 0 ">
+                <mat-form-field class="ddheight">
+                    <mat-select placeholder="Select Action">
+                        <mat-option *ngFor="let process of ProcessList" [value]="process?.name" data-toggle="modal"
+                            data-target="#exampleModal" (click)="gettingRemarks(process)">
+                            {{process?.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <!----------------------------- Approve Reject Review Remarks -------------------------------->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#21cbe5;">
+                    <h2 class="modal-title" id="exampleModalLabel">{{SelectedProcess}}
+                        Remarks</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="RemarksForm">
+                        <table>
+                            <div>
+                                <tr>
+                                    <td>
+                                        <div class="col-md-6">
+                                            <mat-label>Remarks</mat-label><br>
+                                            <mat-form-field class="matformfieldstyle">
+                                                <textarea class="matformfieldinputstyletextarea" type="text" matInput
+                                                    autocomplete="off" placeholder="Remarks"
+                                                    formControlName="remarks"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>
+                                        <div class="col-md-6">
+                                            <mat-label>Group</mat-label><br>
+                                            <mat-form-field>
+                                                <mat-select class="matformfieldinputstyle" placeholder="Role" formControlName="group_id">
+                                                    <mat-option *ngFor="let gp of groupApproverList" [value]="gp.approver.id">{{gp.approver.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                </tr> -->
+                            </div>
+
+                        </table>
+                        <!-- <div class="col-md-3">
+                                    <mat-label>Remarks</mat-label><br>
+                                    <mat-form-field class="matformfieldstyle">
+                                        <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                            placeholder="Remarks" formControlName="remarks">
+                                    </mat-form-field>
+                                </div> 
+                                <div class="col-md-3">
+                                    <mat-label>Group</mat-label><br>
+                                    <mat-form-field class="matformfieldstyle">
+                                        <mat-select  class="matformfieldinputstyle" placeholder="Role" formControlName="group_id">
+                                            <mat-option *ngFor="let gp of groupApproverList" [value]="gp.id">{{gp.approver.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div> -->
+
+
+
+
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                                        border-color: black;
+                                                        background-color: white;" data-dismiss="modal">Close</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                                    border-color: #f5c68b; background-color: #f5c68b;"
+                        class="btn btn-light" (click)="Approval_Reject_Review(SelectedProcess)" data-toggle="modal"
+                        data-target="#exampleModal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!------------------------------ Project View --------------------------->
+
+    <div class="spacingdiv">
+        <table class="tablepaddingsizeheader smallsize">
+            <tr>
+                <th>Type:</th>
+                <td>{{identificationViewList?.type?.name}}</td>
+                <th>Beneficiary Group:</th>
+                <td>{{identificationViewList?.onbehalf_group?.name}}</td>
+                <th>Status:</th>
+                <td>{{identificationViewList?.approval_status?.text}}</td>
+                <!-- <td> <button mat-button color="primary" data-toggle="collapse" data-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">more..<mat-icon>expand_more</mat-icon>
+                    </button>
+                </td> -->
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <table class="tablepaddingsize smallsize">
+                <tr>
+                    <th>Category:</th>
+                    <td>{{detailsPreView?.cat_id?.name}}</td>
+                    <th>SubCategory:</th>
+                    <td>{{detailsPreView?.subcat_id?.name}}</td>
+
+                </tr>
+                <tr>
+                    <th>Submission Date:</th>
+                    <td> <span matTooltip="Start Date">{{detailsPreView?.submission_start_date |
+                            date:'dd-MM-yyyy'}}</span> -
+                        <span matTooltip="End Date">{{detailsPreView?.submission_end_date | date:'dd-MM-yyyy'}}</span>
+                    </td>
+                    <th>Project Date:</th>
+                    <td> <span matTooltip="Start Date">{{detailsPreView?.project_start_date | date:'dd-MM-yyyy'}}</span>
+                        -
+                        <span matTooltip="End Date">{{detailsPreView?.project_end_date | date:'dd-MM-yyyy'}}</span>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div> -->
+
+    <div class="row smallsize" style="width: 70%;padding: 10px;">
+        <div class="col">
+            <div style="margin-left: 10px;">
+                <strong>Approver:</strong>
+                <mat-chip-grid class="inlineprint"
+                    *ngFor="let dataapprover of identificationViewList?.approver; let indexapprover = index">
+                    <div *ngIf="dataapprover?.status?.text == 'Pending'; else Rejects">
+                        <mat-chip-row color="primary" selected title="Pending">{{dataapprover?.approver?.name}}</mat-chip-row>
+                    </div>
+                    <ng-template #Rejects>
+                        <div *ngIf="dataapprover?.status?.text == 'Rejected'; else awaiting">
+                            <mat-chip-row style="background-color: red" selected title="Rejected"> {{dataapprover?.approver?.name}}
+                            </mat-chip-row>
+                        </div>
+                    </ng-template>
+                    <ng-template #awaiting>
+                        <div *ngIf="dataapprover?.status?.text == 'Awaiting'; else approvedcases">
+                            <mat-chip-row style="background-color: rgba(122, 122, 122, 0.704)" selected title="Awaiting">
+                                {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                    <ng-template #approvedcases>
+                        <div *ngIf="dataapprover?.status?.text == 'Approved';else REVIEWcases">
+                            <mat-chip-row style="background-color: rgba(36, 167, 36, 0.704)" selected title="Approved">
+                                {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                    <ng-template #REVIEWcases>
+                        <div *ngIf="dataapprover?.status?.text == 'Reviwed';">
+                            <mat-chip-row style="background-color: rgba(197, 197, 197, 0.704); color: black;" selected
+                            title="Reviewed">
+                                {{dataapprover?.approver?.name}} </mat-chip-row>
+                        </div>
+                    </ng-template>
+                </mat-chip-grid>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <br> -->
+
+    <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNote"
+        aria-expanded="false" aria-controls="collapseNote">Project Proposal Request Note(Purpose of Project):<mat-icon>expand_more</mat-icon>
+    </button>
+    <br>
+
+    <div class="collapse content" id="collapseNote">
+        <div class="card" id="collapseNoteView">
+            <div [innerHtml]="identificationViewList?.covernote.note">
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- <div class="jumbotron">
+        <h1 class="display-4">Note: </h1>
+        <p [innerHtml]="identificationViewList?.covernote.note"> {{identificationViewList?.covernote.note}}</p>
+
+    </div> -->
+    <div style="margin-top: 10px; margin-left:10px;">
+        <p>Attachments:</p>
+        <div style="display:inline;" *ngFor="let files of identificationViewList?.filedata; let indexfile = index">
+            <!-- <mat-chip-row class="cursor spacingfile" [matMenuTriggerFor]="menu1">{{indexfile+1}}.{{files?.file_name}}
+            </mat-chip-row>
+            <mat-menu #menu1="matMenu">
+                <span class="textdecorationatag" (click)="Files_Api_View(files)" data-toggle="modal"
+                    data-target="#my-modalpreview">File view</span>
+            </mat-menu> -->
+            <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" >{{indexfile+1}}.{{files?.file_name}}</button>
+                <button  type="button" style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" class="btn btncolor material-icons" (click)="filedownload(files)">download</button> 
+            </div>
+        </div>
+    </div>
+
+
+
+    <div>
+        <nav>
+            <div class="nav nav-tabs">
+                <span #myDiv class="nav-item nav-link" id="subname" data-toggle="tab" role="tab" style="color: black;"
+                    *ngFor="let sub of CMS_IdentificationView_Menu_List;index as i" (click)="viewShow(sub)">
+                    {{sub?.name}}
+                </span>
+            </div>
+        </nav>
+    </div>
+
+    <div *ngIf="HistoryTab">
+        <h2>Transaction History</h2>
+
+        <div style="margin-left: 15px;">
+            <table class="table table-bordered" style="margin-top: 10px;max-width: 70%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Approver</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of TranHistoryList; let historyindex = index">
+                        <td>{{historyindex+1}}</td>
+                        <td>{{type?.created_date | date: 'dd-MMM-yyyy hh:mm aa'}}</td>
+                        <td>{{type?.approval_status?.text}}</td>
+                        <td>{{type?.approver?.full_name}}</td>
+                        <td>{{type?.comments}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="TranHistoryList?.length==0 || TranHistoryList == undefined" class="NodataAlign text-center">No
+                Records Found...</div>
+        </div>
+
+
+    </div>
+
+
+
+    <div *ngIf="showimageHeaderPreviewPDF" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+        aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#21cbe5;">
+                    <h2 class="modal-title">PDF View</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <pdf-viewer [src]="pdfurl" [render-text]="true" [original-size]="false"
+                    style="display: block;width: 500px; height: 800px;"></pdf-viewer>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div *ngIf="showimageHeaderPreview" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+        aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <img src="{{jpgUrlsAPI}}" class="img-responsive" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+
+
+
+</div>

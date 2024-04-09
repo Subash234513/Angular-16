@@ -1,0 +1,862 @@
+<div style="background-color: #F6F6F6">
+    <mat-card style="margin:10px 12px 20px 10px;" class="mat-elevation-z0">
+        <nav>
+            <div class="nav nav-tabs">
+                <span #myDiv class="nav-item nav-link" id="subname" data-toggle="tab" (click)="subModuleData(sub)"
+                    role="tab" *ngFor="let sub of CMS_Master_Menu_List;index as i">
+                    {{sub.name}}
+                </span>
+            </div>
+        </nav>
+        <div class="container" style="margin: 10px;">
+            <div class="row">
+                <div class="col" *ngIf="projecttypesummary">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="p-auto">
+                                <h2>Project Type Summary</h2>
+                                <form [formGroup]="ProjectTypeSearchForm">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Code/Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Code/Name"
+                                                            formControlName="code">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th>
+                                            <!-- <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Name"
+                                                            formControlName="name">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th> -->
+
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    aria-label="Search" (click)="ProjectTypeSearch('')">
+                                                    <mat-icon>search</mat-icon>
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    (click)="resetProjectType()">Clear</button>
+                                            </th>
+                                            <th>
+
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addType('Project', 'create', '')">
+                                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                                </button>
+                                            </th>
+
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <div style="margin-left: 15px;">
+                                <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Code</th>
+                                            <th>Type</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let type of ProjectTypeList; let index = index">
+                                            <td>{{(presentpageProject-1)*10+index+1 }}</td>
+                                            <td>{{type?.code}}</td>
+                                            <td>{{type?.name}}</td>
+                                            <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="ProjectTypeList?.length==0 || ProjectTypeList == undefined ; else paginationpro"
+                                    class="NodataAlign text-center">No Records Found...</div>
+                                <ng-template #paginationpro>
+                                    <div class="col-sm-12"
+                                        style="font-size: small;text-align: right;margin-bottom: 5%;">
+                                        <button type="button" mat-icon-button [disabled]="has_previousProject === false"
+                                            color="primary" (click)="ProjectTypeSearch('previous')">
+                                            <mat-icon>arrow_back</mat-icon>
+                                        </button> {{presentpageProject}}
+                                        <button type="button" mat-icon-button [disabled]="has_nextProject === false" color="primary"
+                                            (click)="ProjectTypeSearch('next')">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                <div class="col" *ngIf="documenttypesummary">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="p-auto">
+                                <h2>Document Type Summary</h2>
+
+                                <form [formGroup]="DocumentTypeSearchForm">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Code/Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Code/Name"
+                                                            formControlName="code">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th>
+                                            <!-- <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Name"
+                                                            formControlName="name">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th> -->
+
+
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    aria-label="Search" (click)="DocumentTypeSearch('')">
+                                                    <mat-icon>search</mat-icon>
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    (click)="resetDocumentType()">Clear</button>
+                                            </th>
+                                            <th>
+
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addType('Document', 'create', '')">
+                                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                                </button>
+                                            </th>
+
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div style="margin-left: 15px;">
+                                <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Code</th>
+                                            <th>Type</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let type of DocumentTypeList; let index = index">
+                                            <td>{{(presentpageDoc-1)*10+index+1 }}</td>
+                                            <td>{{type?.code}}</td>
+                                            <td>{{type?.name}}</td>
+                                            <td><span class="material-icons cursor" (click)="addType('Document', 'edit', type)">edit</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div *ngIf="DocumentTypeList?.length==0 || DocumentTypeList == undefined ; else paginationdoc"
+                                    class="NodataAlign text-center">No Records Found...</div>
+                                <ng-template #paginationdoc>
+                                    <div class="col-sm-12"
+                                        style="font-size: small;text-align: right;margin-bottom: 5%;">
+                                        <button type="button" mat-icon-button [disabled]="has_previousDoc === false" color="primary"
+                                            (click)="DocumentTypeSearch('previous')">
+                                            <mat-icon>arrow_back</mat-icon>
+                                        </button> {{presentpageDoc}}
+                                        <button type="button" mat-icon-button [disabled]="has_nextDoc === false" color="primary"
+                                            (click)="DocumentTypeSearch('next')">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                
+
+                <!-- Group Master -->
+                <div class="col" *ngIf="groupsummary">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="p-auto">
+                                <h2>Group Summary</h2>
+        
+                                <form [formGroup]="GroupSearchForm">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Code/Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Code/Name"
+                                                            formControlName="code">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th>
+                                            <!-- <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Name"
+                                                            formControlName="name">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th> -->
+
+
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    aria-label="Search" (click)="GroupSearch('')">
+                                                    <mat-icon>search</mat-icon>
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    (click)="resetGroupType()">Clear</button>
+                                            </th>
+                                            <th>
+
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addType('Group', 'create', '')">
+                                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                                </button>
+                                            </th>
+
+                                        </tr>
+                                    </table>
+                                </form>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <div style="margin-left: 15px;">
+                                <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Code</th>
+                                            <th>Name</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let type of groupList; let index = index">
+                                            <td>{{(presentpageGroup-1)*10+index+1 }}</td>
+                                            <td>{{type?.code}}</td>
+                                            <td (click)="groupView(type.id)"
+                                            style="cursor: pointer;color:blue;text-decoration: underline;">{{type?.name}}</td>
+                                            <td><span class="material-icons cursor" (click)="addType('Group', 'edit', type)">edit</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="groupList?.length==0 || groupList == undefined ; else paginationpro"
+                                    class="NodataAlign text-center">No Records Found...</div>
+                                <ng-template #paginationpro>
+                                    <div class="col-sm-12"
+                                        style="font-size: small;text-align: right;margin-bottom: 5%;">
+                                        <button type="button" mat-icon-button [disabled]="has_previousGroup === false"
+                                            color="primary" (click)="GroupSearch('previous')">
+                                            <mat-icon>arrow_back</mat-icon>
+                                        </button> {{presentpageGroup}}
+                                        <button type="button" mat-icon-button [disabled]="has_nextGroup === false" color="primary"
+                                        (click)="GroupSearch('next')">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- employee mapping -->
+                <div *ngIf="groupView_EmployeeMapping" class="Container">
+                    <div class="example-container" style="margin-top: 30px;">
+                        <form [formGroup]="EmpAddForm">
+                            <div class="col-md-6">
+                                <mat-label>Employee</mat-label><br>
+                                <mat-form-field style="width: 1000px;">
+                                    <mat-chip-grid #chipList>
+                                        <mat-chip-row *ngFor="let employee of chipSelectedEmployee" 
+                                            [removable]=true (removed)="removeEmployee(employee)">
+                                            {{employee.full_name}}
+                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                        </mat-chip-row>
+                                        <input #employeeInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipList" placeholder="Select Employee"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]=true>
+                                    </mat-chip-grid>
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="employeeSelected($event)"
+                                        (opened)="autocompleteEmployeeScroll()">
+                                        <mat-option *ngFor="let thisEmployee of allEmployeeList" [value]="thisEmployee">
+                                            {{thisEmployee.full_name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-label>Role</mat-label><br>
+                                <mat-form-field class="matformfieldstyle">
+                                    <mat-select  class="matformfieldinputstyle" placeholder="Role" formControlName="role_id">
+                                        <mat-option *ngFor="let role of roleList" [value]="role.id">{{role.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                                       
+                            <button type="button" (click)="submitForm()" class="btn btn-outline-primary"
+                                style="border-radius:40px;margin-left:2%;margin-top: 25px;">Assign</button>
+                            <button type="button" (click)="onCancelClickGroupViwe()"  class="btn btn-outline-primary"
+                                style="border-radius:40px;margin-left:2%;margin-top: 25px;">Back</button>
+                        </form>
+                    </div>
+            
+            
+                    
+                        <table class="table aligncenter" style="margin-top: 20px;max-width: 100%;" id='commonstyle'>
+                        <thead class="table_header">
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let employee of employeeMappingList; index as i">
+                                    <td scope="row">{{ i+1 }}</td>
+                                    <td>{{ employee.code}}</td>
+                                    <td>{{ employee.full_name}}</td>
+                                    <td *ngIf="employee.role.text != null">{{ employee.role.text}}</td>
+                                    <td *ngIf="employee.role.text === null">-</td>
+                                    <td>
+                                        <mat-icon style="color: gray;cursor: pointer;"
+                                         (click)="deleteMappedEMployee(employee)">delete</mat-icon>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div *ngIf="employeeMappingList?.length==0" >No Records Found...</div>
+                </div>
+
+
+
+
+                <!-- legal clauses view -->
+                <div class="container" *ngIf="islegalView">
+
+                    <!--title part  -->
+                    <div class="row">
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <h2> <span class="material-icons alignvertical"
+                                    (click)="backnavigate()">arrow_back</span>{{legalDetails?.name}}
+                                    <span class="material-icons" style="margin-left: 20px;cursor: pointer;" title="Legal Edit"
+                                    *ngIf="legalDetails?.is_created_by == true && (legalDetails?.approval_status?.text  == 'DRAFT' || legalDetails?.approval_status?.text  == 'REVIEW' ) "
+                                    (click)="EditLegal('Edit')">edit</span>
+                            </h2>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <button type="button"  *ngIf="legalDetails?.is_created_by == true && (legalDetails?.approval_status?.text == 'DRAFT' || legalDetails?.approval_status?.text == 'REVIEW')" mat-stroked-button 
+                            data-toggle="modal"
+                            data-target="#Move_To_Approve"
+                            style="margin-left: 1%;background-color: green;color: white;">Submit To Approver</button>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <div *ngIf="legalDetails?.is_approver == true && legalDetails?.approval_status.text == 'PENDING' ">
+                                <mat-form-field class="ddheight positiontext">
+                                    <mat-select placeholder="Select Action">
+                                        <mat-option *ngFor="let process of ProcessList" [value]="process?.name" data-toggle="modal"
+                                            data-target="#exampleModal" (click)="gettingRemarks(process)">
+                                            {{process?.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>   
+                        </div>
+                    </div>
+
+
+                    <div class="spacingdiv">
+                        <table class="tablepaddingsizeheader smallsize">
+                            <tr>
+                                <th>Status:</th>
+                                <td>{{legalDetails?.approval_status?.text}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+
+                    <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNote"
+                      aria-expanded="false" aria-controls="collapseNoteview">Description:<mat-icon>expand_more</mat-icon>
+                    </button>
+                    <br>
+
+                    <div class="panel-collapse collapse show in" id="collapseNote">
+                        <div class="card" id="collapseNoteView">
+                            <div [innerHtml]="legalDetails?.description">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNoteclause"
+                      aria-expanded="false" aria-controls="collapseNoteclauseview">Legal Clause note:<mat-icon>expand_more</mat-icon>
+                    </button>
+                    <br>
+
+                    <div class="panel-collapse collapse show in" id="collapseNoteclause">
+                        <div class="card" id="collapseNoteView">
+                            <div [innerHtml]="legalDetails?.clauses">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- legal Master -->
+                <div class="col" *ngIf="legalsummary">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="p-auto">
+                                <h2>Legal Clause Summary</h2>
+        
+                                <form [formGroup]="LegalSearchForm">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Name</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <input class="matformfieldinputstyle" type="text" matInput
+                                                            autocomplete="off" placeholder="Name"
+                                                            formControlName="title">
+                                                    </mat-form-field>
+                                                </div>
+                                            </th>
+                                            <!-- <th>
+                                                <div class="col-md-3">
+                                                    <mat-label>Status</mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle">
+                                                        <mat-select class="matformfieldinputstyle" formControlName="approvalstatus"
+                                                            placeholder="Status">
+                                                            <mat-option *ngFor="let appstatus of ApprovalStatusList_legal"
+                                                                title=" {{appstatus.name}}" [value]="appstatus.id">
+                                                                {{appstatus.name}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+
+
+                                            </th> -->
+                                            
+
+
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    aria-label="Search" (click)="LegalSearch('')">
+                                                    <mat-icon>search</mat-icon>
+                                                </button>
+                                            </th>
+                                            <th>
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: white;"
+                                                    (click)="reset_legal()">Clear</button>
+                                            </th>
+                                            <th>
+
+                                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addLegal('create')">
+                                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                                </button>
+                                            </th>
+
+                                        </tr>
+                                    </table>
+                                </form>
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <div style="margin-left: 15px;">
+                                <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <!-- <th>Status</th> -->
+                                            <!-- <th>Edit</th>
+                                            <th>Delete</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let legal of legalList; let index = index">
+                                            <td>{{(presentpageLegal-1)*10+index+1 }}</td>
+                                            <td (click)="legalView(legal.id)"
+                                            style="cursor: pointer;color:blue;text-decoration: underline;">{{legal?.name}}</td>
+                                            <td>{{legal.type }}</td>
+                                            <!-- <td>{{legal.approval_status.text}}</td> -->
+                                            <!-- <td><span class="material-icons cursor" (click)="addLegal('edit', legal)">edit</span></td>
+                                            <td><span class="material-icons cursor" (click)="deleteLegal(legal.id)">delete</span></td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="legalList?.length==0 || legalList == undefined ; else paginationpro"
+                                    class="NodataAlign text-center">No Records Found...</div>
+                                <ng-template #paginationpro>
+                                    <div class="col-sm-12"
+                                        style="font-size: small;text-align: right;margin-bottom: 5%;">
+                                        <button type="button" mat-icon-button [disabled]="has_previousLegal === false"
+                                            color="primary" (click)="LegalSearch('previous')">
+                                            <mat-icon>arrow_back</mat-icon>
+                                        </button> {{presentpageLegal}}
+                                        <button type="button" mat-icon-button [disabled]="has_nextLegal === false" color="primary"
+                                        (click)="LegalSearch('next')">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+              
+
+
+            </div>
+
+
+            <div *ngIf="addformpart">
+                <!-- <div class="ml-5"> -->
+                    <h2>{{FormName}} Type {{TypeOfForm}}</h2>
+                    <div class="row">
+                        <div class="col">
+                            <form [formGroup]="AddFormProjectOrDocument">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-3">
+                                                <mat-label>Name</mat-label><br>
+                                                <mat-form-field class="matformfieldstyle">
+                                                    <input class="matformfieldinputstyle" type="text" matInput
+                                                        autocomplete="off" placeholder="Name"
+                                                        formControlName="name">
+                                                </mat-form-field>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div>
+
+
+                                        <div style="margin-left: 7px;
+                                        margin-top: 20px;">
+
+
+                                            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;"
+                                                (click)="onCancelClick()">Cancel</button>
+
+                                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                                border-color: #f5c68b; background-color: #f5c68b;"
+                                                class="btn btn-light" (click)="onSubmitClick()">Submit</button>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+
+
+
+            <!-- legal form -->
+            <div *ngIf="islegalForm">
+                    <h2>Legal Clause {{TypeOfForm}}</h2>
+                    <div class="row">
+                        <div class="col">
+                            <form [formGroup]="legalForm">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <mat-label>Name</mat-label><br>
+                                                <mat-form-field class="matformfieldstyle">
+                                                    <input class="matformfieldinputstyle" type="text" matInput
+                                                        autocomplete="off" placeholder="Name"
+                                                        formControlName="name">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-label style="margin-left: 60px;">Type</mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" style="margin-left: 60px;">
+                                                <mat-select class="matformfieldinputstyle" formControlName="type"
+                                                    placeholder="Type">
+                                                    <mat-option *ngFor="let type of legaltype"
+                                                       [value]="type.id">
+                                                        {{type.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-label style="margin-left: 60px;">Description</mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" style="margin-left: 60px;width: 300px;">
+                                                <textarea class="matformfieldinputstyle" type="text" matInput
+                                                    autocomplete="off" placeholder="Description"
+                                                    formControlName="description"></textarea>
+                                            </mat-form-field>
+                                        </td>
+                                    </tr>
+                                    <!-- <mat-label>Note</mat-label>
+                                    <div formControlName="clause" [ngxSummernote]="config">
+                                    </div> -->
+                                </table>
+                                <div style="width:90%;height: 70%;">
+                                    <div>
+                                        <h2>Legal clause Note: </h2>
+                                        <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                            formControlName="clauses" (mediaDelete)="onDelete($event)" placeholder="Description"
+                                            (summernoteInit)="summernoteInit($event)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+
+
+                                    <div style="margin-left: 7px;
+                                    margin-top: 20px;">
+
+
+                                        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                                border-color: black;
+                                                background-color: white;"
+                                            (click)="onLegalCancelClick()">Cancel</button>
+
+                                        <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                            border-color: #f5c68b; background-color: #f5c68b;"
+                                            class="btn btn-light" (click)="onSubmitlegalClick()">Submit</button>
+
+                                    </div>
+
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+
+
+             <!----------------------------- Approve Reject Review Remarks -------------------------------->
+
+
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#21cbe5;">
+                    <h2 class="modal-title" id="exampleModalLabel">{{SelectedProcess}}
+                        Remarks</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="RemarksForm">
+                        <table>
+                           <tr>
+                            <mat-label>Remarks</mat-label><br>
+                            <mat-form-field class="matformfieldstyle">
+                                <textarea class="matformfieldinputstyletextarea" type="text" matInput
+                                    autocomplete="off" placeholder="Remarks"
+                                    formControlName="remarks"></textarea>
+                            </mat-form-field>
+                           </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                                        border-color: black;
+                                                        background-color: white;" data-dismiss="modal">Close</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                                    border-color: #f5c68b; background-color: #f5c68b;"
+                        class="btn btn-light" (click)="Approval_Reject_Review(SelectedProcess)" data-toggle="modal"
+                        data-target="#exampleModal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#c1e2f6;">
+                <h2 class="modal-title" id="exampleModalLabel">{{SelectedProcess}}
+                    Remarks</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="RemarksForm" style="margin-left: 2%;">
+                    <table>
+                       <tr>
+                        <!-- <mat-label>Remarks</mat-label><br>
+                        <mat-form-field class="matformfieldstyle">
+                            <textarea class="matformfieldinputstyletextarea" type="text" matInput
+                                autocomplete="off" placeholder="Remarks"
+                                formControlName="remarks"></textarea>
+                        </mat-form-field> -->
+                        
+                        <mat-label>Remarks</mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="width: 300px;">
+                            <textarea class="matformfieldinputstyle" type="text" matInput
+                                autocomplete="off" placeholder="Remarks"
+                                formControlName="remarks"></textarea>
+                        </mat-form-field>
+                       </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;" data-dismiss="modal">Close</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px; 
+                                                border-color: #f5c68b; background-color: #f5c68b;"
+                    class=" mat-stroked-button" data-dismiss="modal"
+                    (click)="Approval_Reject_Review(SelectedProcess)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- move to approver -->
+<div class="modal fade" id="Move_To_Approve" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#c1e2f6;">
+                <h2 class="modal-title" id="exampleModalLabel">
+                    Move to Approver</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="MoveToApproveForm" style="margin-left: 2%;">
+                    <table>
+                        <tr>
+                            <mat-label>Approver</mat-label><br>
+                            <mat-form-field class="lenthoftext matformfieldstyle">
+                                <input #empInput placeholder="Select Code " type="text" matInput formControlName="approval_by"
+                                    (keyup)="EmpDD(this.MoveToApproveForm.value.approval_by)" class="matformfieldinputstyle"
+                                    [matAutocomplete]="emp">
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let emp of EMPList" [value]="emp">
+                                            {{emp.full_name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;" data-dismiss="modal">Close</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px; 
+                                                border-color: #f5c68b; background-color: #f5c68b;"
+                    class=" mat-stroked-button" data-dismiss="modal"
+                    (click)="move_to_approver()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            
+
+        </div>
+    </mat-card>
+</div>

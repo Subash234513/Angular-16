@@ -1,0 +1,218 @@
+// ::ng-deep .mat-form-field-outline {
+//     color: grey !important;
+//   }
+  
+//   ::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+//     color: red !important;
+//     opacity: 0.8 !important;
+//   }
+  
+//   .matformfieldstyle {
+//     font-size: 5px;
+//     margin-top: 5px
+//   }
+  
+//   .matformfieldinputstyle {
+//     font-size: 16px;
+//   }
+  
+//   .matformfieldinputstylelength {
+//     width: 300px;
+//   }
+  
+//   .maticonsize {
+//     font-size: 15px;
+//   }
+  
+//   .mat-option:hover {
+//     background: #EDF8FA !important;
+//   }
+  
+  // button:hover {
+  //   background:#EDF8FA !important;
+  // }
+  
+  // table
+  #commonstyle {
+    border: 15px none #f6f6f6
+  }
+  
+  .table tr:nth-child(even) {
+    background: #EDF8FA
+  }
+  
+  .table tr:nth-child(odd) {
+    background: #FFF
+  }
+  
+  .table tr{
+    text-align: left;
+  }
+  
+  
+  .table,
+  th,
+  td {
+    // text-align: left;
+    // padding: 5px;
+    font-size: 14px;
+  }
+  
+  .navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .tab-btn {
+    margin-left: 81%;
+    position: relative;
+  }
+  
+  #navshow{
+    width: 95%;
+    margin-left: 10px;
+  }
+  
+  .nav-item.show .nav-link,
+  .nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #044063 !important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link:hover {
+    border: none !important;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link {
+    border: none;
+    cursor: pointer;
+  }
+  
+  .textdecorationatag{
+    text-decoration: underline;
+    color: #044063;
+    cursor: pointer;
+  }
+  
+  .cursor{
+    cursor: pointer;
+  }
+
+  .alignvertical {
+    vertical-align: middle;
+}
+
+.widthInput{
+  width: 200px;
+}
+
+
+
+
+
+
+
+// stepper
+
+.stepsdiv {
+  width: 100%;
+  padding: 30px;
+}
+
+.progressstepper {
+  display: table;
+  width: 100%;
+  position: relative;
+}
+
+
+.progressstepper .stepsshow,
+.progressstepper .stepflow {
+  display: table-cell;
+}
+
+.progressstepper .stepflow {
+  width: 70px;
+}
+
+.progressstepper .stepsshow {
+  width: 70px;
+  text-align: center;
+}
+
+  // .progressstepper .stepsshow .stepcircle {
+  //   background-color: #b5e8b1;
+  // }
+
+.stepcircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  line-height: 40px;
+  text-align: center;
+  display: inline-block;
+}
+
+.progressstepper .processname {
+  display: block;
+  font-size: 12px;
+}
+
+.bordercomments {
+  margin-left: 10px;
+  min-width: 500px;
+  max-width: 900px;
+  max-height: 1000px;
+  overflow-x: hidden;
+  overflow: scroll;
+  border: 1px solid rgba(0, 0, 0, 0.082);
+}
+
+
+.bordercomments::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.bordercomments::-webkit-scrollbar-track {
+  background: #e4e3e3;
+}
+
+.bordercomments::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+.paddings{
+  padding: 0px 10px;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+img {
+  height: 200px;
+  width: 200px;
+  border: 5px solid #000;
+  border-radius: 50%;
+}
+
+.select-profile-picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+

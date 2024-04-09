@@ -1,0 +1,211 @@
+<div class="row ">
+
+    <div class=" col-lg-8 spaceforCard">
+        <form [formGroup]="leaveReqForm">
+            <table>
+                <tr>
+                    <td colspan="4">
+                        <mat-label>Type</mat-label><br>
+                        <mat-form-field class="widthOfField">
+                            <mat-select formControlName="leave_type" placeholder="Leave Type">
+                                <mat-option *ngFor="let type of LeaveRequestCreateObjects.leavetypelist"
+                                    (click)="PermissionValidationCheck(type)" [value]="type">
+                                    {{type.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td *ngIf="LeaveRequestCreateObjects.permissionValidation">
+                        <mat-label>From Date and Time</mat-label><br>
+                        <mat-form-field>
+                            <input matInput type="date" placeholder="From Date and Time"
+                                formControlName="fromDatepermission">
+                        </mat-form-field>
+
+                    </td>
+                    <td *ngIf="LeaveRequestCreateObjects.permissionValidation">
+                        <mat-label>From Time</mat-label><br>
+                        <mat-form-field class="inputSizeWidthSmall">
+                            <input matInput type="time" placeholder="From Time" formControlName="frompermissiontime"
+                            (change)="getTimeValidations()" >
+                        </mat-form-field>
+                    </td>
+                    <td *ngIf="LeaveRequestCreateObjects.permissionValidation">
+                        <mat-label>To Time</mat-label><br>
+                        <mat-form-field class="inputSizeWidthSmall">
+                            <input matInput type="time" placeholder="To Time" formControlName="topermissiontime"
+                              (change)="getTimeValidations()">
+                           <mat-hint >Total:  {{LeaveRequestCreateObjects.HourTimeDifference}} hrs and {{LeaveRequestCreateObjects.MinuteTimeDifference}} mins    </mat-hint> 
+                           <!-- <mat-hint>Must be less than or equal to 2 hours</mat-hint>  -->
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+
+
+
+
+                    <td *ngIf="LeaveRequestCreateObjects.permissionValidation == false">
+                        <mat-label>From Date</mat-label><br>
+                        <mat-form-field class="inputSizeWidth">
+                            <input matInput readonly [matDatepicker]="picker1" (dateChange)="countDays();"
+                                formControlName="from_date">
+                            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                    </td>
+
+                    <td class="sizeSplit" *ngIf="LeaveRequestCreateObjects.permissionValidation == false">
+                        <mat-label>From Session</mat-label><br>
+                        <mat-form-field class="inputSizeWidthSmall">
+                            <mat-select formControlName="from_dateLeaveType" 
+                            [disabled]="leaveReqForm.value.leave_type.request_type == 2">
+                                <mat-option *ngFor="let leave of LeaveRequestCreateObjects.LeaveSession"
+                                    [value]="leave.name">
+                                    {{leave.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="sizeSplit" *ngIf="LeaveRequestCreateObjects.permissionValidation == false">
+                        <mat-label>To Date</mat-label><br>
+                        <mat-form-field class="inputSizeWidth">
+                            <input matInput readonly [matDatepicker]="picker2" (dateChange)="countDays()"
+                                [min]="this.leaveReqForm.value.from_date" formControlName="to_date">
+                            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker2">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="sizeSplit" *ngIf="LeaveRequestCreateObjects.permissionValidation == false">
+                        <mat-label>To Session</mat-label><br>
+                        <mat-form-field class="inputSizeWidthSmall">
+                            <mat-select formControlName="to_dateLeaveType"
+                                [disabled]="this.LeaveRequestCreateObjects.TotalDaysInLeaveCount == 1 || leaveReqForm.value.leave_type.request_type == 2">
+                                <mat-option *ngFor="let leave of LeaveRequestCreateObjects.LeaveSession"
+                                    [value]="leave.name">
+                                    {{leave.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+
+                </tr>
+
+            </table>
+            <table>
+                <tr>
+                    <td colspan="4">
+                        <mat-label>Reason</mat-label><br>
+                        <textarea id="w3review" name="w3review" rows="4" cols="70" formControlName="reason"
+                            autocomplete="off">
+
+                        </textarea>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <!-- <td>
+                        <div>Documents: </div>
+                        <div class="input-group mb-3 inputCMTFile01">
+                            <div class="custom-file">
+                                <input type="file" (change)="onFileSelected($event)" multiple class="custom-file-input"
+                                    id="inputGroupFile01">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                    </td> -->
+
+                    <td>
+                        <label>Document</label> <br>
+                        <div class="imgeUploadpart">
+                            <input type="file" (change)="onFileSelected($event)" multiple class="custom-file-input"
+                                id="inputGroupFile01">
+                            <label for="inputGroupFile01" class="aligntextImg">
+                                <span id="hyperlink">Choose File </span>
+                                ( .png, .jpg )
+                            </label>
+                        </div>
+
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+
+            <div *ngIf="LeaveRequestCreateObjects.Documentfilearray?.length > 0">
+                <p> Attachments:</p>
+                <div style="display:inline"
+                    *ngFor="let files of LeaveRequestCreateObjects.Documentfilearray; let indexfile = index">
+
+                    <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                        <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;"
+                            type="button" class="btn btncolor">{{indexfile+1}}.{{files?.name}}</button>
+                        <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button"
+                            class="btn btncolor" (click)="deleteInlineFile(indexfile, '')">X</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div>
+                <div style="margin-left: 7px;
+            margin-top: 20px;">
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                        border-color: black;
+                        background-color: white;" (click)="onLeaveReqCancelClick()">Cancel</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                        (click)="onSubmitLeaveReqClick()">Submit</button>
+
+                </div>
+            </div>
+        </form>
+
+
+
+        <!-- <pre>
+            {{leaveReqForm.value | json}}
+        </pre> -->
+
+    </div>
+
+
+    <div class="card col-lg-4">
+        <!-- <p>EB - Earn Balance,
+        OB - Opening Balance,
+        UL - Utilized Balance, 
+        B  - Balance </p>  -->
+        <div class="card cardSize spaceforCard alignCardFlow"
+            *ngFor="let leavebalance of LeaveRequestCreateObjects.TypesOfLeaveAndCounts; let index = index"
+            [ngStyle]="{'background-color':  LeaveRequestCreateObjects?.leaveColors[index], 'color': '#ffffff'} ">
+            <span>{{leavebalance?.name | uppercase}}</span>
+            <!-- EB - {{leavebalance?.Earn_balance}}
+            OB - {{leavebalance?.Opening_balance}}
+            UL - {{leavebalance?.Utilized_balance}}  -->
+
+            <button mat-mini-fab class="colorBalanceLeave">
+                {{leavebalance?.balance}}
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- <pre>{{leaveReqForm?.value | json}}</pre>  -->

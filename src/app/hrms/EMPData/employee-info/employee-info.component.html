@@ -1,0 +1,342 @@
+<div class="container">
+    <h2 style="margin-left: 20px; font-size: 14px;" (click)="backtosummary()"><span class="material-icons alignvertical">arrow_back</span><span
+            class="highlights alignvertical" >Employee Details</span></h2>    
+
+            <div *ngIf="adminValidation">
+            <button mat-raised-button color="warn" class="btnalign"  data-toggle="modal" data-target="#deactivateModal" >Deactivate</button>    
+            <button mat-raised-button color="primary" class="btnalign"  (click)="startingNoticePeriod()" >Notice Period</button>         
+             </div>
+
+    <div class="detailsside padings">
+        <div class="row marginsize">
+            <div class="col-sm-6 col-md-6 col-lg-6 borderright ">
+                <div class="row">
+                    <div style="margin-left: 10px">
+                        <span class="material-icons iconemp alignvertical">
+                            account_circle
+                        </span>
+                    </div>
+                    <div class="col">
+                        <h1 class="alignvertical aligns">{{EMPNAME | uppercase}}</h1>
+                        <h3>  <span class="SubDetails">Designation: </span> {{EmployeeDetails?.designation}}   </h3>
+                        <h3>  <span class="SubDetails">Date Of Join:</span> {{EmployeeDetails?.doj}}  </h3>
+                        <h3>  <span class="SubDetails">Phone: </span>{{EmployeeDetails?.phone_no}} </h3>
+
+                        <h3>  <span class="SubDetails">Blood Group: </span>    {{BasicInfoEmp?.blood_grp}}  </h3>
+
+                        <h3>   <span class="SubDetails">Height: </span>  {{BasicInfoEmp?.height}}  </h3>
+
+                        <h3>  <span class="SubDetails">Weight: </span>  {{BasicInfoEmp?.weight}}  </h3>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 ">
+                <div class="padings">
+                    <h2>Basic Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Emp Info')">Add/Update</span></h2>
+                    <h3>  <span class="SubDetails"> DOB:</span>{{EmployeeDetails?.dob}} </h3>
+                    <h3>  <span class="SubDetails">   Gender: </span> {{EmployeeDetails?.gender}} </h3>
+                    <h3>  <span class="SubDetails"> Marital Status: </span>  {{BasicInfoEmp?.marital_status}} </h3>
+
+                    <h3>  <span class="SubDetails">  Branch: </span> {{EmployeeDetails?.branch}} </h3>
+
+                    <address>
+                       <h3> Address:</h3>
+                        <span class="SubDetails" *ngIf="!EmployeeDetails?.address_id == null">
+                            {{EmployeeDetails?.address_id?.line1}}, {{EmployeeDetails?.address_id?.line2}},
+                            {{EmployeeDetails?.address_id?.line3}}
+                            {{EmployeeDetails?.address_id?.city}}, {{EmployeeDetails?.address_id?.district}},
+                            {{EmployeeDetails?.address_id?.state}}
+                            {{EmployeeDetails?.address_id?.pincode}}.
+                        </span>
+                    </address>
+                    <h3>  <span class="SubDetails"> Nationality: </span>    {{BasicInfoEmp?.nationality | uppercase}}  </h3>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+        <div class="container">
+
+            
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div style="margin : 15px;" class="detailsside padings">
+                        <h2 style="margin : 15px;">Education Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Education')"     >Add/Update</span></h2>
+
+
+
+                        <table class="viewdetails">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Degree</th>
+                                <th>Steam</th>
+                                <th>Percentage</th>
+                                <th>Passing Month</th>
+                                <th>Passing Year</th>
+                                <th>City</th>
+                                <th>Institute Name</th>
+
+                            </tr>
+
+                            <tr *ngFor="let edu of EmpEducationInfo;let index = index">
+                                <td>{{index + 1}}</td>
+                                <td>{{edu?.title}}</td>
+                                <td>{{edu?.stream}}</td>
+                                <td>{{edu?.percentage}}</td>
+                                <td>{{edu?.passing_month}}</td>
+                                <td>{{edu?.passing_year}}</td>
+                                <td>{{edu?.city}}</td>
+                                <td>{{edu?.inst_name}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div style="margin : 15px;" class="detailsside padings">
+                        <h2 style="margin : 15px;">Experience Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Experience')">Add/Update</span></h2>
+
+                        <table class="viewdetails">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Company</th>
+                                <th>Role</th>
+                                <th>Work Experience</th>
+                                <th>DOJ</th>
+                                <th>DOR</th>
+                                <th>City</th>
+                            </tr>
+    
+    
+                            <tr *ngFor="let exp of EmpExperienceInfo; let index = index">
+                                <td>{{index+1}}</td>
+                                <td>{{exp?.company}}</td>
+                                <td>{{exp?.role}}</td>
+                                <td>{{exp?.work_experience}}</td>
+                                <td>{{exp?.doj}}</td>
+                                <td>{{exp?.dor}}</td>
+                                <td>{{exp?.city}}</td> 
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div style="margin : 15px;" class="detailsside padings">
+                        <h2 style="margin : 15px;">Family Details Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Family Details')"     >Add/Update</span></h2>
+
+
+
+                        <table class="viewdetails">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Name</th>
+                                <th>Relationship</th>
+                                <th>DOB</th> 
+
+                            </tr>
+
+                            <tr *ngFor="let edu of EmpFamilyInfo; let index = index">
+                                <td>{{index + 1}}</td>
+                                <td>{{edu?.name}}</td>
+                                <td>{{edu?.relationship?.text}}</td>
+                                <td>{{edu?.dob}}</td> 
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div style="margin : 15px;" class="detailsside padings">
+                        <h2 style="margin : 15px;">Emerency Contact Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Emergency Contacts')"     >Add/Update</span></h2>
+
+                        <table class="viewdetails">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Name</th>
+                                <th>Relationship</th>
+                                <th>Phone</th>
+                                <th>Address</th> 
+                            </tr> 
+    
+                            <tr *ngFor="let emg of EmpEmerencyContactInfo; let index = index">
+                                <td>{{index+1}}</td>
+                                <td>{{emg?.name}}</td>
+                                <td>{{emg?.relationship?.text}}</td>
+                                <td>{{emg?.phone_no}}</td>
+                                <td>{{emg?.address_id}}</td> 
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+
+                    <div style="margin : 15px;" class="detailsside padings">
+                    
+
+                        <h2 style="margin : 15px;">Bank Details Info <span class="material-icons marginleftclass alignvertical" title="Add/Edit">add_circle</span><span class="fontsizeOne highlights alignvertical" (click)="RouteToEmployeeCreate('Bank Details')"     >Add/Update</span></h2>
+
+                        <table class="viewdetails">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Account name</th> 
+                                <th>Account No</th> 
+                                <th>Bank Branch</th> 
+                                <th>IFSC</th>
+                            </tr>
+                            <tr  *ngFor="let bnk of EmpBankDetailsInfo; let index = index">
+                                <td>{{index + 1}}</td>
+                                <td>{{bnk?.account_name}}</td>
+                                <td>{{bnk?.account_no}}</td>
+                                <td>{{bnk?.bank_branch}}</td>
+                                <td>{{bnk?.ifsc}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="modal bd-example-modal-lg" id="deactivateModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Deactivate Employee</h5> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="DeactivateEmployee">
+                    <table>
+                        <tr>
+                            <td class="leftMargin">
+                                <mat-label>Register Notice Date</mat-label><br>
+                                <mat-form-field>
+                                    <input matInput type="date" placeholder="Register Notice Date" formControlName="reg_notice_date">
+                                </mat-form-field>
+                            </td>
+
+                            <td class="leftMargin">
+                                <mat-label>Exit Date</mat-label><br> 
+                                <mat-form-field>
+                                    <input matInput type="date" placeholder="Exit Date" formControlName="exit_date">
+                                </mat-form-field>
+                            </td>
+
+                            <td class="leftMargin">
+                                <mat-label>Buy Back</mat-label><br>
+                                <mat-form-field class="widthOfField">
+                                    <mat-select formControlName="buy_back" placeholder="Buy Back">
+                                        <mat-option *ngFor="let type of EmpInfoObjects.booleanList" [value]="type?.value">
+                                            {{type.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td class="leftMargin">
+                                <mat-label>Served Notice Period</mat-label><br> 
+                                <mat-form-field class="widthOfField">
+                                    <mat-select formControlName="notice_period_served" placeholder="Notice Period Served">
+                                        <mat-option *ngFor="let type of EmpInfoObjects.booleanList" [value]="type?.value">
+                                            {{type.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+
+                        </tr> 
+                        </table> 
+                        <table>
+                        <tr>
+                            <td class="leftMargin">
+                                <mat-form-field class="textarea">
+                                    <mat-label>Reason/Remarks</mat-label>
+                                    <textarea matInput placeholder="Reason/Remarks" formControlName="reason"></textarea>
+                                  </mat-form-field> 
+                            </td>
+                            </tr>
+                            <!-- <tr>
+                            <td class="leftMargin">
+                                <mat-form-field class="textarea">
+                                    <mat-label>Manager Remarks</mat-label>
+                                    <textarea matInput placeholder="Manager Remarks" formControlName="manager_remarks"></textarea>
+                                  </mat-form-field>
+                            </td>
+                        </tr> -->
+                    </table> 
+                  
+                </form>
+
+                <button mat-raised-button color="warn"  (click)="DeactivateEmp()" >Deactivate</button>   
+              </div>
+          </div>
+        </div>
+    </div>
+
+</div>

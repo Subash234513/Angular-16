@@ -1,0 +1,514 @@
+<form [formGroup]="POForm">
+    <div style="margin-left: 3%;">
+        <h2>Purchase Order Modification</h2>
+
+
+        <table>
+            <tr>
+                <td>
+                    <mat-form-field style="margin-left: 50px;">
+                        <mat-label>PO NO</mat-label>
+                        <input matInput readonly value={{PoNo}}>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <!-- <mat-form-field style="width: 175px; margin-left: 100px;" readonly>
+                    <mat-label>Choose Catlog/ Non Catlog</mat-label>
+                    <mat-select formControlName="type" readonly>
+                        <mat-option *ngFor="let types of getCatlog_NonCatlogList" [value]="types.id" >
+                            {{types.text}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+                    <mat-form-field>
+                        <mat-label>Type</mat-label>
+                        <input matInput readonly formControlName="typename">
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field style="width: 200px; margin-left: 50px;">
+                        <mat-label>Supplier Name</mat-label>
+                        <input #supplierInput placeholder="Select Supplier Name" readonly matInput
+                            formControlName="supplier_id" required [matAutocomplete]="supplier">
+                        <mat-autocomplete #supplier="matAutocomplete" [displayWith]="displayFnsupplier">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let supplier of supplierList" [value]="supplier">{{supplier.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style="width:175px; margin-left: 50px;">
+                        <mat-label>Choose From Date</mat-label>
+                        <input matInput readonly [matDatepicker]="picker1" [min]="todayDate" placeholder="From Date"
+                            formControlName="validfrom">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style="width:175px; margin-left: 50px;">
+                        <mat-label>Choose To Date</mat-label>
+                        <input matInput readonly [matDatepicker]="picker2" [min]="todayDate" placeholder="To Date"
+                            formControlName="validto">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field style="width: 200px; margin-left: 50px;">
+                        <mat-label>Branch Code</mat-label>
+                        <input readonly #branchInput placeholder="Select Branch Code" matInput formControlName="branch_id"
+                            [matAutocomplete]="branch">
+                        <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                            (opened)="autocompletebranchScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                    {{branch.code}}-{{branch.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td> <span class="material-icons" data-toggle="modal"
+                        data-target=".bd-example-modal-xl">description</span></td>
+                <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+                    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="exampleModalLongTitle">
+                                    Note Pad
+                                </h2>
+                            </div>
+                            <br>
+                            <div style="margin-left: 50px;width:90%;height: 70%;">
+                                <div>
+                                    <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled"
+                                        (blur)="onBlur()" (mediaDelete)="onDelete($event)"
+                                        (summernoteInit)="summernoteInit($event)" formControlName="notepad">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                                    class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tr>
+            <tr>
+                <td>
+                    <!-- <mat-form-field style="width: 175px;margin-left: 50px;">
+                        <mat-label>Terms And Condition</mat-label>
+                        <mat-select formControlName="terms_id">
+                            <mat-option *ngFor="let terms of termlist" [value]="terms.id">
+                                {{terms.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    <mat-form-field style="width: 200px; margin-left: 50px;">
+                        <mat-label>Terms And Condition</mat-label>
+                        <input #tncInput placeholder="Select Terms and Conditions" matInput formControlName="terms_id"
+                            [matAutocomplete]="tnc" (keypress)="only_numalpha($event)">
+                        <mat-autocomplete #tnc="matAutocomplete" [displayWith]="displayFnterms">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let terms of termlist" [value]="terms">{{terms.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <span class="material-icons" (click)="termsmodal()" data-toggle="modal"
+                        data-target="#exampleModalCentertwo">
+                        speaker_notes
+                    </span>
+                    <button type="button" class="buttonsize btn btn-outline-success"
+                        style="border-radius: 40px;margin-left: 10px;">
+                        <span class="fa fa-plus" data-toggle="modal" data-target=".bd-exampleterms-modal-lg"> T&C
+                        </span></button>
+                    <!-- <br> -->
+                    <div class="modal fade" id="exampleModalCentertwo" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background:#DDEFDD;">
+                                    <h2 class="modal-title" id="exampleModalLongTitle">Terms List</h2>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul *ngFor="let service of producttermslist; index as i">
+                                        <li>{{service.potermstemplate_id.desc}}</li>
+                                    </ul>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade bd-exampleterms-modal-lg" tabindex="-1" role="dialog"
+                        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background:#DDEFDD;">
+                                        <h2 class="modal-title" id="exampleModalLongTitle">Terms And Conditions</h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <nav style="margin-left: 5px;">
+                                            <div class="nav nav-tabs" style="margin-top: 1%;">
+                                                <a class="nav-item nav-link" data-toggle="tab" (click)="productTab()"
+                                                    role="tab">Product</a>
+                                                <a class="nav-item nav-link" data-toggle="tab" (click)="serviceTab()"
+                                                    role="tab">Services</a>
+                                                <a class="nav-item nav-link" data-toggle="tab" (click)="createTab()"
+                                                    role="tab">Create Terms</a>
+                                            </div>
+                                        </nav>
+
+                                        <div *ngIf="IsCreateTab" style="margin-right: 42%;">
+                                            <form [formGroup]="TermsForm" (ngSubmit)="termscreateSubmit()">
+                                                <mat-form-field style="width: 175px;">
+                                                    <mat-label>Type</mat-label>
+                                                    <mat-select formControlName="type">
+                                                        <mat-option *ngFor="let type of typeList" [value]="type.value">
+                                                            {{type.display}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <mat-form-field style="width: 175px; margin-left: 50px;">
+                                                    <mat-label>Description</mat-label>
+                                                    <input matInput placeholder="Description" autocomplete="off"
+                                                        formControlName="desc" required>
+                                                </mat-form-field>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-outline-primary"
+                                                        style="border-radius:40px;margin-left: 50px">Submit</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        style="border-radius:40px;" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div *ngIf="IsServiceTab" style="margin-left: 50px;">
+                                            <h2 style="margin-right: 80%;">Service Terms</h2>
+                                            <div class="table-responsive"
+                                                style="margin-top: 2%;width: 70%; overflow-x: hidden;">
+                                                <table class="table">
+                                                    <thead class="table_header">
+                                                        <tr>
+                                                            <th>S.No</th>
+                                                            <th>Terms</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let service of servicetermslist; index as i">
+                                                            <td> {{i+1 }} </td>
+                                                            <td>{{ service.desc }}</td>
+                                                            <td>
+                                                                <mat-checkbox class="example-margin"
+                                                                    (change)="serviceCheckBoxvalue(service,$event)">
+                                                                </mat-checkbox>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <form [formGroup]="servicetermsForm"
+                                                    (ngSubmit)="servicetermsFormSubmit()">
+                                                    <mat-form-field style="width: 175px; margin-left: 50px;">
+                                                        <mat-label>PoTerm Name</mat-label>
+                                                        <input matInput placeholder="PO Term Name" autocomplete="off"
+                                                            formControlName="name" required>
+                                                    </mat-form-field>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-outline-primary"
+                                                            style="border-radius:40px;margin-left: 50px">Submit</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            style="border-radius:40px;"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </form>
+
+
+                                                <div *ngIf="ServiceTermList?.length==0" class="NodataAlign">No Terms
+                                                    Found...</div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="IsProductTab" style="margin-left: 50px;">
+                                            <h2 style="margin-right: 80%;">Product Terms</h2>
+                                            <div class="table-responsive"
+                                                style="margin-top: 2%;width: 70%; overflow-x: hidden;">
+                                                <table class="table">
+                                                    <thead class="table_header">
+                                                        <tr>
+                                                            <th>S.No</th>
+                                                            <th>Terms</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- [disabled]='product.isNoBillDisabled' -->
+                                                        <!-- (change)="noBillChecked(product,$event)" -->
+                                                        <tr *ngFor="let product of producttermslistproduct; index as i">
+                                                            <td> {{i+1 }} </td>
+                                                            <td>{{ product.desc}}</td>
+                                                            <td>
+                                                                <mat-checkbox class="example-margin"
+                                                                    (change)="productCheckBoxvalue(product,$event)">
+                                                                </mat-checkbox>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <form [formGroup]="producttermsForm"
+                                                    (ngSubmit)="producttermsFormSubmit()">
+                                                    <mat-form-field style="width: 175px; margin-left: 50px;">
+                                                        <mat-label>PoTerm Name</mat-label>
+                                                        <input matInput placeholder="PO Term Name" autocomplete="off"
+                                                            formControlName="name" required>
+                                                    </mat-form-field>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-outline-primary"
+                                                            style="border-radius:40px;margin-left: 50px">Submit</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            style="border-radius:40px;"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </form>
+                                                <div *ngIf="producttermslist?.length==0" class="NodataAlign">No Terms
+                                                    Found...</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <mat-form-field style="width: 175px; margin-left: 50px;">
+                        <mat-label>Approver Name with Limit</mat-label>
+                        <input #empInput placeholder="Select Approver" matInput (click)="getemployeeForApprover()"
+                            formControlName="employee_id" [matAutocomplete]="emp">
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let emp of employeeList" [value]="emp">{{emp.full_name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+
+            </tr>
+        </table>
+
+
+        <div class="table-responsive" style="margin-top: 2%;width: 90%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header>
+                        <th>S.No</th>
+                        <th>Product Name</th>
+                        <th>Item</th>
+                        <th>Product Qty</th>
+                        <th>Supplier unit price</th>
+                        <th>Po Amount</th>
+                        <th>Total Amount</th>
+                        <th>Commodity Name</th>
+                        <th>AMC(%)</th>
+                        <th>Delivery Period</th>
+                        <th>Delivery Details</th>
+                        <th>Download File</th>
+                        <th>View File</th>
+                    </tr>
+                </thead>
+                <ng-container formArrayName="podetails" *ngFor="let group of podetailsArray.controls; let i = index;">
+                    <tr [formGroupName]="i">
+                        <td>{{i+1}}</td>
+                        <!-- <td>
+                            <div *ngIf="typeID == 1 ; else prod">
+                                {{ group?.product_id?.name}}
+                            </div>
+                            <ng-template #prod>{{ group?.product_name}} </ng-template>
+                        </td>
+                        <td>
+                            <div *ngIf="typeID == 1 ; else item">
+                                {{ group?.item?.name}}
+                            </div>
+                            <ng-template #item>{{ group?.item_name}} </ng-template>
+                        </td> -->
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="product_idCatlog">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="itemCatlog">
+                            </mat-form-field>
+                        </td>
+                        <td>
+
+                            <span>{{quantityValue.value}}</span>
+                            <mat-slider #quantityValue formControlName="qty" disabled [value]="quantityValue" readonly>
+                            </mat-slider>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="unitprice">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="totalamount">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="amount">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="commodity">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="amcvalue">
+                            </mat-form-field>
+                        </td>
+
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="deliveryperiod">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button class="material-icons" [disabled]="disablebutton[i]" (click)="openModal(mytemplate)"
+                                (click)="QuantityValidation(group, i)">
+                                speaker_notes
+                            </button>
+
+                            <ng-template #mytemplate>
+                                <h1>Max Qty: {{MaximumQty}}</h1>
+                                <button type="button" class="close" (click)="closedialog()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 10px;">
+                                    <table class="table scrolltable table-bordered">
+                                        <thead>
+                                            <tr class="table_header">
+                                                <th>S.No</th>
+                                                <th>BS </th>
+                                                <th>CC</th>
+                                                <th>Branch Name</th>
+                                                <th>Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <ng-container formArrayName="delivery_details"
+                                            *ngFor="let subgroup of group.controls.delivery_details.controls; let j = index;">
+                                            <tr [formGroupName]="j">
+                                                <td>{{j+1}}</td>
+                                                <td>
+                                                    <mat-form-field>
+                                                        <input matInput placeholder="BS" readonly formControlName="bs">
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-form-field>
+                                                        <input matInput placeholder="CC" readonly formControlName="cc">
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-form-field>
+                                                        <input matInput placeholder="Location" readonly
+                                                            formControlName="location">
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-form-field>
+                                                        <input matInput placeholder="qty" type="number"
+                                                            formControlName="qty" (mouseover)="gettingIndexOfDelivary(i)" (click)="gettingIndexOfDelivary(i)">
+                                                    </mat-form-field>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </table>
+                                    <!-- <button style="border-radius: 40px;margin-left: 10px;"
+                                        class="btn btn-outline-primary" (click)="SaveDelivaryDetails()" >Save</button> -->
+                                </div>
+                            </ng-template>
+
+                        </td>
+                        <td>
+                            <i class="fa fa-download" (click)="fileDownloads(group)"></i>
+                        </td>
+                        <td> <i class="fa fa-picture-o" aria-hidden="true" data-target="#my-modal" data-toggle="modal"
+                                (click)="commentPopup(group)"></i> </td>
+
+                    </tr>
+                </ng-container>
+                <tr>
+                    <th class="totaldisplay" colspan="5">Total Amount:</th>
+                    <td class="rightaligntotal">{{sum | amountPipeCustom }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-bottom: 100px;">
+
+            <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary"
+                [disabled]="clicked == true" (click)="POsubmit()">Submit</button>
+            <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()">Cancel</button>
+        </div>
+    </div>
+</form>
+<div *ngIf="showimagepopup" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+    tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 
+<pre>
+    {{POForm.value | json}}
+</pre> -->
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

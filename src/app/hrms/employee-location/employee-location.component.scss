@@ -1,0 +1,55 @@
+.search{
+    display: flex;
+    gap: 20px;
+}
+// .display{
+//     display: flex;
+//     align-items: center;
+// }
+.btnMargin{
+    margin-top: 4px;
+}
+.createData{
+    display: flex;
+    gap: 20px;
+}
+.Btndisplay{
+    display: flex;
+}
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.SummarySearch{
+    display: flex;
+    gap: 20px;
+}
+.display{
+    display: flex;
+    justify-content: right;
+    margin-bottom: 20px;
+}
+// .MarginLeft{
+//     margin-left: 50px;
+// }
+.MainSearch{
+    display: flex;
+    justify-content: space-between;
+}
+.width{
+    width: 90px;
+}
+.thFlex{
+    display: flex;
+}
+.badge{
+    padding: 8px 25px;
+}
+.NoRecords{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-size: 17px;
+}

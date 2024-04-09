@@ -1,0 +1,209 @@
+<div *ngIf="Screens['HolidaySummary']" >
+    <h2>Holiday Summary</h2> 
+    <form [formGroup]="holidaySearchForm">
+        <table>
+            <tr>
+                <td class="paddings">
+                    <mat-label>Year</mat-label><br>
+                    <mat-form-field appearance="outline" class="matformfieldstyle">
+                        <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                            placeholder="Year" formControlName="name">
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-label>State</mat-label><br>
+                <mat-form-field appearance="outline" class="matformfieldstyle">
+                    <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                        placeholder="State" formControlName="state">
+                </mat-form-field>
+                </td>
+                <td>
+                    <button mat-stroked-button type="button"
+                        style="margin-left: 20px;background-color: white;" aria-label="Search"
+                        (click)="holidaySearch('')">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button"
+                        style="margin-left: 20px;background-color: white;"
+                        (click)="resetHoliday()">Clear</button>
+
+                    <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                        (click)="addHoliday('Create','', 'HolidayCreate' )">
+                        <mat-icon matTooltip="Add">add</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table> 
+    </form>
+
+
+    <table class="table table-bordered" style="margin-top: 10px;max-width: 800px;" id='commonstyle'>
+
+        <thead class="table_header">
+            <tr>
+                <th>S.No</th>
+                <th>Year</th>
+                <th>State</th> 
+                <th>Edit</th> 
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            <tr *ngFor="let type of HolidayObjects.holidayList; index as i">
+                <td>{{(HolidayObjects.presentpageholiday - 1)*HolidayObjects.pagesize +i+1 }}</td>
+                <td>{{type?.year}}</td>
+                <td>{{type?.state?.name}}</td> 
+                <td>
+                    <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                        (click)="addHoliday('Edit',type, 'HolidayCreate')">
+                        <mat-icon style="color: gray; margin-left: 20px;" aria-label="Edit">edit</mat-icon>
+                    </button>
+                </td> 
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="HolidayObjects.holidayList ?.length == 0; else holidayPagination" style="margin-left: 42%;" >
+        <h3>No Records Found.. </h3>
+    </div>
+    <ng-template class="row" #holidayPagination>
+        <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+            <button mat-icon-button [disabled]="HolidayObjects.has_previousholiday === false" color="primary"
+                (click)="holidaySearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{HolidayObjects.presentpageholiday}} 
+            <button mat-icon-button [disabled]="HolidayObjects.has_nextholiday === false" color="primary"
+                (click)="holidaySearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>
+
+
+
+
+
+ <!-- holiday form -->
+ <div *ngIf="Screens['HolidayCreate']"> 
+    <h2>Holiday {{HolidayObjects.TypeOfForm}}</h2>
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="HolidayForm">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="col-md-3">
+                                <mat-label>Year</mat-label><br>
+                                <mat-form-field appearance="outline" class="matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" matInput
+                                        autocomplete="off" placeholder="Year" formControlName="year">
+                                </mat-form-field>
+                            </div>
+                        </th>
+                        <th>
+                            <mat-label style="margin-left: 60px;">State</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle"
+                                style="width: 250px; margin-left: 60px;" (click)="getState('')">
+
+                                <input class="matformfieldinputstyle" matInput placeholder="Select State"
+                                    [matAutocomplete]="holiday"
+                                    (keyup)="getState(this.HolidayForm.value.state)"
+                                    formControlName="state" autocomplete="off">
+                                <mat-autocomplete #holiday="matAutocomplete" [displayWith]="displayholiday">
+                                    <mat-option *ngFor="let state of HolidayObjects.StateList" [value]="state">
+                                        {{state.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                        </th>
+                        <th>
+                            <button type="button" mat-fab
+                                style="margin-left: 20px;background-color: #f5c68b;"
+                                (click)="AddholidayForm()">
+                                <mat-icon matTooltip="AddholidayForm">add</mat-icon>
+                            </button>
+                        </th> 
+                    </tr>
+                </table>
+
+                <table formArrayName="arr" class="table aligncenter"
+                    style="margin-top: 10px; max-width:500px" id="commonstyle">
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of HolidayForm.get('arr')['controls']; let i = index "
+                            [formGroupName]="i">
+
+                            <td>{{i+1}}</td>
+
+                            <td> 
+
+                                <mat-form-field  >
+                                    <input   type="text" matInput
+                                        autocomplete="off" placeholder="Text" formControlName="name">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+
+                                <mat-form-field >
+                                    <input matInput [matDatepicker]="picker" (dateChange)="ChangeDateFormat('date', i);" 
+                                        formControlName="date">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix
+                                        [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker> 
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <div class="example-button-container">
+                                    <button type="button"
+                                        style="border-color: #f5c68b; background-color: #f5c68b;"
+                                        mat-mini-fab aria-label=" delete icon"
+                                        (click)="deleteholidaydetail('i')">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+                </table>
+                <div>
+
+
+                    <div style="margin-left: 7px;
+                    margin-top: 20px;">
+
+
+                        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                border-color: black;
+                                background-color: white;"
+                            (click)="onHolidayCancelClick(); ">Cancel</button>
+
+                        <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                            (click)="onSubmitHolidayClick()">Submit</button>
+
+                    </div>
+
+
+
+                </div>
+
+
+                <!-- <pre>{{HolidayForm.value | json}}</pre> -->
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div *ngIf="reportcard">
+  
+<div class="container" >
+<div class="row">
+  <div class="col-md-3" (click)="reportmytask()">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        
+        
+        <mat-card-title>
+            <mat-icon> <i class="fa fa-book"></i></mat-icon> 
+         
+          
+        </mat-card-title>
+      
+      </mat-card-header>
+    
+      <mat-card-content style="cursor: pointer;">
+        Time Sheet Report
+      </mat-card-content>
+    
+    </mat-card>
+  </div>
+  <div class="col-md-3" (click)="reportganttchart()">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        
+        
+        <mat-card-title>
+            <mat-icon> <i class="fa-solid fa-chart-gantt"></i></mat-icon> 
+         
+          
+        </mat-card-title>
+      
+      </mat-card-header>
+    
+      <mat-card-content style="cursor: pointer;">
+        Gantt Chart
+      </mat-card-content>
+    
+    </mat-card>
+  </div>
+  <div class="col-md-3" (click)="clientreportdownload()">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        
+        
+        <mat-card-title>
+            <mat-icon> <i class="fa-solid fa-people-roof"></i></mat-icon> 
+         
+          
+        </mat-card-title>
+      
+      </mat-card-header>
+    
+      <mat-card-content style="cursor: pointer;">
+Client Report Download      </mat-card-content>
+    
+    </mat-card>
+  </div>
+  <div class="col-md-3" (click)="ReportDashboardFunc()">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        
+        
+        <mat-card-title>
+            <mat-icon> <i class="fa-solid fa-gauge"></i></mat-icon> 
+         
+          
+        </mat-card-title>
+      
+      </mat-card-header>
+    
+      <mat-card-content style="cursor: pointer;">
+        Report Dashboard
+      </mat-card-content>
+    
+    </mat-card>
+  </div>
+
+  <div class="col-md-3" (click)="monthlyTimesheet()">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        
+        
+        <mat-card-title>
+            <mat-icon> <i class="fa-solid fa-calendar-days"></i></mat-icon> 
+         
+          
+        </mat-card-title>
+      
+      </mat-card-header>
+    
+      <mat-card-content style="cursor: pointer;">
+        Timesheet Month Report
+      </mat-card-content>
+    
+    </mat-card>
+  </div>
+
+</div>
+</div>
+</div>
+<div *ngIf="reportsummary">
+ <app-report-mytask (OnCancel)="backtoreportcard()"></app-report-mytask>
+</div>
+<div *ngIf="reportchart">
+  <app-report-ganttchart (OnCancel)="backtoreportcard()"></app-report-ganttchart>
+ </div>
+ <div *ngIf="clientreport">
+  <!-- <app-report-ganttchart (OnCancel)="backtoreportcard()"></app-report-ganttchart> -->
+  <app-clientreport  (OnCancel)="backtoreportcard()"></app-clientreport>
+ </div>
+ <div *ngIf="reportDashboard">
+  <!-- <app-report-dashboard (OnCancel)="backtoreportcard()"></app-report-dashboard> -->
+  <app-report-dashboard (OnCancel)="backtoreportcard()"></app-report-dashboard>
+ </div>
+ <div *ngIf="monthlydata">
+  <app-monthlydata (OnCancel)="backtoreportcard()"></app-monthlydata>
+ </div>

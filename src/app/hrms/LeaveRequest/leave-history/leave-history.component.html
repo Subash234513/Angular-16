@@ -1,0 +1,188 @@
+<body>
+
+  <div class="container-fluid">
+<h1>Leave History</h1>
+<br>
+
+<form>
+
+  <table>
+    <tr>
+
+      <td class="padsize ">
+        <div class="col-md-3">
+          <mat-form-field class="fieldline" dateFormatLR>
+            <mat-label> Month </mat-label>
+            <input matInput [matDatepicker]="dpnew" [formControl]="monyear" (dateChange)='ChangeDateFormat("monthyear")'
+              placeholder="Month and Year" formControlName="monthyear">
+            <mat-datepicker-toggle matSuffix [for]="dpnew"></mat-datepicker-toggle>
+            <mat-datepicker #dpnew startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dpnew)" panelClass="example-month-picker">
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+      </td>
+
+
+      <td>
+
+        <button class="search" mat-stroked-button type="button" style="margin-left: 10px; background-color: white;" aria-label="Search" (click)="searchClicked()">
+          <mat-icon>search</mat-icon>
+        </button>
+      
+
+      </td>
+
+    </tr>
+  </table>
+
+</form>
+<br>
+<br>
+<!--mat card-->
+<!--expansion panel-->
+<div class="accordion-table-container">
+  
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <br>
+              <mat-panel-title>
+      
+                <div class="title-row"> 
+                  <h1 class="panelTitle">Attendance Days</h1> <div class="head-span">{{totalDays}}</div>
+                </div>
+              </mat-panel-title>
+      
+            </mat-expansion-panel-header>
+            <table class="table accTable" id="hideTable">
+              <thead>
+                <tr>
+                  <th scope="col">Present Days</th>
+                  <th scope="col">Leave Days</th>
+                  <th scope="col">Paid Days</th>
+                  <th scope="col">Attendance Days</th>
+                  <th scope="col">Reduction Days</th>
+      
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{presentDays}}</th>
+                  <td>{{leaveDays}}</td>
+                  <td>{{paidDays}}</td>
+                  <td>{{totalDays}}</td>
+                  <td>{{reductionDays}}</td>
+                </tr>
+      
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>
+                  <div class="title-row"> 
+                    <h1 class="panelTitle">Leave Balance </h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="head-span">{{availLeaveTol}}</div>
+                  </div>
+                </span>
+              </mat-panel-title>
+      
+            </mat-expansion-panel-header>
+            <table class="table" id="hideAvailTable">
+              <thead>
+                <tr>
+                  <th scope="col">PL</th>
+                  <th scope="col">CL</th>
+                  <th scope="col">ML</th>
+                  <th scope="col">TOL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{availLeavePl}}</th>
+                  <td>{{availLeaveCl}}</td>
+                  <td>{{availLeaveMl}}</td>
+                  <td>{{availLeaveTol}}</td>
+                </tr>
+      
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+      
+      
+          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>
+                  <div class="title-row"> 
+                    <h1 class="panelTitle">Utlized Leave</h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="head-span">{{utilLeaveTol}}</div>
+                  </div>
+                </span>
+              </mat-panel-title>
+      
+            </mat-expansion-panel-header>
+            <table class="table" id="hideAvailTable">
+              <thead>
+                <tr>
+                  <th scope="col">PL</th>
+                  <th scope="col">CL</th>
+                  <th scope="col">ML</th>
+                  <th scope="col">TOL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{utilLeavePl}}</th>
+                  <td>{{utilLeaveCl}}</td>
+                  <td>{{utilLeaveMl}}</td>
+                  <td>{{utilLeaveTol}}</td>
+                </tr>
+      
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <section class="cus-tableContainer">
+          <div class="table-container">
+        
+          <table class="table cus-table table-hover displayTab scrollable-table">
+            <thead class="thead-light">
+              <tr>
+                <th  class="static-header" scope="col">S.No</th>
+                <th  class="static-header" scope="col">Log Date</th>
+                <th  class="static-header" scope="col">Type</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr *ngFor="let entry of data.reduction_history; let i = index">
+                <td >{{ i + 1 }}</td>
+                <td >{{ entry.log_date }}</td>
+                  
+                <td class="cus-badge">
+                  <!-- <p [class.cus-badgeRed]="entry.type === 'Absent'" [class.cus-badgeGreen]="entry.type === 'Leave'"
+                  [class.cus-badgeBlue]="entry.type === 'Week Rule'" [class.cus-badgeYellow]="entry.type === 'Sandwich Rule'">{{ entry.type }}</p> -->
+                  <p class="cus-badgeBlue">{{ entry.type }}</p>
+                </td>
+                
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </section>      
+ 
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+  
+
+
+</div>
+</div>
+</body>

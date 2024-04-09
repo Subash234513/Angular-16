@@ -1,0 +1,53 @@
+.display{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.pad{
+    // padding-top: 1px;
+    margin-top: 18px;
+}
+.ReportColumns{
+    margin-left: 15px;
+}
+.padTable{
+    padding-left: 16px;
+}
+.width{
+    width: 90px;
+}
+.cursor{
+    cursor:pointer
+}
+.fa-trash-can {
+    border-radius: 4px;
+    // background-color: #fff0d5;
+    padding: 10px;
+    // color: #ffa500;
+    color: red;
+    cursor: pointer;
+}
+.fa-pencil {
+    // background-color: #ededff;
+    color: #474aff;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.add{
+    // margin-left: 20px;
+    background-color: rgba(45, 129, 155, 0.56);
+}
+#add{
+    margin-left: 20px;
+    background-color: rgba(45, 129, 155, 0.56);
+    margin-top: 10px;
+}
+.card {
+    width: 56%;
+    margin-left: 21%;
+}
+
+.custom-file-input {
+    background-color: aliceblue;
+}

@@ -1,0 +1,121 @@
+<div class="row ">
+    <div class=" col-lg-12 spaceforCard">
+        <form [formGroup]="RequestChangeForm">
+            <div class="row">
+                <div class="col-md-9">
+                    <table>
+                        <tr>
+                            <td class="paddings">
+                                <mat-label>Request Date</mat-label><br>
+                                <mat-form-field class="inputSizeWidth">
+                                    <input matInput readonly [matDatepicker]="picker1" [matDatepickerFilter]="dateFilter"
+                                        (dateChange)="changeDateFormat('date'); perdayLog(RequestChangeForm.value.date)"
+                                        formControlName="date">
+                                    <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+
+                            </td>
+                             
+                            <td colspan="2" class="paddings">
+                                <div class="rowset">
+                                    <div  >
+                                        <mat-label>Request Check In Time</mat-label><br>
+                                        <mat-form-field class="inputSizeWidthSmall">
+                                            <input matInput type="time" placeholder="In Time"
+                                            (change)="timeChange()"
+                                                formControlName="in_time">
+                                        </mat-form-field>
+                                    </div>
+                                     
+                                    <div class="marginset">
+                                        <mat-label>Request Check Out Time</mat-label><br>
+                                        <mat-form-field class="inputSizeWidthSmall">
+                                            <input matInput type="time" placeholder="Out Time"
+                                                formControlName="out_time">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="paddings">
+                                <mat-label>Reason / Remarks</mat-label><br>
+                                <textarea id="w3review" name="w3review" rows="4" cols="70" formControlName="reason"
+                                    autocomplete="off">
+                        </textarea>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="margin:20px  7px 100px 10px  ">
+                        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                        border-color: black;
+                        background-color: white;" (click)="onRequestCancelClick()">Cancel</button>
+
+                        <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                            (click)="onSubmitRequestClick()">Submit</button>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!-- <h3>Check In Logs</h3> -->
+                    <!-- <small>Note: Time format is based system time settings in input</small> -->
+                    <ul class="list-group">
+                        <li class="list-group-item cursor">Actual First Check In:
+                            {{this.RequestObjects.LogData?.atd_check_in| date: 'hh:mm a'}} </li>
+                        <li class="list-group-item cursor">Actual Last Check Out:
+                            {{this.RequestObjects.LogData?.atd_check_out | date: 'hh:mm a'}} </li> 
+                        <!-- <li class="list-group-item cursor">In Time :
+                            {{this.RequestObjects.LogData?.active_status?.in_time}} hrs </li>
+                        <li class="list-group-item cursor">Out Time:
+                            {{this.RequestObjects.LogData?.active_status?.out_time}} </li> -->
+
+                    </ul>
+                    <br>
+
+                    <table class="table table-bordered" style="margin-top: 10px;max-width: 100%; text-align: center;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr> 
+                                <th colspan="2">Login History</th>
+                            </tr>
+                            <tr>
+                                <th>In</th>
+                                <th>Out</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dataLog of RequestObjects.LogData?.log">
+                                <td>{{dataLog?.check_in |
+                                    date:'shortTime'}}</td>
+                                <td>{{dataLog?.check_out |
+                                    date:'shortTime'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+            </div>
+
+
+        </form>
+
+
+
+        <!-- <pre>
+            {{RequestChangeForm.value | json}}
+        </pre> -->
+
+    </div>
+
+
+
+</div>
+
+
+<!-- <pre>{{RequestChangeForm?.value | json}}</pre>  -->

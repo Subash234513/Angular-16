@@ -1,0 +1,99 @@
+<div class="container">
+  <!-- <h3 (click)="BackToSummary()"> <span class="material-icons alignmiddle">arrow_back</span> Time Sheet</h3> -->
+  <div class="row">
+    <div class="col-lg-3">
+      <mat-label>Emp Type</mat-label><br>
+      <mat-form-field class="inputWidthTop">
+        <mat-select [formControl]="EmpType">
+          <mat-option [value]="type.id" *ngFor="let type of timeSheetObjs.Emp_Me_MyTeam_All">
+            {{type.text}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-3">
+
+      <mat-label>Employee</mat-label><br>
+      <mat-form-field class="inputWidthTop">
+        <input #cltInput matInput [formControl]="EmpBasedOnType" [matAutocomplete]="clt" autocomplete="off"
+          (keyup)="getEmpBasedOnView(this.EmpBasedOnType.value)">
+        <mat-icon matSuffix>unfold_more</mat-icon>
+        <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt">
+          <mat-option *ngFor="let clt of timeSheetObjs.EmpList" [value]="clt">
+            {{clt.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-4">
+
+      <mat-label>Date</mat-label><br>
+      <mat-form-field>
+        <input matInput readonly [matDatepicker]="pickerSingle" [formControl]="SelectedHourDate"
+          (dateChange)="ChangeDateFormatCommon()">
+        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerSingle">
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerSingle></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-light ml-20 mt-25 tabledataTop" id="WhiteBtn" (click)="getTimeBasedOnDate()">Choose</button>
+    </div>
+
+  </div>
+ 
+
+
+  <div class="table-responsive">
+    <table class="table table-bordered" style="width: 80%;">
+        <thead class="table_header">
+            <tr>
+              <th>Sl.No</th>
+        <th>Emp Name</th>
+        <th>In / Out </th>
+        <th>Task Code</th>
+        <th>Task Description</th>
+        <th> Time Spent<small>(in hrs)</small></th>
+        <!-- <th> Edit </th> -->
+      </tr>
+    </thead>
+    <tbody *ngFor="let data of timeSheetObjs.taskHourList;let index = index">
+      <tr>
+        <td rowspan="1000">  {{index + 1}}</td>
+        <td rowspan="1000">({{data.developer?.code}}) {{data.developer?.full_name}}
+        </td>
+        <td rowspan="1000">
+           
+            <p> IN: {{data?.developer?.first_check_in | date: 'shortTime'}} / OUT: {{data?.developer?.last_check_in | date: 'shortTime'}}</p>
+            <p> Total : {{data?.developer?.total_hour }} hrs</p> 
+        </td>
+      </tr>
+      <tr *ngFor="let dataTask of data?.task">
+        <td> {{dataTask?.code}} </td>
+        <td> {{dataTask?.desc}} </td>
+        <!-- <td> {{dataTask?.hours}} </td> -->
+        <td class="inputStyleChange"> <input type="text" class="form-control inputdesign" [ngModel]="dataTask?.hours"
+          (ngModelChange)="dataTask.hours = $event" [disabled]="dataTask?.is_update == false" >  
+          <span class="material-icons" *ngIf="dataTask?.is_update"  (click)="updateTask(dataTask)">done</span>
+          <!-- iconsEdit -->
+          <!-- <button class="btn btn-light tabledataTop" (click)="updateTask()"><span class="material-icons">done</span></button>  -->
+        </td> 
+          
+        <!-- <td> <span class="material-icons">edit</span>   </td> -->
+      </tr>
+       
+    </tbody>
+    <tr *ngIf="timeSheetObjs.taskHourList?.length == 0" class="align-items-center">
+      No Records Found...
+    </tr>
+  </table>
+  </div>
+  <br>
+  <div class="bottomSpace">
+    
+    <!-- <button class="btn btn-light ml-20 mt-25 tabledataTop" id="WhiteBtn" (click)="BackToSummary()">Back</button>  -->
+  </div>
+
+
+
+</div>

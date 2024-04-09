@@ -1,0 +1,29 @@
+
+
+
+  .my-dialog-container {
+    z-index: 9999;
+  }
+
+.select-container {
+    z-index: 19998; 
+}
+  
+/* my-dialog.component.css */
+.mat-select-panel {
+    z-index: 10000; /* Set a higher z-index value */
+  }
+  .dialog-header {
+    background-color: #044063;
+    padding: 10px; /* Add padding as needed */
+    color: #fff; 
+  }
+
+  ::ng-deep .mat-dialog-container 
+  {
+    padding:0% !important;
+    width: 586px;
+    overflow-x: hidden;
+  }
+  
+  

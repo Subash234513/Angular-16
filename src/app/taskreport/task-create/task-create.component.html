@@ -1,0 +1,666 @@
+<div >
+    <mat-card style="margin-top: 13px;margin-right: 20px;margin-bottom: 20px;" >
+    <div style="margin-left: 5px;margin-top: 1%; width: 100%;">
+        <h2 class="header">
+            Task Creation
+        </h2>
+        <hr>
+        <div  >
+            <form [formGroup]="taskAddForm"  autocomplete="off">
+                <table>
+                    <div>
+                        <tr>
+                            
+                            <td>
+                                <mat-label >Client<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline"
+                                (click)="client()">
+
+                                <input #cltInput  class="matformfieldinputstyle" matInput (click)="clearproject()"
+                                    formControlName="client" [matAutocomplete]="clt" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt"
+                                    (opened)="autocompleteCltScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let clt of clientList"  (focusout)="FocusOut_select_client(clt)" [value]="clt">
+                                            {{clt.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 30px;">Project Name<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="margin-left: 30px;" appearance="outline"
+                                (click)="appName()">
+
+                                <input #appnmInput  class="matformfieldinputstyle" matInput (click)="clearmodule()"
+                                    formControlName="app_id" [matAutocomplete]="appnm" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm"
+                                    (opened)="autocompleteAppnmScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let appnm of appNameList" (focusout)="FocusOut_select_project(appnm)" [value]="appnm">
+                                            {{appnm.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 30px;">Module Name<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="margin-left: 30px;" appearance="outline"
+                                (click)="moduleName()">
+
+                                <input #modnmInput  class="matformfieldinputstyle" matInput
+                                    formControlName="project_map_id" [matAutocomplete]="modnm" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #modnm="matAutocomplete" [displayWith]="displayFnmodnm"
+                                    (opened)="autocompletemodnmScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let modnm of moduleNameList" [value]="modnm">
+                                            {{modnm.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td>
+        
+                          
+                           
+                            <td>
+                                <!-- <button mat-fab type="button" 
+                                style="margin-left: 20px;background-color: burlywood;" data-toggle="modal"
+                                data-target="#createMaster" (click)="master()">
+                                <mat-icon matTooltip="Add Master">add</mat-icon></button> -->
+                                <button type="button" style="  border-radius: 10px;margin-left: 20px;border-color: #f5c68b;
+                                
+                                background-color: #f5c68b;" data-toggle="modal"
+                                data-target="#createMaster" class="btn btn-light" 
+                                    (click)="master()"><i class="fa fa-plus-circle"></i> Add Master</button>
+                            </td>
+                        </tr>
+                        <!-- <tr> -->
+                            <!-- <td>
+                                <mat-label >Dev Type<label style="color:red">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                                    <mat-select class="matformfieldinputstyle" formControlName="type">
+                                        <mat-option *ngFor="let devtype of devtypelist" 
+                                            [value]="devtype.id">
+                                            {{devtype.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td> -->
+        
+                            <!-- <td>
+                                <mat-label style="margin-left: 60px;" >Unit Head<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline"
+                                (click)="unitHead()">
+
+                                <input #unitHDInput  class="matformfieldinputstyle" matInput
+                                    formControlName="unit_head" [matAutocomplete]="unitHD" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #unitHD="matAutocomplete" [displayWith]="displayFnunitHD"
+                                    (opened)="autocompleteuntheadScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let unitHd of unitheadList" [value]="unitHd">
+                                            {{unitHd.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td> -->
+
+                            <!-- <td>
+                                <mat-label style="margin-left: 60px;" >Team Lead<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline"
+                                (click)="TeamLead()">
+
+                                <input #teamldInput  class="matformfieldinputstyle" matInput
+                                    formControlName="team_lead" [matAutocomplete]="teamld" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld"
+                                    (opened)="autocompleteteteamldScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let teamld of teamldList" [value]="teamld">
+                                            {{teamld.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td> -->
+                        <!-- </tr> -->
+                        <!-- <tr>
+                            <td>
+                                <mat-label>Planned Start Date<label style="color:red">*</label></mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline" style="width: 250px;">
+    
+                                    <input matInput readonly [matDatepicker]="picker1" class="matformfieldinputstyle"
+                                         formControlName="start_date" [min]="set_Threedays_ago" (dateChange)="StartDate($event.value)" >
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Planned End Date<label style="color:red">*</label></mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline" style="width: 250px;margin-left: 60px;">
+    
+                                    <input matInput readonly [min]="set_StartDate" [matDatepicker]="picker2" class="matformfieldinputstyle"
+                                         formControlName="end_date" >
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                           
+                            
+                        </tr> -->
+                        <!-- <tr>
+                            <td colspan="4">
+                                <mat-label>Task Name<label style="color:red">*</label></mat-label><br>
+                                <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                    <textarea class="matformfieldinputstyle heightdesc" type="text"
+                                        placeholder="Task Name..." formControlName="task" matInput
+                                        autocomplete="off"></textarea>
+                                </mat-form-field>
+                            </td>
+                        </tr> -->
+                       
+                        <!-- <tr>
+
+                            <td colspan="4">
+                                <mat-label>Developer Name<label style="color:red">*</label> </mat-label><br>
+                                <mat-form-field class="lenthoftextfield matformfieldinputstyle" (click)="getemp('', 0)">
+                                    <mat-chip-list #chipListemp>
+                                        <mat-chip *ngFor="let empl of chipSelectedemp" [selectable]=true [removable]=true
+                                            (removed)="removedemp(empl)">
+                                            {{empl.name}}
+                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                        </mat-chip>
+                                        <input #empInput [formControl]="employee_arr" [matAutocomplete]="emp"
+                                            placeholder="Select Developer Name" class="matformfieldinputstyle"
+                                            (keyup)="getemp(employee_arr.value, 0)" [matChipInputFor]="chipListemp"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]=true required>
+                                    </mat-chip-list>
+    
+                                    <mat-autocomplete #emp="matAutocomplete" (optionSelected)="empSelected($event)"
+                                        (opened)="autocompleteempScroll('')">
+                                        <mat-option *ngFor="let emp of empList" [value]="emp">
+                                            {{emp.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                        </tr> -->
+
+                        <!-- <tr>
+                            <td>
+                                <div style="vertical-align: center;">Documents: </div>
+                                <div class="input-group mb-3 inputCMTFile01">
+                                    <div class="custom-file">
+                                        <input type="file" (change)="onFileSelected($event)" multiple
+                                            class="custom-file-input" id="inputGroupFile01">
+                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    </div>
+                                </div>
+    
+                            </td>
+                        </tr>
+                        <div *ngIf="Documentfilearray?.length > 0">
+                            <p> Attachments:</p>
+                            <div style="display:inline" *ngFor="let files of Documentfilearray; let indexfile = index">
+                                <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                                    <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;" type="button" class="btn btncolor" >{{indexfile+1}}.{{files?.name}}</button>
+                                    <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;" type="button" class="btn btncolor" (click)="deleteInlineFile(indexfile, '')">X</button>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </table>
+
+
+                <table>
+                    <tr>
+                        <span (click)="addSection()" style="margin-left: 20px;">
+                            <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                        </span>
+                    </tr>
+                </table>
+
+                <div class="table-responsive" style="margin-top: 1%;width:100%">
+                    <table class="table table-bordered" fixed-header style="margin-top: 10px;width:90%">
+                        <thead class="table_header" style="text-align: left;"> 
+                            <tr>
+                                <th>S.No</th>
+                                <th>Dev Type</th>
+                                <th>Planned Start Date</th>
+                                <th>Planned End Date</th>
+                                <th>Developer</th>
+                                <th>Task</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                
+                            <ng-container formArrayName="data"
+                                            *ngFor="let section of getSections(taskAddForm); let i = index">
+                                            <tr [formGroupName]="i">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <mat-label >Dev Type<label style="color:red">*</label> </mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle" appearance="outline">
+                                                        <mat-select class="matformfieldinputstyle" formControlName="dev_type">
+                                                            <mat-option *ngFor="let devtype of devtypelist" 
+                                                                [value]="devtype.id">
+                                                                {{devtype.text}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-label>Planned Start Date<label style="color:red">*</label></mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle" appearance="outline">
+                        
+                                                        <input matInput readonly [matDatepicker]="picker1" class="matformfieldinputstyle"
+                                                             formControlName="start_date" [min]="set_Threedays_ago" (dateChange)="StartDate($event.value)" >
+                                                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #picker1></mat-datepicker>
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-label >Planned End Date<label style="color:red">*</label></mat-label><br>
+                                                    <mat-form-field class="matformfieldstyle" appearance="outline" >
+                        
+                                                        <input matInput readonly [min]="set_StartDate" [matDatepicker]="picker2" class="matformfieldinputstyle"
+                                                             formControlName="end_date" >
+                                                        <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #picker2></mat-datepicker>
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-label >Developer <label style="color:red">*</label></mat-label><br>
+                                                <mat-form-field class="matformfieldstyle" appearance="outline"
+                                                    (click)="developer(i)">
+                    
+                                                    <input #empInput  class="matformfieldinputstyle" matInput
+                                                        formControlName="developer" [matAutocomplete]="emp" required>
+                                                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                                    <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFndev"
+                                                        (opened)="autocompletedevScroll()">
+                                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                                        <ng-container *ngIf="!isLoading">
+                                                            <mat-option *ngFor="let dev of developerList" [value]="dev">
+                                                                {{dev.name}}
+                                                            </mat-option>
+                                                        </ng-container>
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+                                                </td>
+                                                <td>
+                                                        <mat-label>Task Name<label style="color:red">*</label></mat-label><br>
+                                                        <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                                            <textarea class="matformfieldinputstyle heightdesc" type="text"
+                                                                placeholder="Task Name..." formControlName="task" matInput
+                                                                autocomplete="off"></textarea>
+                                                        </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <button mat-icon-button type="button">
+                                                        <mat-icon style="color: black;" *ngIf="taskAddForm.get('data')['controls'].length > 1"
+                                                            (click)=removeSection(i)>
+                                                            delete</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                            </ng-container>
+                        </table>
+                </div>
+
+                <!-- <div>
+                    <table formArrayName="data">
+                        <tr *ngFor="let data of taskAddForm.controls.data['controls']; let dataIndex = index"
+                            [formGroupName]="dataIndex">
+                            <td>
+                                <mat-label >Dev Type<label style="color:red">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                                    <mat-select class="matformfieldinputstyle" formControlName="type">
+                                        <mat-option *ngFor="let devtype of devtypelist" 
+                                            [value]="devtype.id">
+                                            {{devtype.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Planned Start Date<label style="color:red">*</label></mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline" style="width: 250px;margin-left: 60px;">
+    
+                                    <input matInput readonly [matDatepicker]="picker1" class="matformfieldinputstyle"
+                                         formControlName="start_date" [min]="set_Threedays_ago" (dateChange)="StartDate($event.value)" >
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Planned End Date<label style="color:red">*</label></mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline" style="width: 250px;margin-left: 60px;">
+    
+                                    <input matInput readonly [min]="set_StartDate" [matDatepicker]="picker2" class="matformfieldinputstyle"
+                                         formControlName="end_date" >
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Developer Name<label style="color:red">*</label></mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline"
+                                (click)="developer()">
+
+                                <input #empInput  class="matformfieldinputstyle" matInput
+                                    formControlName="developer" [matAutocomplete]="emp" required>
+                                    <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFndev"
+                                    (opened)="autocompletedevScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let dev of developerList" [value]="dev">
+                                            {{dev.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            </td>
+                            <td>
+                                    <mat-label>Task Name<label style="color:red">*</label></mat-label><br>
+                                    <mat-form-field class="lenthoftextfield matformfieldstyle">
+                                        <textarea class="matformfieldinputstyle heightdesc" type="text"
+                                            placeholder="Task Name..." formControlName="task" matInput
+                                            autocomplete="off"></textarea>
+                                    </mat-form-field>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td><button mat-button (click)="AddTask()">+ Add Task</button></td> 
+                        </tr>
+                    </table>
+                </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+             
+   
+    </form>
+    </div>
+    </div>
+    </mat-card>
+
+
+
+    <div style="margin-bottom: 25px; margin-top: 30px;margin-left: 50px; ">
+       
+        <button type="button" class="btn btn-light" (click)="oncancel()" style="border-radius: 7px;margin-left: 10px;
+                        border-color: black;
+                        background-color: white;"  >Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b;
+                    background-color: #f5c68b;" (click)="submitForm()" class="btn btn-light">Submit</button>
+    </div>
+    </div>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen]="true" type="ball-spin-clockwise">
+        <p style="color: white">Please Wait. </p>
+    </ngx-spinner>
+
+
+
+
+
+    <!-- <div *ngIf="createMaster"> -->
+        <div class="modal fade" id="createMaster" tabindex="-1" role="dialog" aria-labelledby="actionpopupTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="margin-left: 247px;" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Master</h2>
+              <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title class="titlecolor">
+                            <mat-icon>add</mat-icon>New Client
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <form [formGroup]="clientForm"  autocomplete="off">
+                            <table>
+                                <div>
+                                    <tr>
+                                        <td >
+                                            <mat-label >Client Name <label style="color:red">*</label></mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" appearance="outline">
+                                                <input matInput class="matformfieldinputstyle" type="text"
+                                                     formControlName="name" autocomplete="off" 
+                                                    >
+                                            </mat-form-field>
+                                        </td>
+                                        
+                                    </tr>
+                                </div>
+                            </table>
+                            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" (click)="clientSubmit()" class="btn btn-light">Submit</button>
+                    </form>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title class="titlecolor">
+                            <mat-icon>add</mat-icon>New Project 
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <form [formGroup]="projectForm"  autocomplete="off">
+                            <table>
+                                <div>
+                                    <tr>
+                                        <td >
+                                            <mat-label >Project Name<label style="color:red">*</label> </mat-label><br>
+                                            <mat-form-field class="matformfieldstyle"  appearance="outline">
+                                                <input matInput class="matformfieldinputstyle" type="name"
+                                                     formControlName="name" autocomplete="off" 
+                                                    >
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-label style="margin-left: 30px;">Project Start Date<label style="color:red">*</label></mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" appearance="outline" style="margin-left: 30px;">
+                        
+                                                <input matInput readonly [matDatepicker]="pickerMR" class="matformfieldinputstyle"
+                                                     formControlName="start_date" (dateChange)="MasterStartDate($event.value)" >
+                                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerMR">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #pickerMR></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-label style="margin-left: 30px;">Planned End Date <label style="color:red">*</label></mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" appearance="outline" style="margin-left: 30px;">
+                        
+                                                <input matInput readonly [min]="set_masterStartDate" [matDatepicker]="pickerMR2" class="matformfieldinputstyle"
+                                                     formControlName="end_date" >
+                                                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerMR2">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #pickerMR2></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        
+                                    </tr>
+                                </div>
+                            </table>
+                            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" (click)="projectSubmit()" class="btn btn-light">Submit</button>
+                        </form>
+                    </mat-expansion-panel>
+
+
+                    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title class="titlecolor">
+                            <mat-icon>add</mat-icon>New Module
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <form [formGroup]="moduleForm"  autocomplete="off">
+                            <table>
+                                <div>
+                                    <tr>
+                                        <td >
+                                            <mat-label >Module Name <label style="color:red">*</label></mat-label><br>
+                                            <mat-form-field class="matformfieldstyle" appearance="outline">
+                                                <input matInput class="matformfieldinputstyle" type="name"
+                                                     formControlName="name" autocomplete="off" 
+                                                    >
+                                            </mat-form-field>
+                                        </td>
+                                      
+                                        
+                                    </tr>
+                                </div>
+                            </table>
+                            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" (click)="moduleSubmit()" class="btn btn-light">Submit</button>
+                            </form>
+                    </mat-expansion-panel>
+
+
+                    <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title class="titlecolor">
+                            <mat-icon>add</mat-icon>New Mapping 
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <form [formGroup]="mappingForm"  autocomplete="off">
+                            <table>
+                            <div>
+                                <tr>
+                                    <td>
+                                        <mat-label >Client<label style="color:red">*</label></mat-label><br>
+                                    <mat-form-field class="matformfieldstyle" appearance="outline"
+                                        (click)="clientmaster()">
+                            
+                                        <input #cltmasterInput  class="matformfieldinputstyle" matInput
+                                            formControlName="client_id" [matAutocomplete]="cltmaster" >
+                                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                        <mat-autocomplete #cltmaster="matAutocomplete" [displayWith]="displayFncltmaster"
+                                            (opened)="autocompleteCltmasterScroll()">
+                                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                            <ng-container *ngIf="!isLoading">
+                                                <mat-option *ngFor="let clt of clientmasterList"  (focusout)="FocusOut_select_clientmaster(clt)" [value]="clt">
+                                                    {{clt.name}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-label style="margin-left: 30px;">Project Name<label style="color:red">*</label></mat-label><br>
+                                    <mat-form-field class="matformfieldstyle" style="margin-left: 30px;" appearance="outline"
+                                        (click)="projectnamemaster()">
+                            
+                                        <input #appnmmasterInput  class="matformfieldinputstyle" matInput
+                                            formControlName="project_id" [matAutocomplete]="appnmmaster" >
+                                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                        <mat-autocomplete #appnmmaster="matAutocomplete" [displayWith]="displayFnappnmmaster"
+                                            (opened)="autocompleteAppnmmasterScroll()">
+                                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                            <ng-container *ngIf="!isLoading">
+                                                <mat-option *ngFor="let appnm of appNamemasterList" (focusout)="FocusOut_select_projectmaster(appnm)" [value]="appnm">
+                                                    {{appnm.name}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                    </td>
+                            
+                                    <td>
+                                        <mat-label style="margin-left: 30px;" >Module Name<label style="color:red">*</label></mat-label><br>
+                                    <mat-form-field class="matformfieldstyle" style="margin-left: 30px;" appearance="outline"
+                                        (click)="modulenamemaster()">
+                            
+                                        <input #modnmmasterInput  class="matformfieldinputstyle" matInput
+                                            formControlName="module_id" [matAutocomplete]="modnmmaster" >
+                                            <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                                        <mat-autocomplete #modnmmaster="matAutocomplete" [displayWith]="displayFnmodnmmaster"
+                                            (opened)="autocompletemodnmmasterScroll()">
+                                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                            <ng-container *ngIf="!isLoading">
+                                                <mat-option *ngFor="let modnm of moduleNamemasterList" [value]="modnm">
+                                                    {{modnm.name}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                    </td>
+                                  
+                                    
+                                </tr>
+                            </div>
+                            </table>
+                            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" (click)="mappingSubmit()" class="btn btn-light">Submit</button>
+                            </form>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+
+
+            </div>
+          </div>
+        </div>
+        </div>
+    <!-- </div> -->
+
+
+
+
+
+    <!-- <pre>{{this.taskAddForm.value | json}}</pre> -->

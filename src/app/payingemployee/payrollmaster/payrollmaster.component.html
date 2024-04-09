@@ -1,0 +1,220 @@
+<div>
+    <div class="container" style="margin: 10px;">
+
+
+        <div class="row" *ngIf="payrollSummary">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h2>Payroll Summary</h2>
+                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                    (click)="addPayroll('Creation','')">
+                    <mat-icon matTooltip="Add">add</mat-icon>
+                </button>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div style="margin-left: 15px;">
+                    <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.no</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Allowance Type</th>
+                                <th>percentage</th>
+                             
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let type of payrollList; index as i">
+                                <td>{{(presentpagepayroll - 1)*pagesizepayroll +i+1 }}</td>
+                                <td>{{type?.code}}</td>
+                                <td>{{type?.name}}</td>
+                                <td>{{type?.allowance_type.name}}</td>
+                                <td>{{type?.percentage}}</td>
+                                <td><span class="material-icons cursor" (click)="addPayroll('Edit',type)">edit</span>
+                                    <span class="material-icons cursor" (click)="deletepayroll(type)">delete</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="payrollList?.length==0 || payrollList == undefined ; else paginationpro"
+                        class="NodataAlign text-center">No Records Found...</div>
+                    <ng-template #paginationpro>
+                        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                            <button type="button" mat-icon-button [disabled]="has_previouspayroll === false"
+                                color="primary" (click)="payrollSearch('previous')">
+                                <mat-icon>arrow_back</mat-icon>
+                            </button> {{presentpagepayroll}}
+                            <button type="button" mat-icon-button [disabled]="has_nextpayroll === false" color="primary"
+                                (click)="payrollSearch('next')">
+                                <mat-icon>arrow_forward</mat-icon>
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="employeePFStructure">
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h2>Employee PF</h2>
+
+
+                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                    (click)="addEmployeePF('Creation','')">
+                    <mat-icon matTooltip="Add">add</mat-icon>
+                </button>
+
+            </div>
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div style="margin-left: 15px;">
+                    <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.no</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <!-- <th>Allowance Type</th> -->
+                                <th>percentage</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let type of PFStructureList; index as i">
+                                <td>{{(presentpagepf - 1)*pagesizepf +i+1 }}</td>
+                                <td>{{type?.code}}</td>
+                                <td>{{type?.name}}</td>
+                                <!-- <td>{{type?.allowance_type.name}}</td> -->
+                                <td>{{type?.percentage}}</td>
+                                <td><span class="material-icons cursor" (click)="addEmployeePF('Edit',type)">edit</span>
+                                    <span class="material-icons cursor" (click)="deletePFStructure(type)">delete</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="PFStructureList?.length==0 || PFStructureList == undefined ; else paginationpro"
+                        class="NodataAlign text-center">No Records Found...</div>
+                    <ng-template #paginationpro>
+                        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                            <button type="button" mat-icon-button [disabled]="has_previousPF === false" color="primary"
+                                (click)="PFSearch('previous')">
+                                <mat-icon>arrow_back</mat-icon>
+                            </button> {{presentpagepayroll}}
+                            <button type="button" mat-icon-button [disabled]="has_nextPF === false" color="primary"
+                                (click)="PFSearch('next')">
+                                <mat-icon>arrow_forward</mat-icon>
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngIf="payrollcreation">
+            <h2>Payroll {{TypeOfForm}}</h2>
+            <form [formGroup]="payrollForm" autocomplete="off">
+                <table>
+                    <div>
+                        <tr>
+                            <td>
+                                <mat-label>Name<label style="color:red">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name" formControlName="name"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Allowance Type<label style="color:red">*</label>
+                                </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" appearance="outline"
+                                    style="width: 250px;margin-left: 60px;">
+                                    <mat-select formControlName="allowance_type" class="matformfieldinputstyle">
+                                        <mat-option *ngFor="let allow of allowanceTypeList" [value]="allow.id">
+                                            {{allow.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="pf_include">PF
+                                    Include
+                                </mat-checkbox>
+                            </td>
+                            <td>
+                                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="is_deduction">
+                                    is Deduction
+                                </mat-checkbox>
+                            </td>
+                        </tr>
+                    </div>
+                </table>
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                border-color: black;
+                background-color: white;" (click)="oncancelPayroll()">Cancel</button>
+                <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                border-color: #f5c68b;
+                background-color: #f5c68b;" (click)="payrollSubmit()" class="btn btn-light">Submit</button>
+            </form>
+        </div>
+
+
+        <div *ngIf="employeePFStructurecreation">
+            <h2>PF {{TypeOfForm}}</h2>
+            <form [formGroup]="PFForm" autocomplete="off">
+                <table>
+                    <div>
+                        <tr>
+                            <td>
+                                <mat-label>Name<label style="color:red">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name" formControlName="name"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Percentage<label style="color:red">*</label>
+                                </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;"
+                                    appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name"
+                                        formControlName="percentage" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 60px;">Amount<label style="color:red">*</label>
+                                </mat-label><br>
+                                <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;"
+                                    appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name" formControlName="amount"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="is_standard">PF
+                                    Include
+                                </mat-checkbox>
+                            </td>
+                        </tr>
+                    </div>
+                </table>
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                border-color: black;
+                background-color: white;" (click)="oncancelPF()">Cancel</button>
+                <button type="submit" style="border-radius: 10px;margin-left: 10px;
+                border-color: #f5c68b;
+                background-color: #f5c68b;" (click)="pfSubmit()" class="btn btn-light">Submit</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen]="true" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

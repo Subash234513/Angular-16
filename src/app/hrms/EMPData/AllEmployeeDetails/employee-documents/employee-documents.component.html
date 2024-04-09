@@ -1,0 +1,393 @@
+<div class="card cardBackground">
+  <div class="card-body">
+    <div class="container text-center">
+
+      <!--left and right grid-->
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <div class="card innerCard" (click)="togglePanCardDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">chrome_reader_mode</mat-icon>
+                <p class="topAlign">Pan Card</p>
+                <mat-icon class="roundIcon" *ngIf="hasPanCardFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="toggleAadharCardDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">fingerprint</mat-icon>
+                <p class="topAlign">Aadhaar Card</p>
+                <mat-icon class="roundIcon" *ngIf="hasAadharFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="toggleBankProofDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">horizontal_split</mat-icon>
+                <p class="topAlign">Bank Proof</p>
+                <mat-icon class="roundIcon" *ngIf="hasBankFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="toggleEducationDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">school</mat-icon>
+                <p class="topAlign">Educational Certificate</p>
+                <mat-icon class="roundIcon" *ngIf="hasEducationFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="toggleDisabilityDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">nature_people</mat-icon>
+                <p class="topAlign">Disability Certificate</p>
+                <mat-icon class="roundIcon" *ngIf="hasDisabilityFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="toggleWorkExpDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">desktop_mac</mat-icon>
+                <p class="topAlign">Work Experience</p>
+                <mat-icon class="roundIcon" *ngIf="hasExpFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <div class="card innerCard" (click)="togglePastPaySlipsDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">message</mat-icon>
+                <p class="topAlign">Past Payslips</p>
+                <mat-icon class="roundIcon" *ngIf="hasPayslipFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div>
+
+            <!-- <div class="card innerCard" (click)="toggleEmpImgDetails()">
+              <div class="card-body">
+                <mat-icon class="topAlign">account_box</mat-icon>
+                <p class="topAlign">Address Proof</p>
+                <mat-icon class="roundIcon" *ngIf="hasImageFiles()">check_circle_outline</mat-icon>
+              </div>
+            </div> -->
+
+
+          </div>
+          <div class="col">
+            <div class="card cardFile">
+              <div class="card-body">
+                <!-- <button class="btn btn-dark" data-toggle="modal" data-target="#docsModal">
+                  <mat-icon>library_add</mat-icon>
+                </button> -->
+                <button type="button" [disabled]="!canUploadFiles()" data-toggle="modal" data-target="#docsModal"
+                  class="btn btn-dark">Upload Files</button>
+
+                <!--pan card files-->
+                <div *ngIf="showPanCardDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'pan card'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon  style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!--adhaar card files-->
+
+                <div *ngIf="showAadharCardDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Aadhar card'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon  style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+
+                <!--bank proof files-->
+
+                <div *ngIf="showBankProofDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Bank proof'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon   style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!--educational certificate files-->
+
+                <div *ngIf="showEducationDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Educational certificate'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!--disability certificate-->
+
+                <div *ngIf="showDisabilityDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Disability certificate'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+
+                <!--work experience-->
+
+                <div *ngIf="showWorkExpDetails">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Work experience'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!--past payslips-->
+
+                <div *ngIf="showPastPaySlips">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Past payslips'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!--employee image-->
+
+
+                <div *ngIf="showEmpImage">
+                  <div *ngFor="let document of EmployeeDocuments.data">
+                    <ng-container *ngIf="document.type.name === 'Address Proof'">
+                      <h3>{{ document.type.name }}</h3>
+                      <div class="d-flex flex-wrap">
+                        <div class="order-3 p-2 cardMarg" *ngFor="let file of document.file"> <mat-icon
+                            (click)="viewfile(file.file_id, file.file_name)" data-toggle="modal"
+                            data-target="#viewDownload">assignment</mat-icon>{{ file.file_name }}
+                            <!-- <mat-icon  style="margin-left: 7px;" (click)="onDownload(file.file_id, file.file_name)">archive</mat-icon> -->
+                          <mat-icon  style="margin-left: 7px;" (click)="onDelete(file.id)">highlight_off</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--modal form-->
+
+<div class="modal bottom-modal" id="docsModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b> Upload <span
+              *ngIf="showPanCardDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'pan card'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span>
+            <span *ngIf="showAadharCardDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Aadhar card'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showBankProofDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Bank proof'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showEducationDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Educational certificate'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showDisabilityDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Disability certificate'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showWorkExpDetails">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Work experience'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showPastPaySlips">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Past payslips'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span><span *ngIf="showEmpImage">
+              <span *ngFor="let document of EmployeeDocuments.data">
+                <span *ngIf="document.type.name === 'Address Proof'">
+                  {{ document.type.name }}
+                </span>
+              </span>
+            </span>
+          </b>
+
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+          #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+
+            </div>
+            <div class="col-md-4">
+
+              <mat-form-field>
+                <mat-label>Remarks</mat-label>
+                <input type="text" matInput placeholder="Remarks" name="remarkInfo" formControlName="remarks" />
+              </mat-form-field>
+              <br>
+              <span class="error-message" *ngIf="(!remarkInfo?.valid && (remarkInfo?.touched || remarkInfo?.dirty))">
+                *Remarks required
+              </span>
+
+            </div>
+           
+            <div class="col-md-1">
+
+              <button class="inputFile" type="submit"><mat-icon>cloud_upload</mat-icon></button>
+
+            </div>
+          </div>
+          <br>
+          <!-- <span class="error-message" *ngIf="(!docsFile?.valid && (docsFile?.touched || docsFile?.dirty))">
+        *File required
+                 </span> -->
+
+        </form>
+
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="viewDownload" role="dialog" aria-labelledby="bankModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;">
+          View File
+        </h5>
+        <mat-icon  style="margin-left: 7%;
+        font-size: 25px; cursor: pointer;" (click)="onDownload()">cloud_download</mat-icon>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton style="color: white; opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12 col-sm-12" fxLayoutAlign="space-between">
+            <pdf-viewer *ngIf="pdfshow" [src]="filesrc" [original-size]="false" [render-text]='false'
+              [show-borders]="true" [fit-to-page]="true" [show-all]="true" style="display: block; height: 500px;"
+              [fit-to-page]="true">
+            </pdf-viewer>
+            <br>
+            <img *ngIf="imgshow" src="{{filesrc}}" class="img-responsive"
+              style="display: block;border-width: 2px;border-style: solid;width: 100%;" />
+          </div>
+
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>

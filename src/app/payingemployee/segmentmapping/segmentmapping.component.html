@@ -1,0 +1,293 @@
+
+<div id="maincontent" *ngIf="isSummaryContent" class="summary">
+  <div class="search">
+      <div class="row widthSegment">
+          <h2 class="mapping">Segment Mapping</h2>
+      </div>
+ <button type="button" class="btn btn-outline-primary" id="back" (click)="back()" >Back</button>
+      <form [formGroup]="datassearch" class="data" >
+          <section>
+              <div class="row">
+                
+                  <div class="col-sm-3">
+                      <mat-form-field class="segmentname"  >
+                          <mat-label>Segment Name</mat-label>    
+                          <input matInput formControlName="name">
+                      </mat-form-field>
+                  </div>
+                 
+                  <div class="col-md-4" id="aria">
+                      <div>
+                          <button mat-stroked-button type="button" class="storked" 
+                              aria-label="Search"  (click)="searchsegment()">
+                              <mat-icon>search</mat-icon>
+                          </button>
+                          <button mat-stroked-button type="button" class="clear" 
+                          (click)="clearData()"
+                              >Clear</button>
+                              <button type="button" mat-fab class="newsegments" (click)="newSegments()"
+                                 >
+                              <mat-icon matTooltip="Add" style="color: black;">add</mat-icon> 
+                           </button>
+                           <button type="button" id="add" mat-fab 
+                             (click)="uploadfile()">
+                             <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                         </button>
+                      </div>
+                     
+                  </div>
+              
+                  
+              </div>
+          </section>
+  
+      </form>
+  
+  </div>
+  
+  <div class="table" *ngIf="isShowTable">
+  
+      <div>
+          <!-- <h3 style="margin-left:25px;">Grade Mapping</h3> -->
+          <div class="table-responsive">
+  
+              <table class="table table-bordered text-center" id='commonstyle'>
+                  <thead class="table_header">
+                      <tr>
+                          <th class="text-center">S.no</th>                            
+                          <th class="text-center">Segment Name</th>
+                          <th class="text-center">Pay Component </th>
+                          <th class="width text-center">Edit</th>
+                          <th class="width text-center">Delete</th>                       
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let sum of summarylist;index as ind">
+                          <td class="text-center">{{(presentpagemapseg-1)*limit+ind+1}}</td>
+                          <td class="text-center">{{sum?.segment?.name}}</td>
+                          <td class="text-center">{{sum?.paycomponent_name}}</td>
+                          <td class="width text-center"><i class="fa-solid fa-pencil" (click)="editSegment(sum)"></i>
+                            </td>    
+                            <td class="width text-center">
+                              <i class="fa-solid fa-trash-can" (click)="deleteSegment(sum.id)"></i>             
+              
+                            </td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div  *ngIf="summarylist?.length === 0 || summarylist == undefined; else paginationpro" class="NodataAlign text-center">
+                No Records Found...
+              </div>
+              
+              
+              <ng-template #paginationpro>
+                <div class="col-sm-12" id="prevpage">
+                  <button type="button" mat-icon-button [disabled]="has_previousmap === false" color="primary" (click)="mapSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                  </button>
+                  {{ presentpagemapseg }}
+                  <button type="button" mat-icon-button [disabled]="has_nextmap === false" color="primary" (click)="mapSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div>
+            
+              </ng-template>
+              
+        
+          </div>
+      </div>
+  </div>
+  
+
+</div>
+
+
+<div *ngIf="isNewCreation"  class="addform" >
+  <h2 style="padding-left:15px">New Segment Mapping</h2>
+  <form [formGroup]="addForm" autocomplete="off">
+    <div class="col-12 row">
+    <!-- <table>
+      <div>
+        <tr> -->
+       
+          <!-- <td>
+              <mat-label  class="getsegment">Segment</mat-label><br>
+              <mat-form-field (click)="getSegments()" class="matformfieldstyle1">
+                
+                  <mat-select formControlName="segment_id">
+                      <mat-option *ngFor="let type of segmentdata" [value]="type.id">
+                          {{type.name}}
+                      </mat-option>
+                      
+                   </mat-select> 
+              </mat-form-field>
+          </td> -->
+          <!-- <td> -->
+            <div class="col-3">
+              <mat-label class="">Segment<label style="color:red">*</label></mat-label><br>
+              <mat-form-field id=""  appearance="outline"
+                  (click)="getSegments()" class="">
+                  <input #getcomponentInput  class="matformfieldinputstyle" matInput
+                  formControlName="segment_id" [matAutocomplete]="component" >
+                  <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+              <mat-autocomplete #component="matAutocomplete" [displayWith]="displayfncomponent"
+                  (opened)="autocompletecomponentScroll()">
+                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                  <ng-container *ngIf="!isLoading">
+                      <mat-option *ngFor="let component of segmentdata" [value]="component" title="{{component.name}}">
+                        {{component.name}}
+                      </mat-option>
+                  </ng-container>
+                  <mat-option *ngIf="!segmentdata.length">No Records Found</mat-option>
+              </mat-autocomplete>
+              </mat-form-field>
+            </div>
+             
+    <!-- </td> -->
+
+          <!-- <td>
+              <mat-label  class="pay">Pay Component<label  class="component" >*</label> </mat-label><br>
+              <mat-form-field  class="matformfieldstyle2" > -->
+                  <!-- <mat-label>Paycomponent</mat-label> -->
+                  <!-- <mat-select formControlName="paycomponent_id">
+                      <mat-option *ngFor="let type of paycomponent_array" [value]="type.id">{{ type.name }}</mat-option>
+                    </mat-select>
+              </mat-form-field>
+          </td>        -->
+          <!-- <td class="PayComponent"> -->
+            <div class="col-3">
+              <mat-label  class="">Pay Component<label style="color:red">*</label></mat-label><br>
+              <mat-form-field id=""  appearance="outline"
+                  (click)="getpaymentcomponentinfo()" class="">
+                  <input #getpaycomponentInput  class="matformfieldinputstyle" matInput
+                  formControlName="paycomponent_id" [matAutocomplete]="paycomponent" >
+                  <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+              <mat-autocomplete #paycomponent="matAutocomplete" [displayWith]="displaypaycomponent"
+                  (opened)="autocompletepaycomponentScroll()">
+                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                  <ng-container *ngIf="!isLoading">
+                      <mat-option *ngFor="let paycomponent of paycomponent_array" [value]="paycomponent" title="{{paycomponent.name}}">
+                        {{paycomponent.name}}
+                      </mat-option>
+                  </ng-container>
+                  <mat-option *ngIf="!paycomponent_array.length">No Records Found</mat-option>
+              </mat-autocomplete>
+              </mat-form-field>  
+            </div>
+            <div class="col-3"></div>
+            <div class="col-3"></div>
+      
+    <!-- </td>
+
+        </tr>
+      </div>
+    </table> -->
+  </div>
+    <button type="button" class="btn" id="cancel"  (click)="onCancelAdd()">Cancel</button>
+    <button type="submit" class="btn ml-2" id="cancel" (click)="onSubmitAdd()" [disabled]="!addForm.valid" >Submit</button>
+  </form>
+</div>
+
+
+<div *ngIf="isTypeCreation" class="segmentedit">
+  <h2 style="padding-left:15px">Segment Edit</h2>
+  <form [formGroup]="editForm" autocomplete="off">
+    <table>
+      <div>
+        <tr>
+          <!-- <td>
+              <mat-label  class="getsegments" >Segment</mat-label><br>
+              <mat-form-field (click)="getSegments()" class="matformfieldstyle3">
+                 
+                  <mat-select formControlName="segment_id">
+                      <mat-option *ngFor="let type of segmentdata" [value]="type.id">
+                          {{type.name}}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </td> -->
+
+          <td class="col-3">
+            <mat-label class="">Segment<label style="color:red">*</label></mat-label><br>
+            <mat-form-field id=""  appearance="outline"
+                (click)="geteditSegments('')" class="">
+                <input #getcomponentInput  class="matformfieldinputstyle" matInput
+                formControlName="segment_id" [matAutocomplete]="component" (keyup)="geteditSegments(editForm.value.segment_id)" >
+                <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+            <mat-autocomplete #component="matAutocomplete" [displayWith]="displayfncomponent"
+                (opened)="autocompletecomponentScroll()">
+                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let component of segmentdata" [value]="component" title="{{component.name}}">
+                      {{component.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!segmentdata.length">No Records Found</mat-option>
+            </mat-autocomplete>
+            </mat-form-field>
+          </td>
+          <!-- <td>
+              <mat-label class="paycomponent">Pay Component<label class="red">*</label> </mat-label><br>
+              <mat-form-field  class="matformfieldstyle4" >
+                   <mat-label>Paycomponent</mat-label> -->
+                  <!-- <mat-select formControlName="paycomponent_id">
+                      <mat-option *ngFor="let type of paycomponent_array" [value]="type.id">{{ type.name }}</mat-option>
+                    </mat-select>
+              </mat-form-field>
+          </td>         -->
+       
+
+          <td>
+            <mat-label>Pay Component<label style="color:red">*</label></mat-label><br>
+            <mat-form-field id="un"  appearance="outline"
+                (click)="geteditpaymentcomponentinfo('')">
+                <input #getpayInput class="matformfieldinputstyle" matInput
+                formControlName="paycomponent_id" [matAutocomplete]="paycomponent" (keyup)="geteditpaymentcomponentinfo(editForm.value.paycomponent_id)">                    
+                <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+            <mat-autocomplete #paycomponent="matAutocomplete" [displayWith]="displaypaycomponent" (opened)="autocompletepaycomponentScroll()">
+                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                <ng-container *ngIf="!isLoading">
+                  <mat-option *ngFor="let paycomponent of paycomponent_array" [value]="paycomponent" title="{{paycomponent.name}}">
+                    {{paycomponent.name}}
+                </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!paycomponent_array.length">No Records Found</mat-option>
+            </mat-autocomplete>
+            </mat-form-field>
+         </td>
+        </tr>
+      </div>
+    </table>
+    <button type="button" class="btn" id="type"  (click)="onCancel()">Cancel</button>
+    <button type="submit"  class="btn" id="type"  (click)="update()" [disabled]="!editForm.valid">Submit</button>
+  </form>
+</div>
+<div *ngIf="isFileUpload">
+  <div class="card">
+      <div class="card-body">
+        <form novalidate [formGroup]="uploadForms">
+          <div class="input-group mb-3">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                (change)="fileChange($event, $event.target.files)">
+              <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+              <i class="fas fa-file-import"></i> Upload
+            </button>
+            <button class="btn btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+              Cancel
+            </button>
+            <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+              Download Template
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+
+

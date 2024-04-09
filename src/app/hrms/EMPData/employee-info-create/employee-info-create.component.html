@@ -1,0 +1,1103 @@
+<div class="container">
+    <!-- <h1>Employee Details</h1> --><span (click)="backtoInfo()">
+        <span class="material-icons alignvertical">arrow_back</span><span class="alignvertical">Employee Details</span>
+    </span>
+
+    <div class="stepsdiv">
+        <div class="progressstepper">
+            <div class="stepflow">
+                <hr>
+            </div>
+            <span *ngFor="let menus of menusList; let index = index">
+                <span (click)="getMenus({routes: true, data: menus, empid: empid})">
+                    <div class="stepsshow">
+                        <!-- <i class="material-icons stepcircle"
+                    [ngStyle]="flow?.is_created == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}"
+                    *ngIf="flow?.is_created == true">done</i>  -->
+
+                        <i class="material-icons stepcircle" [ngStyle]=" {'background-color': '#66bb6a'}">done</i>
+
+                        <span class="processname"
+                            [ngStyle]="menus == SelectedView?{'background-color': 'rgb(191 223 193)'}:{'background-color': 'white'}">{{menus}}</span>
+                    </div>
+                    <div class="stepflow">
+                        <hr>
+                    </div>
+                </span>
+
+            </span>
+            <!-- <div style="display: table-cell;" >
+                 
+                    <i class="material-icons stepcircle"
+                    [ngStyle]=" {'background-color': '#66bb6a'}"
+                     >done</i>
+
+                <span class="processname">Submit</span>
+            </div> -->
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div *ngIf="Obj.Education">
+        <h2>Employee Education Details</h2>
+
+        <form [formGroup]="EmpEducation">
+            <button type="button" class="btn btn-light" (click)="AddEducation()" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" class="material-icons">add</button>
+
+            <div formArrayName="EducationDetails" class="col-sm-12 col-md-12 col-lg-12 table-responsive">
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Title</th>
+                            <th>Stream</th>
+                            <th>Passing year</th>
+                            <th>Passing Month</th>
+                            <th>Percentage</th>
+                            <th>Institute name</th>
+                            <th>City</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let edu of EmpEducation.controls.EducationDetails['controls']; let eduIndex = index"
+                            [formGroupName]="eduIndex">
+                            <td>{{eduIndex + 1}}</td>
+                            <td>
+                                <!-- <mat-label>Title </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <!-- <input class="matformfieldinputstyle" type="text" placeholder="Title"
+                                        formControlName="title" matInput autocomplete="off"> -->
+
+                                    <input type="text" placeholder="Search Title" matInput formControlName="title"
+                                        [matAutocomplete]="titleref" (keyup)="gettitle(edu.value.title)"
+                                        autocomplete="off" #titleInput>
+                                    <mat-autocomplete #titleauto #titleref="matAutocomplete"
+                                        [displayWith]="getdatatitle">
+
+                                        <mat-option *ngFor="let d of titlelist;" [value]="d">{{d.name}}</mat-option>
+
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Stream </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <!-- <input class="matformfieldinputstyle" type="text" placeholder="Stream"
+                                        formControlName="stream" matInput autocomplete="off"> -->
+
+                                    <input type="text" placeholder="Search Stream" matInput formControlName="stream"
+                                        [matAutocomplete]="streamref" (keyup)="getstream(edu.value.stream)"
+                                        autocomplete="off" #streamInput>
+                                    <mat-autocomplete #streamauto #streamref="matAutocomplete"
+                                        [displayWith]="getdatastream">
+
+                                        <mat-option *ngFor="let d of streamlist;" [value]="d">{{d.name}}</mat-option>
+
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Passing Month </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Passing Month"
+                                        formControlName="passing_month" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Passing Year </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Passing Year"
+                                        formControlName="passing_year" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label> Percentage </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Percentage"
+                                        formControlName="percentage" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label> Institute Name </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Institute"
+                                        formControlName="inst_name" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label> City </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="City"
+                                        formControlName="city" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <span class="material-icons" (click)="deleteEMPEducation(eduIndex)">delete</span>
+                            </td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+
+
+
+
+
+            </div>
+
+            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="EMP_EDU_Submit()">Submit</button>
+
+
+
+
+
+
+
+        </form>
+
+        <!-- <pre>
+            {{EmpEducation.value | json}}
+        </pre> -->
+
+    </div>
+
+
+    <div *ngIf="Obj.Experience">
+        <h1>Employee Experience</h1>
+        <form [formGroup]="EmpExperience">
+            <button type="button" class="btn btn-light" (click)="AddExperience()" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" class="material-icons">add</button>
+
+            <div formArrayName="ExperienceDetails" class="col-sm-12 col-md-12 col-lg-12 table-responsive">
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Company</th>
+                            <th>Work Experience</th>
+                            <th>DOJ </th>
+                            <th>DOR</th>
+                            <th>Role</th>
+                            <th>City</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let fam of EmpExperience.controls.ExperienceDetails['controls']; let Index = index"
+                            [formGroupName]="Index">
+                            <td>{{Index + 1}}</td>
+                            <td>
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Company"
+                                        formControlName="company" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Work Experience"
+                                        formControlName="work_experience" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label class="gapforfield">DOB</mat-label><br> -->
+                                <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                    <input matInput readonly placeholder="DOJ" [matDatepicker]="picker3"
+                                        formControlName="doj" class="matformfieldinputstyle">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker3">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker3></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <!-- <mat-label class="gapforfield">DOB</mat-label><br> -->
+                                <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                    <input matInput readonly placeholder="DOR" [matDatepicker]="picker4"
+                                        formControlName="dor" class="matformfieldinputstyle">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker4">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker4></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Passing Month </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Role"
+                                        formControlName="role" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Passing Month </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="City"
+                                        formControlName="city" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+
+                            <td>
+                                <span class="material-icons" (click)="deleteEMPFamily(Index)">delete</span>
+                            </td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+
+
+
+
+
+            </div>
+
+            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="EMP_EXP_Submit()">Submit</button>
+
+
+
+
+
+
+
+        </form>
+
+    </div>
+
+
+    <div *ngIf="Obj['Family Details']">
+        <h1>Employee Family Details</h1>
+        <form [formGroup]="EmpFamilyDetails">
+            <button type="button" class="btn btn-light" (click)="AddFamily()" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" class="material-icons">add</button>
+
+            <div formArrayName="FamilyDetails" class="col-sm-12 col-md-12 col-lg-12 table-responsive">
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Name</th>
+                            <th>Relationship</th>
+                            <th>DOB</th>
+                            <th>Phone No</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let fam of EmpFamilyDetails.controls.FamilyDetails['controls']; let Index = index"
+                            [formGroupName]="Index">
+                            <td>{{Index + 1}}</td>
+                            <td>
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                        formControlName="name" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+
+                                <mat-form-field class="matformfieldstyle gapforfield">
+                                    <mat-select class="matformfieldinputstyle" formControlName="relationship"
+                                        placeholder="Relationship">
+                                        <mat-option *ngFor="let boolean of RelationshipList" title=" {{boolean.text}}"
+                                            [value]="boolean.id">
+                                            {{boolean.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label class="gapforfield">DOB</mat-label><br> -->
+                                <mat-form-field class="lenthoftext gapforfield matformfieldstyle">
+                                    <input matInput readonly placeholder="DOB" [matDatepicker]="picker2"
+                                        formControlName="dob" class="matformfieldinputstyle">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+
+                            <td>
+                                <!-- <mat-label>Passing Month </mat-label><br> -->
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="No"
+                                        formControlName="no" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+
+                            <td>
+                                <span class="material-icons" (click)="deleteEMPFamily(Index)">delete</span>
+                            </td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+
+
+
+
+
+            </div>
+
+            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="EMP_Fam_Submit()">Submit</button>
+
+
+
+
+
+
+
+        </form>
+
+        <!-- <pre>{{EmpFamilyDetails.value | json}}</pre>  -->
+
+    </div>
+
+
+    <div *ngIf="Obj['Emergency Contacts']">
+        <h1>Emergency Contact Details</h1>
+
+        <form [formGroup]="EmpEmergencyDetails">
+            <button type="button" class="btn btn-light" (click)="AddEmg()" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" class="material-icons">add</button>
+
+            <div formArrayName="EmgContactDetails" class="col-sm-12 col-md-12 col-lg-12 table-responsive">
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Name</th>
+                            <th>Relationship</th>
+                            <th>Phone No</th>
+                            <th>Delete</th>
+                        </tr>
+                        <ng-container
+                            *ngFor="let emg of EmpEmergencyDetails.controls.EmgContactDetails['controls']; let Index = index"
+                            [formGroupName]="Index">
+                            <tr>
+                                <td>{{Index + 1}}</td>
+                                <td>
+                                    <mat-form-field class="lenthoftext matformfieldstyle">
+                                        <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                            formControlName="name" matInput autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+
+                                <td>
+
+                                    <mat-form-field class="matformfieldstyle gapforfield">
+                                        <mat-select class="matformfieldinputstyle" formControlName="relationship"
+                                            placeholder="Relationship">
+                                            <mat-option *ngFor="let boolean of RelationshipList"
+                                                title=" {{boolean.text}}" [value]="boolean.id">
+                                                {{boolean.text}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+
+                                <td>
+                                    <mat-form-field class="lenthoftext matformfieldstyle">
+                                        <input class="matformfieldinputstyle" type="text" placeholder="No"
+                                            formControlName="phone_no" matInput autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+
+
+                                <td>
+                                    <span class="material-icons" (click)="deleteEMP_Emg(Index)">delete</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <h2>Address</h2>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <mat-label>Address Line1</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Line 1" matInput formControlName="line1"
+                                                    required autocomplete="off">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-label>Adderss Line2</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Line 2" matInput formControlName="line2"
+                                                    required autocomplete="off">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-label>Address Line3</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Line 3" matInput formControlName="line3"
+                                                    required autocomplete="off">
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-label>Select PinCode</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Search Pincode" matInput
+                                                    formControlName="pincode" required autocomplete="off"
+                                                    [matAutocomplete]="pinlistCon"
+                                                    (keyup)=" getpincodedata(emg.get('pincode').value)"
+                                                    #pincodeInputCon>
+                                                <mat-autocomplete #pincodeinfoCon #pinlistCon="matAutocomplete"
+                                                    [displayWith]="getpincodeinterface">
+                                                    <mat-option *ngFor="let d of pincodelist" [value]="d"
+                                                        (focusout)="getpinlistfocus(d, Index)">
+                                                        {{d.no}}</mat-option>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <mat-label>Select City</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Search City" matInput
+                                                    formControlName="city" required autocomplete="off"
+                                                    [matAutocomplete]="citysCon"
+                                                    (keyup)="getcitydata(emg.get('city').value)" #cityInputCon>
+                                                <mat-autocomplete #cityinfoCon #citysCon="matAutocomplete"
+                                                    [displayWith]="getcityinterface">
+                                                    <mat-option *ngFor="let d of citylist" [value]="d">{{d.name}}
+                                                    </mat-option>
+
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-label>Select District</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Search District" matInput
+                                                    formControlName="district" required autocomplete="off"
+                                                    [matAutocomplete]="districtsCon"
+                                                    (keyup)="getdistrictdata(emg.get('district').value)"
+                                                    #districtInputCon>
+                                                <mat-autocomplete #districtinfoCon #districtsCon="matAutocomplete"
+                                                    [displayWith]="getdistrictinterface">
+                                                    <mat-option *ngFor="let d of districtlist" [value]="d">{{d.name}}
+                                                    </mat-option>
+
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-label>Select State</mat-label>
+                                            <mat-form-field>
+                                                <input type="text" placeholder="Search State" matInput
+                                                    formControlName="state" required autocomplete="off"
+                                                    [matAutocomplete]="statessCon"
+                                                    (keyup)="getstatedata( emg.get('state').value)" #stateInputCon>
+                                                <mat-autocomplete #stateinfoCon #statessCon="matAutocomplete"
+                                                    [displayWith]="getstateinterface">
+                                                    <mat-option *ngFor="let d of statelist" [value]="d">{{d.name}}
+                                                    </mat-option>
+
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </thead>
+                </table>
+
+
+
+
+
+
+            </div>
+
+            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="EMP_EMG_Submit()">Submit</button>
+
+
+
+
+
+
+
+        </form>
+
+        <!-- <pre>{{EmpEmergencyDetails.value | json}}</pre> -->
+    </div>
+
+
+    <div *ngIf="Obj['Bank Details']">
+        <h1>Bank Details</h1>
+
+        <form [formGroup]="EmpBankDetails">
+            <button type="button" class="btn btn-light" (click)="AddBankDetails()" style="border-radius: 7px;margin-left: 10px;
+                    border-color: black; 
+                    background-color: white;" class="material-icons">add</button>
+
+            <div formArrayName="BankDetails" class="col-sm-12 col-md-12 col-lg-12 table-responsive">
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Account Name</th>
+                            <th>Account Number</th>
+                            <th>Bank</th>
+                            <th>Bank Branch</th>
+                            <th>IFSC</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let bank of EmpBankDetails.controls.BankDetails['controls']; let Index = index"
+                            [formGroupName]="Index">
+                            <td>{{Index + 1}}</td>
+                            <td>
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                        formControlName="account_name" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="Acc Number"
+                                        formControlName="account_no" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+
+                                <mat-form-field>
+                                    <input type="text" placeholder="Search Bank Branch" matInput
+                                        formControlName="bank_id" required autocomplete="off"
+                                        [matAutocomplete]="banksearch" (keyup)="getbank(bank.get('bank_id').value)">
+                                    <mat-autocomplete #banksearch="matAutocomplete" [displayWith]="getbankinterface">
+                                        <mat-option *ngFor="let d of banklist" [value]="d"
+                                            (click)="getbank_branchdata(bank.get('bank_id').value)">{{d.name}}
+                                        </mat-option>
+
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+
+
+
+
+                                <!-- <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input type="text" placeholder="Search Bank" class="matformfieldinputstyle" matInput
+                                        formControlName="bank_id" required autocomplete="off" [matAutocomplete]="bank"
+                                        (keyup)="getbank(bank)" #bankInput>
+                                    <mat-autocomplete #bank="matAutocomplete" [displayWith]="getbankinterface">
+                                        <mat-option *ngFor="let d of banklist" [value]="d">{{d.name}}
+                                        </mat-option>
+
+                                    </mat-autocomplete>
+                                </mat-form-field> -->
+
+
+
+
+
+                            </td>
+
+                            <td>
+                                <!-- <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input type="text" placeholder="Search Bank branch" matInput
+                                        formControlName="bank_branch" class="matformfieldinputstyle" required
+                                        autocomplete="off" [matAutocomplete]="bank_branch"
+                                        (keyup)="getbank_branchdata(bank.get('bank_branch').value)" #bank_branchInput>
+                                    <mat-autocomplete #bank_branch="matAutocomplete"
+                                        [displayWith]="getbank_branchinterface">
+                                        <mat-option *ngFor="let d of bank_branchlist" [value]="d">{{d.name}}
+                                        </mat-option>
+
+                                    </mat-autocomplete>
+                                </mat-form-field> -->
+                                <mat-form-field class="matformfieldstyle gapforfield">
+                                    <mat-select class="matformfieldinputstyle" formControlName="bank_branch"
+                                        placeholder="Branch">
+                                        <mat-option *ngFor="let boolean of this.bank_branchlist[Index]"
+                                            title=" {{boolean.text}}" [value]="boolean.id">
+                                            {{boolean.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </td>
+
+                            <td>
+                                <mat-form-field class="lenthoftext matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" placeholder="No"
+                                        formControlName="ifsc" matInput autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+
+                            <td>
+                                <span class="material-icons" (click)="deleteEMP_BankDetails(Index)">delete</span>
+                            </td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+
+
+
+
+
+            </div>
+
+
+            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="EMP_bank_Submit()">Submit</button>
+
+
+
+
+
+
+
+        </form>
+
+        <!-- <pre>{{EmpBankDetails.value | json}}</pre> -->
+
+    </div>
+
+
+
+    <div *ngIf="Obj['Emp Info']">
+        <form [formGroup]="createemploys">
+
+            <table>
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Employee Code</mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Code" matInput formControlName="code" readonly
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>First Name </mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="First Name" matInput formControlName="first_name"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Middle Name </mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Middle Name" matInput formControlName="middle_name"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Last Name </mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Last Name" matInput formControlName="last_name"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Date of Birth</mat-label><br>
+                        <mat-form-field class="widthInput">
+                            <input matInput placeholder="DOB" [matDatepicker]="pickerE21"
+                                (dateChange)="dateformatchange('createemploys', 'dob' )" formControlName="dob">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerE21">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #pickerE21></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Date of Join</mat-label><br>
+                        <mat-form-field class="widthInput">
+                            <input matInput placeholder="DOJ" [matDatepicker]="pickerE2"
+                                (dateChange)="dateformatchange('createemploys', 'doj' )" formControlName="doj">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerE2">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #pickerE2></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+
+                        <mat-label>Gender </mat-label><br>
+                        <mat-form-field>
+                            <mat-select formControlName="gender">
+                                <mat-option *ngFor="let type of GenderList" [value]="type.id">
+                                    {{type.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Department</mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search Department" matInput formControlName="department_id"
+                                autocomplete="off" [matAutocomplete]="deptlist"
+                                (keyup)="getEmployeedepartmentdata(createemploys.value.department_id)" #deptInput>
+                            <mat-autocomplete #deptinfo #deptlist="matAutocomplete"
+                                [displayWith]="getdepartmentinterface">
+                                <mat-option *ngFor="let d of employeetypelist" [value]="d">{{d.name}}</mat-option>
+
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Designation</mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search Designation" matInput formControlName="designation"
+                                [matAutocomplete]="designref" (keyup)="getdesignation(createemploys.value.designation)"
+                                autocomplete="off" #designInput>
+                            <mat-autocomplete #designauto #designref="matAutocomplete"
+                                [displayWith]="getdatadesignation">
+
+                                <mat-option *ngFor="let d of designationlist;" [value]="d">{{d.name}}</mat-option>
+
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Mobile Number</mat-label> <br>
+                        <mat-form-field>
+                            <input matInput placeholder="Mobile Number" formControlName="mobilenumber"
+                                [minlength]="minLength" [maxlength]="maxLength" (keyup)="keypress($event)"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Email Id</mat-label> <br>
+                        <mat-form-field>
+                            <input type="email" placeholder="Email Id" matInput formControlName="emailid" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Branch Name</mat-label> <br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search Branch" matInput formControlName="branch" required
+                                autocomplete="off" (keyup)="getbranchsdata(createemploys.value.branch)"
+                                [matAutocomplete]="branchlist" #branchInput>
+                            <mat-autocomplete #branchinfo #branchlist="matAutocomplete" [displayWith]="getdatabranch">
+                                <mat-option *ngFor="let d of branchdatalist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td class="paddings">
+                        <mat-label>Department Name</mat-label> <br>
+                        <mat-form-field >
+                            <input type="text" placeholder="Search Department" matInput formControlName="department" required
+                                autocomplete="off" (keyup)="getDepartmentdata(createemploys.value.department)"
+                                [matAutocomplete]="departmentlist" #departmentInput>
+                            <mat-autocomplete #departmentinfo #departmentlist="matAutocomplete" [displayWith]="getdatadepartment">
+                                <mat-option *ngFor="let d of departmentdatalist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr> -->
+            </table>
+
+            <h2 style="font-family: 'Times New Roman', Times, serif;font-weight: bold;color: blue;">Address</h2>
+
+            <table>
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Address Line1</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Line 1" matInput formControlName="line1" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Adderss Line2</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Line 2" matInput formControlName="line2" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Address Line3</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Line 3" matInput formControlName="line3" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Select PinCode</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search Pincode" matInput formControlName="pincode" required
+                                autocomplete="off" [matAutocomplete]="pinlist"
+                                (keyup)=" getpincodedata(createemploys.value.pincode)" #pincodeInput>
+                            <mat-autocomplete #pincodeinfo #pinlist="matAutocomplete"
+                                [displayWith]="getpincodeinterface">
+                                <mat-option *ngFor="let d of pincodelist" [value]="d"
+                                    (focusout)="getpinlistfocusEMPInfo(d)">
+                                    {{d.no}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Select City </mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search City" matInput formControlName="city" required
+                                autocomplete="off" [matAutocomplete]="citys"
+                                (keyup)="getcitydata(createemploys.value.city)" #cityInput>
+                            <mat-autocomplete #cityinfo #citys="matAutocomplete" [displayWith]="getcityinterface">
+                                <mat-option *ngFor="let d of citylist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Select District</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search District" matInput formControlName="district"
+                                required autocomplete="off" [matAutocomplete]="districts"
+                                (keyup)="getdistrictdata(createemploys.value.district)" #districtInput>
+                            <mat-autocomplete #districtinfo #districts="matAutocomplete"
+                                [displayWith]="getdistrictinterface">
+                                <mat-option *ngFor="let d of districtlist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Select State </mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search State" matInput formControlName="state" required
+                                autocomplete="off" [matAutocomplete]="statess"
+                                (keyup)="getstatedata(createemploys.value.state)" #stateInput>
+                            <mat-autocomplete #stateinfo #statess="matAutocomplete" [displayWith]="getstateinterface">
+                                <mat-option *ngFor="let d of statelist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <h2 style="color:blue;font-family:'Times New Roman', Times, serif;font-weight:bold">Contact</h2>
+
+            <table>
+                <tr>
+                    <td class="paddings">
+                        <!-- <mat-label>Contact Type</mat-label><br>
+                        <mat-form-field >
+                            <mat-select formControlName="contacttype" placeholder="Contact Type">
+                                <mat-option value="EMPLOYEE">EMPLOYEE</mat-option>
+                                <mat-option value="GROUP123">GROUP123</mat-option>
+                                <mat-option value="Individual">Individual</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                        <mat-label> Contact Type </mat-label><br>
+                        <mat-form-field>
+                            <mat-select formControlName="contacttype">
+                                <mat-option *ngFor="let type of ContactTypeList" [value]="type.id">
+                                    {{type.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Person Name</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Person Name" matInput formControlName="personname" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Designation</mat-label><br>
+                        <mat-form-field>
+                            <input type="text" placeholder="Search Designation" matInput
+                                formControlName="condesignation" required autocomplete="off"
+                                [matAutocomplete]="designref"
+                                (keyup)="getdesignation(createemploys.value.condesignation)" autocomplete="off"
+                                #designInput>
+                            <mat-autocomplete #designauto #designref="matAutocomplete"
+                                [displayWith]="getdatadesignation">
+                                <mat-option *ngFor="let d of designationlist;" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Landline1</mat-label><br>
+                        <mat-form-field>
+                            <input matInput placeholder="Land Line 1" formControlName="landline1" required
+                                autocomplete="off" [minlength]="minLength" [maxlength]="maxLength"
+                                (keyup)="keypress($event)" autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="paddings">
+                        <mat-label>Land Line2</mat-label><br>
+                        <mat-form-field>
+                            <input matInput placeholder="Land Line 2" formControlName="landline2" autocomplete="off"
+                                [minlength]="minLength" [maxlength]="maxLength" (keyup)="keypress($event)"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Mobile Number</mat-label><br>
+                        <mat-form-field>
+                            <input matInput placeholder="Mobile No 1" formControlName="contactnumber"
+                                [minlength]="minLength" [maxlength]="maxLength" (keyup)="keypress($event)"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Mobile Number2</mat-label><br>
+                        <mat-form-field>
+                            <input matInput placeholder="Mobile No 2" formControlName="contactnumber2"
+                                [minlength]="minLength" [maxlength]="maxLength" (keyup)="keypress($event)"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td class="paddings">
+                        <mat-label>Email Id</mat-label><br>
+                        <mat-form-field>
+                            <input type="email" placeholder="Email id" matInput formControlName="conemailid" required
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                </tr>
+
+                <!-- <tr>
+                    <td class="paddings">
+                        <mat-label>Date Of Birth</mat-label><br>
+                        <mat-form-field >
+                            <input matInput placeholder="DOB" [max]="today" [matDatepicker]="pickerjoins"
+                                formControlName="condob" autocomplete="off">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerjoins">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #pickerjoins></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="paddings">
+                        <mat-label>Wedding Day</mat-label><br>
+                        <mat-form-field >
+                            <input matInput placeholder="Wedding Date" [max]="today" [matDatepicker]="pickerjoinn"
+                                formControlName="conwedday" autocomplete="off">
+                            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="pickerjoinn">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #pickerjoinn></mat-datepicker>
+                        </mat-form-field>
+
+                    </td>
+                </tr> -->
+            </table>
+
+            <br>
+            <div>
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                            border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                    (click)="employeecreatedata()">Submit</button>
+
+            </div>
+            <br><br>
+        </form>
+
+
+        <!-- <pre>
+            {{createemploys.value | json}}
+        </pre> -->
+
+
+    </div>
+
+
+    <div *ngIf="Obj['Photo Upload']">
+        <h1>Upload Photo</h1>
+
+        <form [formGroup]="EmpProfile">
+
+            <div style="display: flex;justify-content: center;">
+                <div class="image-container">
+                    <label class="hoverable" for="fileInput">
+                        <img [src]="url ? url : ''" />
+                        <div class="hover-text">Choose file</div>
+                        <div class="background"></div>
+                    </label>
+                    <br />
+                    <input id="fileInput" type="file" [(ngModel)]="url" class="select-profile-picture"
+                        (change)="onSelectFile($event)" formControlName="file" />
+                    <span class="message">Tap here to select your picture</span>
+                </div>
+            </div>
+            <br />
+            <div class="row" style="display: flex;justify-content: center;">
+                <button class="btn btn-info" *ngIf="url" (click)="delete()" style="    margin-left: 4cap;
+              margin-top: 2%;">delete</button>
+                <button class="btn btn-success" *ngIf="url" style="margin-left: 6%;
+                margin-top: 2%;">Upload</button>
+
+            </div>
+
+
+
+
+
+
+
+
+        </form>
+
+        <!-- <pre>{{EmpBankDetails.value | json}}</pre> -->
+
+    </div>
+
+</div>

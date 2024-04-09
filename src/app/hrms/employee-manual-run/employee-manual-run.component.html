@@ -1,0 +1,39 @@
+<div>
+    <form [formGroup]="formData">
+        <div class="display">
+            <div class="row col-md-10">
+                <div class="col-3">
+                    <mat-form-field>
+                        <mat-label>Month</mat-label>
+                        <mat-select formControlName="Month">
+                            <mat-option *ngFor="let data of Month" [value]="data.Value">
+                                {{data.key}}
+                            </mat-option>
+                        </mat-select>
+                        
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field>
+                        <mat-label>Year</mat-label>
+                        <mat-select formControlName="Year">
+                            <mat-option *ngFor="let data of years" [value]="data">
+                                {{data}}
+                            </mat-option>
+                        </mat-select>
+                        
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div>
+                <button mat-raised-button class="button" (click)="ManualRun()">
+                    <i class="fa fa-cog" [ngClass]="{'rotate':Searching}"></i>
+                    Manual Run
+                </button>
+            </div>
+        </div>
+
+       
+    </form>
+</div>

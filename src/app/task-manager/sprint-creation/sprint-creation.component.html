@@ -1,0 +1,129 @@
+<!-- 
+<br><br><br>
+<div class="card">
+  <div class="card-body">
+    <h1 class="storyheading">Sprint Creations</h1>
+
+
+    
+  <form [formGroup]="sprintForm">
+    <table>
+        <tr>
+            <td>
+                <mat-label >Name/Code</mat-label><br>
+                        <mat-form-field class="inputSizeWidth">
+                            <input type="text" matInput autocomplete="off" formControlName="name">
+                            <mat-placeholder>Name</mat-placeholder>
+                </mat-form-field>
+            </td>
+            <td class="padsize">
+                <mat-label>Start Date</mat-label><br>
+                <mat-form-field class="inputSizeWidth">
+                    <input matInput readonly [matDatepicker]="picker1"
+                        formControlName="start_day">
+                    <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker1">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </td>
+            <td class="padsize">
+                <mat-label>End Date</mat-label><br>
+                <mat-form-field class="inputSizeWidth">
+                    <input matInput readonly [matDatepicker]="picker2"  formControlName="end_day">
+                    <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker2">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+    
+  </form>
+
+
+  <br>
+
+        <div style="margin-bottom: 100px;">
+            <button class="btn btn-light" id="submitBtn" [disabled]="!sprintForm.valid" (click)="SubmitSprint()">Submit</button>
+            <button class="btn btn-light" id="WhiteBtn" (click)="BackToSummary()">Back</button>
+
+
+        </div>
+
+
+    </div>
+</div>     -->
+
+<!-- <div class="cus-createHeader">
+  <h3>New Sprint Creation</h3>
+  <nav class="cus-createHeaderNav">
+    <p class="cus-createHeaderNavActive" id="cus-createDetailsBtn">
+      New Sprint Creation
+    </p>
+  </nav>
+</div> -->
+
+<form [formGroup]="sprintForm" class="cus-sprintCreateMain">
+    <div class="modal-body" style="padding: 10px">
+      <div class="cus-sprintContainer1">
+        <div class="cus-sprintContainer100">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input
+              type="text"
+              matInput
+              autocomplete="off"
+              formControlName="name"
+            />
+            <!-- <mat-placeholder>Name</mat-placeholder> -->
+          </mat-form-field>
+        </div>
+  
+        <div>
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input matInput readonly [matDatepicker]="picker1" formControlName="start_day">
+
+            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+  
+        <div>
+          <mat-form-field>
+            <mat-label>End Date</mat-label>
+            <input
+              matInput
+              readonly
+              [matDatepicker]="picker2"
+              formControlName="end_day"
+              [min]="sprintForm.get('start_day').value"
+            />
+            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker2">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal-footer">
+      <div class="cus-sprintContainer2">
+        <!-- <button class="btn btn-outline-secondary" (click)="BackToSummary()">
+          Cancel
+        </button> -->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="BackToSummary()">
+          Close
+        </button>
+        <button
+          class="btn btn-primary"
+          [disabled]="!sprintForm.valid"
+          (click)="SubmitSprint()" style="background-color: #044063;color: white;"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+  

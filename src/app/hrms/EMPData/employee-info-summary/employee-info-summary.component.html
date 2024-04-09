@@ -1,0 +1,272 @@
+<!-- <div class="col-md-12" *ngIf="EmployeeSummaryPart"> -->
+    <div class="col-md-12" *ngIf="EmployeeSummaryPart">
+    <!-- <h2>Employee Summary</h2> -->
+    <form [formGroup]="EmployeeSummarySearch" style="margin-left: 20px;">
+
+
+         <table>
+            <tr>
+                <td>
+
+                    <mat-form-field  (click)="getTeamLead('')">
+                        <mat-label>Team Lead</mat-label>
+
+                        <input #teamldInput class="matformfieldinputstyle" matInput
+                            (keyup)="getTeamLead(EmployeeSummarySearch.value.lead_id)" formControlName="lead_id"
+                            [matAutocomplete]="teamld">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                            <mat-option *ngFor="let teamld of EmpSummaryObjs.teamldList" [value]="teamld">
+                                {{teamld.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <!-- <mat-form-field 
+                        (click)="getemployee('')"
+                        class="gapforfieldfy">
+                        <mat-label> Employee </mat-label>
+                        <input #empInput placeholder="Select Employee" matInput formControlName="emp"
+                            [matAutocomplete]="emp"
+                            (keyup)="getemployee(EmployeeSummarySearch.value.emp)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                            <mat-option *ngFor="let emp of EmpSummaryObjs.employeeList" [value]="emp"
+                                title="{{emp.full_name}}">{{emp.full_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>  -->
+                    <mat-form-field class="gapforfieldfy lenthoftext" >
+                        <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                            placeholder="Code/Name" formControlName="emp">
+                    </mat-form-field>
+                </td>
+
+                <!-- <td>
+
+                    <mat-form-field class="gapforfieldfy" (click)="getDepartment('')">
+                        <mat-label>Department</mat-label>
+                        <input #deptInput class="matformfieldinputstyle" matInput
+                            (keyup)="getDepartment(EmployeeSummarySearch.value.department)"
+                            formControlName="department" [matAutocomplete]="dept">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #dept="matAutocomplete" [displayWith]="displayFnDept">
+                            <mat-option *ngFor="let dept of EmpSummaryObjs.deptList" [value]="dept"> 
+                                {{dept.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td> -->
+                <td>
+
+                    <mat-form-field (click)="getorg_id('')" class="gapforfieldfy">
+                        <mat-label> Deployed Site </mat-label>
+                        <input #org_idInput placeholder="Select Deployed Site" matInput formControlName="org_id"
+                            [matAutocomplete]="org_id" (keyup)="getorg_id(EmployeeSummarySearch.value.org_id)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #org_id="matAutocomplete" [displayWith]="displayFnorg_id">
+                            <mat-option *ngFor="let org_id of EmpSummaryObjs.org_idList" [value]="org_id"
+                                title="{{org_id.name}}">{{org_id.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>   
+                <td>
+
+                    <mat-form-field  class="gapforfieldfy" style="width: 94%;">
+                        <mat-label> Status </mat-label>
+                        <mat-select formControlName="noticeperiod" placeholder="Status">
+                            <mat-option *ngFor="let type of statusList" [value]="type?.id"> 
+                                {{type?.name}} 
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    <mat-form-field (click)="getbsdata('')"  >
+                        <mat-label> BS </mat-label>
+                        <input #bsInput placeholder="Select BS" matInput formControlName="bs"
+                            [matAutocomplete]="bs_id" (keyup)="getbsdata(EmployeeSummarySearch.value.bs)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #bs_id="matAutocomplete" [displayWith]="displayFnbs_id">
+                            <mat-option *ngFor="let bs_id of EmpSummaryObjs.bsdatalist" [value]="bs_id"
+                                title="{{bs_id.name}}">{{bs_id.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td>
+
+                    <mat-form-field (click)="getccdata('')" class="gapforfieldfy">
+                        <mat-label> CC </mat-label>
+                        <input #CC_idInput placeholder="Select CC" matInput formControlName="cc"
+                            [matAutocomplete]="cc_id" (keyup)="getccdata(EmployeeSummarySearch.value.cc)">
+                        <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                        <mat-autocomplete #cc_id="matAutocomplete" [displayWith]="displayFncc">
+                            <mat-option *ngFor="let cc of EmpSummaryObjs.ccdatalist" [value]="cc"
+                                title="{{cc.name}}">{{cc.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+             
+                <td>
+
+                    <div style="margin-bottom: 20px;">
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            aria-label="Search" (click)="EmployeeSearch('')"> 
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="resetEmployee()">Clear</button> 
+
+                            <button *ngIf="adminValidation" mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="AddEmployee()" title="Add Employee"><span class="material-icons">
+                                group_add
+                            </span></button> 
+                           
+                    </div>
+                    
+
+                    <!-- <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        aria-label="Search" (click)="EmployeeSearch('')">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        (click)="resetEmployee()">Clear</button> -->
+                </td>
+                <!-- <td>
+                    <div style="margin-bottom: 20px;">
+                        <button *ngIf="adminValidation" mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        (click)="showRelievedEmployees(1)" title="Releived Employees"><span><i class="fa-solid fa-person-walking-dashed-line-arrow-right" style="font-size: large;"></i>
+                            
+                        </span></button> 
+                    </div>
+                </td> -->
+                <!-- <td>
+                    <div style="margin-bottom: 20px;">
+                      <button 
+                              mat-stroked-button 
+                              type="button" 
+                              style="margin-left: 20px;background-color: white;"
+                              (click)="showRelievedEmployees(1)"
+                              [class.highlighted]="isHighlighted" 
+                              title="Releived Employees">
+                        <span><i class="fa-solid fa-person-walking-dashed-line-arrow-right"   [class.highlighted]="isHighlighted"  style="font-size: large;"></i></span>
+                      </button> 
+                    </div>
+                  </td> -->
+            </tr>
+        </table>  
+
+
+
+
+
+
+
+
+
+        <!-- <div class="row">
+
+
+            <div class="col-md-3">
+                <mat-label>Code/Name</mat-label><br>
+                <mat-form-field class="matformfieldstyle">
+                    <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                        placeholder="Code/Name" formControlName="codename">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <div style="margin-top: 26px;">
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        aria-label="Search" (click)="EmployeeSearch('')">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        (click)="resetEmployee()">Clear</button>
+ 
+                </div>
+            </div>
+        </div> -->
+    </form>
+
+
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-bordered tablepaddingsizeheader aligncenter" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+            <thead class="table_header">
+                <tr>
+                    <th>S.No</th>
+                    <th>Employee</th>
+                    <th>Functional Head</th> 
+                    <th>Deployed Site</th> 
+                    <th>Department</th>
+                    <th>BS</th>
+                    <th>CC</th>
+                    <th>Current Status</th>
+                    <th>Action</th>
+                    <th *ngIf="adminValidation">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let emp of EmployeeList; let empindex = index">
+                    <td>{{(presentpageEmployee-1)*10+empindex+1}}</td> 
+                    <td>{{emp?.full_name}}</td>
+                    <td>{{emp?.functional_head?.name}}</td>
+                    <td>{{emp?.employee_branch_id?.name}}</td> 
+                    <td>{{emp?.department_id?.name}}</td> 
+                    <td>{{emp?.businesssegment?.name}}</td> 
+                    <td>{{emp?.costcentre?.name}}</td>  
+                    <td><span class="badge" 
+
+                        [ngClass]="emp.noticeperiod?.text == 'Working' ? 'badge-success' : 
+                        emp.noticeperiod?.text == 'Service Noticeperiod' ? 'badge-warning' : 
+                        emp.noticeperiod?.text == 'Relieved' ? 'badge-danger' : 
+                        emp.noticeperiod?.text == 'Designation Submit' ? 'badge-info' : 
+                        emp.noticeperiod?.text == 'Onboard' ? 'badge-primary' : '-'    ">
+
+
+                    {{emp?.noticeperiod?.text}}</span></td>
+                    <td><span class="material-icons" (click)="employeeViewPage(emp)">visibility</span></td>
+                    <td *ngIf="adminValidation"><span class="material-icons" (click)="employeeHREdit(emp)">edit</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="EmployeeList?.length==0 || EmployeeList == undefined ; else paginationpro"
+            class="NodataAlign text-center">No Records Found...</div>
+        <ng-template #paginationpro>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                <button type="button" mat-icon-button [disabled]="has_previousEmployee === false" color="primary"
+                    (click)="EmployeeSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button> {{presentpageEmployee}}
+                <button type="button" mat-icon-button [disabled]="has_nextEmployee === false" color="primary"
+                    (click)="EmployeeSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- <div *ngIf="EmployeeViewPart">
+    
+
+
+
+    <app-employee-info (backToSummary)="backSummary()"></app-employee-info>
+
+</div> -->

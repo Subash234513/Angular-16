@@ -1,0 +1,77 @@
+<div>
+ 
+<div class="col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+  <span
+  (click)="backtoTaskSummary()"
+  class="material-icons pointer">arrow_back</span>
+  <span style="margin-top: 2px;font-weight: bold;">Gantt Chart</span>
+</div>
+
+  <form [formGroup]="reportChartt" class="reportContainer">
+      <div (click)="getteamdrop()">
+        <mat-form-field>
+            <mat-label>Team</mat-label>
+            <input  #teamInput placeholder="Select Team" matInput formControlName="team"  [matAutocomplete]="teamsrole"
+            (click)="teamclick()" >
+            <mat-autocomplete  #teamsrole="matAutocomplete"[displayWith]="displayFnteamclient">
+                <ng-container>
+                <mat-option *ngFor="let opt of teamdrop"[value]="opt" title="{{opt.name}}">
+               {{opt.name}}
+                </mat-option>
+            </ng-container>
+            <mat-option *ngIf="!teamdrop ||!teamdrop.length">
+              No Records Found
+            </mat-option>
+            </mat-autocomplete>                                     
+        </mat-form-field>
+      </div>
+
+     <div (click)="getDeveloperdrop()">
+      <mat-form-field>
+          <mat-label> Employee</mat-label>
+          <input #developerinput placeholder="Select Employee" matInput
+              formControlName="developer_id" [matAutocomplete]="developerrole"
+              (click)="developerClick()">
+          <mat-autocomplete #developerrole="matAutocomplete" [displayWith]="displaydevelopclient">
+              <ng-container>
+                  <mat-option *ngFor="let opt of develop" [value]="opt" title="{{opt.name}}">
+                      {{opt.name}}
+                  </mat-option>
+              </ng-container>
+              <mat-option *ngIf="!develop ||!develop.length">
+                No Records Found
+              </mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
+     </div>
+
+
+      <!-- startdate -->
+      <div>
+        <mat-form-field>
+         <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="from_date" />
+         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+         <mat-datepicker #picker></mat-datepicker>
+       </mat-form-field>
+      </div>
+      
+     <!-- enddate -->
+      <div>
+        <mat-form-field>
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="to_date" [min]="reportChartt.value.from_date"/>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+       
+      <div class="reportContainer-sub">
+        <button class="btn btn-secondary" type="button" (click)="resetTasks()">Reset</button>
+        <button class="reportBtn" color="primary" (click)="reportTime()">Download</button>
+        
+      </div>
+  </form>
+</div>
+
+

@@ -1,0 +1,140 @@
+.marginposition{
+    margin: 25px;
+}
+
+// .example-headers-align .mat-expansion-panel-header-title,
+// .example-headers-align .mat-expansion-panel-header-description {
+//   flex-basis: 0;
+// }
+
+// .example-headers-align .mat-expansion-panel-header-description {
+//   justify-content: space-between;
+//   align-items: center;
+// }
+
+mat-form-field {
+  margin-right: 12px;
+}
+.headingstyle{
+    font-weight: bold;
+}
+.button-name:hover{
+    background-color: #D4E3FB;
+    color: #FBFCFF;
+   
+  }
+  .button-name{
+    background: #0067b8;
+              border: 1px solid #fff;
+              padding: 6px 12px 6px 12px;
+              color: #fff;
+              width: auto;
+              cursor: pointer;
+              transition-duration: 1s;
+              border-radius: 10px;
+}
+.contentposition{
+    place-content: center;
+    margin-top: 15px;
+}
+
+.borderright{
+  border-right: dotted;
+  border-right-color: rgb(154, 162, 154);
+}
+
+.marginsize{
+  margin: 20px; 
+}
+
+.alignvertical {
+  vertical-align: middle;
+}
+
+.iconemp{
+  font-size: 60px;
+}.padings{
+  padding: 10px;
+}
+.SubDetails{
+  color: #5f676c ;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+table th{
+  border-radius: 0px 0px 0px 0px;
+}
+
+.trhighlater{
+  background: antiquewhite;
+}
+
+// td, th {
+//   border: 1px solid #dddddd;
+//   text-align: left;
+//   padding: 8px;
+// }
+// ---------
+
+.page {
+  // width: 21cm;
+  // height: 29.7cm;
+  // margin: auto;
+  background-color: white;
+  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 70px 50px 50px 50px ;
+  // padding-top: 20px;
+  page-break-after: always;
+  font-family: 'Times New Roman', Times, serif;
+    font-size: larger;
+
+  @media print {
+    margin: 0;
+    box-shadow: none;
+  }
+}
+
+@media print {
+  body {
+    margin: 0;
+    
+  }
+
+  .page {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  main {
+    margin-top: 20px;
+  }
+}
+
+//   .vertical-line {
+//     border-left: 2px solid blue;
+//     padding-left: 10px; __<<ngThemingMigrationEscapedComment0>>__
+//   }
+#previewTable,
+#ths,
+#tds {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+// .font{
+//   font-family: 'Poppins', sans-serif;
+//   font-weight: 500;
+// }
+.poppins{
+  font-family: 'Poppins', sans-serif;
+  font-weight:00;
+}
+

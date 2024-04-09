@@ -1,0 +1,446 @@
+<div style="padding-top: 2%;padding-left: 1%;">
+    <!-- <h4>Pay Advance</h4> -->
+    <div class="row">
+        <button mat-stroked-button style="margin-left: 85%;" (click)="gotoNewAdvance()">2.0</button>
+    </div>
+    <div *ngIf="isShowSummary">
+        <div id="search">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+
+                        <form [formGroup]="advSearchForm" class="formposition">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <mat-label>Employee Name</mat-label><br>
+                                    <mat-form-field>
+                                        <input type="text" matInput autocomplete="off" formControlName="empName"
+                                            placeholder="Employee Name">
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-label>Status</mat-label><br>
+                                    <mat-form-field>
+                                        <input type="text" matInput autocomplete="off" formControlName="status"
+                                            placeholder="Status">
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-label>Amount</mat-label><br>
+                                    <mat-form-field>
+                                        <input type="text" matInput autocomplete="off" formControlName="status1"
+                                            placeholder="Amount">
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <button mat-stroked-button type="button"
+                                            style="margin-left: 20px;background-color: white;" aria-label="Search">
+                                            <mat-icon>search</mat-icon>
+                                        </button>
+                                        <button mat-stroked-button type="button"
+                                            style="margin-left: 20px;background-color: white;">Clear</button>
+                                        <button type="button" mat-fab
+                                            style="margin-left: 20px;background-color: #f5c68b;margin-top: 10px;"
+                                            (click)="addNewAdvance()">
+                                            <mat-icon matTooltip="Add">add</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="summary">
+            <div class="table-responsive">
+                <table class="table table-bordered" fixed-header style="max-width: 100%;margin-top: 10px;">
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.no</th>
+                            <th>Code</th>
+                            <th>Employee Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Advance Status</th>
+                            <th>History</th>
+                            <th *ngIf="normalUser">Edit</th>
+                            <th *ngIf="normalUser">Delete</th>
+                            <th *ngIf="adminUser">Approval</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sum of advanceSummary; index as i">
+                            <td>{{i+1}}</td>
+                            <td> {{ (sum?.employee_data?.employee_no != "") ? sum?.employee_data?.employee_no : "-" }}
+                            </td>
+                            <td class="summarytextstyle">{{sum?.employee_data?.name}}</td>
+                            <td>{{sum?.from_date  | date:'dd-MM-yyyy'}}</td>
+                            <td>{{sum?.to_date | date:'dd-MM-yyyy'}}</td>
+                            <td>{{sum?.advance_status?.name}}</td>
+                            <td>
+                                <button mat-icon-button matTooltip="history" class="iconbutton" color="primary" mat-button
+                                data-toggle="modal" data-target="#HistoryModal">
+                                <span class="material-icons" style="color: gray;" (click)="gettranhistory(sum)">
+                                    description
+                                </span>
+                            </button>
+                            </td>
+                            <td *ngIf="normalUser">
+                                <mat-icon (click)="editAdvance(sum)">edit</mat-icon>
+                              </td>           
+                              <td *ngIf="normalUser">
+                                <mat-icon (click)="deleteAdvance(sum.id)">delete</mat-icon>           
+                              </td>
+                              <td *ngIf="adminUser">
+                                <mat-icon (click)="approveAdvance(sum)">send</mat-icon>
+                              </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-sm-12" style="font-size:x-small;text-align:right;padding-right:2%;">
+                    <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                        color="primary">
+                        <mat-icon class="customIconSize">arrow_back</mat-icon>
+                    </button>
+                    {{pagination.index}}
+                    <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                        color="primary">
+                        <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                    </button>
+        
+                </div>
+                <!-- <div class="NodataAlign text-center">No Records Found...</div> -->
+                <br>
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isShowNewAdd" style="overflow: scroll;">
+        <h2>Add New Advance</h2>
+        <form [formGroup]="newAdvanceForm" autocomplete="off">
+            <table>
+                <div>
+                    <tr>
+                        <td>
+                            <pre style="    font-family: times new roman;
+                            font-size: revert;
+                            padding-bottom: -5px;
+                            width: 130px;">Employee Name</pre> <br>
+                            <pre style="    font-size: medium;
+                            margin-top: -14%;">{{EmployeeFullName | uppercase}}</pre>
+                            <!-- <mat-form-field
+                            (click)="functionalHead()">
+                            <input #fnInput matInput formControlName="emplName" placeholder="Select Employee" [matAutocomplete]="fn">
+                                <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                            <mat-autocomplete #fn="matAutocomplete" [displayWith]="displayFnFunHead"
+                            (opened)="autocompleteFunctionalHeadScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let fun of empData" [value]="fun">
+                                        {{fun.full_name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field> -->
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 9%;">From Date<label style="color:red">*</label> </mat-label><br>
+                            <mat-form-field style="margin-left: 9%;width: 60%;">                        
+                                <input matInput  [matDatepicker]="pickerjoin" formControlName="fromDate"  autocomplete="off" [min]="fromDateControl.value" >
+                                <mat-datepicker-toggle matSuffix [for]="pickerjoin"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerjoin></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -17%;">To Date<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field style=" width: 63%;margin-left: -17%;">
+                                <input matInput  [matDatepicker]="pickerjoins" formControlName="toDate"  autocomplete="off" [min]="select" >
+                                <mat-datepicker-toggle matSuffix [for]="pickerjoins"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerjoins></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -53%;">Actual Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -53%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="actual_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -72%;">Payable Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -72%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="payable_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -83%;">Reason<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -83%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="reason"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -93%;">EMI Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -93%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="emi_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <!-- <td>
+                            <mat-label style="margin-left: -120%;">Advance Status<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 180px;margin-left: -120%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="advance_status"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td> -->
+
+                    </tr>
+                </div>
+            </table>
+            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+            border-color: black;
+            background-color: white;" (click)="cancelAdd()">Cancel</button>
+            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;"  class="btn btn-light" (click)="addAdvance()">Submit</button>
+        </form>
+    </div>
+
+    <div *ngIf="isShowAdvanceEdit" style="overflow: scroll;">
+        <h2>Edit Employee Advance</h2>
+        <form [formGroup]="editAdvanceForm" autocomplete="off">
+            <table>
+                <div>
+                    <tr>
+                        <td>
+                            <mat-label>Employee Name<label style="color:red">*</label> </mat-label><br>
+                            <mat-form-field>
+                            <input  matInput formControlName="emplName" placeholder="Select Employee" >
+                        </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 9%;">From Date<label style="color:red">*</label> </mat-label><br>
+                            <mat-form-field style="margin-left: 9%;width: 60%;">                        
+                                <input matInput  [matDatepicker]="pickerjoin" formControlName="fromDate"  autocomplete="off" >
+                                <mat-datepicker-toggle matSuffix [for]="pickerjoin"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerjoin></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -10%;">To Date<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field style=" width: 63%;margin-left: -17%;">
+                                <input matInput  [matDatepicker]="pickerjoins" formControlName="toDate"  autocomplete="off" >
+                                <mat-datepicker-toggle matSuffix [for]="pickerjoins"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerjoins></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -53%;">Actual Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -53%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="actual_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -72%;">Payable Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -72%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="payable_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -83%;">Reason<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -83%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="reason"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: -93%;">EMI Amount<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -93%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="emi_amount"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <!-- <td>
+                            <mat-label style="margin-left: -104%;">Remarks<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 60%;margin-left: -104%;"
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="remarks"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td> -->
+                        <!-- <td>
+                            <mat-label style="margin-left: -120%;">Advance Status<label style="color:red">*</label>
+                            </mat-label><br>
+                            <mat-form-field class="matformfieldstyle" style="width: 180px;margin-left: -120%;"  
+                                appearance="outline">
+                                <input matInput class="matformfieldinputstyle" type="name" formControlName="advance_status" readonly="true"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </td> -->
+           
+                    </tr>
+                </div>
+            </table>
+            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+            border-color: black;
+            background-color: white;" (click)="cancelAdd()">Cancel</button>
+            <button type="submit" style="border-radius: 10px;margin-left: 10px;
+            border-color: #f5c68b;
+            background-color: #f5c68b;"  class="btn btn-light" (click)="AdvanceSubmit()">Submit</button>
+        </form>
+    </div>
+
+</div>
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" 
+aria-hidden="true" id="HistoryModal">
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="Container">
+            <div class="modal-header" style="background-color: aliceblue;">
+                <h2 class="modal-title">Transaction History</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="table-responsive" style="margin-top: 2%;margin-left: 50px; width: 94%;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <th>Employee</th>
+                            <!-- <th>Request </th> -->
+                            <th>Transaction Date</th>
+                            <th>Actual Amount</th>
+                            <th>EMI Amount</th>
+                            <th>Payable Amount</th>
+                            <!-- <th>Reason</th> -->
+                            <th>Transaction Date</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Remarks</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let tran of TranHistoryList; index as i">
+                            <td>{{ i+1 }}</td>
+                            <td>{{tran?.advance_employee}}</td>
+                            <!-- <td>{{tran?.ref_type?.name}}</td> -->
+                            <td>{{tran?.date  | date:'dd-MM-yyyy'}}</td>
+                            <td>{{tran?.actual_amount}}</td>
+                            <td>{{tran?.emi_amount}}</td>
+                            <td>{{tran?.payable_amount}}</td>
+                            <!-- <td>{{tran?.reason}}</td> -->
+                            <td>{{tran?.tran_date  | date:'dd-MM-yyyy'}}</td>
+                            <td>{{tran?.tran_from}}</td>
+                            <td>{{tran?.tran_to}}</td>
+                            <td>{{tran?.remarks}}</td>
+                            <td>{{tran?.advance_status?.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!---->
+
+<div *ngIf="isShowApproval" >
+    <h2>Advance Approval</h2>
+    
+        <table class="table table-bordered" style="width: 100%;">
+            <!-- <div> -->
+                <tr>
+                    <th  class="table_header">
+                        <mat-label>Employee Name</mat-label> 
+                    </th>
+                    <th  class="table_header">
+                        <mat-label>From Date</mat-label> 
+                    </th>
+                    <th class="table_header">
+                        <mat-label>To Date</mat-label> 
+                    </th>
+                    <th  class="table_header">
+                        <mat-label>Requested Amount</mat-label> 
+                    </th>
+                    <th  class="table_header">
+                        <mat-label>EMI Amount</mat-label> 
+                    </th>
+                    <th  class="table_header">
+                        <mat-label>Reason</mat-label> 
+                    </th>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <mat-label>{{approveDetails?.name | uppercase}}</mat-label>
+                    </td>
+                    
+                    <td>
+                        <mat-label>{{approveDetails?.from_date | date:'MMM/yyyy'}}</mat-label>
+                    </td>
+                    <td>
+                        <mat-label>{{approveDetails?.to_date | date:'MMM/yyyy'}}</mat-label>
+                    </td>
+                    <td>
+                        <mat-label>{{approveDetails?.payable_amount | currency : 'INR'}}</mat-label>
+                    </td>
+                    <td>
+                        <mat-label>{{approveDetails?.emi_amount | currency : 'INR'}}</mat-label>
+                    </td>
+                    <td>
+                        <mat-label>{{approveDetails?.reason}}</mat-label>
+                    </td>
+                </tr>
+                           
+            <!-- </div> -->
+        </table>
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+        border-color: black;
+        background-color: white;" (click)="cancelAdd()">Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+        border-color: #f5c68b;
+        background-color: #f5c68b;"  class="btn btn-light" (click)="finalApprove()">Approve</button>
+         <button type="submit" style="border-radius: 10px;margin-left: 10px;
+         border-color: #f5c68b;
+         background-color: #f5c68b;"  class="btn btn-light" (click)="rejectAdvances()">Reject</button>
+    
+</div>

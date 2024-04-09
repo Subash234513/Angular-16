@@ -1,0 +1,417 @@
+.mat-form-field {
+  margin-top: 16px;
+}
+
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+input[type="text"] {
+  width: 100%;
+
+
+  border-radius: 3px;
+}
+
+button {
+
+
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+
+/* cus-tableContainer */
+.cus-tableContainer {
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  border-color: #dedede;
+  padding: 16px 30px;
+}
+
+/* Table Search */
+.cus-tableSearch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 20px 0;
+}
+
+.cus-tableSearchContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cus-tableSearchHead {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+
+
+}
+
+  
+#editicon {
+  color: rgb(23, 111, 244);
+}
+
+#deleteicon {
+  color: rgb(23, 111, 244);
+}
+
+.insidePopup {
+  margin-top: 15px;
+}
+
+#saveEdu {
+  margin-right: 40rem;
+}
+
+// .bottom-modal {
+//   position: fixed;
+//   bottom: 5rem;
+//   width: 100%;
+//   margin-top: 20rem;
+//   margin-left: 10rem;
+//   padding: 0;
+//   transform: translateX(100%);
+//   transition: transform 0.3s;
+//   height: 380px;
+//   border-radius: 5px;
+//   overflow-x: hidden;
+//   overflow-y: hidden;
+// }
+
+// .bottom-modal.show {
+//   transform: translateX(0);
+// }
+
+.dateFormat {
+  width: 7rem;
+}
+
+
+.shortinput {
+  width: 13rem;
+}
+
+.shortinputPercentage {
+  // right: 129px;
+  width: 13rem;
+}
+
+.city {
+  font-size: 15px;
+  margin-bottom: 2rem;
+}
+
+.addbutton {
+  background-color: #f5c68b;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#educationHeader {
+  background-color: #044063;
+  color: white;
+}
+
+.cityInst {
+  margin-left: 2rem;
+  height: 50px;
+  position: relative;
+  bottom: 15px;
+  font-family: "Montserrat";
+  font-size: 20px;
+}
+
+.close {
+  color: white;
+}
+
+#percentErr {
+  right: 8rem;
+}
+
+.dateleft {
+  position: relative;
+  right: 8rem;
+}
+
+.cus-badgeGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #d7f8e1;
+  color: #057926;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeBlue {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #ededfd;
+  color: #2d2e8e;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badgeLightBlack {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #eeeeef;
+  color: #353537;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+// .aligncard {
+//   border: 1px solid rgb(0, 0, 0);
+//   padding: 15px;
+//   margin-bottom: 10px;
+//   font-size: 15px;
+//   border-radius: 10px;
+// }
+
+// .editdelIcon {
+//   position: relative;
+//   left: 8rem;
+// }
+
+mat-icon {
+  font-size: 15px;
+}
+
+mat-checkbox {
+  position: relative;
+  bottom: 1rem;
+  font-size: 10px;
+  height: 10px;
+  width: 10px;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+  position: relative;
+  bottom: 1rem;
+
+}
+.roleErr {
+  position: absolute;
+  bottom: 10rem;
+  left: 5rem;
+}
+
+.rolecityRow {
+  position: relative;
+  // bottom: 2rem;
+}
+
+.saveUpdate {
+  position: relative;
+  // bottom: 3rem;
+}
+
+.cus-badgeLightGreen {
+  border-radius: 100px;
+  max-width: fit-content;
+  background-color: #c2f8ff;
+  color: #007787;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cus-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+
+.newCard{
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-family: 'Poppins', sans-serif;
+
+}
+
+.cardspaceListProfile{
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  font-size:32px;
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  font-family: 'Poppins', sans-serif;
+  // font-weight:bold;
+  // color: #044063;
+}
+.display{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color{
+  color:#525CEB;
+  // color:#046ba8
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.matCard{
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  // margin-top: 45px;
+  padding: 3px;
+}
+#matCard{
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  // margin-top: 45px;
+  padding: 3px;
+}
+
+.cardspaceListProfile{
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  font-size:32px;
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  font-family: 'Poppins', sans-serif;
+  // font-weight:bold;
+  // color: #044063;
+}
+.display{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color{
+  color:#525CEB;
+  // color:#046ba8
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.matCard{
+  box-shadow: 0px 0px 4px -1px #c8c2c2;
+  border-radius: 3px;
+  // margin-top: 45px;
+  padding: 3px;
+}
+
+.fa-pencil {
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+}
+
+.fa-trash-can{
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+}
+.inputFile{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #f5c68b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+// margin-left: 30rem;
+}
+.inputFile mat-icon{
+  font-size: 20px;
+}
+.remarks{
+  margin-top: 0px;
+}
+.form-group{
+  margin-top: 20px;
+}
+
+.fa-download{
+  background-color: #044063;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 7%;
+  cursor: pointer;
+  }
+
+  .cus-attachCard {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.171);
+    padding: 4px 10px;
+    max-width: 500px;
+    width: 100%;
+    margin: 10px 0 0 0;
+    border-radius: 6px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+ 
+// @media screen and (max-width: 1280px) {
+
+//   .modal {
+//     margin: 3rem;
+//     // width: calc(100% - 4rem);
+//     // height: auto;
+//     // max-height: 80vh; 
+//   }
+// }
+

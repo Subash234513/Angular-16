@@ -1,0 +1,991 @@
+<div *ngIf="isTaskView" class="cus-taskViewContainer">
+  <div>
+    <mat-card>
+      <div class="cus-taskViewCardHeader">
+        <div class="cus-taskViewHead">
+          <span (click)="backtoTaskSummary()" class="material-icons alignvertical pointer">arrow_back</span>
+          <p style="font-weight: bold;">Task View</p>
+          <p style="font-weight: bold;"><span class="sprintColor">{{ sprintName }}  </span><span *ngIf="sprintName !== '' && sprintName !== null && sprintName !== undefined">>></span>  {{ storyCode }} {{ storyName }}</p>
+        </div>
+
+
+        <div class="cus-taskViewCardHeaderBtns">
+          <div *ngIf="story_TaskViewData?.can_delete">
+            <button matTooltip="Delete Task" class="btn btn-primary" style="background-color: #044063; color: white"
+              (click)="deletetask_task(story_TaskViewData.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+
+          <div>
+            <button *ngIf="story_TaskViewData?.can_map" class="btn btn-outline-secondary" data-toggle="modal"
+              data-target="#assignStoryTask">
+              Story Mapping
+            </button>
+          </div>
+          <!-- <div *ngIf="story_TaskViewData?.dev_arr?.length > 0"> -->
+          <div class="dropdowns" *ngIf="story_TaskViewData?.can_changestatus">
+            <button mat-button [matMenuTriggerFor]="menu" 
+              style="background-color: #044063; color: #ededfd; width: 112px">
+              Action <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" >
+         
+              
+              <ng-container *ngIf="
+                    story_TaskViewData?.task_status_id === 0 ||
+                    story_TaskViewData?.task_status_id === 3 ||
+                    story_TaskViewData?.task_status_id === 6
+                  ">
+                <span *ngIf="isActualDate == true">
+                  <button class="btn" (click)="ChaneStatuss(story_TaskViewData)" data-target="#workinprogressModal"
+                    data-toggle="modal">
+                    Work In Progress</button><br />
+                </span>
+                <span *ngIf="isActualDate == false">
+                  <button class="btn" (click)="updateTaskProgress()">
+                    Work In Progress</button><br />
+                </span>
+              </ng-container>
+
+              <ng-container *ngIf="
+                    story_TaskViewData?.task_status_id === 0 ||
+                    story_TaskViewData?.task_status_id === 1 ||
+                    story_TaskViewData?.task_status_id === 6
+                  ">
+                <button class="btn" (click)="ChaneStatuss(story_TaskViewData)" data-target="#markcompleteModal"
+                  data-toggle="modal">
+                  Mark Complete</button><br />
+              </ng-container>
+
+              <ng-container *ngIf="story_TaskViewData?.task_status_id === 1">
+                <button class="btn" (click)="ChaneStatus(3, story_TaskViewData)">
+                  Hold</button><br />
+              </ng-container>
+
+              <ng-container *ngIf="story_TaskViewData?.task_status_id === 2">
+                <button class="btn" (click)="ChaneStatus(5, story_TaskViewData)">
+                  Verified</button><br />
+              </ng-container>
+
+              <ng-container *ngIf="
+                    story_TaskViewData?.task_status_id === 10 ||
+                    story_TaskViewData?.task_status_id === 2 ||
+                    story_TaskViewData?.task_status_id === 5
+                  ">
+                <button class="btn" (click)="ChaneStatuss(story_TaskViewData)" data-target="#returnModal"
+                data-toggle="modal">
+                <!-- (click)="ChaneStatus(6, story_TaskViewData)"> -->
+                  Return</button><br />
+              </ng-container>
+
+              <ng-container *ngIf="story_TaskViewData?.task_status_id === 5">
+                <button class="btn" (click)="ChaneStatus(10, story_TaskViewData)">
+                  Tested</button><br />
+              </ng-container>
+            </mat-menu>
+          </div>
+          <!-- </div> -->
+          <div *ngIf="story_TaskViewData?.can_reassign">
+            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#holidaygetmodal">
+              Reassign
+            </button>
+          </div>
+          <div *ngIf="story_TaskViewData?.task_status_id == 8">
+            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#assignmodal"
+              (click)="assignEdit(story_TaskViewData)">
+              Assign
+            </button>
+          </div>
+          <div *ngIf="
+              story_TaskViewData?.can_edit
+              
+            ">
+            <button type="button" class="btn btn-primary"
+              style="padding: 2px 10px 0 10px;background-color: #044063;color: white;" data-toggle="modal"
+              data-target="#exampleModal" (click)="onclickTaskEdit(story_TaskViewData)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <!-- Edit Popup -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width: 800px; transform: translateX(-15%)">
+                  <div class="modal-header" style="background-color: #044063;color: white;">
+                    <p class="modal-title" id="exampleModalLabel" style="margin-bottom: 0">
+                      Task Edit
+                    </p>
+                    <button (click)="popclose()" type="button" class="close" data-dismiss="modal" aria-label="Close"
+                      style="color: white;" #closebutton>
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <!-- <div class="modal-body">
+                  </div> -->
+                  <div *ngIf="taskedit">
+                    <app-taskedit [jsonData]="story_TaskViewData" (OnSubmit)="SubmitbackToView()"></app-taskedit>
+                  </div>
+
+                  <!-- <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                      Save changes
+                    </button>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cus-taskViewDescDiv">
+        <p class="cus-taskViewHead-p1">{{ story_TaskViewData?.code }}</p>
+        <p><b>|</b></p>
+        <p class="cus-taskViewDesc" [attr.title]="story_TaskViewData?.task">
+          {{ story_TaskViewData?.task }}
+        </p>
+      </div>
+
+      <hr />
+
+      <div>
+        <div>
+          <div class="cus-taskViewCardHeader2">
+            <div class="cus-taskViewCardHeader-sub1">
+              <!-- Paths -->
+              <div>
+                <span class="cus-badgeBlue">
+                  <span class="material-icons fontsize alignvertical">lock</span>
+                  <span class="alignvertical">
+                    {{ story_TaskViewData?.client_name?.name }}
+                  </span>
+                  <span class="material-icons fontsize alignvertical">arrow_forward_ios</span>
+                  {{ story_TaskViewData?.app_id?.name }}
+                  <span class="material-icons fontsize alignvertical">arrow_forward_ios</span>
+                  <span class="alignvertical">
+                    {{ story_TaskViewData?.module_id?.name }}
+                  </span>
+                  &nbsp;&nbsp;&nbsp;
+                </span>
+              </div>
+
+              <!-- Status: New -->
+              <div>
+                <span class="cus-badgeBlue">{{
+                  story_TaskViewData?.dev_type?.text
+                  }}</span>
+              </div>
+
+              <!-- Task View Flags -->
+              <div class="cus-taskViewFlagsDiv">
+                <mat-icon class="cus-taskViewFlags" *ngIf="story_TaskViewData?.priority_type?.text === 'High'"
+                  style="background-color: #f50000" title="High">flag</mat-icon>
+
+                <mat-icon class="cus-taskViewFlags" *ngIf="story_TaskViewData?.priority_type?.text === 'Normal'"
+                  style="background-color: #ffcc00" title="Normal">flag</mat-icon>
+                <mat-icon class="cus-taskViewFlags" *ngIf="story_TaskViewData?.priority_type?.text === 'Low'"
+                  style="background-color: #6fddff" title="Low">flag</mat-icon>
+              </div>
+            </div>
+
+            <div class="cus-taskViewCardHeader-sub2">
+              <!-- Status -->
+              <div class="cus-taskViewStatus" *ngIf="
+                  story_TaskViewData?.task_status &&
+                  story_TaskViewData.task_status.trim() !== ''
+                ">
+                <p>
+                  {{ story_TaskViewData?.task_status }}
+                </p>
+              </div>
+
+              <!-- Profile type name -->
+              <div>
+                <ng-container *ngIf="
+                    story_TaskViewData?.task_assignee &&
+                    story_TaskViewData?.task_assignee?.length > 0
+                  ">
+                  <div class="cus-badgeViolet" title="{{ story_TaskViewData?.task_assignee[story_TaskViewData?.task_assignee.length - 1].full_name }}">
+                    <!-- <div>
+                      {{
+                      story_TaskViewData?.task_assignee[0].full_name
+                      | uppercase
+                      }}
+                    </div> -->
+                    <div>
+                      {{
+                        getLastAssigned
+                      }}
+                    </div>
+
+
+                    <!-- <div *ngIf="story_TaskViewData?.dev_arr.length > 1"
+                                [matBadge]="story_TaskViewData?.dev_arr.length - 1"
+                                matBadgePosition="above after" matBadgeSize="small"
+                                matBadgeColor="warn">
+                                {{story_TaskViewData?.dev_arr[0].full_name[0] | uppercase}}
+                            </div> -->
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <!-- <tr style="margin-left: 4%;margin-top: 1%;">
+                                <span class="cus-badgeViolet"
+                                    style="font-size: 15px;    padding: 4px 10px;">{{story_TaskViewData?.task_status}}</span>
+                            </tr> -->
+          </div>
+
+          <hr />
+
+          <div class="cus-taskViewGrids">
+            <!-- Dependency -->
+            <mat-card *ngIf="story_TaskViewData?.dependency !== null" class="cus-taskViewGrids1">
+              <h2>Dependency</h2>
+              <p>{{ story_TaskViewData?.dependency?.description }}</p>
+
+              <div class="cus-taskViewGrids1-sub1">
+                <div>
+                  <ng-container *ngIf="
+                      story_TaskViewData.dependency.assign_to &&
+                      story_TaskViewData.dependency.assign_to.length > 0
+                    ">
+                    <!-- <div
+                        class="circle-badge"
+                        title="{{ story_TaskViewData.emp_arr[0].full_name }}"
+                      > -->
+                    <div class="cus-badgeLightBlack">
+                      {{ story_TaskViewData.dependency.assign_to[0].full_name | uppercase }}
+                    </div>
+                    <!-- 
+                              <div *ngIf="story_TaskViewData.emp_arr.length > 1"
+                                [matBadge]="story_TaskViewData.emp_arr.length - 1"
+                                matBadgePosition="above after" matBadgeSize="small"
+                                matBadgeColor="warn">
+                                  {{story_TaskViewData.emp_arr[0].full_name[0] | uppercase}}
+                              </div> -->
+                    <!-- </div> -->
+                  </ng-container>
+                </div>
+
+                <div>
+                  <p class="cus-badgeLightBlack">
+                    {{ story_TaskViewData?.dependency?.code }}
+                  </p>
+                </div>
+                <!-- <div class="col-sm-6" style="    margin-left: -5%;
+                            margin-right: 5%;">
+                                    <span
+                                        class="cus-badgeYellow">{{story_TaskViewData?.dependency?.status?.text}}</span>
+                                </div> -->
+
+                <div *ngIf="
+                    story_TaskViewData?.dependency?.status?.text &&
+                    story_TaskViewData?.dependency.status.text.trim() !== ' '
+                  ">
+                  <p class="cus-badgeYellow">
+                    {{ story_TaskViewData?.dependency?.status?.text }}
+                  </p>
+                </div>
+              </div>
+            </mat-card>
+
+            <div class="cus-taskViewGrids2">
+              <h2>Date</h2>
+              <div class="cus-taskViewGrids2-sub">
+                <h3>Planned Dates</h3>
+                <div>
+                  <p *ngIf="story_TaskViewData?.start_date">
+                    {{ story_TaskViewData?.start_date | date : "dd MMM yyyy" }}
+                  </p>
+                  <p><b>|</b></p>
+                  <p *ngIf="story_TaskViewData?.end_date">
+                    {{ story_TaskViewData.end_date | date : "dd MMM yyyy" }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="cus-taskViewGrids2-sub">
+                <h3>Actual Dates</h3>
+                <div>
+                  <p *ngIf="story_TaskViewData?.actual_start_date">
+                    {{
+                    story_TaskViewData?.actual_start_date
+                    | date : "dd MMM yyyy"
+                    }}
+                  </p>
+                  <p><b>|</b></p>
+                  <p *ngIf="story_TaskViewData?.actual_end_date">
+                    {{
+                    story_TaskViewData?.actual_end_date | date : "dd MMM yyyy"
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="cus-taskViewGrids3">
+              <h2>Time</h2>
+              <!-- <div class="cus-taskViewGrids3-sub">
+                <h3>Total Hours</h3>
+                <div>
+                  <p>
+                    {{
+                      story_TaskViewData?.total_hours > 0
+                        ? story_TaskViewData?.total_hours
+                        : 0
+                    }}
+                  </p>
+                </div>
+              </div> -->
+              <div class="cus-taskViewGrids3-sub">
+                <h3>Delay in Days</h3>
+                <div>
+                  <p>
+                    {{
+                    story_TaskViewData?.delay_days > 0
+                    ? story_TaskViewData?.delay_days
+                    : 0
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="cus-taskViewGrids3-sub">
+                <h3>Reason for Delay</h3>
+                <div>
+                  <p>
+                    {{
+                    story_TaskViewData?.reason_for_delay
+                    ? story_TaskViewData?.reason_for_delay
+                    : ''
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cus-taskViewCardActivity">
+          <div class="cus-taskViewCardActivity-btns">
+            <h2>Activity</h2>
+            <!-- <div class="col-sm-2">
+                          <button   class="btn btn-outline-secondary" [ngStyle]="button1Styles" (click)="toggleButtons(1)">All</button>
+                        </div> -->
+            <div class="cus-taskViewCardActivity-btnDiv">
+              <div>
+                <button class="btn btn-secondary" (click)="toggleButtons(2)" [ngStyle]="button2Styles">
+                  Work Log
+                </button>
+              </div>
+              <div>
+                <button class="btn btn-outline-secondary" [ngStyle]="button3Styles" (click)="toggleButtons(3)">
+                  Comments
+                </button>
+              </div>
+              <div>
+                <button class="btn btn-outline-secondary" [ngStyle]="button4Styles" (click)="toggleButtons(4)">
+                  History
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cus-taskViewCardActivity-content">
+            <div *ngIf="isShowWorklogs">
+              <div class="table-responsive custom-table">
+                <div *ngFor="let employee of story_TaskViewData?.employee_hours">
+                  <h3>{{ employee?.employee_id?.full_name | uppercase }}</h3>
+                  <table class="table table-bordered cus-taskViewTable" width="100%">
+                    <tr>
+                      <th class="position-stick">Days</th>
+                      <td  *ngFor="
+                          let dateHours of employee.hour_data;
+                          let index = index
+                        " style="font-size: smaller">
+                        {{ dateHours?.date | date : "MMM dd" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="position-stick">Hours</th>
+                      <td  *ngFor="
+                          let dateHours of employee.hour_data;
+                          let index = index
+                        ">
+                        <input class="cus-taskView-imp" placeholder="Hours" type="number" [readOnly]="
+                            story_TaskViewData?.task_status_id == 4 &&
+                            story_TaskViewData?.task_status_id == 7 &&
+                            story_TaskViewData?.task_status_id == 8 &&
+                            story_TaskViewData?.task_status_id == 9 &&
+                            story_TaskViewData?.task_status_id == 10
+                          " [(ngModel)]="dateHours.hour" min="1" max="12" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div *ngIf="story_TaskViewData?.hour_arr.length!==0">
+                  <button type="button" class="btn btn-secondary" (click)="UpdateTask(story_TaskViewData)">
+                    Update
+                  </button>
+                </div>
+              </div>
+              <!-- <div >
+                                <table style="margin-left: 3%;" *ngIf="isShowRemarks">
+                                   
+                                    <tr >
+                                        <th style="min-width: 130px;">Reason / Remarks</th>
+                                        <td colspan="100">
+                                            <input 
+                                                style="border: 1; outline: 1;width: 300px"
+                                                [readOnly]="story_TaskViewData.task_status == 'Completed'"
+                                                [ngModel]="story_TaskViewData.reason_for_delay"
+                                                (ngModelChange)="story_TaskViewData.reason_for_delay = $event">
+                                        </td>
+    
+    
+                                    </tr>
+    
+                                </table>
+                            </div> -->
+            </div>
+
+            <div class="cus-taskView-comment" *ngIf="isShowCommentTask">
+              <!-- <div class="row">
+    
+                                <div class="col-sm-12" style="width: 639px;">
+                                    <div class="comment-container">
+                                        <div class="comment-box">
+                                            <textarea [(ngModel)]="commentTexts"
+                                                placeholder="Type your comment..."></textarea>
+                                            <input type="file" (change)="onFileSelect($event)" accept="image/*">
+                                            <button (click)="saveCommentTask()"
+                                                style="width: 20%;float: right;">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div> -->
+              <!-- <div class="row"> -->
+
+              <div class="cus-taskView-comment1">
+                <textarea [(ngModel)]="commentTexts" placeholder="Type your comment..."></textarea>
+                <div class="file-upload">
+                  <label for="file-input" style="margin-bottom: 0">Attach File</label>
+                  <input id="file-input" type="file" multiple (change)="onFileSelect($event)" />
+
+                  <button class="btn btn-primary" style="padding: 8px 10px" (click)="saveCommentTask()">
+                    Save
+                  </button>
+                </div>
+
+                <div *ngFor="let file of reuploadfileArr;let index = index" class="cus-attachCard">
+
+                  <span>{{ file.name }}</span>
+                  <button mat-icon-button type="button" (click)="attachmentDelete(file.name, index)">
+                    <mat-icon style="color: blue" aria-label="Delete">delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- </div> -->
+
+              <div class="cus-taskView-comment2">
+                <div *ngFor="let item of commenthistoryarrs">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>{{ item.comment }} </mat-card-title>
+                      <div class="cus-taskView-comment2-sub">
+                        <mat-card-subtitle>Posted by :
+                          {{ item.created_by.name }}</mat-card-subtitle>
+                        <mat-card-subtitle>Posted Time :
+                          {{
+                          formatCreatedDate(item.created_date)
+                          }}</mat-card-subtitle>
+                      </div>
+                      <div class="cus-popupIconsDiv">
+                        <button mat-icon-button class="btn btn-outline-secondary" (click)="deleteComments(item.id)">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <span class="cus-taskViewFlagsDiv" *ngIf="item.file">
+                          <button mat-icon-button data-toggle="modal" data-target="#myModal3"
+                            class="btn btn-outline-secondary" (click)="fileview(item)">
+                            <mat-icon style="font-size: 16px">file_open</mat-icon>
+                          </button>
+                        </span>
+                      </div>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="isShowHistory">
+              <div class="col" style="margin-left: 1%">
+                <table class="table table-bordered">
+                  <tr style="
+                      text-align: center;
+                      font-weight: bold;
+                      background-color: #ededfd;
+                    ">
+                    <th>Employee</th>
+                    <th>Created Date</th>
+                    <!-- <th>Task Name</th> -->
+                    <th>Task Status</th>
+                  </tr>
+                  <tr *ngFor="
+                      let hist of story_TaskViewData.history;
+                      let i = index
+                    ">
+                    <td>{{ hist?.emp_id?.full_name }}</td>
+                    <td>{{ hist?.log_date | date : "dd MMM yyyy" }}</td>
+                    <!-- <td>{{hist?.task_name}}</td> -->
+                    <!-- <td>{{hist?.task_status?.text}}</td> -->
+                    <td>
+                      {{
+                      hist?.task_status?.text
+                      ? hist?.task_status?.text
+                      : hist?.task_status?.name
+                      }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<div class="modal fade" id="assignmodal" tabindex="-1" role="dialog" aria-labelledby="exampleassignlabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px; transform: translateX(-15%)">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <p class="modal-title" id="exampleassignlabel" style="margin-bottom: 0">
+          Assign Task
+        </p>
+        <button (click)="popassignclose()" type="button" class="close" data-dismiss="modal" aria-label="Close"
+          style="color: white;" #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <!-- <div class="modal-body">
+    </div> -->
+      <div *ngIf="assignedit">
+        <app-taskedit [jsonData]="story_TaskViewData" (OnSubmit)="SubmitbackToView()"></app-taskedit>
+      </div>
+
+      <!-- <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        data-dismiss="modal"
+      >
+        Close
+      </button>
+      <button type="button" class="btn btn-primary">
+        Save changes
+      </button>
+    </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- <div
+  class="modal"
+  id="assignmodal"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Assign Task</h2>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="margin-top: 3%">
+          <div class="col-sm-4">Select Employee</div>
+          <div class="col-sm-4">
+            <form [formGroup]="assignForm">
+              <mat-form-field
+                class="matformfieldstyle"
+                appearance="outline"
+                (click)="developerName()"
+                style="margin-left: -25%"
+              >
+                <mat-label>Assignee</mat-label>
+                <input
+                  #developerInput
+                  class="matformfieldinputstyle"
+                  matInput
+                  formControlName="developer_id"
+                  [matAutocomplete]="dev"
+                />
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete
+                  #dev="matAutocomplete"
+                  [displayWith]="displayFndev"
+                  (opened)="autocompletetedevScroll()"
+                >
+                  <mat-option *ngIf="isLoading" class="is-loading"
+                    >Loading...</mat-option
+                  >
+                  <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let dev of developerList" [value]="dev">
+                      {{ dev.name }}
+                    </mat-option>
+                  </ng-container>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-sm-4">
+            <button
+              class="btn btn-primary"
+              style="margin-left: 30%"
+              (click)="assignTask()"
+              data-dismiss="modal"
+            >
+              Assign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal" id="holidaygetmodal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h2 class="modal-title">Re-assigning</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="margin-top: 3%">
+          <div class="col-sm-4">Select Employee</div>
+          <div class="col-sm-4">
+            <form [formGroup]="reassignForm">
+              <mat-form-field class="matformfieldstyle" appearance="outline" (click)="developerName()"
+                style="margin-left: -25%">
+                <mat-label>Assignee</mat-label>
+                <input #developerInput class="matformfieldinputstyle" matInput formControlName="developer_id"
+                  [matAutocomplete]="dev" />
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #dev="matAutocomplete" [displayWith]="displayFndev"
+                  (opened)="autocompletetedevScroll()">
+                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                  <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let dev of developerList" [value]="dev" title="dev.name">
+                      {{ dev.name }}
+                    </mat-option>
+                  </ng-container>
+                  <mat-option *ngIf="!developerList || !developerList.length">
+                    No Record Found
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-sm-4">
+            <button class="btn btn-primary" style="margin-left: 30%;background-color: #044063;color: white;"
+              (click)="reassignTask()" data-dismiss="modal">
+              Reassign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="workinprogressModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h3 class="modal-title" style="margin-bottom: 0">Action</h3>
+        <button type="button" class="close" data-dismiss="modal" style="color: white;" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+          <p style="margin-bottom: 6px">Actual Start Date</p>
+
+          <form [formGroup]="taskupdateForm">
+            <mat-form-field style="width: 100%">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker12" formControlName="actual_start_date" [min]="spgetstartdate"
+                [max]="spgetenddate" />
+              <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker12">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker12></mat-datepicker>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <!-- <p>Updating the Task</p> -->
+        <div>
+          <button class="btn btn-primary" (click)="updateTaskProgress()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="markcompleteModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h3 class="modal-title" style="margin-bottom: 0">Action</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="cus-makeChangesPopContainer">
+          <div class="cus-makeChangesPopup" *ngIf="isActualDate">
+            <div style="width: 100%">
+              <p style="margin-bottom: 6px">Actual Start Date</p>
+              <form [formGroup]="taskupdateForm">
+                <mat-form-field style="width: 100%">
+                  <mat-label>Date</mat-label>
+                  <input matInput [matDatepicker]="picker24" formControlName="actual_start_date" [min]="spgetstartdate"
+                    [max]="spgetenddate" (dateChange)="resetdate()" />
+                  <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker24">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker24></mat-datepicker>
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+
+          <div class="cus-makeChangesPopup">
+            <div style="width: 100%">
+              <p style="margin-bottom: 6px">Actual End Dates</p>
+              <form [formGroup]="taskupdateForm">
+                <mat-form-field style="width: 100%">
+                  <mat-label>Date</mat-label>
+                  <input matInput [matDatepicker]="picker22" formControlName="actual_end_date"
+                    [min]="taskupdateForm.value.actual_start_date" [max]='spgetenddate'
+                    (dateChange)="checkendDate($event.value)" />
+                  <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker22">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker22></mat-datepicker>
+                </mat-form-field>
+              </form>
+            </div>
+
+            <div *ngIf="isShowRemarks" style="width: 100%">
+              <p style="margin-bottom: 6px">Reason of Delay</p>
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>Reason</mat-label>
+                <input [readOnly]="story_TaskViewData.task_status == 'Completed'"
+                  [ngModel]="story_TaskViewData.reason_for_delay"
+                  (ngModelChange)="story_TaskViewData.reason_for_delay = $event" matInput />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" (click)="updateTaskProgresss()" data-dismiss="modal"
+          style="background-color: #044063; color: white">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="taskedit">
+  <app-taskedit
+    [jsonData]="story_TaskViewData"
+    (OnSubmit)="SubmitbackToView()"
+    (OnCancel)="SubmitbackToView()"
+  ></app-taskedit>
+</div> -->
+<!-- <div *ngIf="isShowStorySummary">
+        <app-tasks (OnSubmit)="SubmitbackToSummary()"
+            (OnCancel)="backtoTaskSummary()"></app-tasks>
+    
+    </div> -->
+
+<div class="modal" id="confirmModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" style="margin-bottom: 0">Details</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          Confirm to Hold the Task.
+          <button class="btn btn-primary" (click)="updateTaskProgressHold()" data-dismiss="modal">
+            Update
+          </button>
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="assignStoryTask" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h3 class="modal-title" style="margin-bottom: 0">Story Task Mapping</h3>
+        <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <p>Select Story</p>
+          <form [formGroup]="reassignForm" style="width: 100%">
+            <div click="getSprintDropDown()">
+              <mat-form-field style="width: 100%">
+                <mat-label>Stories</mat-label>
+                <input #teamInput placeholder="Select Story" matInput formControlName="story"
+                  [matAutocomplete]="teamsprintrole" (keypress)="teamsprintclicks()" />
+                <!-- (selectionChange)="onSelectChangeSpr($event)"> -->
+                <mat-autocomplete #teamsprintrole="matAutocomplete" [displayWith]="displaysprintteamclient">
+                  <ng-container>
+                    <mat-option *ngFor="let opt of sprintlsts" [value]="opt">
+                      {{ opt.name }}
+                    </mat-option>
+                  </ng-container>
+                  <mat-option *ngIf="!sprintlsts || !sprintlsts.length">
+                    No results found.
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" style="margin-left: 30%;background-color: #044063;color: white;"
+          (click)="assignStoryTasks()" data-dismiss="modal">
+          Submit
+        </button>
+        <div>
+          <button class="btn btn-primary" (click)="gotoStories()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Add New Story
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isgotostory">
+  <app-stories (OnSubmit)="SubmitbackToStorySummary()" (OnCancel)="SubmitbackToStorySummary()"></app-stories>
+</div>
+<div class="modal fade" id="myModal3" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width: 75%">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <p class="modal-title" style="margin-bottom: 0;">Comment Attachments</p>
+        <button type="button" class="close" data-dismiss="modal" style="color: white;">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <div *ngFor="let files of commenthistoryarrs">
+          <a
+              (click)="downloadfile(files)">{{files.file_name}}</a>
+          </div> -->
+        <!-- <div *ngFor="let item of commenthistoryarrs"> -->
+
+        <!-- <div *ngIf="item.file && item.file.length > 0"> -->
+
+        <div *ngFor="let file of fileviews">
+          <a (click)="downloadfile(file)">{{ file.file_name }}</a>
+        </div>
+        <!-- </div> -->
+        <!-- </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          style="background-color: #044063;color: white;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="returnModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" style="width: 370px">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #044063;color: white;">
+        <h3 class="modal-title" style="margin-bottom: 0">Action</h3>
+        <button type="button" class="close" data-dismiss="modal" style="color: white;" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+          <p style="margin-bottom: 6px">Actual End Date</p>
+
+          <form [formGroup]="taskupdateForm">
+            <mat-form-field style="width: 100%">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker112" formControlName="actual_end_date" />
+              <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker112">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker112></mat-datepicker>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <!-- <p>Updating the Task</p> -->
+        <div>
+          <button class="btn btn-primary" (click)="updateTaskProgressOne()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

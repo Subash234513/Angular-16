@@ -1,0 +1,16 @@
+.material-icons {
+    font-family: "Material Icons", sans-serif;
+  }
+
+  input{
+    border-bottom-style: hidden;
+  }
+
+.cus-brdAddContainer {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 10px;
+    width: 20%;
+    margin-left: 3%;
+    margin-top: 24px;
+}

@@ -1,0 +1,983 @@
+<div>
+  <div class="container-fluid">
+    <div class="col-12  mt-5 row">
+      <div class="col-6 name">
+        <span class="violet">{{employee_data?.full_name}}</span>
+        's Pay Structure
+      </div>
+      <!-- <form class="example-form"> -->
+      <div class="col-2 mt-3">
+        <!-- <section class="example-section"> -->
+        <mat-checkbox class="example-margin" [(ngModel)]="vpf" (change)="_check(vpf,'vpf')"><span
+            style="font-weight:bold">VPF</span>
+        </mat-checkbox>
+        <!-- </section> -->
+        <!-- </mat-form-field> -->
+      </div>
+      <div class="col-2 mt-3">
+        <!-- <section class="example-section"> -->
+        <mat-checkbox class="example-margin" [(ngModel)]="std_pf" (change)="_check(std_pf,'std_pf')"
+          ngInit="checked=true"><span style="font-weight:bold">Std.PF</span></mat-checkbox>
+        <!-- </section> -->
+        <!-- </mat-form-field> -->
+      </div>
+      <div class="col-2 mt-3">
+        <!-- <h4>Basic mat-select</h4> -->
+        <!-- <mat-form-field appearance="outline" class="col-12"> -->
+        <!-- <section class="example-section"> -->
+        <mat-checkbox class="example-margin" [(ngModel)]="no_esi" (change)="_check(no_esi,'no_esi')"><span
+            style="font-weight:bold">NO ESI</span></mat-checkbox>
+        <!-- </section> -->
+        <!-- </mat-form-field> -->
+      </div>
+      <!-- </form> -->
+    </div>
+    <!-- <div class="col-12 mt-3 row pl-0">
+      <div class="col-12  ">
+        <form class="example-form">
+        <mat-form-field class="example-full-width col-12">
+          <mat-label>Employee Grade</mat-label>
+          <input type="text" placeholder="" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of gradedata " [value]="option.name" (focusout)="LevelClick(option)">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        </form>
+      </div>
+
+    </div> -->
+  </div>
+  <!-- <div class="col-2 mt-3">
+    <section class="example-section">
+      <mat-checkbox class="example-margin"><span style="font-weight:bold">PF</span></mat-checkbox>
+
+    </section> -->
+
+  <!-- </mat-form-field> -->
+  <!-- </div> -->
+  <!-- <div class="col-2 mt-3" > -->
+  <!-- <h4>Basic mat-select</h4> -->
+  <!-- <mat-form-field appearance="outline" class="col-12"> -->
+  <!-- <section class="example-section">
+      <mat-checkbox class="example-margin" ><span style="font-weight:bold">ESI</span></mat-checkbox>
+
+    </section> -->
+  <!-- </mat-form-field> -->
+  <!-- </div> -->
+</div>
+<div class="col-12 mt-3 row pl-0">
+  <div class="col-4  ">
+    <form class="example-form col-12">
+      <mat-form-field class="example-full-width col-12">
+        <mat-label>Employee Grade</mat-label>
+        <input type="text" placeholder="" aria-label="Number" matInput [formControl]="myControl"
+          [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of gradedata " [value]="option.name" (focusout)="LevelClick(option)">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="col-4  ">
+    <form class="example-form col-12">
+      <mat-form-field class="example-full-width col-12">
+        <mat-label>Template</mat-label>
+        <!-- <input type="text" placeholder="" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of gradedata " [value]="option.name" (focusout)="LevelClick(option)">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete> -->
+        <mat-select matInput formControlName="template_id" placeholder="Template">
+          <mat-option *ngFor="let option of templatedrop" [value]="option.id" (click)="TemplateClick(option)">
+            {{ option.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="col-2  ">
+
+  </div>
+  <div class="col-2">
+    <button class="btn btn-primary text-center" style="margin-left: 10px;" data-target="#revisionModal"
+      data-toggle="modal" [disabled]="enableRevise">Salary Revise</button>
+  </div>
+
+</div>
+<!-- </div> -->
+
+<div class="container-fluid">
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <form [formGroup]="payrollgenform">
+        <div class="row col-12 border d-flex align-items-center bg-light text-dark height">
+          <div class="col-3">SALARY COMPONENTS</div>
+          <div class="col-3">
+            CALCULATION</div>
+          <div class="col-3">MONTHLY</div>
+          <div class="col-3">
+            YEARLY</div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue mt-3">
+          <div class="col-3">Take Home</div>
+          <div class="col-3">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text Prepend">₹</span>
+              </div>
+              <!-- <mat-form-field appearance="outline" class="perwidth"> -->
+
+              <input type="number" class="form-control perwidth col-4" formControlName="take_home"
+                (input)="getAmount(payrollgenform.value.take_home)" >
+              <!-- (keydown)="validationPaycomponent" -->
+
+              <!-- </mat-form-field> -->
+            </div>
+          </div>
+          <div class="col-3">
+
+            <mat-form-field appearance="outline" class="custom-mat-form-field">
+              <input type="number" matInput formControlName="takehome_monthly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline" class="custom-mat-form-field">
+              <input matInput formControlName="takehome_yearly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+            <!-- <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input type="number" matInput formControlName="amount" class="alignValue">
+            </mat-form-field>
+          </div> -->
+          </div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue mt-3">
+          <div class="col-3">Take Home with Bonus & Statutory Deductions</div>
+          <div class="col-3">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text Prepend">₹</span>
+              </div>
+
+
+              <input type="number" class="form-control perwidth col-4  custom-mat-form-field" formControlName="takehomeWBD" [readonly]="true">
+
+            </div>
+          </div>
+          <div class="col-3">
+
+            <mat-form-field appearance="outline"  class="custom-mat-form-field">
+              <input type="number" matInput formControlName="takehome_monthlyWBD" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline" class="custom-mat-form-field">
+              <input matInput formControlName="takehome_yearlyWBD" class="alignValue" [readonly]="true">
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <div class="row col-12 d-flex align-items-center skyblue mt-3">
+          <div class="col-3">CTC</div>
+          <div class="col-3">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text Prepend">₹</span>
+              </div>
+              <!-- <mat-form-field appearance="outline" class="perwidth"> -->
+
+              <input type="number" class="form-control perwidth col-4" formControlName="standard_ctc"
+                (input)="getAmount(payrollgenform.value.takehome)" [readonly]="true">
+
+              <!-- </mat-form-field> -->
+            </div>
+          </div>
+          <div class="col-3">
+
+            <mat-form-field appearance="outline" class="custom-mat-form-field">
+              <input type="number" matInput formControlName="ctc_monthly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="ctc_yearly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+            <!-- <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input type="number" matInput formControlName="ctc_monthly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="ctc_yearly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+             <div class="col-3">
+    <mat-form-field appearance="outline">
+      <input type="number" matInput formControlName="takehome_monthly" class="alignValue">
+    </mat-form-field>
+  </div> -->
+          </div>
+        </div>
+        <!-- t -->
+
+
+
+
+        <div class="row col-12 d-flex align-items-center skyblue">
+          <div class="col-3" style="cursor: pointer;">Gross pay</div>
+          <div class="col-3">
+            <!-- {{gross_pay}} -->
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text Prepend">₹</span>
+              </div>
+              <!-- <mat-form-field appearance="outline" class="perwidth"> -->
+
+              <input type="number" class="form-control perwidth col-4" formControlName="gross_pay" [readonly]="true">
+
+              <!-- </mat-form-field> -->
+            </div>
+            <!-- <mat-form-field appearance="outline" class="perwidth">
+        <input type="number" matInput formControlName="gross_pay" [readonly]="true" >
+    </mat-form-field> -->
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input type="number" matInput formControlName="gross_pay_monthly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="gross_pay_yearly" class="alignValue" [readonly]="true">
+            </mat-form-field>
+          </div>
+        </div>
+        <div formArrayName='segment_data'>
+          <!--segment array  -->
+          <div *ngFor="let list of payrollgenform.get('segment_data')['controls']; let i = index " [formGroupName]="i">
+            <div class="row col-12 d-flex align-items-center skyblue">
+              <div class="col-3">
+                <b (click)="showpaycom(payrollgenform.get('segment_data').value ,i)"
+                  class="Segment">{{payrollgenform.get('segment_data').value[i].segment_name}}</b>
+              </div>
+              <div class="col-3">
+                <div class="input-group"
+                  *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type !== 'Monthly Bonus' &&  (payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() !== 'deductions'">
+                  <!-- <mat-form-field appearance="outline" class="perwidth"> -->
+                  <input type="number" class="form-control perwidthBack col-3" formControlName="segment_percentage"
+                    (input)="_letcalculate(payrollgenform.value.gross_pay)">
+                  <!-- </mat-form-field> -->
+                  <div class="input-group-append">
+                    <span class="input-group-text Append">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input type="number" matInput formControlName="amount" class="alignValue" [readonly]="true">
+                </mat-form-field>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="amount_yearly" class="alignValue" [readonly]="true">
+                </mat-form-field>
+              </div>
+            </div>
+            <!-- paycomponent based on segment -->
+            <div *ngIf="payrollgenform.get('segment_data').value[i].is_paycomponent " formArrayName='paycomponent_data'
+              class="Segment_value ml-1 border bg-light  pt-5 pb-5 pl-2 pr-2 mt-2 mb-2 ">
+              <!-- pink #EFA8E4 -->
+              <!-- lightBlue=61aaf8bc -->
+              <!-- light=background-color:#eeeeef -->
+              <div>
+                <div *ngFor="let mark of list.get('paycomponent_data')['controls']; let j = index" [formGroupName]="j"
+                  class="row col-12 d-flex align-items-center  ml-1 ">
+                  <!-- blue=4999ef -->
+                  <div class="col-3">
+                    {{payrollgenform.get('segment_data').value[i].paycomponent_data[j].paycomponent_name}}
+                  </div>
+
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type === 'Monthly Bonus'">
+
+                    <ng-container>
+                      <mat-form-field appearance="outline" style="width: 130px;">
+                        <mat-label>Bonus Type</mat-label>
+                        <mat-select formControlName="type" (selectionChange)="onBonusTypeChange($event, i)">
+                          <mat-option *ngFor="let type of deduction_type_data" [value]="type.id">
+                            {{type.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngIf="selectedBonusType === 5 ">
+                      <!-- Display two datepickers for custom selection -->
+                      <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date"
+                          formControlName="from_date">
+                        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startDatePicker></mat-datepicker>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="endDatePicker" placeholder="End Date"
+                          formControlName="to_date">
+                        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #endDatePicker></mat-datepicker>
+                      </mat-form-field>
+                    </ng-container>
+                  </div>
+
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type === 'Monthly Bonus'">
+
+                    <mat-form-field appearance="outline">
+                      <input type="number" matInput formControlName="amount" class="alignValue"
+                        (focusout)="calculateAmountYearly(i)">
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type === 'Monthly Bonus'">
+                    <mat-form-field appearance="outline">
+                      <input type="number" matInput formControlName="amount_yearly" class="alignValue"
+                        [readonly]="true">
+                    </mat-form-field>
+                  </div>
+                  <ng-container *ngIf="showDedcutEntry">
+                    <div class="col-3"
+                      *ngIf="(payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() === 'deductions'">
+
+                      <ng-container>
+                        <mat-form-field appearance="outline" style="width: 130px;">
+                          <mat-label>Bonus Type</mat-label>
+                          <mat-select formControlName="type" (selectionChange)="onBonusTypeChanges($event, i)">
+                            <mat-option *ngFor="let type of deduction_type_data" [value]="type.id">
+                              {{type.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </ng-container>
+                      <ng-container *ngIf="selectedBonusTypes === 5 ">
+
+                        <mat-form-field appearance="outline">
+                          <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date"
+                            formControlName="from_date">
+                          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #startDatePicker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                          <input matInput [matDatepicker]="endDatePicker" placeholder="End Date"
+                            formControlName="to_date">
+                          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #endDatePicker></mat-datepicker>
+                        </mat-form-field>
+                      </ng-container>
+                    </div>
+
+                    <div class="col-3"
+                      *ngIf="(payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() === 'deductions'">
+
+                      <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="amount" class="alignValue"
+                          (focusout)="calculateAmountYearlys(i)">
+                      </mat-form-field>
+
+                    </div>
+                    <div class="col-3"
+                      *ngIf="(payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() === 'deductions'">
+                      <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="amount_yearly" class="alignValue"
+                          [readonly]="true">
+                      </mat-form-field>
+                    </div>
+                  </ng-container>
+
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type !== 'Monthly Bonus' && (payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() !== 'deductions'">
+                    <div class="input-group">
+                      <!-- <div class="input-group-prepend">
+                    <span class="input-group-text Prepend" >₹</span>
+                  </div> -->
+                      <!-- <mat-form-field  class="perwidth" style="border-color:black"> -->
+                      <input type="number" class="form-control perwidthBack col-3"
+                        formControlName="paycomponent_percentage"
+                        (input)="_letcalculate(payrollgenform.value.gross_pay)" min="0" max="100">
+                      <!-- (input)="validationPaycomponent()" -->
+                      <!-- formControlName="paycomponent_percentage" (input)="_letcalculate(payrollgenform.value.gross_pay)"  > -->
+                      <!-- </mat-form-field> -->
+                      <div class="input-group-append">
+                        <span class="input-group-text Append">%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type !== 'Monthly Bonus' && (payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() !== 'deductions'">
+                    <mat-form-field appearance="outline">
+                      <input type="number" matInput formControlName="amount" class="alignValue" [readonly]="true">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-3"
+                    *ngIf="payrollgenform.get('segment_data').value[i].paycomponent_type !== 'Monthly Bonus' && (payrollgenform.get('segment_data').value[i].paycomponent_type)?.toLowerCase() !== 'deductions'">
+                    <mat-form-field appearance="outline">
+                      <input matInput formControlName="amount_yearly" class="alignValue" [readonly]="true">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row col-12">
+                  <div class="col-3"></div>
+                  <div class="col-3 text-danger text-center" style="margin-left:-80px">{{paycomponentvalue[i]}}</div>
+                  <div class="col-3 "></div>
+                  <div class="col-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Custom Deductions-->
+        <ng-container *ngIf="deductPatchrow">
+          <div class="row col-12 d-flex align-items-center skyblue mt-5 mb-3">
+            <div class="col-3 Segment mt-1" (click)="showhideecs(payrollgenform.get('companycontribution').value)">
+              Deductions</div>
+
+          </div>
+
+
+          <div *ngIf="is_pfs" formArrayName='deductions'
+            class=" border bg-light Segment_value pt-5 pb-5 pl-5 pr-2 mt-2 mb-2 ml-1">
+
+            <div class="skyblue bg-light">
+              <!-- <code>{{payrollgenform.get('companycontribution').value[0]?.paycomponent_name}}</code> -->
+
+              <div *ngFor="let d of payrollgenform.get('deductions')['controls']; let z = index"
+                class="row col-12 d-flex align-items-center " [formGroupName]="z">
+                <ng-container *ngIf="payrollgenform.get('deductions').value[z]?.paycomponent_name !== ''">
+                  <!-- <div  > -->
+                  <div class="col-3">{{payrollgenform.get('deductions').value[z]?.paycomponent_name}}</div>
+                  <div class="col-3">
+                    <!-- <mat-form-field appearance="outline" class="perwidth">
+          <input type="number" matInput formControlName="paycomponent_percentage"> -->
+                    <!-- </mat-form-field>  -->
+                    <!-- <div class="Employeespan row col-5"> -->
+                    <ng-container>
+                      <mat-form-field appearance="outline" style="width: 130px;">
+                        <mat-label>Bonus Type</mat-label>
+                        <mat-select formControlName="type" (selectionChange)="onBonusTypeChangeD($event, z)">
+                          <mat-option *ngFor="let type of deduction_type_data" [value]="type.id">
+                            {{type.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-container>
+                    <!-- <div class="col-7 " style="text-align:left;display:flex;align-items:center">
+          {{payrollgenform.get('deductions').value[z]?.paycomponent_percentage}} </div>
+        <div class="col-4 perc" style="display:flex;align-items:center;justify-content:center">%</div> -->
+
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-3">
+                    <mat-form-field appearance="outline">
+                      <input type="number" matInput formControlName="amount" class="alignValue"
+                        (focusout)="calculateAmountYearVal()">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-3">
+                    <mat-form-field appearance="outline">
+                      <input matInput formControlName="amount_yearly" class="alignValue" readonly>
+                    </mat-form-field>
+                  </div>
+                </ng-container>
+              </div>
+
+              <!-- <div class="row col-12">
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-3 text-danger text-center" style="margin-left:35px">{{totalEmployee}}</div>
+    <div class="col-3 text-danger text-right" style="margin-left:-100px">{{totalEmployeeYearly}}</div>
+  </div> -->
+            </div>
+
+            <!-- </div> -->
+          </div>
+
+        </ng-container>
+
+
+        <div class="row col-12 d-flex align-items-center skyblue mt-5">
+          <div class="col-3 Segment mt-1" (click)="showhidecc(payrollgenform.get('companycontribution').value)">Company
+            Contribution</div>
+
+        </div>
+        <div *ngIf="is_company" formArrayName='companycontribution'
+          class=" border bg-light Segment_value pt-5 pb-5 pl-5 pr-2 mt-2 mb-2 ml-1">
+
+
+          <!-- <code>{{payrollgenform.get('companycontribution').value[0]?.paycomponent_name}}</code> -->
+          <div class=" skyblue bg-light">
+            <div *ngFor="let d of payrollgenform.get('companycontribution')['controls']; let c = index"
+              [formGroupName]="c" class="row col-12 d-flex align-items-center">
+              <!-- <div class=""> -->
+              <!-- <div  > -->
+              <div class="col-3 ">
+
+                <span>{{payrollgenform.get('companycontribution').value[c]?.paycomponent_name}}</span>
+              </div>
+              <div class="col-3">
+                <!-- <mat-form-field appearance="outline" class="perwidth">
+                  <input type="number" matInput formControlName="paycomponent_percentage"> -->
+                <!-- </mat-form-field>  -->
+                <div class="Employeespan row col-5">
+                  <div class="col-7 " style="text-align:left;display:flex;align-items:center">
+                    {{payrollgenform.get('companycontribution').value[c]?.paycomponent_percentage}}</div>
+                  <div class="col-4 perc" style="display:flex;align-items:center;justify-content:center">%</div>
+                </div>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input type="number" matInput formControlName="amount" class="alignValue" readonly="true">
+                </mat-form-field>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="amount_yearly" class="alignValue" readonly="true">
+                </mat-form-field>
+              </div>
+
+
+            </div>
+            <div class="row col-12">
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3 text-danger text-center" style="margin-left:35px">{{totalCompany}}</div>
+              <div class="col-3 text-danger text-right" style="margin-left:-100px">{{totalCompanyYearly}}</div>
+            </div>
+            <!-- </div> -->
+          </div>
+        </div>
+
+
+        <div class="row col-12 d-flex align-items-center skyblue mt-5 mb-3">
+          <div class="col-3 Segment mt-1" (click)="showhideec(payrollgenform.get('companycontribution').value)">Employee
+            Contribution</div>
+
+        </div>
+        <div *ngIf="is_pf" formArrayName='employeecontribution'
+          class=" border bg-light Segment_value pt-5 pb-5 pl-5 pr-2 mt-2 mb-2 ml-1">
+
+          <div class="skyblue bg-light">
+            <!-- <code>{{payrollgenform.get('companycontribution').value[0]?.paycomponent_name}}</code> -->
+            <div *ngFor="let d of payrollgenform.get('employeecontribution')['controls']; let c = index"
+              class="row col-12 d-flex align-items-center " [formGroupName]="c">
+
+              <!-- <div  > -->
+              <div class="col-3">{{payrollgenform.get('employeecontribution').value[c]?.paycomponent_name}}</div>
+              <div class="col-3">
+                <!-- <mat-form-field appearance="outline" class="perwidth">
+                  <input type="number" matInput formControlName="paycomponent_percentage"> -->
+                <!-- </mat-form-field>  -->
+                <div class="Employeespan row col-5">
+                  <div class="col-7 " style="text-align:left;display:flex;align-items:center">
+                    {{payrollgenform.get('employeecontribution').value[c]?.paycomponent_percentage}} </div>
+                  <div class="col-4 perc" style="display:flex;align-items:center;justify-content:center">%</div>
+                </div>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input type="number" matInput formControlName="amount" class="alignValue" readonly>
+                </mat-form-field>
+              </div>
+              <div class="col-3">
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="amount_yearly" class="alignValue" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row col-12">
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3 text-danger text-center" style="margin-left:35px">{{totalEmployee}}</div>
+              <div class="col-3 text-danger text-right" style="margin-left:-100px">{{totalEmployeeYearly}}</div>
+            </div>
+          </div>
+
+          <!-- </div> -->
+        </div>
+
+        <div *ngIf="showpreference">
+               <div class="row">
+          <p style="font-size: larger;
+          font-weight: 600;
+          margin-top: 3%;
+          margin-left: 3%;">Payout Preferences</p>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <p style="    margin-top: 4%;
+            margin-left: 17%;">Revised Salary Effective From </p>
+          </div>
+          <div class="col-sm-4">
+            <form [formGroup]="revisePay">
+              <mat-form-field appearance="outline" style="    margin-top: 2%;
+              margin-left: -53%;">
+                <input matInput [matDatepicker]="startDatePicker" placeholder="Revised Date"
+                  formControlName="revisedate">
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+              </mat-form-field>
+         
+            </form>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 4%;">
+            <div class="col-sm-6">
+              <p style="    margin-left: 16%;">Payout Month : </p>
+            </div>
+            <div class="col-sm-6">
+              <form [formGroup]="revisePay">
+                <mat-form-field dateFormat2 class="smallinput" style="width: 43%;
+                margin-left: -34%;">
+                  <mat-label> Month </mat-label>
+                  <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+                    formControlName="monthyear" />
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                    (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                  </mat-datepicker>
+                </mat-form-field>
+              </form>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="row col-12 d-flex align-items-center skyblue mb-5">
+          <button type="submit" class="btn btn-outline-primary text-center"
+            style="border-radius: 40px;margin-left: 10px;" (click)="previewPay()" data-target="#modalPay"
+            data-toggle="modal">Preview</button>
+          <button type="submit" class="btn btn-outline-success text-center"
+            style="border-radius: 40px;margin-left: 10px;" (click)="Formsubmission()"
+            [disabled]="!payrollgenform.get('take_home').valid">Submit</button>
+          <button type="button" class="btn btn-outline-primary text-center"
+            style="border-radius: 40px;margin-left: 10px;" (click)="Submit()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  id="modalPay" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width:127%">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Preview Pay Structure </h2>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <mat-card>
+          <html>
+
+          <body>
+
+
+            <div class="page">
+              <main>
+                <section>
+                  <br>
+
+                  <div id="tablesection" class="mt-5">
+                    <table style="width: 90%;font-family: Calibri;margin-left: 2%;" id="previewTable">
+                      <tr>
+                        <th colspan="3" id="ths" class="bg-info text-white"
+                          style="font-size: large;text-align: center;font-weight: bold;">
+                          Pay Structure</th>
+                      </tr>
+
+                      <tr>
+                        <!-- <th id="ths" >S. No</th> -->
+                        <th id="ths" style="font-weight: bold;">Description</th>
+                        <th id="ths" style="font-weight: bold;">Gross Amount</th>
+                        <th id="ths" style="font-weight: bold;">Gross Amount</th>
+                      </tr>
+                      <tr>
+                        <th id="ths" style="font-weight: bold;">Earnings</th>
+                        <th id="ths" style="font-weight: bold;">MONTHLY</th>
+                        <th id="ths" style="font-weight: bold;">YEARLY</th>
+                      </tr>
+
+
+                      <tr>
+                        <th id="ths" style="font-weight: bold;">GROSS PAY</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('gross_pay_monthly').value |
+                          currency:'INR'}}</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('gross_pay_yearly').value |
+                          currency:'INR'}}</th>
+
+                      </tr>
+
+                      <!-- <tr *ngFor="let list of payrollgenform.get('segment_data')['controls']; let i = index" >                                                 
+                                                    <td>
+                                                      <b>{{ list.value.segment_name }}</b>
+                                                    </td>                                               
+                                                    <td >
+                                                      {{ list.value.amount }}
+                                                    </td>
+                                                    <td>
+                                                      {{ list.value.amount_yearly }}
+                                                    </td>                                         
+                                                    <tr *ngFor="let mark of list.get('paycomponent_data')['controls']; let j = index">
+                                                      <td>
+                                                        {{ mark.value.paycomponent_name }}
+                                                      </td>
+                                                      <td>
+                                                        {{ mark.value.amount }}
+                                                      </td>
+                                                      <td>
+                                                        {{ mark.value.amount_yearly }}
+                                                      </td>                                                
+                                                    </tr>
+                 
+                                                </tr> -->
+
+                      <ng-container *ngFor="let list of payrollgenform.get('segment_data')['controls']; let i = index">
+                        <td id="tds" style="background-color: #17a2b8 ;color:white;">
+                          <b>{{ list.value.segment_name }}</b>
+                        </td>
+                        <td id="tds" style="background-color: #17a2b8 ;color:white;"> {{list.value.amount |
+                          currency:'INR'}}</td>
+                        <td id="tds" style="background-color: #17a2b8 ;color:white;">{{list.value.amount_yearly |
+                          currency:'INR'}}</td>
+
+                        <tr *ngFor="let mark of list.get('paycomponent_data')['controls']; let j = index">
+
+                          <td id="tds">{{ mark.value.paycomponent_name }}</td>
+                          <td id="tds">{{ mark.value.amount | currency:'INR'}}</td>
+                          <td id="tds">{{ mark.value.amount_yearly | currency:'INR' }}</td>
+                        </tr>
+
+                      </ng-container>
+
+                      <tr style="background-color: #17a2b8 ;color:white;">
+                        <td colspan="3">
+                          Company Contribution
+                        </td>
+                        <!-- <td></td>
+                                                  <td></td> -->
+                      </tr>
+                      <tr *ngFor="let d of payrollgenform.get('companycontribution')['controls']; let c = index">
+                        <td id="tds">{{d.value.paycomponent_name}}</td>
+                        <td id="tds">{{d.value.amount | currency:'INR'}}</td>
+                        <td id="tds">{{d.value.amount_yearly | currency:'INR'}}</td>
+                      </tr>
+                      <tr style="background-color: #17a2b8 ;color:white;">
+                        <td id="tds"></td>
+                        <td id="tds">{{totalCompany | currency:'INR'}}</td>
+                        <td id="tds">{{totalCompanyYearly | currency:'INR'}}</td>
+
+                      </tr>
+
+                      <tr style="background-color: #17a2b8 ;color:white;">
+                        <td colspan="3">
+                          Employee Contribution
+                        </td>
+                        <!-- <td></td>
+                                                  <td></td> -->
+                      </tr>
+                      <tr *ngFor="let d of payrollgenform.get('employeecontribution')['controls'] ; let c = index">
+                        <td id="tds">{{d.value.paycomponent_name}}</td>
+                        <td id="tds">{{d.value.amount | currency:'INR'}}</td>
+                        <td id="tds">{{d.value.amount_yearly | currency:'INR'}}</td>
+                      </tr>
+                      <tr style="background-color: #17a2b8 ;color:white;">
+                        <td id="tds"></td>
+                        <td id="tds">{{totalEmployee | currency:'INR'}}</td>
+                        <td id="tds">{{totalEmployeeYearly | currency:'INR'}}</td>
+
+                      </tr>
+
+                      <tr>
+                        <th id="ths" style="font-weight: bold;">TAKE HOME</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('takehome_monthly').value |
+                          currency:'INR'}}</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('takehome_yearly').value |
+                          currency:'INR'}}</th>
+
+                      </tr>
+                      <tr>
+                        <th id="ths" style="font-weight: bold;">TAKE HOME WITH BONUS & DEDUCTIONS</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('takehome_monthlyWBD').value |
+                          currency:'INR'}}</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('takehome_yearlyWBD').value |
+                          currency:'INR'}}</th>
+
+                      </tr>
+                      <tr>
+                        <th id="ths" style="font-weight: bold;">CTC</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('ctc_monthly').value |
+                          currency:'INR'}}</th>
+                        <th id="ths" style="font-weight: bold;">{{this.payrollgenform.get('ctc_yearly').value |
+                          currency:'INR'}}</th>
+
+                      </tr>
+
+
+
+
+
+
+
+                    </table>
+                  </div>
+
+
+
+
+                  <br>
+
+
+                </section>
+
+              </main>
+            </div>
+          </body>
+
+          </html>
+        </mat-card>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  id="revisionModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width:127%">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel" style="font-family: 'Inter';">Select the Salary Revision Type
+        </h2>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedOption" (change)="onSelectionChange()">
+              <mat-radio-button value="1" class="fonts"><span style="font-family: 'Inter';"> Revise CTC by
+                  Percentage</span></mat-radio-button>
+              <mat-radio-button value="2" class="fonts"><span style="font-family: 'Inter';"> Enter the new Monthly Take
+                  Home </span> </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="col-md-6">
+            <form [formGroup]="revisePay">
+
+              <div>
+                <mat-form-field>
+                  <input matInput  formControlName="revPercent"  (input)="calculateVal()" >
+                </mat-form-field>
+                <span *ngIf="showPercent">
+                  <span > % </span>
+                </span>
+                <span *ngIf="showRupee">
+                  <span> ₹ </span>
+                </span>
+              </div>
+
+  
+         
+          </form>
+          </div>
+        </div>
+
+        <div class="row" style="margin-left: 22%;font-size: medium;">
+          Revised Monthly Take Home : <span style="color: red;    margin-left: 4%;
+          font-size: large;"><span>₹</span>{{this.calcAmount}}</span>
+        </div>
+        <div class="row" style=" margin-left: 22%;   font-size: medium;">
+          Revised Yearly Take Home :  <span style="color: red;    margin-left: 6%;
+          font-size: large;"><span>₹</span>{{this.yrcalcAmount}}</span>
+        </div>
+        <hr>
+
+        <!-- <div class="row">
+          <p style="font-size: larger;
+          font-weight: 600;
+          margin-top: 3%;
+          margin-left: 3%;">Payout Preferences</p>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <p>Revised Salary Effective From </p>
+          </div>
+          <div class="col-sm-4">
+            <form [formGroup]="revisePay">
+              <mat-form-field appearance="outline" style="margin-top: -8%;">
+                <input matInput [matDatepicker]="startDatePicker" placeholder="Revised Date"
+                  formControlName="revisedate">
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+              </mat-form-field>
+         
+            </form>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 4%;">
+            <div class="col-sm-6">
+              <p>Payout Month : </p>
+            </div>
+            <div class="col-sm-6">
+              <form [formGroup]="revisePay">
+                <mat-form-field dateFormat2 class="smallinput" style="margin-top: -2%;width: 85%;">
+                  <mat-label> Month </mat-label>
+                  <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+                    formControlName="monthyear" />
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                    (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                  </mat-datepicker>
+                </mat-form-field>
+              </form>
+            </div>
+        </div> -->
+
+        <div class="row">
+          <div class="col-md-8"></div>
+          <div class="col-md-2">
+            <button class="btn btn-primary text-center" (click)="reviseProcess()" >Submit</button>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-info text-center" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+
+
+
+    
+
+    </div>
+
+  </div>
+</div>
+</div>

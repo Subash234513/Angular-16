@@ -1,0 +1,290 @@
+<div *ngIf="Objs['Post Job Summary']">
+
+
+    <div>
+        <form [formGroup]="JobPostingSearchForm" style="margin-left: 20px;">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <mat-label>Approval Status</mat-label><br>
+                    <mat-form-field>
+                        <mat-select formControlName="approvalstatus" placeholder="Status">
+                            <mat-option *ngFor="let group of JobPostingObjects.ApprovalStatusList" [value]="group.id">
+                                {{group.text}}
+                            </mat-option>
+
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" mat-fab
+                        style="margin-left: 20px;background-color: #f5c68b; vertical-align: text-top;"
+                        (click)="JobPostSearch('')">
+                        <mat-icon matTooltip="Search">search</mat-icon>
+                    </button>
+                    <button type="button" mat-fab
+                        style="margin-left: 20px;background-color: #f5c68b; vertical-align: text-top;"
+                        (click)="getAddScreen()">
+                        <mat-icon matTooltip="Add">add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+        <thead class="table_header">
+            <tr>
+                <th> Sl.No </th>
+                <th> Job Title </th>
+                <th> Status </th>
+                <!-- <th> View </th> -->
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let job of JobPostingObjects?.JobList; let index = index">
+                <td>{{index + 1}}</td>
+                <td>
+                    <span (click)="ViewJobPost(job)" id="hyperlinkview"> {{job?.job_title}} </span>
+                </td>
+                <td>{{job?.approval_status?.text}}</td>
+                <!-- <td > <span class="material-icons" (click)="getJobRecruitmentView(job)">visibility</span> </td> -->
+            </tr>
+        </tbody>
+
+    </table>
+    <div *ngIf="JobPostingObjects?.JobList?.length == 0; else jobpost" style="margin-left: 42%;">
+        <h3>No Records Found.. </h3>
+    </div>
+    <ng-template #jobpost>
+        <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+            <button mat-icon-button [disabled]="JobPostingObjects?.hasPreviousPostJobSummary === false" color="primary"
+                (click)="JobPostSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{JobPostingObjects?.presentPagePostJobSummary}}
+            <button mat-icon-button [disabled]="JobPostingObjects?.hasnextPostJobSummary === false" color="primary"
+                (click)="JobPostSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+
+
+</div>
+
+<div class="container" *ngIf="Objs['Post Job Create']">
+
+
+    <app-postjob-create (onSubmit)="SubmitPostJob()" (onCancel)="CancelPostJob()"></app-postjob-create>
+
+
+
+
+</div>
+
+
+<div class="container" *ngIf="Objs['Post Job View']">
+
+    <div>
+        <div class="placingOnRight">
+
+            <h3 class="badge badge-primary padAll"> {{JobPostingObjects?.ViewPost?.approval_status?.text}} </h3>
+            <div
+                *ngIf="JobPostingObjects?.ViewPost?.approval_status?.text == 'Draft' && JobPostingObjects?.ViewPost?.is_aapproval_status?.textpprover == true">
+                <mat-form-field class="ddheight" style="width: 140px;">
+                    <mat-select placeholder="Select Action">
+                        <mat-option *ngFor="let process of JobPostingObjects?.ProcessList" [value]="process?.name"
+                            data-toggle="modal" data-target="#exampleModal" (click)="gettingRemarks(process)">
+                            {{process?.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background:#c1e2f6;">
+                            <h2 class="modal-title" id="exampleModalLabel">{{JobPostingObjects?.SelectedProcess}}
+                                Remarks</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form [formGroup]="RemarksForm">
+                                <div class="col-md-3">
+                                    <mat-label>Remarks</mat-label><br>
+                                    <mat-form-field class="matformfieldstyle lenthoftextfield">
+                                        <textarea class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                            placeholder="Remarks" formControlName="remarks"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                        border-color: black;
+                                                        background-color: white;" data-dismiss="modal">Close</button>
+
+                            <button type="button" [disabled]="RemarksForm.invalid" style="border-radius: 10px;margin-left: 10px; 
+                                                    border-color: #f5c68b; background-color: #f5c68b;"
+                                class=" mat-stroked-button" data-dismiss="modal"
+                                (click)="Approval_Reject_Review(JobPostingObjects?.SelectedProcess)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="WhiteBtn" class="btn btn-light" (click)="CancelPostJob()"> Back</button>
+        </div>
+
+        <h2><span class="colors">Role:</span> {{JobPostingObjects?.ViewPost?.job_title}}</h2>
+        <h5><span class="material-icons alignicons">work</span>{{JobPostingObjects?.ViewPost?.job_type?.text}}
+
+            <span class="material-icons alignicons leftPad"> work_history </span>
+            {{JobPostingObjects?.ViewPost?.work_mode?.text}}
+               
+
+        </h5>
+        <h5> 
+            <!-- badge badge-pill badge-light -->
+            <span class="alignicons"><b>Salary Range: </b><span>
+                 
+                {{JobPostingObjects?.ViewPost?.min_salary |
+                     currency : JobPostingObjects?.ViewPost?.currency_type?.text == 'RUPEE' ? 'INR': 
+                     JobPostingObjects?.ViewPost?.currency_type?.text == 'DOLLAR' ? 'USD' :
+                      JobPostingObjects?.ViewPost?.currency_type?.text == 'EURO' ? 'EUR' : 'INR'}} 
+                - {{JobPostingObjects?.ViewPost?.max_salary}}
+                {{JobPostingObjects?.ViewPost?.salary_type?.text}} </span> </span>
+
+                <span class="alignicons leftPad"><b>No Of Positions:</b><span
+                >{{JobPostingObjects?.ViewPost?.no_opening}}
+            </span>   </span> 
+            <span class="alignicons leftPad"><b> Experience: </b> <span
+                >{{JobPostingObjects?.ViewPost?.min_exp}} -
+                {{JobPostingObjects?.ViewPost?.max_exp}} years </span> </span>
+
+        </h5>
+        
+
+        <hr>
+
+        <div class="row">
+            <!-- <div class="col-sm-3 col-md-3 col-lg-3">
+                <table class="tableStyle">
+                    <tr>
+                        <td>
+                            <h4> <b>Department:</b> <span>IT</span></h4>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4><b> Hiring Manager:</b> <span class="badge badge-pill badge-light">Mani</span> </h4>
+                        </td> 
+                    </tr>   
+                </table>
+                
+            </div> -->
+            <!-- badge badge-pill badge-light inlinebadge -->
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <h4> <b>Location: </b></h4>
+                    <mat-chip-grid class="inlinebadge" *ngFor="let dataLocation of JobPostingObjects?.ViewPost?.location">
+                        <div><mat-chip-row >{{dataLocation}} </mat-chip-row> </div>
+                      </mat-chip-grid>
+                <!-- <span *ngFor="let dataLocation of JobPostingObjects?.ViewPost?.location">
+                    {{dataLocation}} 
+                </span>  -->
+            </div>    
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <h4><b> Skills: </b></h4>
+                <mat-chip-grid class="inlinebadge" *ngFor="let dataSkills of JobPostingObjects?.ViewPost?.skill_set">
+                    <mat-chip-row>{{dataSkills}}</mat-chip-row>
+                </mat-chip-grid> 
+              
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="contanier">
+        <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+            <thead class="table_header">
+                <tr>
+                    <th> Sl.No </th>
+                    <th> Applicant </th>
+                    <th> Status </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let job of JobPostingObjects?.ProposedJobList; let index = index">
+                    <td>{{index + 1}}</td>
+                    <td>
+                        <span id="hyperlinkview"> {{job?.job_title}} </span>
+                    </td>
+                    <td>{{job?.approval_status?.text}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <div *ngIf="JobPostingObjects?.ProposedJobList?.length == 0; else proposedjobpost" style="margin-left: 42%;">
+            <h3>No Records Found.. </h3>
+        </div>
+        <ng-template #proposedjobpost>
+            <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                <button mat-icon-button [disabled]="JobPostingObjects?.hasPreviousproposedSummary === false"
+                    color="primary" (click)="ProposedJobPostSearch('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{JobPostingObjects?.presentPageproposedSummary}}
+                <button mat-icon-button [disabled]="JobPostingObjects?.hasnextProposedSummary === false" color="primary"
+                    (click)="ProposedJobPostSearch('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

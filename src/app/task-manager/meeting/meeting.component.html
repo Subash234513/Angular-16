@@ -1,0 +1,436 @@
+<div *ngIf="isShowmeet">
+  <form [formGroup]="meetingSummaryForm" class="cus-meetingFormMain">
+    <div class="cus-meetingFormContainer">
+      <div class="cus-meetingFormContainer1">
+        <mat-form-field class="divWidth">
+          <mat-label>Search Code</mat-label>
+          <input matInput formControlName="query" />
+        </mat-form-field>
+
+        <mat-form-field  class="divWidth">
+          <mat-label>Meeting Status</mat-label>
+          <mat-select formControlName="meetstatus">
+            <mat-option *ngFor="let i of statuslist" [value]="i">
+              {{ i.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  class="divWidth">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="from_date" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field  class="divWidth">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="to_date" />
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <button class="btn btn-primary" style="background-color: #044063; color: white" (click)="meetSearch()">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <button class="btn btn-secondary" (click)="resetSearch()">Reset</button>
+      </div>
+
+      <div class="cus-meetingFormContainer2" id="divWidths">
+        <button class="btn btn-primary" style="background-color: #044063; color: white" (click)="onclickMeetingAdd()">
+          + Meeting
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="cus-tableContainer">
+        <table class="table cus-table">
+          <thead>
+            <tr>
+              <th scope="col">S.No</th>
+              <th scope="col">Code</th>
+              <th scope="col">Description</th>
+              <th scope="col">Start Date / Time</th>
+              <th scope="col">End Date / Time</th>
+              <th scope="col">Meeting Status</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let type of meetList; index as i">
+            <tr>
+              <td>
+                {{ (pageMeet - 1) * pagesizemeetlog + i + 1 }}
+              </td>
+              <td class="pointer blue" (click)="onclickMeetingView(type)">{{ type.code }}</td>
+              <td>{{ type.description }}</td>
+              <td>{{ type.from_date | date : "dd/MM/yyyy HH:mm:ss" : 'UTC' }}</td>
+              <td>{{ type.to_date | date : "dd/MM/yyyy HH:mm:ss" : 'UTC' }}</td>
+              <td>{{ type.meeting_status?.text}}</td>
+            </tr>
+          </tbody>
+          <div *ngIf="meetList?.length == 0 || meetList == undefined" style="padding: 10px">
+            <p style="margin-bottom: 0">No Records Found...</p>
+          </div>
+        </table>
+      </div>
+      <div class="cus-meetingPageBtnsDiv">
+        <button [disabled]="!has_previousStoryTask" (click)="previouspage()">
+          <mat-icon>arrow_backward</mat-icon>
+        </button>
+
+        <div class="cus-pageNumbers">
+          <p class="cus-btnActive">
+            {{ this.currentpagenew }}
+          </p>
+        </div>
+        <!-- <div  class="cus-pageNumbers">
+          <p class="cus-btnActive">
+            {{ this.pageNumb }}
+          </p>
+        </div> -->
+
+        <button [disabled]="! has_nextStoryTask" (click)="nextpage()">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="isShowView">
+  <!-- <span style="margin-bottom: 0;margin-left: 40px;margin-top: 20px;" (click)="backmeetsummary()"  class="material-icons alignvertical">
+     arrow_back <p style="font-weight: bold">Meeting Info</p></span> -->
+  <div (click)="backmeetsummary()" class="cus-meetingAddHead pointer ">
+    <span class="material-icons alignvertical">arrow_back</span>
+    <p style="margin-bottom: 0;"><b style="font-weight: bold;">Meeting Info</b></p>
+  </div>
+
+  <form [formGroup]="meetingViewForm">
+    <div class="col d-flex" style="justify-content: space-between">
+      <div style="margin-left: 25px; font-size: 15px">
+        <!-- <button
+                  mat-button
+                  [matMenuTriggerFor]="menu"
+                  style="background-color: #044063; color: #ededfd; width: 112px;margin-left: 950px;">
+                  Action <mat-icon>keyboard_arrow_down</mat-icon>
+             </button> -->
+        <div style="margin-left: 700px; display: flex">
+
+          <div *ngIf="meetView?.can_delete">
+            <button style="margin-top: -9px;margin-left: 10px;" mat-icon-button type="button"
+              (click)="deletetask_meet()" matTooltip="Delete Meeting">
+              <mat-icon style="color:#044063" aria-label="Delete">delete</mat-icon>
+            </button>
+          </div>
+
+
+          <div *ngIf="meetView?.can_action">
+            <mat-form-field style="color: #044063; width: 112px;margin-top: -16px;">
+              <mat-label>Action</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let i of typeList" [value]="i" (click)="checkAndOpenPopup(i)" data-toggle="modal"
+                  data-target="#showModals" matTooltip="{{ i.text }}">
+                  {{ i.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+          <div *ngIf="meetView?.can_response">
+            <mat-form-field style="color: #044063; width: 112px; margin-left: 10px;margin-top: -16px;">
+              <mat-label>Response</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let i of editList" [value]="i" (click)="meetingEdit(i)">
+                  {{ i.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- <span>
+                  <button class="btn " >
+                    cancel</button>
+                  <br/>
+                </span>
+                <span>
+                  <button class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+                    Ended</button>
+                    <br/>
+                </span> -->
+
+        <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"> -->
+
+        <!-- <tr>
+            <h3><b>Meeting Code: </b> {{ meetView.code }}</h3>
+          </tr> -->
+        <div class="cus-taskViewDescDiv" style="margin-left: 20px">
+          <p class="cus-taskViewHead-p1">{{ meetView.code }}</p>
+          <p><b>|</b></p>
+          <p class="cus-taskViewDesc">
+            <b> {{ meetView.description }}</b>
+          </p>
+        </div>
+        <!-- <tr>
+            <h3><b>Description: </b> {{ meetView.description }}</h3>
+          </tr> -->
+        <div style="margin-left: 40px">
+          <h4>
+            <b>Date: </b>
+            {{ meetView.from_date | date : "dd/MM/yyyy HH:mm:ss" : 'UTC' }} <b>|</b>
+            {{ meetView.to_date | date : "dd/MM/yyyy HH:mm:ss" : 'UTC' }} &nbsp;&nbsp;&nbsp;<b
+              class="cus-badgeLightBlack">{{meetView.meeting_status?.text}}</b>
+          </h4>
+        </div>
+        <div style="margin-left: 40px">
+          <h4>
+            <b>MOM: </b>
+            {{meetView.meeting_note}}
+          </h4>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="cus-tableContainer">
+        <div class="cus-tableDivss2">
+          <table class="table cus-table">
+            <thead style="background-color: #eeeeef">
+              <tr>
+                <!-- <th scope="col">S.No</th> -->
+                <th scope="col">Employee</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <!--<th scope="col">Start Date</th>
+                                  <th scope="col">End Date</th>
+                                  <th scope="col">Attendees</th> -->
+              </tr>
+            </thead>
+            <tbody *ngFor="let type of viewList">
+              <tr>
+                <!-- <td>
+                                      {{(pageView - 1)*pagesizeviewlog +i+1 }}
+                                  </td> -->
+                <td>
+                  {{ type.user.code }} &nbsp;&nbsp;<b>|</b> &nbsp;&nbsp;{{
+                  type.user.name
+                  }}
+                </td>
+                <!-- <td></td> -->
+                <td>{{ type.type.name }}</td>
+                <td>{{ type.status?.text }}</td>
+
+                <!--<td>{{type.from_date}}</td>
+                                  <td>{{type.to_date}}</td>
+                                  <td>{{type.meeting_attendees}}</td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="isShowAdd">
+  <div (click)="backsummary()" class="cus-meetingAddHead">
+    <span class="material-icons alignvertical">arrow_back</span>
+    <p style="margin-bottom: 0;"><b style="font-weight: bold;">Meeting Creation</b></p>
+  </div>
+
+  <div class="cus-meetingAddForms">
+    <form [formGroup]="meetingsubmit" class="cus-meetingAddForms1" style="width: 100%;">
+      <div class="cus-meetingAddForms100">
+        <mat-form-field style="width: 800px">
+          <mat-label>Meeting Description</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Start Date / Time</mat-label>
+        <!-- <input matInput [matDatepicker]="picker" formControlName="from.date" /> -->
+        <input matInput type="datetime-local" formControlName="from_dates" (change)="clearToDate()" />
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>End Date / Time</mat-label>
+        <!-- <input matInput [matDatepicker]="picker1" formControlName="to.date" /> -->
+        <input matInput type="datetime-local" formControlName="to_dates" [max]="this.meetingsubmit.value.from_dates" />
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="meetingPopupForm" class="cus-meetingAddForms2" style="width: 870px">
+      <mat-form-field (click)="getemp('')">
+        <mat-label>Employee</mat-label>
+        <input #empInput matInput (click)="employeename()" formControlName="selectemployee"
+          [matAutocomplete]="autoemp" />
+        <mat-autocomplete #autoemp="matAutocomplete" [displayWith]="displayemp" (opened)="empScroll()">
+          <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let emp of empList" (focusout)="emps(emp)" [value]="emp" title="{{emp.name}}">{{ emp.name }}
+            </mat-option>
+          </ng-container>
+          <!-- <mat-option *ngIf="!empList.length">No Results Found.</mat-option> -->
+          <mat-option *ngIf="!empList || !empList.length">No Results Found</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- <mat-form-field
+        style="width: 20%; margin-top: 1%; margin-left: 3%; margin-bottom: -2%"
+        (click)="clientname()"
+      >
+        <mat-label>Position</mat-label>
+        <input
+          #clientInput
+          matInput
+          formControlName="selectclient"
+          [matAutocomplete]="autoclient"
+        />
+        <mat-autocomplete
+          #autoclient="matAutocomplete"
+          [displayWith]="displayclient"
+        >
+          <mat-option *ngIf="isLoading" class="is-loading"
+            >Loading...</mat-option
+          >
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let client of clientList" [value]="client"
+              >{{ client.name }}
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </mat-form-field> -->
+
+      <mat-form-field (click)="clientname()">
+        <mat-label>Type</mat-label>
+        <mat-select required #positionInput formControlname="selectclient"
+          (selectionChange)="onSelectionChange($event)">
+          <mat-option *ngFor="let client of clientList" [value]="client" (click)="position(client)">
+            {{ client.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button class="btn" style="background-color: #044063; color: white; margin-top: 4px;" (click)="savePopup()">
+        Add
+      </button>
+    </form>
+  </div>
+
+  <div>
+    <div class="cus-tableContainer" style="width: 63%;">
+      <table class="table cus-table">
+        <thead>
+          <tr>
+            <th scope="col">Employee</th>
+            <th scope="col">Type</th>
+            <th style="width: 6%">Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of empdataarray">
+            <td>
+              {{ data.employee?.name }}
+            </td>
+            <td>
+              {{ data.client?.name }}
+            </td>
+            <td>
+              <mat-icon (click)="remove(data)"> delete </mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cus-createMeet">
+      <button class="btn btn-primary" style="background-color: #044063; color: white" (click)="addEmpsubmit()">
+        Meeting Creation
+      </button>
+      <br><br>
+    </div>
+  </div>
+</div>
+<!-- 
+  <div style="margin-bottom: 10px;margin-left: 677px;">
+  
+  </div> -->
+<div *ngIf="showPopup">
+  <div class="modal" data-backdrop="static" data-keyboard="false" id="showModals">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #044063;color: white;">
+          <h2 class="modal-title">MOM</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <span aria-hidden="true" #closeModal>&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="meetingpopup">
+          <div class="modal-body">
+
+
+            <mat-form-field style="width: 459px;">
+              <mat-label>MOM</mat-label>
+
+              <input matInput formControlName="popupmom" />
+            </mat-form-field>
+
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="clickback()" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" (click)="submitepopupmeeting()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="Rescheduled">
+  <div class="modal" data-backdrop="static" data-keyboard="false" id="showModals">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #044063;color: white;">
+          <h2 class="modal-title">Reschedule Date</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+            <span aria-hidden="true" #closeModal1>&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="resechduleform">
+          <div class="modal-body">
+            <mat-form-field>
+              <mat-label>Start Date / Time</mat-label>
+              <!-- <input matInput [matDatepicker]="picker" formControlName="from.date" /> -->
+              <input matInput type="datetime-local" formControlName="fromdate" />
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>End Date / Time</mat-label>
+              <!-- <input matInput [matDatepicker]="picker" formControlName="from.date" /> -->
+              <input matInput type="datetime-local" formControlName="todate" />
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="resechduleback()" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" (click)="submiteresechdule()" data-dismiss="modal"
+            style="background-color: #044063;color: white;">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div id="maincontent" *ngIf="isSummaryContent">
+    <div class="search" id="width">
+        <div class="rows" >
+            <h2 >Grade Mapping</h2>
+        </div>
+   
+        <form [formGroup]="datassearch" class="datasearh" >
+            <section>
+                <div class="row">
+                    <div class="col-sm-3">                        
+                        <mat-form-field class="level"  appearance="outline" (click)="getGrade()">
+                            <mat-label>Grade Level</mat-label>
+                        <input #getgradeInput matInput formControlName="gradelevel" [matAutocomplete]="map">
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                        <mat-autocomplete #map="matAutocomplete" [displayWith]="displayfnGrade" (opened)="autocompletegradeScroll()">
+                          <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                          <mat-option *ngFor="let map of gradeList" [value]="map" title="{{map.name}}">
+                            {{map.name}}
+                        </mat-option>
+                      </ng-container>
+                      <mat-option *ngIf="!gradeList.length">No Records Found</mat-option>
+                        </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field class="pay"  >
+                            <mat-label>PayCompontent</mat-label>    
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-md-3">
+                        <div>
+                            <button mat-stroked-button type="button" class="button"  (click)="searchData()"
+                                aria-label="Search" >
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <button mat-stroked-button type="button" class="cleardata" 
+                            (click)="clearData()"
+                                >Clear</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+    
+        </form>
+    
+    </div>
+    
+    <div class="table" *ngIf="isShowTable">
+    
+        <div>
+       
+            <div class="table-responsive">
+    
+                <table class="tables table-bordered" id='commonstyle' style="width: 98%;">
+                    <thead class="table_header">
+                        <tr>
+                            <th class="text-center">S.no</th>
+                            
+                            <th class="text-center">
+                                Pay Component                           
+                            </th>
+                            <th class="text-center">
+                                    Percentage                    
+                            </th>
+                            <th class="text-center">Allowance Type</th>
+                       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sum of summarylist;index as ind">
+                            <td class="text-center">{{(pagination.index-1)*limit+ind+1}}</td>
+                            <td class="text-center">{{sum?.name}}</td>
+                            <td class="text-center">{{sum?.percentage}} %</td>
+                            <td class="text-center">{{sum?.allowance_type?.name}}</td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-sm-12" id="click" >
+                  <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+                      color="primary">
+                      <mat-icon class="customIconSize">arrow_back</mat-icon>
+                  </button>
+                  {{pagination.index}}
+                  <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                      color="primary">
+                      <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                  </button>
+      
+              </div>
+            </div>
+        </div>
+    </div>
+    
+  
+</div>

@@ -1,0 +1,213 @@
+<div>
+    <form [formGroup]="PARmakerForm">
+        <div class="header">
+            <h2>
+                Budget Proposal Approval (BPA Maker)
+            </h2>
+            <div *ngIf="status === 'APPROVED' ; else error" style="text-align:center;">
+                <div class="alert alert-success" role="alert">
+                    BPA Status : "{{status}}" &nbsp; &nbsp; Remarks: "{{statusremarks}}"
+                </div>
+            </div>
+            <ng-template #error>
+                <div class="alert alert-danger" role="alert" style="text-align:center;">
+                    BPA Status : "{{status}}" &nbsp; &nbsp; Remarks: "{{statusremarks}}"
+                </div>
+            </ng-template>
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label>BPA Number</mat-label>
+                            <input matInput placeholder="BPA Number" formControlName="no"  readonly>
+                        </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" placeholder="Start Date"
+                                formControlName="date" required>
+                            <mat-datepicker-toggle matSuffix readonly [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1 disabled></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                   
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label>BPA Year</mat-label>
+                            <input matInput placeholder="BPA Year" readonly formControlName="year" autocomplete="off"
+                                minlength="4" maxlength="4" size="45" pattern="[0-9]{4,4}" readonly >
+                        </mat-form-field>
+                    </td>
+                </tr> 
+                <tr>
+                    <td>
+                        <mat-form-field class="inputformat">
+                            <mat-label> BPA Amount</mat-label>
+                            <input matInput type="number" readonly placeholder="BPA Amount" 
+                                autocomplete="off" formControlName="amount" required  readonly >
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="inputformatlongdesc">
+                            <mat-label> BPA Description</mat-label>
+                            <input matInput placeholder="BPA Description" formControlName="desc" autocomplete="off" readonly>
+                        </mat-form-field>
+                    </td>
+                    
+                    <td> <span class="material-icons" type="button" data-toggle="modal"
+                            data-target=".bd-example-modal-xl">description</span></td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">
+                            Note Pad
+                        </h2>
+                    </div>
+                    <br>
+                    <div style="margin-left: 50px;width:90%;height: 70%;">
+                        
+                        <div>
+                            
+                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                (mediaDelete)="onDelete($event)" (summernoteInit)="summernoteInit($event)"
+                                formControlName="content">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                            class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 10px 10px 5px 30px;">
+            <form [formGroup]="PARmakerconForm" (ngSubmit)="PARconFormSubmit()">
+
+                <mat-form-field class="inputformat">
+                    <mat-label>Contingency</mat-label>
+                    <input matInput placeholder="Contingency" type="number" 
+                        formControlName="contigency" autocomplete="off" minlength="1" maxlength="3" size="45"
+                        pattern="[0-9]{1,3}" required>
+                </mat-form-field>
+
+                <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary"
+                    [disabled]="PARmakerconForm.invalid || clicked">Submit</button>
+                <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                    (click)="onCancelClick()">Cancel</button>
+
+            </form>
+        </div>
+
+        <h1 style="margin-left: 4%;">BPA Details</h1>
+        <div class="table-responsive" style="margin-top: 2%;width: 90%;margin-left: 50px;margin-bottom: 100px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header>
+                        <th>S.No</th>
+                        <th>EXPType</th>
+                        <th>Request For</th>
+                        <th>Description</th>
+                        <th>Year</th>
+                        <th>Amount</th>
+                        <th>Remarks</th>
+                        <th>Contigency Amount</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="pardetails" *ngFor="let section of getSections(PARmakerForm); let i = index">
+                    <tr [formGroupName]="i">
+
+                        <td>{{i+1}}</td>
+                        <td>
+                            <mat-form-field style="width: 175px;">
+                                <mat-label>Expense</mat-label>
+                                <mat-select formControlName="exptype" disabled>
+                                    <mat-option *ngFor="let type of expensetype" [value]="type.text">{{type.text}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="inputformatlong" >
+                                <mat-label>Request For</mat-label>
+                                <input #rforInput placeholder="Search Request For" matInput formControlName="requestfor"
+                                    [matAutocomplete]="rfor" readonly>
+                                <mat-autocomplete #rfor="matAutocomplete" [displayWith]="displayFnrfor.bind(this)"
+                                   >
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let rfor of requestforList" [value]="rfor.name">
+                                            {{rfor.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+                        
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Description" readonly formControlName="desc" readonly
+                                    autocomplete="off" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Year" readonly formControlName="year" autocomplete="off" maxlength="4"
+                                    required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput type="text" pattern="\d*" maxlength="16" readonly placeholder="Amount"
+                                    formControlName="amount" autocomplete="off" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput placeholder="Remarks" readonly formControlName="remarks"
+                                    autocomplete="off" required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="perce" autocomplete="off" 
+                                    required>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput readonly formControlName="perceTotal" autocomplete="off"
+                                     required>
+                            </mat-form-field>
+                        </td>
+
+                    </tr>
+                </tbody>
+                <tr>
+                    <th class="totaldisplay" colspan="5">Total Amount:</th>
+                    <td class="rightaligntotal">{{sum  | amountPipeCustom  }}</td>
+                    <td class="totaldisplay" colspan="3" style="margin-left: 50px;">{{perceTotalsum  | amountPipeCustom  }}
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </form>
+
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

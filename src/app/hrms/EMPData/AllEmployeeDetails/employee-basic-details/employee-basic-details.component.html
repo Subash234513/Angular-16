@@ -1,0 +1,1201 @@
+<div style="  width: 100%; " *ngIf="isShowSummary">
+  <div class="row">
+    <div class="col-sm-1 col-md-1 col-1 col-lg-1 col-xl-1">
+      <div class="cardspaceListProfile color display">
+        {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+      </div>
+    </div>
+    <div class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3">
+      <p style="color: #046ba8;font-size:x-large;font-weight: 700;margin-top: 7%;">Employee Details</p>
+    </div>
+    <div class="col-sm-4 col-md-4 col-4 col-lg-4 col-xl-4">
+      <!-- <div class="popup-btn" style="  margin-top: 4%;  margin-left: 36%;">
+        <button class="btn btn-primary" type="button" (click)="newEmployeeCreation()">
+          <span>Create New Employee</span>
+        </button>
+      </div> -->
+    </div>
+    <div *ngIf="EmpBasicDetails?.is_admin"  class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;" type="button">
+          <span> &nbsp; Notice Period</span>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="EmpBasicDetails?.is_admin"  class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+      <div class="popup-btn">
+        <button class="btn btn-primary"
+          style="color: #044063; background-color: white;box-shadow: 0px 1px 1px 0px rgba(0, 0, 0,0.5) ;" type="button">
+          <span> &nbsp; Deactivate</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="container mt-3">
+    <div class="matCard">
+      <div class="row">
+
+        <div class="col-lg-10">
+          <div class="HeaderView">
+            <!-- <div class="ProfileDisplayName backgroundColors"> -->
+            <div class="cardspaceListProfiless color display">
+              <!-- <div > -->
+              <!-- {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}} -->
+            <!-- </div> -->
+             <i *ngIf="!filesrc" class="fa-solid fa-user" style="padding: 32px;" >
+
+              </i> 
+              <div *ngIf="filesrc" >
+                <img  style="height: 95px;width: 95px;object-fit: cover;object-position: center;border-radius: 50px;" src="{{filesrc}}">
+              </div>
+              <!-- <i  style="    position: absolute;
+              margin-top: -9%;
+              margin-left: 9%;" class="fa-solid fa-camera" >
+              
+              <input type="file" #fileInput style="display:none;" (change)="onFileSelected($event)" />
+            </i> -->
+            <i style="position: relative; display: inline-block;margin-top: -105%;
+            margin-left: -12%;color: #503C3C;">
+              <label style="position: absolute; top: 0; left: 0; cursor: pointer;">
+                <i class="fas fa-pen" title="edit"  [matMenuTriggerFor]="editMenu" #menuTrigger="matMenuTrigger"></i>
+                <mat-menu #editMenu="matMenu">
+                  <button mat-menu-item style="padding: 0px;padding-left: 1%;color:#044063" (click)="openFileInput()" >Change</button>
+                  <button mat-menu-item style="padding: 0px;padding-left: 1%;color:#044063" (click)="deleteProfilePic()" >Remove</button>
+                </mat-menu>
+              </label>
+              
+              <input
+                type="file"
+                id="fileInput"
+                style="display: none;"
+                (change)="onFileSelected($event)"
+                accept=".jpg,.jpeg,.png"
+                #fileInput
+              />
+            </i>
+            
+              <!-- <mat-icon class="plus">add</mat-icon> -->
+
+              <!-- </div> -->
+            </div>
+
+            <div class="detailsView">
+
+              <h2 class="m-0 font color"> {{
+                EmpBasicDetails?.full_name | uppercase}} <span> ({{EmpBasicDetails?.code  }})</span>
+              </h2>
+              <!-- <h3 class="m-0 font" style="color: #A9A9A9; font-weight: 700;">{{EmpBasicDetails?.code | lowercase }}
+              </h3> -->
+
+              <div class="detailsdepth">
+
+                <div class="font" style="color: #A9A9A9; font-weight: 700;">
+                  {{EmpBasicDetails?.email_id | lowercase}}
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-1">
+          <i class="fa solid fa-pencil" (click)="editRown(EmpBasicDetails)"></i>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-3">
+    <div class="matCard">
+      <div class="row">
+        <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Personal Details
+        </p>
+      </div>
+
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Gender</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.gender?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Phone</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.phone_no}}</p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">DOB</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.dob | date :'dd-MMM-yyyy'  }}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Grade</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.grade?.name}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Functional Head</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.functional_head?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Designation</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.designation?.name }}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Deployed Branch</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.employee_branch_id?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Report Branch</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.report_branch?.name}}</p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Department</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.department_id?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Shift</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.shift?.shift_name}}</p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Business Segment</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.businesssegment?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Cost Centre</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.costcentre?.name}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">DOJ</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.doj | date :'dd-MMM-yyyy'}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">ROLE</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.role?.text }}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Status</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.noticeperiod?.text}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">PF</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.pf_number}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">ESI</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.esi_number}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">UAN</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.uan_number }}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">PAN</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.pan_number}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Aadhaar No</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.aadhar_number }}</p>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Additional Info
+        </p>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Nationality</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.nationality}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Blood Group</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.blood_grp}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Marital Status</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.marital_status?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Differently Abled</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.disability == true ? 'Yes' : 'No' }}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Height</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.height}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Weight</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.weight }}</p>
+        </div>
+      </div>
+
+      
+       <!-- <div class="row">
+        <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Address
+        </p>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Line 1</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.address?.line1}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Line 2</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.address?.line2}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Line 3</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{ EmpBasicDetails?.address?.line3}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">District</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.address?.district?.name}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">City</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.address?.city?.name}}</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">State</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.address?.state?.name}}</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+        <div style="width: 100%">
+          <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Pincode</p>
+        </div>
+        <div style="width: 100%">
+          <p class="pvalue">{{EmpBasicDetails?.address?.pincode}}</p>
+        </div>
+        <div style="width: 100%">
+
+        </div>
+        <div style="width: 100%">
+
+        </div>
+      </div>  -->
+
+
+
+    </div>
+  </div>
+  <br><br>
+</div>
+
+<div *ngIf="isShowEditForm">
+  <div style="  width: 100%;">
+
+    <div class="container mt-3">
+      <div class="matCard">
+        <div class="row">
+
+
+          <div class="col-lg-10">
+            <div class="HeaderView">
+              <!-- <div class="ProfileDisplayName backgroundColors"> -->
+              <div class="cardspaceListProfiles color display">
+
+                {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+
+                <!-- </div> -->
+              </div>
+              <form [formGroup]="allDetailsForm">
+                <div class="detailsView">
+                  <div class="m-0 font color">
+                    <mat-form-field style="width: 100%;color: #525CEB;    margin-top: -7%;height: 43px;">
+                      <mat-label>Full Name</mat-label>
+                      <input matInput formControlName="full_name">
+                    </mat-form-field>
+                  </div>
+                  <!-- <h3 class="m-0 font" style="color: #A9A9A9; font-weight: 700;">{{EmpObjects?.employeeList?.code ==
+                    null ?
+                    'VS': EmpObjects?.employeeList?.code | lowercase }}
+                  </h3> -->
+
+                  <div class="detailsdepth">
+
+                    <div class="font" style="color: #A9A9A9; font-weight: 700;">
+                      <mat-form-field style="width: 100%;">
+                        <mat-label>Mail Id</mat-label>
+                        <input matInput formControlName="email_id">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-1"></div>
+          <div class="col-lg-1">
+            <!-- <i class="fa solid fa-pencil" (click)="editEmployeeData()"></i> -->
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <div class="matCard">
+        <div class="row">
+          <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Personal Details
+          </p>
+        </div>
+
+        <form [formGroup]="allDetailsForm">
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Gender</p>
+            </div>
+            <div style="width: 100%">
+          
+              <mat-form-field class="color" style="width: 100%">
+                <mat-select formControlName="gender">
+                  <mat-option *ngFor="let type of GenderList" [value]="type?.id">
+                    {{type.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Phone</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field style="width: 100%">
+                <input type="text" matInput formControlName="phone_no" maxlength="10" (keypress)="keyPressNumbers($event)">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">DOB</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field style="width: 100%;">
+                <input matInput [matDatepicker]="picker2" formControlName="dob" [readonly]="true">
+                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <!-- <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Role</p> -->
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Grade</p>
+            </div>
+            <div style="width: 100%">
+        
+             
+                <mat-form-field style="width: 100%;">
+                  <mat-select formControlName="grade" placeholder="level" disabled>
+                      <mat-option *ngFor="let type of DropGrade" [value]="type?.id"> 
+                          {{type?.name}} 
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+             
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Functional Head</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input type="text" matInput formControlName="functional_head" [matAutocomplete]="auto" [readonly]="true">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTeamLead">
+                  <mat-option *ngFor="let lead of filteredTeamLead | async" [value]="lead" >
+                    {{ lead.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Designation</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input type="text" matInput formControlName="designation" [matAutocomplete]="designrefn"
+                  (keyup)="getdesignation(allDetailsForm.value.designation)" autocomplete="off" #designInput [readonly]="true">
+                <mat-autocomplete #designauto #designrefn="matAutocomplete" [displayWith]="getdatadesignation">
+
+                  <mat-option *ngFor="let d of designationlist;" [value]="d">{{d.name}}</mat-option>
+
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Deployed Branch</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input (input)="getBranchDropdown()" #titleInput matInput formControlName="employee_branch_id"
+                  [matAutocomplete]="branch" [readonly]="true">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayBranch">
+                  <mat-option *ngFor="let branch of branchArr" [value]="branch">
+                    {{ branch.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Report Branch</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+
+                <input (input)="getReportingBranchDropdown()" #titleInput matInput formControlName="branch_id"
+                  [matAutocomplete]="report" [readonly]="true">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #report="matAutocomplete" [displayWith]="reportBranch">
+                  <mat-option *ngFor="let report of reportArr" [value]="report">
+                    {{ report.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Department</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input type="text" matInput formControlName="department_id" autocomplete="off"  [readonly]="true"
+                  [matAutocomplete]="deptlist" (keyup)="getEmployeedepartmentdata(allDetailsForm.value.department_id)"
+                  #deptInput>
+                <mat-autocomplete #deptinfo #deptlist="matAutocomplete" [displayWith]="getdepartmentinterface">
+                  <mat-option *ngFor="let d of employeetypelist" [value]="d">{{d.name}}</mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Shift</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <mat-select 
+                  formControlName="shift" disabled>
+                  <mat-option *ngFor="let shift of workshiftList" [value]="shift.id" >
+                    {{ shift.shift_name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Business Segment</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input #titleInput matInput formControlName="businesssegment" [matAutocomplete]="seg"
+                  (input)="getSegmentDropdown()" [readonly]="true">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #seg="matAutocomplete" [displayWith]="displayBsSeg">
+                  <mat-option *ngFor="let seg of segmentArr" [value]="seg">
+                    {{ seg.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Cost Centre</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;" >
+                <input (input)="getCcDropdown()" #ccInput placeholder="Select costcentre" matInput
+                  formControlName="costcentre" [matAutocomplete]="cc"  [readonly]="true" style="color:grey">
+                <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                <mat-autocomplete #cc="matAutocomplete" [displayWith]="displayCc" >
+                  <mat-option *ngFor="let cc of ccArr" [value]="cc" disabled>
+                    {{ cc.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">DOJ</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput readonly placeholder="DOJ" [matDatepicker]="picker3" formControlName="doj"
+                  class="matformfieldinputstyle" [readonly]="true" >
+                <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker3" disabled>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <!-- <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Payroll</p> -->
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Work Mode</p>
+            </div>
+            <div style="width: 100%">
+              <!-- <mat-form-field >
+              <input type="checkbox" formControlName="is_payroll"
+              (change)="updateCheckboxValue($event)">
+            </mat-form-field> -->
+            <mat-form-field  style="width: 100%;">
+              <!-- <mat-select  [(value)]="selectedShift" (selectionChange)="onShiftSelect($event)"
+              formControlName="workmode" >
+              <mat-option *ngFor="let shift of workshiftList" [value]="shift.id" >
+                {{ shift.shift_name }}
+              </mat-option>
+            </mat-select> -->
+            <mat-select formControlName="workmode" disabled>
+              <mat-option *ngFor="let work of workmodeList" 
+                  [value]="work.id">
+                  {{work.text}}
+              </mat-option>
+          </mat-select>
+            </mat-form-field>
+
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Height</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput type="number" formControlName="Height">
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Weight</p>
+            </div>
+            <div style="width: 100%">
+
+            <mat-form-field  style="width: 100%;">
+              <input matInput type="number" formControlName="Weight">
+            </mat-form-field>
+
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Nationality</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput formControlName="nationality">
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Blood Group</p>
+            </div>
+            <div style="width: 100%">
+
+            <mat-form-field style="width: 100%;">
+              <input matInput formControlName="blood_grp">
+            </mat-form-field>
+
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Marital Status</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <mat-select formControlName="marital_status">
+                  <mat-option *ngFor="let type of maritalList" [value]="type?.name">
+                    {{type.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Differently Abled</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field style="width: 100%;">
+                <mat-select formControlName="disability">
+                  <mat-option *ngFor="let type of differentlyable" [value]="type?.id">
+                    {{type.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">PAN</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput  (input)="onPanInput($event)"  formControlName="Pan_no" placeholder="AAAAA0000A" maxlength="10">
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">ESI</p>
+            </div>
+            <div style="width: 100%">
+
+            <mat-form-field style="width: 100%;">
+              <input matInput formControlName="Esi"  (input)="this.allDetailsForm.get('Esi').setValue(formatEsi($event.target.value))"  placeholder="00-00-0000000-000-0000" maxlength="22">
+            </mat-form-field>
+
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">EPF No</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput formControlName="PfNo" placeholder="AA/AAA/0000000/000/0000000" (input)="this.allDetailsForm.get('PfNo').setValue(formatPf($event.target.value));onPfInput($event)" maxlength="26">
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">UAN</p>
+            </div>
+            <div style="width: 100%">
+
+            <mat-form-field style="width: 100%;">
+              <input matInput formControlName="uan_number" placeholder="000000000000" maxlength="12" (input)="onUANInput($event)">
+            </mat-form-field>
+
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+            <div style="width: 100%">
+              <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Aadhaar No</p>
+            </div>
+            <div style="width: 100%">
+              <mat-form-field  style="width: 100%;">
+                <input matInput formControlName="aadhar_number" placeholder="0000-0000-0000" (input)="onAadhaarInput($event)" maxlength="14">
+              </mat-form-field>
+            </div>
+            <div style="width: 100%">
+        
+            </div>
+            <div style="width: 100%">
+
+
+            </div>
+          </div>
+        </form>
+        <!-- <div class="row">
+          <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Address
+          </p>
+        </div>  -->
+       
+
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+          <div style="width: 100%">
+
+          </div>
+          <div style="width: 100%">
+            
+          </div>
+          <div style="width: 100%">
+            <div class="popup-btn">
+              <button class="btn btn-secondary" (click)="back()">Back</button>
+              <button class="btn btn-primary ml-3" style="background-color: #044063;" type="button" (click)="updates()">
+                <span> Update</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+     
+        <!-- <div class="row">
+          <p style="color: #525CEB;font-size: medium;font-weight: 600;margin-top: 1%;margin-left: 4%;">Additional Info
+          </p>
+        </div> -->
+
+        <!-- <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+          <div style="width: 100%">
+            <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Nationality</p>
+          </div>
+          <div style="width: 100%">
+            <p class="pvalue">{{EmpBasicDetails?.employee_info?.nationality}}</p>
+          </div>
+          <div style="width: 100%">
+            <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Blood Group</p>
+          </div>
+          <div style="width: 100%">
+            <p class="pvalue">{{ EmpBasicDetails?.employee_info?.blood_grp}}</p>
+          </div>
+        </div> -->
+        <!-- <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px">
+          <div style="width: 100%">
+            <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Marital Status</p>
+          </div>
+          <div style="width: 100%">
+            <p class="pvalue">{{EmpBasicDetails?.employee_info?.marital_status}}</p>
+          </div>
+          <div style="width: 100%">
+
+          </div>
+          <div style="width: 100%">
+
+          </div>
+        </div> -->
+
+
+
+      </div>
+    </div>
+    <br><br>
+  </div>
+</div>
+
+<!-- <div *ngIf="isNewEmplyee">
+  <form [formGroup]="newEmployeeCreate">
+    <h2 class="color" style="font-size: medium; font-weight: 600;">Employee Creation</h2>
+    <div class="matCard">
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;">
+
+        <div style="width: 100%">
+          <mat-form-field style="margin-left: 10%;width: 32%;">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="full_name">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div
+        style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;margin-left: 10%;">
+
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="first_name">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Middle Name</mat-label>
+            <input matInput formControlName="middle_name">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="last_name">
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;margin-left: 10%;">
+
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option *ngFor="let type of GenderList" [value]="type">
+                {{type.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>DOB</mat-label>
+            <input matInput [matDatepicker]="picker22" formControlName="dob">
+            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker22">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker22></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Mail Id</mat-label>
+            <input matInput formControlName="email_id">
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Phone No</mat-label>
+            <input matInput formControlName="phone_no">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Grade</mat-label>
+            <input matInput formControlName="grade">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Candidate Code</mat-label>
+            <input matInput formControlName="candidate_code">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div
+        style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;margin-left: 10%;">
+
+        <div style="width: 100%">
+        
+          <mat-form-field>
+            <mat-label>Department</mat-label>
+            <input type="text" matInput formControlName="department_id" autocomplete="off" [matAutocomplete]="deptlist"
+              (keyup)="getEmployeedepartmentdata(newEmployeeCreate.value.department_id)" #deptInput>
+            <mat-autocomplete #deptinfo #deptlist="matAutocomplete" [displayWith]="getdepartmentinterface">
+              <mat-option *ngFor="let d of employeetypelist" [value]="d">{{d.name}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Designation</mat-label>
+            <input type="text" matInput formControlName="designation_id" [matAutocomplete]="designrefn"
+              (keyup)="getdesignation(allDetailsForm.value.designation)" autocomplete="off" #designInput>
+            <mat-autocomplete #designauto #designrefn="matAutocomplete" [displayWith]="getdatadesignation">
+
+              <mat-option *ngFor="let d of designationlist;" [value]="d">{{d.name}}</mat-option>
+
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div style="width: 100%;">
+          <mat-form-field>
+            <mat-label>Functional Head</mat-label>
+            <input type="text" matInput formControlName="functional_head" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTeamLead">
+              <mat-option *ngFor="let lead of filteredTeamLead | async" [value]="lead" focusout>
+                {{ lead.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;margin-left: 10%;">
+  
+        <div style="width: 100%">
+         
+          <mat-form-field >
+            <mat-label>Business Segment</mat-label>
+            <input #titleInput matInput formControlName="businesssegment" [matAutocomplete]="seg"
+              (input)="getSegmentDropdowns()">
+            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+            <mat-autocomplete #seg="matAutocomplete" [displayWith]="displayBsSeg">
+              <mat-option *ngFor="let seg of segmentArr" [value]="seg">
+                {{ seg.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      
+        <div style="width: 100%">
+          <mat-form-field (click)="getCcDropdowns()">
+            <mat-label>Cost Center</mat-label>
+            <input (input)="getCcDropdowns()" #ccInputs matInput
+              formControlName="costcenter" [matAutocomplete]="cc">
+            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+            <mat-autocomplete #cc="matAutocomplete" [displayWith]="displayCc">
+              <mat-option *ngFor="let cc of ccArrs" [value]="cc">
+                {{ cc.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+        <div style="width: 100%">
+          <mat-form-field >
+            <mat-label>Branch</mat-label>
+            <input (input)="getBranchDropdowns()" #titleInput matInput formControlName="branch"
+            [matAutocomplete]="branch">
+          <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+          <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayBranch">
+            <mat-option *ngFor="let branch of branchArrs" [value]="branch">
+              {{ branch.name }}
+            </mat-option>
+          </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+          <mat-form-field >
+            <mat-label>Employee Branch</mat-label>
+            <input (input)="getBranchDropdownss()" #titleInput matInput formControlName="employee_branch"
+            [matAutocomplete]="branch">
+          <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+          <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayBranch">
+            <mat-option *ngFor="let branch of branchAr" [value]="branch">
+              {{ branch.name }}
+            </mat-option>
+          </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+    
+        <div style="width: 100%">
+          
+          <mat-form-field>
+            <mat-label>DOJ</mat-label>
+            <input matInput [matDatepicker]="picker23" formControlName="doj">
+            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker23">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker23></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          
+          <mat-form-field>
+            <mat-label>Expected DOJ</mat-label>
+            <input matInput [matDatepicker]="picker24" formControlName="expected_doj">
+            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker24">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker24></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+  
+            <mat-label>Payroll</mat-label>         
+          
+
+        </div>
+    
+        <div style="width: 100%">
+          
+          <mat-form-field>
+            <mat-label>Payroll Date</mat-label>
+            <input matInput [matDatepicker]="picker43" formControlName="payroll_date">
+            <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker43">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker43></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          
+          <mat-form-field>
+            <mat-label>Shift</mat-label>
+            <mat-select [(value)]="selectedShift" (selectionChange)="onShiftSelect($event)"
+            formControlName="workmode">
+            <mat-option *ngFor="let shift of workshiftList" [value]="shift">
+              {{ shift.shift_name }}
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>PF No</mat-label>
+            <input matInput formControlName="pf_number">
+          </mat-form-field>
+
+        </div>
+    
+        <div style="width: 100%">
+          
+          <mat-form-field>
+            <mat-label>ESI No</mat-label>
+            <input matInput formControlName="esi_number">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          <mat-form-field>
+            <mat-label>Notice Period</mat-label>
+            <input matInput formControlName="noticeperiod">
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+          <mat-form-field >
+            <mat-label>Nationality</mat-label>
+            <input matInput formControlName="nationality">
+          </mat-form-field>
+
+        </div>
+    
+        <div style="width: 100%">
+          
+          <mat-form-field >
+            <mat-label>Disability</mat-label>
+            <input matInput formControlName="disabality">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          
+          <mat-form-field >
+            <mat-label>Marital Status</mat-label>
+            <input matInput formControlName="marital_status">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+          <mat-form-field >
+            <mat-label>Blood Group</mat-label>
+            <input matInput formControlName="blood_grp">
+          </mat-form-field>
+
+        </div>
+    
+        <div style="width: 100%">
+          
+          <mat-form-field >
+            <mat-label>Height</mat-label>
+            <input matInput formControlName="height">
+          </mat-form-field>
+        </div>
+        <div style="width: 100%">
+          
+          <mat-form-field >
+            <mat-label>Weight</mat-label>
+            <input matInput formControlName="weight">
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px; margin-left: 10%;">
+       
+        <div style="width: 100%">
+          <div class="popup-btn" >
+            <button class="btn btn-primary" type="button" >
+              <span>Create Employee</span>
+            </button>
+          </div>
+
+        </div>
+    
+        <div style="width: 100%">
+          
+        </div>
+        <div style="width: 100%">
+        
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+
+</div> -->

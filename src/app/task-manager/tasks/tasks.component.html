@@ -1,0 +1,564 @@
+<div *ngIf="isShowTasksummary">
+  <div>
+    <form [formGroup]="taskSummaryForm" class="cus-taskFormMain">
+      <div class="cus-taskFormContainer">
+        <div class="cus-taskFormContainer1">
+          <!-- Filter -->
+          <div >
+            <mat-form-field class="divWidth">
+              <mat-label>Filter</mat-label>
+              <mat-select formControlName="dropfilter">
+                <mat-option *ngFor="let pep of assigns" [value]="pep.id" (click)="newdrop(pep)">
+                  {{ pep.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Search -->
+
+          <div >
+            <mat-form-field  (click)="getDeveloperdrop()" class="divWidths">
+              <mat-label>Employee</mat-label>
+              <input #developerinput placeholder="Select Employee" matInput formControlName="developer_id"
+                [matAutocomplete]="developerrole" (click)="developerClick()" />
+              <mat-autocomplete #developerrole="matAutocomplete" [displayWith]="displaydevelopclient">
+                <ng-container>
+                  <mat-option *ngFor="let opt of develop" [value]="opt" title="{{opt.name}}">
+                    {{ opt.name }}
+                  </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!develop || !develop.length">
+                  No Records Found    
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <!-- Status -->
+          <div >
+            <mat-form-field (click)="getemp('')" class="divWidth2">
+              <mat-label>Status</mat-label>
+              <mat-chip-grid #chipListemp>
+                <mat-chip-row *ngFor="let empl of chipSelectedemp"  [removable]="true"
+                  (removed)="removedemp(empl)">
+                  {{ empl.text }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip-row>
+                <input #empInput [formControl]="status" [matAutocomplete]="emp" (keyup)="getemp(status.value)"
+                  [matChipInputFor]="chipListemp" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true" required />
+              </mat-chip-grid>
+
+              <mat-autocomplete #emp="matAutocomplete" (optionSelected)="empSelected($event)">
+                <mat-option *ngFor="let emp of empList" [value]="emp">
+                  {{ emp.text }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <!-- Clear Btn -->
+          <div>
+            <!-- <i class="fa-solid fa-xmark" style="margin-left: 23%;" (click)="resetTasks()"></i> -->
+            <button class="btn" type="button" (click)="resetTasks()" style="background-color: #e4e4e4; color: #044063">
+              Clear
+            </button>
+          </div>
+
+          <div class="cus-taskBtnDiv">
+            <!-- Search Icon -->
+
+            <button class="btn" style="background-color: #044063; color: #e4e4e4" (click)="TaskSearch('', '')">
+              <i class="fa-solid fa-magnifying-glass" ></i>
+            </button>
+
+            <!-- Filter Icon -->
+            <div class="cus-taskFormIcon2" style="position: relative">
+              <!-- <span
+                style="
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                  display: flex;
+                  font-size: larger;
+                  margin-top: -4%;
+                  margin-left: 69%;
+                "
+              >
+                <mat-icon style="margin-left: 2%">filter_list</mat-icon
+                >filter</span
+              > -->
+
+              <button class="btn" (click)="taskPopup()">
+                <span> <i class="fa-solid fa-filter"></i></span>
+              </button>
+
+
+
+
+              <!-- Popup Filter -->
+              <div *ngIf="taskPopups">
+                <form [formGroup]="taskSummaryForm" class="cus-filterSearchContainer">
+                  <!-- <div>
+              <mat-form-field class="matformfieldstyle" appearance="outline">
+                <mat-select
+                  class="matformfieldinputstyle"
+                  placeholder="Filter"
+                  formControlName="dynamicdropdown"
+                >
+                  <mat-option
+                    (click)="taskfunction()"
+                    *ngFor="let type1 of taskfilter"
+                    [value]="type1.id"
+                    >{{ type1.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+                  <div class="cus-filterSearch">
+                    <div>
+                      <mat-form-field>
+                        <mat-label>Start date</mat-label>
+                        <input matInput [matDatepicker]="picker1" placeholder="Start Date" autocomplete="off"
+                          formControlName="start_date" (dateInput)="startdateclick($event)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <!-- <mat-datepicker (dateChange)="startdateclick()" ></mat-datepicker> -->
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field>
+                        <mat-label>End date</mat-label>
+                        <input matInput [matDatepicker]="picker2" placeholder="End Date" autocomplete="off"
+                          formControlName="end_date" (dateInput)="enddateclick($event)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2> </mat-datepicker>
+                        <!-- <mat-datepicker (click)="enddateclick()"></mat-datepicker> -->
+                      </mat-form-field>
+                    </div>
+                    <!-- <div>
+              <mat-form-field>
+                <mat-label>Query</mat-label>
+                <input matInput formControlName="query" placeholder="Query" />
+              </mat-form-field>
+            </div> -->
+                    <div>
+                      <mat-form-field style="width: 100%" (click)="getClientdrop()">
+                        <mat-label>client</mat-label>
+                        <mat-select matInput formControlName="client">
+                          <mat-option *ngFor="let opt of clientdrop" [value]="opt.id" title="{{opt.name}}">
+                            {{ opt.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div (click)="getAppdrop()">
+                      <mat-form-field style="width: 100%">
+                        <mat-label>Project</mat-label>
+                        <input #clientInput placeholder="Select Project" matInput formControlName="app_id"
+                          [matAutocomplete]="clientrole" (click)="appClick()" />
+                        <mat-autocomplete #clientrole="matAutocomplete" [displayWith]="displayFnclient">
+                          <!-- <mat-autocomplete> -->
+                          <ng-container>
+                            <mat-option *ngFor="let opt of appdrop" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!appdrop ||!appdrop.length">
+                            No Records Found    
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- <div class=" row col-md-12">
+                  <div class="col-md-3">
+                      <mat-form-field style="margin-left: 5%;width:220px">
+                          <input #clientInput matInput
+                              formControlName="client_code" [matAutocomplete]="clientrole"
+                              placeholder="Select Client" >
+                          <mat-autocomplete  [panelWidth]="400" #clientrole="matAutocomplete"
+                              [displayWith]="displayFnclient" (opened)="clientScroll()">
+                              <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                              <ng-container *ngIf="!isLoading">
+                                  <mat-option *ngFor="let code of clientlist" [value]="code">
+                                      {{code.client_name}}
+                                  </mat-option>
+                              </ng-container>
+                          </mat-autocomplete>
+                      </mat-form-field>
+                  </div> -->
+
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+
+
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+                    <div (click)="getModuledrop()">
+                      <mat-form-field style="width: 100%">
+                        <mat-label>Module </mat-label>
+                        <input #moduleInput placeholder="Select Module" matInput formControlName="module_id"
+                          [matAutocomplete]="modulerole" (click)="moduleClick()" />
+                        <mat-autocomplete #modulerole="matAutocomplete" [displayWith]="displaymoduleclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of moduledrop" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!moduledrop ||!moduledrop.length">
+                            No Records Found    
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+                    <div class="cus-taskFormSearch">
+                      <mat-form-field>
+                        <mat-label> Tasks </mat-label>
+                        <input matInput formControlName="query" placeholder="Type Task" />
+                        <!-- <mat-icon matSuffix class="maticonsize" (click)="TaskSearch('')">search</mat-icon> -->
+                      </mat-form-field>
+                    </div>
+                    <!--  (selectionChange)="onSelectChange($event)" -->
+                    <div (click)="getTeamleaddrop()">
+                      <mat-form-field style="width: 100%">
+                        <mat-label>Team Lead</mat-label>
+                        <input #teamlead placeholder="Select TeamLead" matInput formControlName="team_lead"
+                          [matAutocomplete]="teamrole" (click)="teamleadclick()" />
+                        <mat-autocomplete #teamrole="matAutocomplete" [displayWith]="displayteamleadclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of teams" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!teams ||!teams.length">
+                            No Records Found    
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <div (click)="getteamdrop()">
+                      <mat-form-field style="width: 100%">
+                        <mat-label>Team</mat-label>
+                        <input #teamInput placeholder="Select Team" matInput formControlName="team"
+                          [matAutocomplete]="teamsrole" (click)="teamclick()" />
+                        <mat-autocomplete #teamsrole="matAutocomplete" [displayWith]="displayFnteamclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of teamdrop" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!teamdrop ||!teamdrop.length">
+                            No Records Found    
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <div >
+                      <mat-form-field style="width: 100%" click="getSprintDropDown()">
+                        <mat-label>Sprints</mat-label>
+                        <input #teamInput placeholder="Select Sprint" matInput formControlName="sprint"
+                          [matAutocomplete]="teamsprintrole" (click)="teamsprintclick()" />
+                        <!-- (selectionChange)="onSelectChangeSpr($event)"> -->
+                        <mat-autocomplete #teamsprintrole="matAutocomplete" [displayWith]="displaysprintteamclient">
+                          <ng-container>
+                            <mat-option *ngFor="let opt of sprintlsts" [value]="opt" title="{{opt.name}}">
+                              {{ opt.name }}
+                            </mat-option>
+                          </ng-container>
+                          <mat-option *ngIf="!sprintlsts ||!sprintlsts.length">
+                            No Records Found    
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <!--  (selectionChange)="onSelectChange($event)" -->
+                    <!-- <div (click)="statusdrop()">
+  
+                  <mat-form-field style="width: 100%;margin-top: -7%;" >
+                      <mat-label>Status</mat-label>
+                      <input #status placeholder="Select status" matInput formControlName="status"
+                      [matAutocomplete]="statusrole" (click)="statusclick()" >
+                      <mat-autocomplete  #statusrole="matAutocomplete"[displayWith]="displaystatusleadclient"
+                      >
+                      <ng-container>
+                          <mat-option *ngFor="let opt of statusdrops"[value]="opt">
+                              {{opt.text}}
+                          </mat-option>
+                          </ng-container>
+                      </mat-autocomplete>
+                  </mat-form-field>
+              </div> -->
+                    <!-- (selectionChange)="onSelectChange($event)" -->
+                  </div>
+                  <div class="cus-filterSearch-btnDiv">
+                    <button class="btn btn-secondary" color="primary" (click)="resetsprinitform()">
+                      Reset
+                    </button>
+
+                    <div>
+                      <button class="btn btn-primary" type="submit" color="primary" (click)="ApplyFilters()"
+                        style="margin-right: 10px;background-color: #044063;color: white;">
+                        Apply
+                      </button>
+                      <button class="btn btn-secondary" (click)="taskPopup()">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="color: white; background-color: #044063; margin-left: 6px"
+              matTooltip="Excel download" (click)="downloadexcel()">
+              <i class="fa-solid fa-xl fa-file-csv"></i>
+            </button>
+            <button class="btn btn-primary" style="color: white; background-color: #044063; margin-left: 6px"
+              matTooltip="" (click)="BulkClick()">
+               Bulk Creation
+            </button>
+            <div *ngIf="ExcelUpload" class="ExcelSheet">
+              <form >
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="importFile"
+                      (change)="fileChange($event, $event.target.files)">
+                    <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                    <i class="fas fa-file-import"></i> Upload
+                  </button>
+                  <button class="btn btn-outline-info" type="button" (click)="CancelBulk()" style="margin-left: 4%;">
+                    Cancel
+                  </button>
+                  <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+                    Download Template
+                  </button>
+                </div>
+              </form>
+            </div>
+           
+          </div>
+        </div>
+
+        <div class="cus-taskFormContainer2">
+          <!-- Add Task -->
+          <div>
+            <button type="button" class="btn btn-primary" style="background-color: #044063; color: white"
+              (click)="onTaskAdds()">
+              + Task
+            </button>
+
+
+          </div>
+
+          <!-- Add Task Popup -->
+          <!-- <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog"
+              role="document"
+              style="margin-left: auto; transform: translateX(-15%)"
+            >
+              <div class="modal-content" style="width: 780px">
+                <div
+                  class="modal-header"
+                  style="background-color: #044063; color: white"
+                >
+                  <p
+                    class="modal-title"
+                    id="exampleModalLabel"
+                    style="margin-bottom: 0"
+                  >
+                    Add Task
+                  </p>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    style="color: white"
+                    #closebutton
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div *ngIf="taskcreate">
+                  <app-task-creation
+                    (OnSubmit)="modalclose()"
+                  ></app-task-creation>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </form>
+
+    <div class="cus-tableContainer">
+      <table class="table cus-table">
+        <thead>
+          <tr>
+            <th><i class="fa-solid fa-list"></i>S.No</th>
+            <th><i class="fa-solid fa-list-check"></i>Task</th>
+            <th><i class="fa-solid fa-at"></i>Assignee</th>
+            <th><i class="fa-solid fa-tag"></i>Labels</th>
+            <th><i class="fa-solid fa-rotate-right"></i>Status</th>
+            <th><i class="fa-regular fa-calendar-days"></i>Due Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let type of taskList; index as i">
+            <tr>
+              <td style="text-align: center">
+                {{ (presentpageTask - 1) * pagesizetask + i + 1 }}
+              </td>
+              <td style="text-align: left">
+                <div class="cus-taskTdAlign">
+                  <mat-icon *ngIf="type?.priority_type?.text === 'High'" style="color: #f50000"
+                    title="High">flag</mat-icon>
+                  <mat-icon *ngIf="type?.priority_type?.text === 'Normal'" style="color: #ffcc00"
+                    title="Normal">flag</mat-icon>
+                  <mat-icon *ngIf="type?.priority_type?.text === 'Low'" style="color: #6fddff"
+                    title="Low">flag</mat-icon>
+                  <span class="cus-badgeLightBlack pointer" [ngClass]="'othersColor'"
+                    (click)="story_TaskViews(type.id)">{{ type?.code }}</span>
+                  -
+                  <span class="pointer blue " title="{{ type?.task }}" (click)="story_TaskViews(type.id)">
+                    {{
+                    type?.task.length > 40
+                    ? (type?.task | slice : 0 : 40) + ".."
+                    : type.task
+                    }}
+                  </span>
+                </div>
+              </td>
+              <td style="text-align: center">
+                <div>
+                  <ng-container *ngIf="type?.assigned_to && type?.assigned_to.length > 0">
+                    <div title="{{ type?.assigned_to[0].name }}">
+                      <div>
+                        <span *ngIf="
+                            type?.assigned_to[0]?.name.trim().split(' ')[0]
+                              .length > 1;
+                            else shortOrTwoWords
+                          ">
+                          {{
+                          type?.assigned_to[0]?.name.trim().split(" ")[0]
+                          | uppercase
+                          }}
+                        </span>
+                        <ng-template #shortOrTwoWords>
+                          <span *ngIf="
+                              type?.assigned_to[0]?.name.trim().split(' ')[0]
+                                .length === 1
+                            ">
+                            {{
+                            type?.assigned_to[0]?.name
+                            .trim()
+                            .split(" ")
+                            .slice(0, 2)
+                            .join(" ") | uppercase
+                            }}
+                          </span>
+                        </ng-template>
+                      </div>
+                      <!-- <div *ngIf="type?.assigned_to.length > 1"
+                                                      [matBadge]="type?.assigned_to.length - 1"
+                                                      matBadgePosition="above after" matBadgeSize="small"
+                                                      matBadgeColor="warn">
+                                                      {{type?.assigned_to[0]?.name[0] | uppercase}}
+                                                  </div> -->
+                    </div>
+                  </ng-container>
+                </div>
+              </td>
+
+              <td style="text-align: center">
+                <span class="cus-badge">
+                  <span class="cus-badgecustom">{{ type?.type }}</span>
+                </span>
+              </td>
+              <td style="text-align: center">
+                <span class="cus-badge">
+                  <span *ngIf="type?.task_status == 'Work in Progress'" class="cus-badgeBlue">Work In Progress</span>
+                  <span *ngIf="type?.task_status == 'Completed'" class="cus-badgeGreen">Completed</span>
+                  <span *ngIf="type?.task_status == 'Yet to Start'" class="cus-badgeLightBlack">Yet to Start</span>
+                  <span *ngIf="type?.task_status == 'Verified'" class="cus-badgeYellow">Verified</span>
+                  <span *ngIf="type?.task_status == 'Draft'" class="cus-badgeLightGreen">Draft</span>
+                  <span *ngIf="type?.task_status == 'Rejected'" class="cus-badgeRed">Rejected</span>
+                  <span *ngIf="type?.task_status == 'Hold'" class="cus-badgeViolet">Hold</span>
+                  <span *ngIf="type?.task_status == 'Reopen'" class="cus-badgeRed">Reopen</span>
+                  <span *ngIf="type?.task_status == 'Tested'" class="cus-badgeViolet">Tested</span>
+                  <span *ngIf="type?.task_status == 'Unassigned'" class="cus-badgeGreen">Unassigned</span>
+                </span>
+              </td>
+
+              <td style="text-align: center">
+                {{
+                type?.end_date !== "None"
+                ? (type?.end_date | date : "dd/MM/yyyy")
+                : ""
+                }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="taskList?.length == 0 || taskList == undefined" class="NodataAlign text-center">
+      No Records Found...
+    </div>
+    <div class="cus-taskPageBtnsDiv">
+      <!-- <div *ngIf="this.pageNumbers == 1">
+          <p class="cus-btnActive" style="text-align: center">
+            {{ this.pageNumbers }}
+          </p> -->
+      <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                  <p style="text-align: center;">{{this.pageNumbers+2}}</p> 
+                  <p style="text-align: center;">{{this.pageNumbers+3}}</p>             -->
+      <!-- </div> -->
+
+      <!-- <div class="row" *ngIf="istaskpagination">
+                  <div class="col-sm-12" style="font-size: small;text-align:right;margin-bottom: 5%;">
+                      <button mat-icon-button [disabled]="has_previousTask === false" color="primary"
+                          (click)="previousClick()">
+                          <mat-icon>arrow_back</mat-icon>
+                      </button>
+                      {{presentpageTask}}
+                      <button mat-icon-button [disabled]="has_nextTask === false" color="primary"
+                          (click)="nextClick()">
+                          <mat-icon>arrow_forward</mat-icon>
+                      </button>
+                  </div>
+              </div> -->
+      <button [disabled]="has_previousTask === false" (click)="previousPage()">
+        <mat-icon>arrow_backward</mat-icon>
+      </button>
+      <div>
+        <!-- <p style="text-align: center;">{{this.pageNumbers-1}}</p>  -->
+        <p class="cus-btnActive">
+          {{ this.pageNumbers }}
+        </p>
+        <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                  <p style="text-align: center;">{{this.pageNumbers+2}}</p>                -->
+      </div>
+      <button [disabled]="has_nextTask === false" (click)="nextPage()">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="taskcreate">
+  <app-task-creation (OnSubmit)="SubmitbackToSummary()" (OnCancel)="backtoTaskSummary()"></app-task-creation>
+</div>
+<div *ngIf="taskview">
+  <app-taskviews (OnSubmit)="SubmitbackToSummary()" (OnCancel)="backtoTaskSummary()"></app-taskviews>
+</div>

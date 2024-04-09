@@ -1,0 +1,186 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    padding: 42vh 32px;
+    font-size: 14px;
+    background: #eee;
+    text-align: center;
+  }
+  
+  .file-input {
+    display: inline-block;
+    text-align: left;
+    background: #fff;
+    padding: 16px;
+    width: 450px;
+    position: relative;
+    border-radius: 3px;
+  }
+  
+  .file-input > [type='file'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+  }
+  
+  .file-input > .button {
+    display: inline-block;
+    cursor: pointer;
+    background: #eee;
+    padding: 8px 16px;
+    border-radius: 2px;
+    margin-right: 8px;
+  }
+  
+  .file-input:hover > .button {
+    background: dodgerblue;
+    color: white;
+  }
+  
+  .file-input > .label {
+    color: #333;
+    white-space: nowrap;
+    opacity: .3;
+  }
+  
+  .file-input.-chosen > .label {
+    opacity: 1;
+  }
+
+  * {
+    font-family: 'Inter', sans-serif;
+}
+
+.mat-form-field,div,.mat-option,.mat-fab,.mat-button,button,.mat-menu-item,p {
+    font-family: 'Inter', sans-serif;
+  }
+
+
+.material-icons {
+    font-family: 'Material Icons', sans-serif;
+}
+
+.maindiv
+{
+  margin: 2%;
+}
+
+.custom-card {
+  height: 78px;
+}
+
+.custom-text {
+  padding-left: 13%;
+  padding-top: 1%;
+  margin-left: 10%;
+}
+.container {
+  margin-top: 20px;
+}
+
+.cards {
+  width: 50%;
+  margin-left: 21%;
+}
+.cardDeduction{
+  width: 80%;
+  margin-left: 10%;
+}
+
+.custom-file-input {
+  background-color: aliceblue;
+}
+.btn-outline-info {
+  margin-left: 51%;font-size: small;
+}
+.delete,.edit{
+ transition:opacity 0.5s;
+}
+.delete:hover{
+  opacity: 0.7;
+
+}
+.edit:hover{
+  opacity: 0.7;
+}
+.fa-pencil {
+  background-color: #ededff;
+  color: #474aff;
+  padding: 10px;
+  border-radius: 4px;
+}
+.fa-trash {
+  border-radius: 4px;
+  background-color: #fff0d5;
+  padding: 10px;
+  color: #ffa500;
+}
+.fa-trash-can {
+  border-radius: 4px;
+  background-color: #fff0d5;
+  padding: 10px;
+  color: #ffa500;
+}
+.uploadIcon{
+  display:inline-block;
+  margin-left: 28px;
+  // margin-left: 650px;
+}
+.DownloadButton{
+  margin-left: 20px;
+  display:inline-block;
+}
+.AdditionalDeductionNav{
+  display: flex;
+  align-items: center;
+}
+.SearchButton{
+  margin-left: 20px;
+  background-color: white;
+}
+.ClearButton{
+  margin-left: 20px;
+  background-color: white;
+}
+.AddButton{
+  margin-left: 17px;
+  background-color:rgba(45, 129, 155, 0.56);
+  margin-top: 10px;
+}
+@media (max-width:1450px) {
+  .uploadIcon{
+    margin-left: 5px;
+  }
+}
+@media (max-width:1340px) {
+  .uploadIcon{
+    margin-left: 2px;
+  }
+}
+@media (max-width:1330px) {
+  .uploadIcon{
+    margin-left: 0px;
+  }
+}
+@media (max-width:1320px) {
+  .SearchButton{
+    margin-left: 10px;
+  }
+  .ClearButton{
+    margin-left: 10px;
+  }
+  .AddButton{
+    margin-left: 7px;
+  }
+  .uploadIcon{
+    margin-left: 2px;
+  }
+
+}

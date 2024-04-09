@@ -1,0 +1,285 @@
+<div *ngIf="payrollcreation" class="ml-5">
+    <h2>Payroll {{TypeOfForm}}</h2>
+    <form [formGroup]="payrollForm" autocomplete="off">
+        <div class="d-flex">
+            <div>
+                <table>
+                    <div>
+                        <tr>
+                            <td>
+                                <mat-label>Name<label class="roll">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle1" appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name" formControlName="name"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <!-- <td>
+                        <mat-label  class="allow">Allowance Type<label class="allowance">*</label>
+                        </mat-label><br>
+                        <mat-form-field class="matformfieldstyle2" appearance="outline">
+                            <mat-select formControlName="allowance_type" class="matformfieldinputstyle">
+                                <mat-option *ngFor="let allow of allowanceTypeList" [value]="allow.id">
+                                    {{allow.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td> -->
+
+                            <td>
+                                <mat-label class="allow">Allowance Type <label class="allowance">*</label><br>
+                                </mat-label>
+                                <mat-form-field class="matformfieldstyle2" appearance="outline"
+                                    (click)="getAllowance()">
+                                    <input #getallowInput matInput formControlName="allowance_type"
+                                        [matAutocomplete]="allow">
+                                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                    <mat-autocomplete #allow="matAutocomplete" [displayWith]="displayfnalowance"
+                                        (opened)="autocompleteBonusScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let allow of allowanceTypeList" [value]="allow"
+                                                title="{{allow.name}}">
+                                                {{allow.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                        <mat-option *ngIf="!allowanceTypeList.length">No Records Found</mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <!-- <td>
+                        <mat-label class="gra">Grade<label   class="de" >*</label>
+                        </mat-label><br>
+                        <mat-form-field class="matformfieldstyle3" appearance="outline">
+                            <mat-select formControlName="gradelevel" class="matformfieldinputstyle">
+                                <mat-option *ngFor="let allow of gradeList" [value]="allow.id">
+                                    {{allow.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td> -->
+
+                            <td>
+                                <mat-label class="allow">Grade <label class="allowance">*</label><br>
+                                </mat-label>
+                                <mat-form-field class="matformfieldstyle2" appearance="outline" (click)="getGrade()">
+                                    <input #getpayrollInput matInput formControlName="gradelevel"
+                                        [matAutocomplete]="payroll">
+                                    <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                                    <mat-autocomplete #payroll="matAutocomplete" [displayWith]="displayfnpayroll"
+                                        (opened)="autocompletepayrollScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let payroll of gradeList" [value]="payroll"
+                                                title="{{payroll.name}}">
+                                                {{payroll.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                        <mat-option *ngIf="!gradeList.length">No Records Found</mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label class="percen">Percentage<label class="tage">*</label> </mat-label><br>
+                                <mat-form-field class="matformfieldstyle4" appearance="outline">
+                                    <input matInput class="matformfieldinputstyle" type="name"
+                                        formControlName="percentage" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-label>From Date</mat-label><br>
+                                <mat-form-field class="matformfieldstyle1">
+
+                                    <input matInput [matDatepicker]="picker1" formControlName="from_date">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-label style="margin-left: 30px;">To Date</mat-label><br>
+                                <mat-form-field class="matformfieldstyle2">
+
+                                    <input matInput [matDatepicker]="picker2" formControlName="to_date"
+                                        [min]="payrollForm.get('from_date').value">
+                                    <mat-datepicker-toggle class="maticonsize" matSuffix [for]="picker2">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+            <div class="border">
+                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="pf_include">PF
+                    Include
+                </mat-checkbox><br>
+                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="is_deduction">
+                    is Deduction
+                </mat-checkbox><br>
+                <mat-checkbox class="example-margin" [color]="setcolor" formControlName="is_default">
+                    is Show in Payroll
+                </mat-checkbox>
+
+            </div>
+        </div>
+        <button type="button" class="btn btns btn-light" (click)="oncancelPayroll()">Cancel</button>
+        <button type="submit" (click)="payrollSubmit()" class="btn btns btn-light">Submit</button>
+    </form>
+</div>
+
+<div class="row" *ngIf="payrollSummary">
+    <div class="row">
+        <h2 class="sear">PayComponents</h2>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <!-- <h2>Payroll Summary</h2> -->
+        <div class="search">
+
+            <form [formGroup]="datassearch" class="data">
+                <section>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <mat-form-field class="field">
+                                <mat-label>Name</mat-label>
+
+                                <input matInput formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-5 pl-0">
+                            <div>
+                                <button mat-stroked-button type="button" class="stroked" aria-label="Search"
+                                    (click)="searchName()">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button" class="payroll"
+                                    (click)="clearForm()">Clear</button>
+                                <button type="button" mat-fab class="add" (click)="addPayroll('Creation','')">
+                                    <mat-icon style="color: black;" matTooltip="Add">add</mat-icon>
+                                </button>
+                                <button type="button" class="add" mat-fab (click)="uploadfile()">
+                                    <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                                </button>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </form>
+
+        </div>
+
+
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div style="margin-left: 15px;">
+            <table class="table aligncenter table-bordered" style="margin-top: 10px;max-width: 98%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th class="text-center">S.no</th>
+                        <th class="text-center">Code</th>
+                        <th style="width:30px" class="text-center">Name</th>
+                        <th class="text-center">Category Type</th>
+                        <th class="text-center">Grade</th>
+                        <!-- <th>Show in Payroll</th> -->
+                        <th class="text-center">Percentage</th>
+                        <th class="text-center">From Date</th>
+                        <th class="text-center">TO Date</th>
+                        <th class="width text-center">Edit</th>
+                        <th class="width text-center">Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let type of payrollList; index as i">
+                        <td class="text-center">{{(presentpagepayroll - 1)*pagesizepayroll +i+1 }}</td>
+                        <td class="text-center">{{type?.code}}</td>
+                        <td class="text-center">{{type?.name}}</td>
+                        <td class="text-center">{{type?.allowance_type.name}}</td>
+                        <td class="text-center">{{type?.grade?.name}}</td>
+                        <!-- <td>{{type?.name}}</td> -->
+                        <td class="text-center">{{type?.percentage}} %</td>
+                        <!-- <span *ngIf="fromDate==='None'">
+                            <td>{{type?.from_date}}</td>
+                            <td>{{type?.to_date}}</td>
+                        </span> -->
+                        <!-- <span *ngIf="fromDate!=='None'"> -->
+                        <td class="text-center">
+                            <span *ngIf="type?.from_date==='None'">
+                                {{type?.from_date}}
+                            </span>
+                            <span *ngIf="type?.from_date!=='None'">
+                                {{type?.from_date | date:'dd-MMM-yyyy'}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="type?.to_date==='None'">
+                                {{type?.to_date}}
+                            </span>
+                            <span *ngIf="type?.to_date!=='None'">
+                                {{type?.to_date | date:'dd-MMM-yyyy'}}
+                            </span>
+                        </td>
+                        <!-- </span> -->
+                        <!-- <td></td> -->
+                        <td class="width text-center"><span class="fa-solid fa-pencil"
+                                (click)="addPayroll('Edit',type)"></span>
+
+                        </td>
+                        <td class="width text-center"> <span class="fa-solid fa-trash-can"
+                                (click)="deletepayroll(type)"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="payrollList?.length==0 || payrollList == undefined ; else paginationpro"
+                class="NodataAlign text-center">No Records Found...</div>
+            <ng-template #paginationpro>
+                <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                    <button type="button" mat-icon-button [disabled]="has_previouspayroll === false" color="primary"
+                        (click)="payrollSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpagepayroll}}
+                    <button type="button" mat-icon-button [disabled]="has_nextpayroll === false" color="primary"
+                        (click)="payrollSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isFileUpload">
+    <div class="card">
+        <div class="card-body">
+            <form novalidate [formGroup]="uploadForms">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                            (change)="fileChange($event, $event.target.files)">
+                        <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class=" btn btn-warning" type="button" (click)="uploadDocuments()">
+                        <i class="fas fa-file-import"></i> Upload
+                    </button>
+                    <button class=" btn  btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+                        Cancel
+                    </button>
+                    <button class=" btn  btn-outline-info" (click)="downloadTemplate()" style="margin-left:34%;">
+                        Download Template
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

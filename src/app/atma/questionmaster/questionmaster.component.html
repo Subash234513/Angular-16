@@ -1,0 +1,394 @@
+<!-- <div style="margin-left: 20px;margin-right: 80%;margin-top: 3%; width: 100%;">
+
+    <h3  style="margin-left:3%;font-size:20px;font-weight:bold;font-family:Times New Roman;color:blue">
+        Question Add Form
+    </h3><hr> -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+        <h2 style="margin-left: -65px;"> Question Form</h2>
+        <form style="margin-left:-50px;" [formGroup]="QuesForm"  autocomplete="off">
+            <table>
+                <tr>
+                    <span (click)="addSection()" style="margin-left: 20px;">
+                        <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                    </span>
+                </tr>
+            </table>
+            <div class="table-responsive" style="width:95%;margin-top: 1%;">
+                <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                    <thead class="table_header" style="text-align: left;"> 
+                        <tr>
+                            <th>S.No</th>
+                            <th>Category Type</th>
+                            <th>Header</th>
+                            <th>Question</th>
+                            <th>Sub Question</th>
+                            <th>Input Type</th>
+                            <th>Score</th>
+                            <th>Min</th>
+                            <th>Max</th>
+                            <th>Order</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+
+                        <ng-container formArrayName="formheader"
+                                        *ngFor="let section of getSections(QuesForm); let i = index">
+                                        <tr [formGroupName]="i">
+                                            <td>{{i+1}}</td>
+                                            <td>
+                                                <mat-form-field style="width: 250px;" (click)="getqueslists()">
+                                                    <mat-label>Category</mat-label>
+                                                    <input type="text" #typeinput matInput formControlName="type_id" autocomplete="off" required [matAutocomplete]="typeauto" (keyup)="getquestionlistsearch($event.target.value)" (keypress)="kyenbdata($event)">
+                                                    <mat-autocomplete [panelWidth]="300" #typeauto="matAutocomplete" [displayWith]="getquestypelist" (opened)="questypescroll()">
+                                                    <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                    <ng-container *ngIf="!isLoading">
+                                                        <mat-option *ngFor="let type of questypelist" [value]="type" (click)="gettypeid(type)">{{type.name}}</mat-option>
+                                                    </ng-container>
+                                                    </mat-autocomplete>
+                                                     </mat-form-field> 
+
+                                            </td>
+                                            <td>
+                                                    <mat-form-field style="width: 250px;" (click)="getquesheaderlists()">
+                                                        <mat-label>Header</mat-label>
+                                                        <input type="text" #headerinput matInput formControlName="header_id" autocomplete="off" required [matAutocomplete]="headerauto"  (keypress)="kyenbdata($event)">
+                                                        <mat-autocomplete [panelWidth]="300" #headerauto="matAutocomplete" [displayWith]="getquesheaderlist" >
+                                                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                                                        <ng-container *ngIf="!isLoading">
+                                                            <mat-option *ngFor="let header of quesheaderlist" [value]="header">{{header.name}}</mat-option>
+                                                        </ng-container>
+                                                        </mat-autocomplete>
+                                                         </mat-form-field> 
+                                            </td>
+                                            
+                                            <td>
+                                                <mat-form-field style="width: 250px;">
+                                                    <mat-label>Question</mat-label>
+                                                    <input matInput placeholder="Question" formControlName="text" autocomplete="off" required
+                                                    >
+                                                </mat-form-field>
+                                            </td>
+                                            <td>
+                                                <!-- <input  type="checkbox" #checkEnabled  (click)="checkselect($event,section,i)"  color="primary" 
+                                                 formControlName="is_subtext"> -->
+                                                
+
+                                                <div >
+
+                                                    
+                                                        <table>
+                                                            <tr>
+                                                                <span (click)="addsubSection(i)" style="margin-left: 20px;">
+                                                                    <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                                                                </span>
+                                                            </tr>
+                                                        </table>
+                                                        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+                                                            <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                                                                <thead class="table_header" style="text-align: left;"> 
+                                                                    <tr>
+                                                                        <th>S.No</th>
+                                                                        <th>Questions</th>
+                                                                        <th>Input Type</th>
+                                                                        <th>Score</th>
+                                                                        <th>Min</th>
+                                                                        <th>Max</th>
+                                                                        <th>Order</th>
+                                                                        <th>Delete</th>
+                                                                    </tr>
+                                                                </thead>
+                                            
+                                                                    <ng-container formArrayName="sub_question"
+                                                                                    *ngFor="let sections of section.controls.sub_question.controls; let ind = index">
+                                                                                    <tr [formGroupName]="ind">
+                                                                                        <td>{{ind+1}}</td>
+                                                                                        
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Question</mat-label>
+                                                                                                <input matInput placeholder="Question" formControlName="text" autocomplete="off" required
+                                                                                                >
+                                                                                            </mat-form-field>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Input Type</mat-label>
+                                                                                                <!-- <input matInput placeholder="Input Type" formControlName="input_type" autocomplete="off" required
+                                                                                                (keypress)="only_numalpha($event)"> -->
+                                                                                                <mat-select formControlName="input_type" matInput required >
+                                                                                                    <mat-option *ngFor="let ints of inputdropdown" [value]="ints.id" >{{ints.name}}</mat-option>
+                                                                                                </mat-select>
+                                                                                            </mat-form-field>
+                                                                                         
+
+                                                                                           <!-- <pre>{{sections.value| json}}</pre> -->
+
+                                                                                            <div *ngIf="sections?.value?.input_type == 1 || sections?.value?.input_type == 3 || sections?.value?.input_type == 4">
+
+                                                    
+                                                                                                <table>
+                                                                                                    <tr>
+                                                                                                        <span (click)="addsubdropSection(i,ind)" style="margin-left: 20px;">
+                                                                                                            <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                                                                                                        </span>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                                <div class="table-responsive" style="width:95%;margin-top: 1%;">
+                                                                                                    <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                                                                                                        <thead class="table_header" style="text-align: left;"> 
+                                                                                                            <tr>
+                                                                                                                <th>S.No</th>
+                                                                                                                <th>Option</th>
+                                                                                                                <th>Remarks</th>
+                                                                                                                <th>Order</th>
+                                                                                                                <th>Delete</th>
+                                                                                                            </tr>
+                                                                                                        </thead>
+                                                                                    
+                                                                                                            <ng-container formArrayName="Input_value"
+                                                                                                                            *ngFor="let dropsections of sections.controls.Input_value.controls; let index = index">
+                                                                                                                            <tr [formGroupName]="index">
+                                                                                                                                <td>{{index+1}}</td>
+                                                                                                                                
+                                                                                                                                <td>
+                                                                                                                                    <mat-form-field style="width: 250px;">
+                                                                                                                                        <mat-label>Option</mat-label>
+                                                                                                                                        <input matInput placeholder="Option" formControlName="options" autocomplete="off" required
+                                                                                                                                        >
+                                                                                                                                    </mat-form-field>
+                                                                                                                                </td>
+                                                                                                                                <td>
+                                                                                                                                    <mat-form-field style="width: 250px;">
+                                                                                                                                        <mat-label>Remarks</mat-label>
+                                                                                                                                        <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off" 
+                                                                                                                                        >
+                                                                                                                                    </mat-form-field>
+                                                                                                                                </td>
+                                                                                                                               
+                                                                                                                                <td>
+                                                                                                                                    <mat-form-field style="width: 250px;">
+                                                                                                                                        <mat-label>Order</mat-label>
+                                                                                                                                        <input matInput placeholder="Order" formControlName="order" autocomplete="off" required
+                                                                                                                                        (keypress)="numberOnly($event)">
+                                                                                                                                    </mat-form-field> 
+                                                                                                                                </td>
+                                                                                                                                <td>
+                                                                                                                                    <button mat-icon-button type="button">
+                                                                                                                                        <mat-icon style="color: black;" aria-label="Edit"
+                                                                                                                                            (click)=removesubdropSection(i,ind,index)>
+                                                                                                                                            delete</mat-icon>
+                                                                                                                                    </button>
+                                                                                                                                </td>
+                                                                                    
+                                                                                                                            </tr>
+                                                                                                            </ng-container>
+                                                                                                        </table>
+                                                                                                    </div>
+                                                                                                                           
+                                                                                    
+                                                                                           
+                                                                                        
+                                                                                            
+                                                                                    </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <input type="checkbox"  formControlName="is_score" >
+                                                                                         </td>
+
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>MIN</mat-label>
+                                                                                                <input matInput type="number" [readonly]="!QuesForm.value.formheader[i].sub_question[ind].is_score" placeholder="MIN" formControlName="min" autocomplete="off" required
+                                                                                                >
+                                                                                            </mat-form-field>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>MAX</mat-label>
+                                                                                                <input [readonly]="!QuesForm.value.formheader[i].sub_question[ind].is_score" min="QuesForm.value.formheader[i].sub_question[ind].min" matInput type="number" placeholder="MAX" formControlName="max" autocomplete="off" required
+                                                                                                >
+                                                                                            </mat-form-field>
+                                                                                        </td>
+                                                                                      
+                                                                                       
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Order</mat-label>
+                                                                                                <input matInput placeholder="Order" formControlName="order" autocomplete="off" required
+                                                                                                (keypress)="numberOnly($event)">
+                                                                                            </mat-form-field> 
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <button mat-icon-button type="button">
+                                                                                                <mat-icon style="color: black;" aria-label="Edit"
+                                                                                                    (click)=removesubSection(i,ind)>
+                                                                                                    delete</mat-icon>
+                                                                                            </button>
+                                                                                        </td>
+                                            
+                                                                                    </tr>
+                                                                    </ng-container>
+                                                                </table>
+                                                            </div>
+                                                                                   
+                                            
+                                                   
+                                                
+                                                    
+                                            </div>
+                                       
+                        
+                                            </td>
+                                            
+                                                <td>
+                                                    <mat-form-field style="width: 250px;">
+                                                        <mat-label>Input Type</mat-label>
+                                                        <!-- <input matInput placeholder="Input Type" formControlName="input_type" autocomplete="off" required
+                                                        (keypress)="only_numalpha($event)"> -->
+                                                        <mat-select formControlName="input_type" matInput required >
+                                                            <mat-option *ngFor="let int of inputdropdown" [value]="int.id" >{{int.name}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    
+
+                                                    <div *ngIf="QuesForm?.value?.formheader[i]?.input_type == 1 || QuesForm?.value?.formheader[i]?.input_type == 3 || QuesForm?.value?.formheader[i]?.input_type == 4">
+
+                                                    
+                                                        <table>
+                                                            <tr>
+                                                                <span (click)="adddropSection(i)" style="margin-left: 20px;">
+                                                                    <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+                                                                </span>
+                                                            </tr>
+                                                        </table>
+                                                        <div class="table-responsive" style="width:95%;margin-top: 1%;">
+                                                            <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+                                                                <thead class="table_header" style="text-align: left;"> 
+                                                                    <tr>
+                                                                        <th>S.No</th>
+                                                                        <th>Option</th>
+                                                                        <th>Remarks</th>
+                                                                        <th>Order</th>
+                                                                        <th>Delete</th>
+                                                                    </tr>
+                                                                </thead>
+                                            
+                                                                    <ng-container formArrayName="Input_value"
+                                                                                    *ngFor="let dropsections of section.controls.Input_value.controls; let index = index">
+                                                                                    <tr [formGroupName]="index">
+                                                                                        <td>{{index+1}}</td>
+                                                                                        
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Option</mat-label>
+                                                                                                <input matInput placeholder="Option" formControlName="options" autocomplete="off" required
+                                                                                                >
+                                                                                            </mat-form-field>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Remarks</mat-label>
+                                                                                                <input matInput placeholder="Remarks" formControlName="remarks" autocomplete="off" 
+                                                                                                >
+                                                                                            </mat-form-field>
+                                                                                        </td>
+                                                                                       
+                                                                                        <td>
+                                                                                            <mat-form-field style="width: 250px;">
+                                                                                                <mat-label>Order</mat-label>
+                                                                                                <input matInput placeholder="Order" formControlName="order" autocomplete="off" required
+                                                                                                (keypress)="numberOnly($event)">
+                                                                                            </mat-form-field> 
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <button mat-icon-button type="button">
+                                                                                                <mat-icon style="color: black;" aria-label="Edit"
+                                                                                                    (click)=removedropSection(i,index)>
+                                                                                                    delete</mat-icon>
+                                                                                            </button>
+                                                                                        </td>
+                                            
+                                                                                    </tr>
+                                                                    </ng-container>
+                                                                </table>
+                                                            </div>
+                                                                                   
+                                            
+                                                   
+                                                
+                                                    
+                                            </div>
+                                       
+                        
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" formControlName="is_score">
+                                                 </td>
+                                                <td>
+                                                    <mat-form-field style="width: 250px;">
+                                                        <mat-label>MIN</mat-label>
+                                                        <input matInput type="number" [readonly]="!QuesForm.value.formheader[i].is_score" placeholder="MIN" formControlName="min" autocomplete="off" required
+                                                        >
+                                                    </mat-form-field>
+                                                </td>
+                                                <td>
+                                                    <mat-form-field style="width: 250px;">
+                                                        <mat-label>MAX</mat-label>
+                                                        <input matInput type="number" [readonly]="!QuesForm.value.formheader[i].is_score" min="QuesForm.value.formheader[i].min" placeholder="MAX" formControlName="max" autocomplete="off" required
+                                                        >
+                                                    </mat-form-field>
+                                                </td>
+                                               
+                                          
+                                            <td>
+                                                <mat-form-field style="width: 250px;">
+                                                    <mat-label>Order</mat-label>
+                                                    <input matInput placeholder="Order" formControlName="order" autocomplete="off" required
+                                                    (keypress)="numberOnly($event)">
+                                                </mat-form-field> 
+                                            </td>
+                                            <td>
+                                                <button mat-icon-button type="button">
+                                                    <mat-icon style="color: black;" aria-label="Edit"
+                                                        (click)=removeSection(i)>
+                                                        delete</mat-icon>
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                        </ng-container>
+                    </table>
+                </div>
+                <!-- <br> -->
+            <!-- <div style="margin-bottom:5%">
+            <button type="submit" style="border-radius: 40px;margin-left: 590px;"
+             class="btn btn-outline-primary" (click)="questionsubmit()">Submit</button>
+            <button type="button" (click)="onQuestionCancel()" class="btn btn-outline-primary"
+            style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+            </div>                           -->
+
+            <div style="margin: 30px;">
+
+
+                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 500px;
+                border-color: black; 
+                background-color: white;" (click)="onQuestionCancel()">Cancel</button>
+
+                <button type="button" style="border-radius: 10px;margin-left: 10px;
+                border-color: #f5c68b; 
+                background-color: #f5c68b;" class="btn btn-light" (click)="questionsubmit()">Submit</button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<!-- <pre>{{ QuesForm.value |json}}</pre> -->

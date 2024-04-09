@@ -1,0 +1,169 @@
+<form [formGroup]="reportsearchform">
+    <div class="col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+        <span
+        (click)="backtoTaskSummary()"
+        class="material-icons pointer">arrow_back</span>
+        <span style="margin-top: 2px;font-weight: 3px;font-weight: bold;">Client Report Download</span>
+      </div>
+<div class="row" style="margin-top: 1%;margin-left: 1%;">
+    <div class="col-md-2">
+        <mat-form-field style="width:100%;"(click)="taskrclient()"  >
+            <mat-label>Client </mat-label>
+            <input matInput placeholder="Client" formControlName="client_id" #taskrcltInput autocomplete="off" [matAutocomplete]="clt"  />
+            <mat-autocomplete #clt="matAutocomplete" [displayWith]="displaytrclt" >
+                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let clt of trclientList"   [value]="clt" title="{{clt.name}}">{{clt.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!trclientList ||!trclientList.length">
+                    No Record Found
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div class="col-md-2">
+        <!-- <mat-form-field  style="width: 100%">
+            <mat-label>Month / Year</mat-label>
+            <input matInput [matDatepicker]="picker3" formControlName="month" [max]="current_date" required>
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>  -->
+        <mat-form-field dateFormat2 class="smallinput spacingForm" style="margin-top: -2%;width: 100%;">
+            <mat-label> Month/Year </mat-label>
+            <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+              formControlName="month" />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+            </mat-datepicker>
+          </mat-form-field>
+    </div>
+    <div class="col-md-2">
+        <mat-form-field style="width:100%;"  (click)="taskrappName()">
+            <mat-label>Project</mat-label>
+            <input matInput placeholder="Project Name" formControlName="app_id" #taskrappInput autocomplete="off" [matAutocomplete]="app" (click)="taskrappName()" />
+            <mat-autocomplete #app="matAutocomplete" [displayWith]="displaytrcapp" >
+                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let app of trappNameList"   [value]="app" title="{{app.name}}">{{app.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!trappNameList ||!trappNameList.length">
+                    No Record Found
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+    </div>
+    <div class="col-md-2">
+        <mat-form-field style="width:100%;" (click)="taskrmoduleName()">
+            <mat-label>Module</mat-label>
+            <input matInput placeholder="Module Name" formControlName="project_map_id" #taskmodInput autocomplete="off" [matAutocomplete]="mod"  (click)="taskrmoduleName()"/>
+            <mat-autocomplete #mod="matAutocomplete" [displayWith]="displaytrmod">
+                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let mod of trmoduleNameList"   [value]="mod" title="{{mod.name}}">{{mod.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!trmoduleNameList || !trmoduleNameList.length">
+                    No Records Found
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+   
+    <div class="col-md-2">
+        <mat-form-field style="width:100%;" (click)="taskprojectheadName()"   >
+            <mat-label>Project Head</mat-label>
+            <input matInput placeholder="Project Head Name" formControlName="project_head" #taskprojectheadInput autocomplete="off" [matAutocomplete]="project_head"(click)="taskprojectheadName()"/>
+            <mat-autocomplete #project_head="matAutocomplete" [displayWith]="displayprojecthead">
+                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let project_head of tprojectheademployeeList"   [value]="project_head" title="{{project_head.name}}">{{project_head.name}}
+                    </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!tprojectheademployeeList ||!tprojectheademployeeList.length">
+                    No Records Found
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div class="col-md-2">
+        <!-- <mat-form-field  style="width: 100%;" (click)="taskName()">
+            <mat-label>Task Name</mat-label>
+            <input matInput placeholder="Task Name" formControlName="task_name" #tasknameInput autocomplete="off" [matAutocomplete]="taskname" (click)="taskName()" />
+            <mat-autocomplete #taskname="matAutocomplete" [displayWith]="displayemptask" >
+                <mat-option *ngIf="isLoading">Loading..</mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngFor="let taskname of gettasknamelist"   [value]="taskname">{{taskname.task}}
+                    </mat-option>
+                </ng-container>
+            </mat-autocomplete>
+        </mat-form-field> -->
+    </div>
+</div>
+<div class="row" style="margin-left: 1%;">
+<div class="col-md-2">
+    <div (click)="getDeveloperdrop()">
+        <mat-form-field style="width: 100%">
+          <mat-label>Employee</mat-label>
+          <input
+            #developerinput
+            placeholder="Select Employee"
+            matInput
+            formControlName="developer_id"
+            [matAutocomplete]="developerrole"
+            (click)="developerClick()"
+          />
+          <mat-autocomplete
+            #developerrole="matAutocomplete"
+            [displayWith]="displaydevelopclient"
+          >
+            <ng-container>
+              <mat-option
+                *ngFor="let opt of develop"
+                [value]="opt"  title="{{opt.name}}"
+              >
+                {{ opt.name }}
+              </mat-option>
+            </ng-container>
+            <mat-option *ngIf="!develop ||!develop.length">
+              No Records Found
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+</div>
+<div  class="col-md-2">
+    <mat-form-field  style="width:100%" (click)="typeStatus()">
+        <mat-label>Task Type</mat-label>
+        <input matInput placeholder="Task Type" [matAutocomplete]="tasknameb" formControlName="task_type"  autocomplete="off" (click)="typeStatus()" />
+        <mat-autocomplete #tasknameb="matAutocomplete"  [displayWith]="displayemptasktype"  >
+            <mat-option *ngIf="isLoading">Loading..</mat-option>
+            <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let status of statusList"   [value]="status" title="{{status.name}}">{{status.name}}
+           
+                </mat-option>
+        </ng-container>
+        <mat-option *ngIf="!statusList ||!statusList.length">
+            No Record Found
+        </mat-option>
+        </mat-autocomplete>
+        
+       
+    </mat-form-field>
+</div>
+
+<div class="col-md-1">
+    <button class="btn btn-secondary" type="button" (click)="clearfunc()">
+      Reset 
+    </button>
+  </div>
+<div class="col-md-1" style="margin-left: -40px;">
+        <button class="reportBtn" color="primary" (click)="reportdownload()">Download</button>
+</div> 
+
+</div>
+    
+</form>

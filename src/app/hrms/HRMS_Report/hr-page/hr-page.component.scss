@@ -1,0 +1,93 @@
+.widthset{
+    width: 90%;
+    margin: 5px 0px 100px 10px;
+}
+
+table td:nth-child(7), td:nth-child(13), td:nth-child(19), td:nth-child(25),  td:nth-child(28), td:nth-child(34),
+th:nth-child(6), th:nth-child(12), th:nth-child(18), th:nth-child(24), th:nth-child(27),  th:nth-child(33)
+{
+  background-color:#909090;
+  color: #ffffff
+}
+.nowrap{
+  white-space: nowrap;
+}
+
+.tableFixHeaddiv{
+  height: 700px;
+  position: relative;
+}
+
+.outertable thead{ 
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0; 
+  z-index: 5;
+}
+
+.firstone {
+  background-color: #f2f2f2;
+  color: #000000;
+  position: sticky;
+  left: 0;
+  z-index: 6 !important;
+}
+
+.outertable td:first-child {
+  background-color: #f2f2f2;
+  position: sticky;
+  left: 0; 
+  // z-index: 5!important;
+}
+
+.marginleftField{
+  margin-left: 50px;
+  width: 210px;
+}
+
+.leaveHeader{
+  background-color:#909090;
+  color: #ffffff;
+  text-align: center;
+}
+
+.OD_Color{
+  color: rgb(255, 95, 95)
+}
+
+.bottomSpace{
+  margin-bottom: 20px;
+}
+
+
+
+// style="margin-left: 20px;background-color: white;"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

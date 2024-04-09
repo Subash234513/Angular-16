@@ -1,0 +1,67 @@
+<div> 
+        <nav>
+            <div class="nav nav-tabs">
+                <span class="nav-item nav-link" data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                    [ngClass]="sub.name == AttendanceObjects.menuName? 'activemenu': ''"
+                    *ngFor="let sub of AttendanceObjects.attendance_Menu_List;index as i">
+                    {{sub.name}}
+                </span>
+            </div>
+        </nav> 
+
+
+
+    <div *ngIf="Objs['Attendance Log']">
+        <mat-card>
+            <app-attendance-log> </app-attendance-log>
+        </mat-card>
+    </div>
+
+
+    <div *ngIf="Objs['Attendance Report']">
+        <mat-card>
+            <app-attendance-full-report></app-attendance-full-report>
+
+            <!-- <app-attendance-report></app-attendance-report> -->
+        </mat-card>
+    </div>
+
+    <div *ngIf="Objs['Track Employee']">
+        <mat-card>
+            <app-trackemployee></app-trackemployee>
+        </mat-card>
+    </div>
+
+    <div *ngIf="Objs['Attendance Full Report']">
+        <mat-card>
+        </mat-card>
+    </div>
+
+
+    <div *ngIf="Objs['FET View']" >
+        <mat-card>
+            <app-fetview></app-fetview>
+        </mat-card>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

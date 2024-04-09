@@ -1,0 +1,211 @@
+<h2> Question Mapping Form</h2>
+
+<div style="width: 90%" >
+    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 500px;
+    border-color: black; 
+    background-color: white;float: right;" (click)="oncancel()">Back</button>
+</div>
+
+<div class="wholediv">
+
+   
+
+    <form [formGroup]="questionmappingform">
+
+        <tr>
+            
+            <td>
+
+                <mat-form-field style="width:300px" (click)="getqueslists()">
+                    <input type="text" class="matformfieldinputstyle" #typeinput matInput formControlName="type_id"
+                        autocomplete="off" required [matAutocomplete]="typeauto" placeholder="Category Type"
+                        (keypress)="queslistsvaluechanges($event.target.value, type_currentpage=1)">
+
+                    <mat-autocomplete #typeauto="matAutocomplete" [displayWith]="getquestypelist"
+                        (opened)="questypescroll()">
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option (click)="optionselected()" *ngFor="let type of questypelist" [value]="type">{{type.name}}</mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field style="margin-left:60px;width: 300px;" (click)="getquesheaderlists()">
+                    <mat-label>Header</mat-label>
+                    <input type="text" #headerinput matInput formControlName="header" autocomplete="off" required
+                        [matAutocomplete]="headerauto" (keypress)="quesheaderlistvaluechanges($event.target.value,1)">
+                    <mat-autocomplete [panelWidth]="300" #headerauto="matAutocomplete"
+                        [displayWith]="getquesheaderlist">
+                        <!-- (opened)="quesheaderscroll()" -->
+                        <mat-option *ngIf="isLoading">Loading..</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option (click)="optionselected()" *ngFor="let header of quesheaderlist" [value]="header">{{header.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </td>
+        </tr>
+    </form>
+
+    <!-- <div class="table-responsive" style="margin-top: 2%;width:99%"> -->
+    <!-- <table class="table table-bordered">
+            <thead class="table_header">
+                <tr>
+                    <th>S.No</th>
+                    <th>Questions</th>
+                    <th>Mark</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let quest of questiondata;let i=index;">
+                    <td>{{i+1}}</td>
+                    <td>{{quest?.question_id.text}}</td>
+                    <td>
+                        <input (change)="getcheckbox($event,quest.id,i)" type="checkbox">
+                    </td>
+
+                </tr>
+                <tr colspan="3" *ngIf="questiondata.length==0">
+                    <td class="colspan">No Records Found..</td>
+                </tr>
+            </tbody>
+        </table> -->
+    <div style="margin-top: 2%;">
+        <div style="display:flex;justify-content:space-between;width:65%">
+            <div>
+                <h2>Questions</h2>
+
+            </div>
+            <div>
+                <button type="button" mat-stroked-button data-toggle="modal" data-target="#addquestion"
+                    style="margin-left: 20px;background-color: #f5c68b;">
+                    <mat-icon matTooltip="Add Question">add</mat-icon>
+                </button>
+            </div>
+        </div>
+
+
+        <!-- <div>
+            <mat-chip-list>
+              <mat-chip [ngClass]="(tab.checked)? 'back':''" (click)="questionmarkchange(tab.checked,i,tab.id)"  *ngFor="let tab of questiondata;let i=index" ><mat-icon *ngIf="tab.checked" >done</mat-icon>&nbsp;&nbsp;{{tab.question_id.text}}</mat-chip>
+            </mat-chip-list>
+          </div> -->
+
+          <div class="row" style="width:100%" >
+            <!-- <mat-tab-group>
+                <mat-tab [label]="questionmappingform.value.type_id?.name" style="writing-mode: vertical-rl;
+                text-orientation: mixed;" > -->
+                <div style="width:3%" >
+                    &#9660; <p style="writing-mode: vertical-rl;
+                    text-orientation: mixed;" >{{questionmappingform.value.type_id?.name}}</p>
+                </div>
+                <div style="width:90%" >
+                    <table class="table" id="questionstyle">
+                       
+                
+                        <tr *ngFor="let quest of questiondata;let i=index;">
+                           
+                            <td (click)="questionmarkchange(i,quest.id)">
+                                <input [checked]="quest?.is_check"  type="checkbox">
+                            </td>
+                            <td class="tdquest" (dblclick)="questionmarkchange(i,quest.id)">
+                                <p>{{quest?.text}}</p>
+                                <div style="padding-left:25px" *ngFor="let sub of quest.sub_question;let j=index" > 
+                                    <p>{{j+1}}.&nbsp; {{sub.text}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px;" >
+                                    <mat-label>Relationship Category</mat-label>
+                                    <mat-select multiple [value]="quest.relation_category" [(ngModel)]="quest.relation_category"  >
+                                        <mat-option #checked (click)="geteval(checked,quest.id,1,lists.id)" *ngFor="let lists of categorylist" [value]="lists.id">
+                                            {{lists.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> 
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 150px;">
+                                    <mat-label>Vendor Type</mat-label>
+                                    <mat-select multiple [value]="quest.vendor_type" [(ngModel)]="quest.vendor_type" >
+                                        <mat-option #checked (click)="geteval(checked,quest.id,2,ven.id)" *ngFor="let ven of Ventypelist" [value]="ven.id">
+                                            {{ven.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>  
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 150px;">
+                                    <mat-label>Criticality</mat-label>
+                                    <mat-select multiple [value]="quest.criticality" [(ngModel)]="quest.criticality" >
+                                        <mat-option #checked (click)="geteval(checked,quest.id,3,data.id)" *ngFor="let data of criticallist" [value]="data.id">
+                                            {{data.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> 
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- </mat-tab>
+                
+              </mat-tab-group> -->
+              
+          </div>
+
+        
+
+        <!-- <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button mat-icon-button [disabled]="question_has_previous === false" color="primary"
+                (click)="previousquestiondata()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{question_currentpage}}
+            <button mat-icon-button [disabled]="question_has_next === false" color="primary"
+                (click)="nextquestiondata()">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div> -->
+    </div>
+
+    <!-- <div style="margin: 30px;">
+
+
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 500px;
+        border-color: black; 
+        background-color: white;" (click)="oncancel()">Cancel</button>
+
+        <button type="button" style="border-radius: 10px;margin-left: 10px;
+        border-color: #f5c68b; 
+        background-color: #f5c68b;" class="btn btn-light" (click)="questionmappingsubmit()">Submit</button>
+
+    </div> -->
+
+</div>
+
+<!-- <pre>
+    {{questionmappingform.value | json}}
+</pre> -->
+
+<div class="modal fade" id="addquestion" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-5">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                
+                <button #modalclose class="close" type="button" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" style="padding: 0px 1px 0px 60px;" >
+                    <app-questionmaster (onSubmit)="closepop()" (onCancel)="closepop()" ></app-questionmaster>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" [fullScreen]="true" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

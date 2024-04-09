@@ -1,0 +1,183 @@
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="poreopencreate">
+            <h2 style="margin-left: 3%;">Purchase Order Reopen Create</h2>
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field style="margin-left: 50px;">
+                            <input type="text" formControlName="no" matInput autocomplete="off" (keypress)="only_numalpha($event)">
+                            <mat-placeholder>PO Number</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="margin-left: 50px;">
+                            <input formControlName="supplier_id" matInput autocomplete="off" (keypress)="only_char($event)">
+                            <mat-placeholder>Supplier Name</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="table-responsive" style="margin-top: 2%;width: 94%;margin-left: 50px;">
+    <table class="table scrolltable table-bordered" fixed-header>
+        <thead>
+            <tr class="table_header" fixed-header>
+                <th>S.No</th>
+                <!-- <th>Product Category</th>
+                <th>Product Type</th> -->
+                <th>Product Name </th>
+                <th>Item</th>
+                <th>UOM</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+                <th>Total Amount </th>
+                <th>Delivery</th>
+            </tr>
+        </thead>
+        <!-- <tbody>
+            <tr *ngFor="let poreopen of poreopendataList; index as i">
+                <td> {{i+1 }} </td>
+                <td>{{poreopen.product_id.category_id.name}}</td>
+                <td>{{poreopen.product_id.type}}</td>
+                <td>{{poreopen.product_id.name}}</td>
+                <td>{{poreopen.product_id.uom_id.name}}</td>
+                <td>{{poreopen.product_id.qty}}</td>
+                <td>{{poreopen.product_id.unitprice}}</td>
+                <td>{{poreopen.product_id.name}}</td>
+                <td>&#8377;{{sum}}</td>
+                <td>
+                    <span data-toggle="modal" data-target=".bd-example-modal-lg" class="material-icons"(click)="addreopendeliverydetails(poreopen)">
+                        local_post_office
+                    </span>
+                </td>
+
+            </tr>
+        </tbody> -->
+        <tbody >
+        
+        <tr *ngFor="let poclose of poreopendataList;index as i">
+                   
+                       
+            <!-- <tr *ngFor="let po of poclose.product_data;index as i" > -->
+               
+               
+                <td>{{i+1}}</td>
+                <!-- <td>{{po.category_id.name}}</td>
+                <td>{{po.producttype_id.name}}</td> -->
+                <td>{{poclose.product_name}}</td>
+                <td>{{poclose.item_name}}</td>
+                <td>{{poclose.uom}}</td>
+                <td>{{poclose.qty}}</td>
+                <td>{{poclose.unitprice}}</td>
+                <td>{{poclose.totalamount}}</td>
+                <td>{{poclose.totalamount}}</td>
+
+              
+                    <td>
+                        <span
+                        data-toggle="modal" data-target=".bd-example-modal-lg" class="material-icons"
+                         (click)="deliveryReopen(poclose.id)" 
+                        (click)="dataForSelectedLine(poclose)">
+                        local_post_office
+                        </span>
+                    </td>
+                    
+               </tr>
+               </tbody> 
+               <tr>
+                <th class="totaldisplay" colspan="7">Total Amount:</th>
+                <td class="rightaligntotal">{{totallineAmount | amountPipeCustom }}</td>
+            </tr>
+        
+    </table>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Delivery Details</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>Product Name: {{ ProductNameForSelectedLine }} &nbsp; &nbsp;&nbsp;&nbsp; Quantity: {{ QtyForSelectedLine }}</h3>
+                    <div class="table-responsive"
+                        style="margin-top: 2%;margin-left:50px; width: 90%; overflow-x: hidden;">
+                        <table class="table table-bordered">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>S:No</th>
+                                    <th>Godown Name</th>
+                                    <th>Incharge Name</th>
+                                    <th>Address</th>
+                                    <th>UOM</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of deliverylistReopen;index as i" >
+                                    <td>{{i+1}}</td>
+                                    <td>{{d?.prpoqty_id?.prccbs_id?.branch_id?.name}}</td>
+                                    <td>{{d?.prpoqty_id?.prccbs_id?.branch_id?.incharge}} </td>
+                                    <td>{{d?.poheader_id?.branch_id?.line1}},{{d.poheader_id?.branch_id?.line2}},{{d.poheader_id?.branch_id?.line3}}</td>
+                                    <td>{{d?.prpoqty_id?.prdetails_id?.uom}}</td>
+                                    <td>{{d?.qty}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- <div style="margin-top: -4%;margin-left: 58%;">
+                    <button type="button" data-dismiss="modal" style="float: left;margin-left: 400px; "
+                    class="btn btn-outline-primary">
+                    close</button>
+                </div> -->
+                <div *ngIf="deliverydetailList ?.length == 0" style="margin-left: 42%;">
+                    <h3>Sorry data not found!.. </h3>
+                </div>
+                <!-- <div class="row" *ngIf="is_deliverydetails">
+                    <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:left;">
+                        <button mat-icon-button [disabled]="has_previousddetails === false" color="primary"
+                            (click)="previousClickDD()">
+                            <mat-icon>arrow_back
+                            </mat-icon>
+                        </button>
+                        {{presentpageDD}}
+                        <button mat-icon-button [disabled]="has_nextddetails === false" color="primary"
+                            (click)="nextClickDD()">
+                            <mat-icon>arrow_forward
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<form [formGroup]="poreopenremarks">
+    <mat-form-field style="width:500px;margin-left: 50px;">
+        <input type="text" formControlName="remarks" matInput autocomplete="off">
+        <mat-placeholder>Reopen Remarks</mat-placeholder>
+    </mat-form-field>
+    <div class="row" style="margin-left: 50px;">
+        <button type="button" class="btn btn-outline-success" style="border-radius: 40px;margin-left: 10px;"
+            (click)="poreopensubmit()" [disabled]="clicked">Submit</button>
+        <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+            (click)="onCancelClick()">Cancel</button>
+    </div>
+</form>
+
+<!-- <pre>
+    {{poreopenremarks.value | json}}
+</pre> -->
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

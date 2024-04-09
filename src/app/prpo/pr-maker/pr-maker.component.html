@@ -1,0 +1,751 @@
+<div style="margin-left: 50px;margin-right: 80%;margin-top: 1%; width: 90%;">
+    <h1>Purchase Request Maker</h1>
+    <td>
+        <table style="margin: 0px auto;">
+        </table>
+    </td>
+    <div>
+        <form [formGroup]="prForm">
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 10px;">
+                            <mat-label>Choose Catalog/ Non Catalog</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let types of getCatlog_NonCatlogList" [value]="types.id"
+                                    [disabled]="Options" (click)="CatlogOrNotCatlog()"
+                                    (click)="resetAfterCatlogChange()">
+                                    {{types.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td style="margin-left: 50px;" *ngIf="dtsShow">
+                        <mat-radio-group formControlName="dts" class="inputformatradiobutton"
+                            style="width:10px;margin-left: 50px;">
+                            <mat-label> Is DTS</mat-label>&nbsp;
+                            <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                (click)="dtsValidation($event)" style="margin-left: 4px;">
+                                {{n.display}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </td>
+                    <td>
+                        <input type="file" multiple #takeInput (change)="onFileSelectedHeader($event)"
+                            style="width:250px; margin-left: 35px;" />
+                        <mat-icon style="color: gray;" (click)="HeaderFilesDelete()" aria-label="Delete">delete
+                        </mat-icon>
+                    </td>
+                    <td *ngIf="DownloadnUploadExcelButton">
+                        <button type="button" class="buttonsize btn btn-outline-success"
+                            (click)="downloadFileXLSXprTemplate()" style="border-radius:40px;margin-left: 50px;">
+                            <span class="fa fa-download"></span> Template</button>
+
+                    </td>
+                </tr>
+            </table>
+            <table>
+
+
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 8px;" (click)="getmepFK()">
+                            <mat-label>PCA Number</mat-label>
+                            <input #mepinput placeholder="PCA Number" matInput formControlName="mepno"
+                                [readonly]="mepreadonly" data-toggle="modal" data-target="#exampleModalResetOptionMep"
+                                [matAutocomplete]="mepname">
+                            <mat-autocomplete #mepname="matAutocomplete" [displayWith]="displayFnMep.bind(this)"
+                                >
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let mep of MEPList" [value]="mep.no"
+                                        (click)="resetAfterMepChange()" title="{{mep.mepno}}">
+                                        <!-- {{mep.no}}--{{mep.justification}} -->{{mep.mepno}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" [disabled]="mepreadonly" matSuffix class="close"
+                                (click)="resetAfterMepChange(); resetMepChange()">X</button>
+                        </mat-form-field>
+                        <button *ngIf="ismepdtl" type="button" matTooltip="PCA Details" class="btn btn-default"
+                            mat-button data-toggle="modal" data-target="#lableMep">
+                            <span class="material-icons">
+                                feedback
+                            </span>
+                        </button>
+
+                        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+                            aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" id="lableMep">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background:#DDEFDD;">
+                                        <h2 class="modal-title" id="exampleModalLongTitle">PCA Details</h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="table-responsive" style="margin-top: 2%;width: 95%;margin-left: 10px;">
+                                        <table class="table scrolltable table-bordered">
+                                            <thead>
+                                                <tr class="table_header">
+                                                    <th>S.No</th>
+                                                    <th>PCA Number</th>
+                                                    <th>PCA Amount</th>
+                                                    <th>PR Approved Amount</th>
+                                                    <th>PR Pending Amount</th>
+                                                    <th>Balance In PCA</th>
+                                                    <th>PCA Justification</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let UtilAmt of MEPUtilizationAmountList;index as i">
+                                                    <td>{{ i+1 }}</td>
+                                                    <td>{{ UtilAmt?.mep_no }}</td>
+                                                    <td>{{ UtilAmt?.mep_amount| amountPipeCustom }}</td>
+                                                    <td>{{ UtilAmt?.pr_approvedamount | amountPipeCustom }}</td>
+                                                    <td>{{ UtilAmt?.pr_pendingamount| amountPipeCustom }}</td>
+                                                    <td>{{ UtilAmt?.unutilized_amount| amountPipeCustom }}</td>
+                                                    <td>{{ UtilAmt?.justification }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getCommodityFK()">
+                            <mat-label>Commodity Name</mat-label>
+                            <input [readonly]="comreadonly" #commodityInput placeholder="Select commodity" matInput
+                                formControlName="commodity" [matAutocomplete]="commodity">
+                            <mat-autocomplete #commodity="matAutocomplete" [displayWith]="displayFncommodity"
+                                (opened)="autocompletecommodityScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let commodity of commodityList" title="{{commodity.name}}"
+                                        [value]="commodity" (click)="resetAfterCommodityChange(''); getmepdtl(); getemployeeForApprover();">
+                                        {{commodity.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" [disabled]="comreadonly" matSuffix class="close"
+                                (click)="resetAfterCommodityChange('removecom')">X</button>
+                        </mat-form-field>
+                    </td>
+
+
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getprodcatkeyFK()">
+                            <mat-label>Product Category</mat-label>
+                            <input #productCategoryInput
+                                placeholder="Select Product Category" matInput formControlName="productCategory"
+                                [matAutocomplete]="productCategory">
+                            <mat-autocomplete #productCategory="matAutocomplete"
+                                [displayWith]="displayFnproductCategory" (opened)="autocompleteproductCategoryScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let productCategory of productCategoryList"
+                                        (click)="resetAfterProdCatChange('')" [value]="productCategory">
+                                        {{productCategory.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" matSuffix class="close"
+                                (click)="resetAfterProdCatChange('removePC')">X</button>
+                        </mat-form-field>
+
+                    </td>
+
+
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getproductTypeFK()">
+                            <mat-label>Product SubCategory</mat-label>
+                            <input #productTypeinput 
+                                placeholder="Select Product Subcategory" matInput formControlName="productType"
+                                [matAutocomplete]="productType">
+                            <mat-autocomplete #productType="matAutocomplete" [displayWith]="displayFnproductType"
+                                (opened)="autocompleteproductTypeScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let productType of productTypeList" [value]="productType"
+                                        (click)="resetAfterProdTypeChange('')">
+                                        {{productType.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" matSuffix class="close"
+                                (click)="resetAfterProdTypeChange('removePT')">X</button>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td *ngIf="productcatlog">
+                        <mat-form-field style="width: 200px; margin-left: 8px;" (click)="getproductFK()">
+                            <mat-label>Product Name</mat-label>
+                            <input #productInput [readonly]="prodreadonly" placeholder="Select Product" matInput
+                                formControlName="product" [matAutocomplete]="product">
+                            <mat-autocomplete #product="matAutocomplete" [displayWith]="displayFnproduct">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let product of productList" [value]="product"
+                                        (click)="resetAfterProductChange('')">
+                                        {{product.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" matSuffix class="close"
+                                (click)="resetAfterProductChange('removeProd')">X</button>
+                        </mat-form-field>
+                    </td>
+                    <td *ngIf="itemcalog">
+                        <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getitemFK()">
+                            <mat-label>Item / Model</mat-label>
+                            <input #itemInput [readonly]="itemreadonly" placeholder="Select Item/ Model" matInput
+                                formControlName="items" [matAutocomplete]="item">
+                            <mat-autocomplete #item="matAutocomplete" [displayWith]="displayFnitem"
+                                (opened)="autocompleteitemScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let item of itemList" [value]="item" (click)="getUnitprice()">
+                                        {{item.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" matSuffix class="close" (click)="resetAfterItemChange()">X</button>
+                        </mat-form-field>
+                    </td>
+                    <!-- <td *ngIf="productNonCatlog">
+                        <mat-form-field style="width: 200px; margin-left: 8px;">
+                            <mat-label>Product Name</mat-label>
+                            <input matInput placeholder="Product Name" autocomplete="off"
+                                formControlName="productnoncatlog">
+                        </mat-form-field>
+                    </td> -->
+                    <td *ngIf="itemNonCalog">
+                        <mat-form-field style="width: 200px; margin-left: 35px;">
+                            <mat-label>Item / Models</mat-label>
+                            <input matInput placeholder="Item / Model" autocomplete="off"
+                                formControlName="itemnoncatlog">
+                        </mat-form-field>
+                    </td>
+
+
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 35px;" (click)="getSupplier()">
+                            <mat-label>Supplier Name</mat-label>
+                            <input #supplierInput [readonly]="supplierreadonly" placeholder="Select supplier" matInput
+                                formControlName="supplier" [matAutocomplete]="supplier">
+                            <mat-autocomplete #supplier="matAutocomplete" [displayWith]="displayFnsupplier"
+                                (opened)="autocompletesupplierScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let supplier of supplierList" [value]="supplier"
+                                        (click)="getUnitprice()" title="{{supplier.name}}">
+                                        {{supplier.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <button type="button" matSuffix class="close" [disabled]="supplierreadonly"
+                                (click)="resetAfterSupplierChange()">X</button>
+                        </mat-form-field>
+                    </td>
+                    <td *ngIf="dtsShow">
+                        <mat-form-field style="width: 200px; margin-left: 35px;">
+                            <mat-label>Unit Price</mat-label>
+                            <input matInput placeholder="Unitprice" autocomplete="off" readonly
+                                formControlName="unitprice">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <!-- [readonly]="branchreadonly" -->
+                        <mat-form-field style="width: 200px; margin-left: 8px;">
+                            <mat-label>Branch Code</mat-label>
+                            <input #branchInput placeholder="Select Branch Code" matInput formControlName="branch_id"
+                                readonly [matAutocomplete]="branch">
+                            <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                                (opened)="autocompletebranchScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                        {{branch.code}}-{{branch.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <!-- <button type="button" matSuffix class="close" [disabled]="branchreadonly"
+                                (click)="resetAfterBranchChange()">X</button> -->
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <span class="material-icons" data-toggle="modal" style="margin-left: 50px;"
+                            data-target=".bd-examplenote-modal-xl">description</span>
+
+                        <div class="modal fade bd-examplenote-modal-xl" tabindex="-1" role="dialog"
+                            aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background:#DDEFDD;">
+                                        <h2 class="modal-title" id="exampleModalLongTitle">
+                                            NotePad
+                                        </h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <div style="margin-left: 50px;width:90%;height: 70%;">
+
+                                        <div>
+
+                                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled"
+                                                (blur)="onBlur()" (mediaDelete)="onDelete($event)"
+                                                (summernoteInit)="summernoteInit($event)" formControlName="notepad">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="modal-footer">
+                                        <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                                            class="btn btn-outline-primary" data-dismiss="modal">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="DownloadnUploadExcelButton">
+                        <input type="file" (change)="onFileSelectedBulkUpload($event)"
+                            style="width:250px;margin-left:50px;" accept=".xlsx, .xls, .csv" />
+                    </td>
+                    <td *ngIf="DownloadnUploadExcelButton" style="margin-left: 150px;">
+                        <!-- <button (click)="UploadCsv()">CSV Upload</button> -->
+
+                        <button type="button" class="buttonsize btn btn-outline-success" (click)="UploadCsv()"
+                            style="border-radius:40px;margin-left: 50px;">
+                            <span class="fa fa-upload"></span> Bulk Upload</button>
+
+
+                    </td>
+
+                    <td>
+                        <button type="button" class="buttonsize btn btn-outline-success" (click)="addProduct()"
+                            style="border-radius:40px;margin-left: 50px;">
+                            <span class="fa fa-plus"></span></button>
+
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+            <div *ngIf="ErrorMSgDivBulk">
+                <div class="table-responsive" style="margin-top: 2%;width: 50%;margin-left: 10px;">
+                    <table class="table scrolltable table-bordered" fixed-header>
+                        <thead>
+                            <tr class="table_header" fixed-header>
+                                <td>S.No</td>
+                                <td>Error Occur at</td>
+                                <td>Type Error</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let error of errorXLSXList ; let i = index">
+                                <td> {{i + 1}}</td>
+                                <td> {{error?.s_no}}</td>
+                                <td> {{error?.error}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div formArrayName="prdetails" class="table-responsive"
+                style="margin-top: 2%;width: 99%;margin-left: 10px;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <th>Product Name</th>
+                            <th>Item</th>
+                            <th>Commodity Name</th>
+                            <th>Supplier Name</th>
+                            <th>Branch</th>
+                            <th>UOM</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th *ngIf="ShowHideFile">Image Upload</th>
+                            <!-- <th *ngIf="ShowHideAssert">Is Asset</th> -->
+                            <th>Installation Required</th>
+                            <th>Capitalize Required</th>
+                            <th>CCBS</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let prdetails of prForm.controls.prdetails['controls']; let prdetailsIndex = index"
+                            [formGroupName]="prdetailsIndex">
+
+                            <td> {{prdetailsIndex + 1}} </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 5px;">
+                                    <mat-label>Product Name</mat-label>
+                                    <input matInput readonly formControlName="productname" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 5px;">
+                                    <mat-label>Item Name</mat-label>
+                                    <input matInput readonly formControlName="itemname" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 5px;">
+                                    <mat-label>Commdity Name</mat-label>
+                                    <input matInput readonly formControlName="commodityname" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 5px;">
+                                    <mat-label>Supplier Name</mat-label>
+                                    <input matInput readonly formControlName="suppliername" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 200px; margin-left: 5px;">
+                                    <mat-label>Branch</mat-label>
+                                    <input matInput readonly formControlName="branch" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td *ngIf="prForm.value.type == 1">
+                                <mat-form-field style="width: 100px; margin-left: 5px;">
+                                    <mat-label>UOM</mat-label>
+                                    <input matInput formControlName="uom" autocomplete="off" [readonly]="ForCatlog">
+                                </mat-form-field>
+                            </td>
+                            <td *ngIf="prForm.value.type == 2">
+                                <mat-form-field style="width:100px;margin-left: 5px"
+                                    (click)="getuom()">
+
+                                    <mat-label>UOM</mat-label>
+                                    <input  #uomInput placeholder="UoM" matInput formControlName="uom"
+                                        [matAutocomplete]="uom" [readonly]="ForCatlog">
+                                    <mat-autocomplete [panelWidth]="250" #uom="matAutocomplete" [displayWith]="displayFnuom"
+                                        (opened)="uomScroll()">
+                                        <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                                        </mat-option>
+                                        <ng-container *ngIf="!isLoading">
+                                            <mat-option *ngFor="let uom of uomlist" [value]="uom">
+
+                                                {{uom.name}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+
+                            </td>
+
+                            <td>
+                                <mat-form-field style="width: 100px; margin-left: 5px;">
+                                    <mat-label>Quantity</mat-label>
+                                    <input matInput formControlName="qty" type="number"
+                                        (click)="indexvalueOnprdetails(prdetailsIndex)" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 100px; margin-left: 5px;">
+                                    <mat-label>Unit Price</mat-label>
+                                    <input matInput readonly formControlName="unitprice" type="number"
+                                        (click)="indexvalueOnprdetails(prdetailsIndex)" [readonly]="ForCatlog"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field style="width: 100px; margin-left: 5px;">
+                                    <mat-label>Amount</mat-label>
+                                    <input readonly matInput formControlName="amount" type="number" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                            <td *ngIf="ShowHideFile">
+                                <!-- <td> -->
+                                <input type="file" #fileInput id="uploadFile" class="choose-file"
+                                    (change)="onFileSelected($event, prdetailsIndex)" style="width:250px;"
+                                    name="uploadFile" />
+                            </td>
+                            <!-- <td *ngIf="ShowHideAssert">
+
+                                <mat-radio-group class="example-margin" formControlName="is_asset" disabled>
+                                    <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                        style="margin-left: 4px;">
+                                        {{n.display}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td> -->
+                            <td>
+
+                                <mat-radio-group class="example-margin" formControlName="installationrequired">
+
+                                    <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                        style="margin-left: 4px;">
+                                        {{n.display}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                            <td>
+                                <mat-radio-group class="example-margin" formControlName="capitialized">
+
+                                    <mat-radio-button *ngFor="let n of yesorno" [value]="n.value"
+                                        style="margin-left: 4px;">
+                                        {{n.display}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+
+
+
+
+                            <td>
+                                <span class="material-icons" (click)="openModal(prdetailsIndex, prdetails, $event )"
+                                    (click)="requiredqty(prdetails, prdetailsIndex)">
+                                    input </span>
+
+                            </td>
+
+                            <td>
+                                <button mat-icon-button matTooltip="Delete" class="iconbutton" color="primary"
+                                    (click)="deleteProduct(prdetailsIndex)">
+                                    <mat-icon style="color: gray;" aria-label="Delete">delete</mat-icon>
+                                </button>
+                            </td>
+
+
+                            <div id="popupcontainer" *ngIf="prdetails.editable" #popupcontainer
+                                [ngStyle]="{'display': displayVal}">
+                                <div id="popUP"><button type="button" matSuffix class="close closebutton"
+                                        (click)="closepopup(prdetails)">X</button>
+
+                                    <div formArrayName="prccbs" class="displayblock">
+                                        <div>
+                                            <h2 style="text-align:center">CCBS Details</h2>
+
+                                            <h3 style="text-align:center">Requested
+                                                Quantity:{{RequiredQtyForThisccbs}}
+                                            </h3>
+                                            <button type="button" (click)="addccbs(prdetailsIndex, prForm.controls.prdetails.value)"
+                                                style="border-radius: 40px;margin-left: 800px;"
+                                                class="btn btn-outline-success">Add
+                                                CCBS</button>
+                                                <br><br><br>
+                                        </div>
+
+                                        <div class="table-responsive ccbstable"  style="margin-left: 50px;">
+
+                                            <table class="table scrolltable table-bordered  " >
+                                                <thead style="top:-1px;position: sticky;z-index:999;  margin-top:0px;" >
+                                                    <tr class="table_header" fixed-header>
+                                                        <th >S.No</th>
+                                                        <th >Location</th>
+                                                        <th >BS Name</th>
+                                                        <th >CCName</th>
+                                                        <th >Quantity</th>
+                                                        <th >Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let prccbs of prdetails.controls.prccbs.controls; let j = index"
+                                                        formGroupName="{{j}}">
+                                                        <td>{{j + 1}}</td>
+                                                        <td>
+                                                            <mat-form-field (click)="getbranchFK()"
+                                                                style="width: 200px; margin-left: 10px;">
+                                                                <mat-label>Location</mat-label>
+                                                                <input #branchInput placeholder="Select Branch Code"
+                                                                    (click)="getPrccbsIndex(j)" matInput
+                                                                    formControlName="branch_id"
+                                                                    [matAutocomplete]="branch">
+                                                                <mat-autocomplete #branch="matAutocomplete"
+                                                                    [displayWith]="displayFnbranch"
+                                                                    (opened)="autocompletebranchScroll()">
+                                                                    <mat-option *ngIf="isLoading" class="is-loading">
+                                                                        Loading...</mat-option>
+                                                                    <ng-container *ngIf="!isLoading">
+                                                                        <mat-option *ngFor="let branch of branchList"
+                                                                            [value]="branch">
+                                                                            {{branch.name}}-{{branch.code}}
+                                                                        </mat-option>
+                                                                    </ng-container>
+                                                                </mat-autocomplete>
+                                                                <button type="button" matSuffix class="close"
+                                                                    (click)="resetAfterccbsbranchChange(prdetailsIndex,j)">X</button>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td>
+                                                            <mat-form-field style="width: 175px;margin-left: 10px;"
+                                                                (click)="getbsdd()">
+                                                                <mat-label> Select BS Name</mat-label>
+                                                                <input #bsInput placeholder="Select BS" matInput
+                                                                    (click)="getPrccbsIndex(j)" formControlName="bs"
+                                                                    [matAutocomplete]="bs">
+                                                                <mat-autocomplete #bs="matAutocomplete"
+                                                                    [displayWith]="displayFnbs.bind(this)"
+                                                                    (opened)="autocompletebsScroll()">
+                                                                    <mat-option *ngIf="isLoading" class="is-loading">
+                                                                        Loading...
+                                                                    </mat-option>
+                                                                    <ng-container *ngIf="!isLoading">
+                                                                        <mat-option *ngFor="let bs of bslist"
+                                                                            [value]="bs"
+                                                                            (click)="ccclear(prdetailsIndex , j)"
+                                                                            title="Description: {{bs.description}}">
+                                                                            {{bs.name}}
+                                                                        </mat-option>
+                                                                    </ng-container>
+                                                                </mat-autocomplete>
+                                                                <button type="button" matSuffix class="close"
+                                                                    (click)="resetAfterbsccbsChange(prdetailsIndex,j)">X</button>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td>
+                                                            <mat-form-field style="width: 175px;margin-left: 10px;"
+                                                                (click)="getccValue(prdetailsIndex , j)">
+                                                                <mat-label>Select CC Name</mat-label>
+                                                                <input #ccInput placeholder="Select CC" matInput
+                                                                    (click)="getPrccbsIndex(j)" formControlName="cc"
+                                                                    [matAutocomplete]="cc">
+                                                                <mat-autocomplete #cc="matAutocomplete"
+                                                                    [displayWith]="displayFncc.bind(this)"
+                                                                    (opened)="autocompleteccScroll()">
+                                                                    <mat-option *ngIf="isLoading" class="is-loading">
+                                                                        Loading...
+                                                                    </mat-option>
+                                                                    <ng-container *ngIf="!isLoading">
+                                                                        <mat-option *ngFor="let cc of cclist"
+                                                                            [value]="cc"
+                                                                            title="Description: {{cc.description}}">
+                                                                            {{cc.name}}
+                                                                        </mat-option>
+                                                                    </ng-container>
+                                                                </mat-autocomplete>
+                                                                <button type="button" matSuffix class="close"
+                                                                    (click)="resetAfterSccccbsChange(prdetailsIndex,j)">X</button>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" formControlName="qty"
+                                                                (click)="getPrccbsIndex(j)"
+                                                                oninput="validity.valid||(value='');" placeholder="qty"
+                                                                min=1 (keypress)="omit_special_num($event)">
+
+                                                        </td>
+
+                                                        <td>
+                                                            <mat-icon style="color: gray;"
+                                                                (click)="deleteccbs(prdetailsIndex,j)"
+                                                                aria-label="Delete">
+                                                                delete</mat-icon>
+                                                        </td>
+
+
+                                                    </tr>
+                                                </tbody>
+                                                <tr>
+                                                    <th class="totaldisplay" colspan="4">Total Quantity:</th>
+                                                    <td class="rightaligntotal">{{totalccbs}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <br><br>
+                                        <div style="margin-bottom: 150px;">
+                                            <button style="border-radius: 40px;margin-left: 500px;"
+                                                (click)="saveccbs(prdetailsIndex, prdetails)"
+                                                class="btn btn-outline-success">Save</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </tr>
+                        <tr>
+                            <th class="totaldisplay" colspan="8">Total Amount:</th>
+                            <td class="rightaligntotal">{{sum | amountPipeCustom }}</td>
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+            <div class="row">
+                <mat-form-field style="width: 300px; margin-left: 50px;" (click)="getemployeeForApprover()">
+                    <mat-label>Approver Name with Limit</mat-label>
+                    <input #empInput placeholder="Select Approver" matInput formControlName="employee_id"
+                        [matAutocomplete]="emp">
+                    <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp"
+                        (opened)="autocompleteempScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let emp of employeeList" (click)="empValues(emp)" [value]="emp">
+                                {{emp.full_name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field style="width: 100px; margin-left: 50px;">
+                    <mat-label>Code</mat-label>
+                    <input readonly matInput value={{employeeCode}}>
+                </mat-form-field>
+                <mat-form-field style="width: 100px; margin-left: 50px;">
+                    <mat-label>Limit</mat-label>
+                    <input readonly matInput value={{employeeLimit}}>
+                </mat-form-field>
+
+            </div>
+            <div style="margin-bottom: 5%;">
+
+                <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-primary"
+                    (click)="PRSubmit('draft')">Draft</button>
+                <button type="submit" style="border-radius: 40px;margin-left: 10px;" class="btn btn-outline-success"
+                    (click)="PRSubmit('makersubmit')">Submit</button>
+                <button type="button" (click)="onCancelClick()" class="btn btn-outline-primary"
+                    style="border-radius: 40px;margin-left: 10px;">Cancel</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>
+ 
+
+
+
+
+
+
+<!-- <pre>
+    {{prForm.value | json}}
+</pre>  -->
+
+
+<!-- 
+
+this.SpinnerService.show();
+
+this.SpinnerService.hide();
+
+ -->

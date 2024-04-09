@@ -1,0 +1,43 @@
+#commonstyle {
+    border: 15px none #f6f6f6
+  }
+  
+  .table tr:nth-child(even) {
+    background: #EDF8FA
+  }
+  
+  .table tr:nth-child(odd) {
+    background: #FFF
+  }
+  
+  .table tr{
+    text-align: left;
+  }
+
+  .tablewidth{
+    width:70%
+  }
+
+  .inputwidth{
+    width: 300px;
+  }
+
+  .activestatus::after{
+    color: green;
+    font-weight: bold;
+    content: 'Active';
+  }
+
+  .inactivestatus::after{
+    color: red;
+    font-weight: bold;
+    content: 'Inactive';
+  }
+
+  .modalbody{
+    margin: 30px;
+  }
+
+  .modalbutton{
+    margin:25px 0px
+  }

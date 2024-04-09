@@ -1,0 +1,56 @@
+<div class="container" style="margin-top: 2%;">
+
+    <form [formGroup]="LeaveTrackerReportsearchForm">
+        <div class="row">
+            <!-- <div class="col-md-3">
+                <mat-label> Employee </mat-label>
+                <mat-form-field class="lenthoftext matformfieldstyle" (click)="getemployee('')">
+                    <input #empInput placeholder="Select Employee" class="matformfieldinputstyle" matInput
+                        formControlName="emp" [matAutocomplete]="emp"
+                        (keyup)="getemployee(LeaveTrackerReportsearchForm.value.emp)">
+                    <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp">
+                        <mat-option *ngFor="let emp of TrackLeaveObj.employeeList" [value]="emp"
+                            title="{{emp.full_name}}">{{emp.full_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>  -->
+            <div class="col-md-3">
+                <mat-label> Month </mat-label>
+                <mat-form-field dateFormatLR>
+                    <input matInput [matDatepicker]="dp" [formControl]="monyear"
+                    (dateChange)='ChangeDateFormat("monthyear")'
+                     placeholder="Month and Year" formControlName="monthyear">
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker #dp startView="multi-year"
+                                    (yearSelected)="chosenYearHandler($event)"
+                                    (monthSelected)="chosenMonthHandler($event, dp)"
+                                    panelClass="example-month-picker">
+                    </mat-datepicker>
+                  </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+                <div style="margin-top: 26px;">
+                    <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        aria-label="Search" (click)="LeaveTrackerReportSearch('')">
+                        Export
+                    </button>
+                    <!-- <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                        (click)="resetLeaveTrackerReport()">Clear</button> -->
+
+                     
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+ 
+
+         
+        
+    </div>
+</div>

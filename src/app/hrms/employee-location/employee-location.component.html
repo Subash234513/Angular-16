@@ -1,0 +1,299 @@
+<!-- <div>
+    <div class="search" *ngIf="Search">
+        <div class="display">
+            <mat-form-field (click)="EmployeeData('')">
+                <mat-label>Employee</mat-label>
+                <input type="text" matInput [matAutocomplete]="auto" (keyup)="EmployeeData($event.target.value)">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let data of EmployeeArrayData" [value]="data.name" (focusout)="EmployeeId(data)" title="{{data.name}}">
+                        {{data.name}}
+                    </mat-option>
+                    <mat-option *ngIf="!EmployeeArrayData.length">No Records Found</mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let data of Status"  [value]="data.name" (focusout)="StatusData(data)" title="{{data.name}}">
+                        {{data.name}}
+                    </mat-option>
+              
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-raised-button class="btnMargin" (click)="SearchData()">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        <div>
+            <button mat-raised-button class="btnMargin">
+                Clear
+            </button>
+        </div>
+        <div>
+            <button class="btn btnMargin" (click)="Add()">
+                <i class="fa-solid fa-plus-circle text-primary fa-2xl"></i>
+            </button>
+        </div>
+    </div>
+    <div class="Create" *ngIf="CreateData">
+
+        <form [formGroup]="CreateForm">
+            <div class="createData">
+                <div>
+                    <mat-form-field >
+                        <mat-label>Latitude</mat-label>
+                        <input matInput formControlName="latitude"> 
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Longitute</mat-label>
+                        <input matInput formControlName="longitude">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Radius</mat-label>
+                        <input matInput formControlName="radius">
+                    </mat-form-field>
+                </div>
+            </div>
+            
+        </form>
+        <div class="Btndisplay">
+            <button class="btn btn-secondary" (click)="cancel()">
+                Cancel
+            </button>
+            <button class="btn btn-primary ml-2" (click)="Submit()">
+                Submit
+            </button>
+        </div>
+     
+    </div>
+    <div class="Update" *ngIf="UpdateData">
+
+        <form [formGroup]="EditForm">
+            <div class="createData">
+                <div>
+                    <mat-form-field>
+                        <mat-label>Latitude</mat-label>
+                        <input matInput formControlName="latitude">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Longitute</mat-label>
+                        <input matInput formControlName="longitude">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Radius</mat-label>
+                        <input matInput formControlName="radius">
+                    </mat-form-field>
+                </div>
+            </div>
+            
+        </form>
+        <div class="Btndisplay">
+            <button class="btn btn-secondary" (click)="cancel()">
+                Cancel
+            </button>
+            <button class="btn btn-primary ml-2" (click)="Update()">
+                Update
+            </button>
+        </div>
+     
+    </div>
+    <div *ngIf="summary">
+        <table class="table table-bordered table-hover" >
+            <thead>
+                <th>Employee</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Radius</th>
+                <th>Status</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of SummaryData">
+                    <td *ngFor="let employee of data?.employee_id">{{employee?.full_name}}</td>
+                    <td >
+                        <ul>
+                            <li *ngFor="let arr of data?.location_arr">{{arr.latitude}}</li>
+                        </ul>
+                    </td>
+                    <td >
+                        <ul>
+                            <li *ngFor="let arr of data?.location_arr">{{arr.longitude}}</li>
+                        </ul>
+                    </td>
+                    <td >
+                        <ul>
+                            <li *ngFor="let arr of data?.location_arr">{{arr.radius}}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span *ngIf="data.loc_approve_status.text==='Pending'" class="badge badge-pill badge-secondary">{{data.loc_approve_status.text}}</span>
+                        <span *ngIf="data.loc_approve_status.text==='Rejected'" class="badge badge-pill badge-danger">{{data.loc_approve_status.text}}</span>
+                        <span *ngIf="data.loc_approve_status.text==='Approved'" class="badge badge-pill badge-success">{{data.loc_approve_status.text}}</span>
+                    </td>
+                    <td><i class="fa fa-pencil" (click)="Edit(data)"></i></td>
+                    <td><i class="fa fa-trash-can" (click)="Delete(data)"></i></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <button mat-icon-button color="primary" [disabled]="pagination.has_prev==false">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            {{pagination.index}}
+            <button mat-icon-button color="primary" [disabled]="pagination.has_next==false">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </div>
+</div> -->
+<div>
+    <div Class="MainSearch">
+        <form action="" [formGroup]="SearchForm">
+            <div class="SummarySearch">
+                <div class="display" *ngIf="admin">
+                    <mat-form-field (click)="EmployeeData('')">
+                        <mat-label>Employee</mat-label>
+                        <input type="text" matInput [matAutocomplete]="auto" (keyup)="EmployeeData($event.target.value)" formControlName="Employee">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let data of EmployeeArrayData" [value]="data.name" (focusout)="EmployeeId(data)" title="{{data.name}}">
+                                {{data.name}}
+                            </mat-option>
+                            <mat-option *ngIf="!EmployeeArrayData.length">No Records Found</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="status">
+                            <mat-option *ngFor="let data of Status"  [value]="data.name" (focusout)="StatusData(data)" title="{{data.name}}">
+                                {{data.name}}
+                            </mat-option>
+                      
+                    </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-raised-button class="btnMargin" (click)="SearchData()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+                <div>
+                    <button mat-raised-button class="btnMargin" (click)="clear()">
+                        Clear
+                    </button>
+                </div>
+                
+            </div>
+        </form>
+   
+    <div>
+        <button class="btn btnMargin MarginLeft" (click)="AddFormArray()" *ngIf="!admin">
+            <i class="fa-solid fa-plus-circle text-primary fa-2xl"></i>
+        </button>
+    </div>
+</div>
+    <div class="Summarydata">
+        <form [formGroup]="CreateForm">
+        <div >
+        <table class="table table-bordered">
+            <thead>
+                <th class="text-center" *ngIf="admin">Employee</th>
+                <th class="text-center">Latitude</th>
+                <th class="text-center">Longitude</th>
+                <th class="text-center">Radius</th>
+                <th class="text-center">Status</th>
+                <th class="text-center width" *ngIf="!admin">Delete</th>
+                <th class="text-center " *ngIf="admin">Bulk<input type="checkbox" (change)="BulKcheckBox($event)" [checked]="BulkCheckBool"></th>
+            </thead>
+            <tbody>
+               
+                <ng-container formArrayName="DataArray"  *ngFor="let section of CreateForm.controls.DataArray['controls']; let i = index">
+                <tr [formGroupName]="i">
+
+
+                    <td class="text-center" *ngIf="admin">
+                        <mat-form-field (click)="EmployeeData('')">
+                            <mat-label>Employee</mat-label>
+                            <input type="text" matInput [matAutocomplete]="auto" (keyup)="EmployeeData($event.target.value)" formControlName="EmployeeId">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="EmployeeDisplay">
+                                <mat-option *ngFor="let data of EmployeeArrayData" [value]="data" title="{{data.name}}" >
+                                    {{data.name}}
+                                </mat-option>
+                                <mat-option *ngIf="!EmployeeArrayData.length">No Records Found</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+
+                    
+                    </td>
+                    <td class="text-center">
+                        <mat-form-field>
+                            <mat-label>Latitude</mat-label>
+                            <input matInput formControlName="latitude">
+                        </mat-form-field>
+                    </td>
+                    <td class="text-center">
+                        <mat-form-field>
+                            <mat-label>Longitute</mat-label>
+                            <input matInput formControlName="longitude">
+                        </mat-form-field>
+                    </td>
+                    <td class="text-center">  <mat-form-field>
+                        <mat-label>Radius</mat-label>
+                        <input matInput formControlName="radius">
+                    </mat-form-field></td>
+                    <td class="text-center">
+                        <span *ngIf="section?.value?.status?.text==='Pending'" class="badge badge-pill badge-secondary">{{section?.value?.status?.text}}</span>
+                        <span *ngIf="section?.value?.status?.text==='Rejected'" class="badge badge-pill badge-danger">{{section?.value?.status?.text}}</span>
+                        <span *ngIf="section?.value?.status?.text==='Approved'" class="badge badge-pill badge-success">{{section?.value?.status?.text}}</span>
+                    </td>
+                    <td class="text-center width" *ngIf="!admin && (section?.value?.status?.text==='Pending')"><i class="fa fa-trash-can" (click)="delete(i,section)"></i></td>
+                    <td class="text-center" *ngIf="admin && (section?.value?.status?.text==='Pending')"><input type="checkbox" [checked]="InputCheckBox" (change)="checkBox($event,section)"></td>
+                </tr>
+            </ng-container>
+            <!-- <ng-container *ngIf="!CreateForm.controls.DataArray['controls'].length">
+                <div class="NoRecords">
+                    No Records Found!
+                </div>
+            </ng-container> -->
+          
+            </tbody>
+        </table>
+        </div>
+        <div class="pagination" *ngIf="CreateForm.controls.DataArray['controls'].length">
+            <button mat-icon-button [disabled]="pagination.has_prev==false" (click)="hasPrev()"><i class="fa-solid fa-arrow-left"></i></button>
+            {{pagination.index}}
+            <button mat-icon-button [disabled]="pagination.has_next==false" (click)="hasNext()"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="NoRecords" *ngIf="!CreateForm.controls.DataArray['controls'].length">
+            No Records Found!
+        </div>
+    </form>
+    </div>
+    <div class="display" *ngIf="CreateForm.controls.DataArray['controls'].length">
+        <button class="btn btn-primary" (click)="SubmitData()" *ngIf="!admin">
+            Submit
+        </button>
+        <button class="btn btn-success ml-2" (click)="ApproveData()" *ngIf="admin" [disabled]="!EmployeeArrayId.length">
+            Approve
+        </button>
+        <button class="btn btn-danger ml-2" (click)="RejectData()" *ngIf="admin" [disabled]="!EmployeeArrayId.length">
+            Reject
+        </button>
+    </div>
+</div>

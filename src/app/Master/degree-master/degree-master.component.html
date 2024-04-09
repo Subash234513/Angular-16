@@ -1,0 +1,126 @@
+<div *ngIf="isSearch" class="col-sm-12 ">
+    <div class="col-sm-6 row d-flex align-items-center mt-5 pl-2">
+        <div class="col-sm-5 SearchMargin">
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input type="text" matInput [formControl]="search">
+            </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+            <button mat-stroked-button (click)="Searchfun()">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button mat-stroked-button (click)="clear()">
+                clear
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" id="add" mat-fab>
+                <mat-icon matTooltip="add" (click)="add()" class="black">add</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<div *ngIf="isTable">
+    <table class="table table-bordered">
+        <thead>
+            <th class="text-center">S.No</th>
+            <th class="text-center">Degree</th>
+            <th class="text-center">Title</th>
+            <th class="text-center width">Edit</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let value of summaryData; let i=index">
+                <td class="text-center">{{(pagination.index-1)*maxValue+i+1}}</td>
+                <td class="text-center">{{value.name}}</td>
+                <td class="text-center">{{value?.title_id?.name}}</td>
+                <td class="text-center width"><i class="fa-solid fa-pencil" (click)="Edit(value.id)"></i></td>
+            </tr>
+        </tbody>
+    </table>
+    <div  style="font-size: small;margin-bottom: 5%;margin-left:740px">
+        <button type="button" (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false"
+            color="primary" >
+            <mat-icon>arrow_back</mat-icon>
+        </button> 
+        {{pagination.index}}
+        <button type="button" (click)="nextpage()" mat-icon-button color="primary" [disabled]="pagination.has_next === false"
+            >
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+</div>
+<div *ngIf="isCreation" class="Creation">
+    <h2 class="CreationName">Add Degree</h2>
+    <form [formGroup]="CreateFormGroup">
+        <div class="col-sm-12 row">
+            <div class="col-sm-2">
+                <mat-form-field>
+                    <mat-label>Title</mat-label>
+                    <mat-select formControlName="TitleId">
+                        <mat-option *ngFor="let data of TitleDropdown" [value]="data.id">
+                            {{data.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-2 ml-3">
+                
+            <mat-form-field>
+                <mat-label>Degree</mat-label>
+                <input type="text" matInput formControlName="DegreeName">
+            </mat-form-field>
+            </div>
+          
+        </div>
+        <div class="col-sm-12 row">
+            <div class="col-sm-2">
+                <button class="btn btn-secondary" (click)="Back()">Back</button>
+                <button class="btn btn-primary ml-3" (click)="Submit()">Submit</button>
+            </div>
+            <div class="col-sm-1">
+           
+            </div>
+        </div>
+    </form>
+ 
+   
+</div>
+<div *ngIf="isEdit" class="Creation">
+    <h2 class="CreationName">Edit Degree</h2>
+    <form [formGroup]="EditFormGroup">
+        <div class="col-sm-12 row">
+            <div class="col-sm-2">
+                <mat-form-field>
+                    <mat-label>Title</mat-label>
+                    <mat-select formControlName="TitleId">
+                        <mat-option *ngFor="let data of TitleDropdown" [value]="data.id">
+                            {{data.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-2 ml-3">
+                
+            <mat-form-field>
+                <mat-label>Degree</mat-label>
+                <input type="text" matInput formControlName="DegreeName">
+            </mat-form-field>
+            </div>
+          
+        </div>
+        <div class="col-sm-12 row">
+            <div class="col-sm-2">
+                <button class="btn btn-secondary" (click)="Back()">Back</button>
+                <button class="btn btn-primary ml-3" (click)="Update()">Update</button>
+            </div>
+            <div class="col-sm-1">
+           
+            </div>
+        </div>
+    </form>
+ 
+   
+</div>

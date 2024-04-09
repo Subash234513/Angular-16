@@ -1,0 +1,683 @@
+<div class="Container" style="margin-left: 20px;">
+    <div class="nav nav-tabs" style="margin-top: 1%;">
+        <span class="nav-item nav-link " data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+            *ngFor="let sub of prpoGRNList">
+            {{sub.name}}
+        </span>
+    </div>
+
+    <span *ngIf="isGRNCreateform">
+        <app-grn-inward-createeditdelete (onSubmit)="grncreateSubmit()" (onCancel)="grncreateCancel()">
+        </app-grn-inward-createeditdelete>
+    </span>
+
+    <span *ngIf="isGRNApproverFormTab">
+        <app-grnapproveer-view (onSubmit)="grncreateApproverSubmit()" (onCancel)="grncreateApproverCancel()">
+        </app-grnapproveer-view>
+    </span>
+    <span *ngIf="isGRNViewTab">
+        <app-grn-view (onCancel)="grnViewCancel()">
+        </app-grn-view>
+    </span>
+
+
+    <div *ngIf="isGRNmakerTab">
+        <!-- <div class="col-12"> -->
+        <h2 style="margin-left: 3%;">Goods Received Note Inward Summary</h2>
+        <form [formGroup]="GRNDataForm" (ngSubmit)="GRNSummaryFormsearch()">
+
+            <table>
+                <div>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>GRN No</mat-label>
+                                <input matInput placeholder="GRN No" formControlName="no" autocomplete="off"
+                                    (keypress)="only_numalpha($event)" maxlength="">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>Choose Supplier</mat-label>
+                                <input #name placeholder="Choose Supplier" matInput formControlName="suppliername"
+                                    [matAutocomplete]="autosupp">
+                                <mat-autocomplete #autosupp="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                                    </mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let suppliername of supplierNameData"
+                                            [value]="suppliername">
+                                            {{suppliername.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+
+
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>GRN from Date</mat-label>
+                                <input matInput readonly [matDatepicker]="picker1" placeholder="GRN from Date"
+                                    formControlName="fromdate">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                    <!-- </tr> -->
+                    <!-- <tr> -->
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>GRN To Date</mat-label>
+                                <input matInput readonly [matDatepicker]="picker2" placeholder="GRN To Date"
+                                    formControlName="todate">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <!-- <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>MIN Quantity</mat-label>
+                                <input matInput placeholder="MIN Quantity" formControlName="minquantity"
+                                    autocomplete="off" (keypress)="numberOnly($event)">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                                <mat-label>MAX Quantity</mat-label>
+                                <input matInput placeholder="MAX Quantity" formControlName="maxquantity"
+                                    autocomplete="off" (keypress)="numberOnly($event)">
+                            </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td> -->
+                       
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <mat-form-field style="width: 200px; margin-left: 50px;">
+                                <mat-label>Branch</mat-label>
+                                <input #branchInput placeholder="Select Branch Code" matInput
+                                    formControlName="branch_id" [matAutocomplete]="branch">
+                                <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                                    (opened)="autocompletebranchScroll()">
+                                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                    <ng-container *ngIf="!isLoading">
+                                        <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                            {{branch.code}}-{{branch.name}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </td>
+
+                        
+                        <td>
+
+                            <button class="btn btn-outline-primary" type="submit"
+                                style="border-radius:40px;margin-left: 15px;" color="primary"><i class="fa fa-search"
+                                    aria-hidden="true"></i></button>&nbsp;
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-success"
+                                style="border-radius:40px;margin-left: 15px" (click)="GRNcreateform()">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" style="border-radius:40px;margin-left: 15px;"
+                                class="btn btn-outline-primary" (click)="dataclear()">
+                                Reset</button>
+                        <!-- </td>
+                        <td> -->
+                            <button style="border-radius:40px;margin-left: 20px;cursor: pointer" type="button"
+                        class="btn btn-outline-success" (click)="makerexceldownload()"
+                       >
+                        <span></span>Export </button>
+                        </td>
+                        <!-- <td>
+                                    <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;"
+                                        color="primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </td> -->
+                    </tr>
+                </div>
+            </table>
+        </form>
+
+        <div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 50px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header style="text-align:center;">
+                        <th>S.No</th>
+                        <th>GRN No</th>
+                        <!-- <th>DC No</th> -->
+                        <th>Invoice No</th>
+                        <th>Supplier</th>
+                        <th>Branch</th>
+                        <th>Date</th>
+                        <th>Received Quantity</th>
+                        <th>Status</th>
+                        <th>PDF View</th>
+                        <th>File</th>
+                        <th>View</th>
+                        <th>Tran History</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let GRN of grnList;index as i">
+                        <td>{{(this.presentpagegrn - 1)*pageSize +i+1 }}</td>
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.inwardheader?.code}}</td>
+                        <!-- <td style="margin: 15px; padding: 15px;">{{GRN?.inwardheader?.dcnote }}</td> -->
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.inwardheader?.invoiceno }}</td>
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.poheader_id?.supplierbranch_id?.name}}</td>
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.branch_id?.fullname}}</td>
+                        <td style="white-space: nowrap;overflow:hidden;margin: 15px; padding: 15px;">{{GRN?.date |
+                            date:'dd-MMM-yyyy'}} </td>
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.quantity}}</td>
+                        <td style="margin: 15px; padding: 15px;">{{GRN?.inwardheader?.grn_status }}</td>
+                        <td><span class="material-icons" (click)="GRNPDf(GRN)">
+                                picture_as_pdf</span>
+                        </td>
+                        <td style="text-align: center;color:green;">
+                            <i class="fa fa-file" aria-hidden="true" data-toggle="modal" data-target="#fileview"
+                                (click)="fileview(GRN)"></i>
+                        </td>
+                        <td><span class="material-icons" matTooltip="view" style="color:green;">
+                                <mat-icon style="color: green;" class="material-icons" (click)="viewGRN(GRN)">
+                                    visibility</mat-icon>
+                            </span></td>
+                        <td style="text-align: center;color:green;">
+                            <i class="fa fa-file" aria-hidden="true" data-toggle="modal"
+                                data-target="#exampleModalLongs" (click)="tranview(GRN)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="grnList ?.length == 0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...
+        </div>
+        <ng-template #paginationgrn>
+            <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                <button mat-icon-button [disabled]="has_previousgrn === false" color="primary"
+                    (click)="previousClickgrn()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpagegrn}}
+                <button mat-icon-button [disabled]="has_nextgrn === false" color="primary" (click)="nextClickgrn()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            id="exampleModalLongs">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#DDEFDD;">
+                        <h2 class="modal-title"
+                            style="color:black ;font-family:'Times New Roman', Times, serif;font-size:25px;font-weight:lighter;">
+                            View Transaction History Against {{POno}}</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-bordered" fixed-header
+                        style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>GRN Header No</th>
+                                <th>Transaction Date</th>
+                                <th>Status</th>
+                                <th>Employee Name</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tran of tranList;index as i">
+                                <td>{{(this.presentpagetran - 1)*pageSizetran +i+1 }}</td>
+                                <td>{{tran?.ref_id?.code }}</td>
+                                <td>{{tran.ref_id.date | date: 'dd-MMM-yyyy'}} </td>
+                                <td>{{tran.comments}}</td>
+                                <td>{{tran.from_user_id.full_name }}</td>
+                                <td>{{tran.remarks }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div *ngIf="tranList ?.length == 0" style="margin-left: 42%;">
+                        <h3>Sorry data not found!.. </h3>
+                    </div>
+                    <tr>
+                        <button style="margin-left: 500px;" type="button" data-dismiss="modal"
+                            class="btn btn-outline-primary">
+                            Back</button>
+                    </tr>
+                    <div class="row" *ngIf="tranpage">
+                        <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+                            <button mat-icon-button [disabled]="has_previoustran === false" color="primary"
+                                (click)="previousClicktran()">
+                                <mat-icon>arrow_back
+                                </mat-icon>
+                            </button>
+                            {{presentpagetran}}
+                            <button mat-icon-button [disabled]="has_nexttran === false" color="primary"
+                                (click)="nextClicktran()">
+                                <mat-icon>arrow_forward
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            id="fileview">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#DDEFDD;">
+                        <h2 class="modal-title"
+                            style="color:black ;font-family:'Times New Roman', Times, serif;font-size:25px;font-weight:lighter;">
+                            GRN Header File(s) for {{GRNNo}}</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br>
+                    <table class="table table-bordered" fixed-header
+                        style="margin-left: 50px;width: 90%;margin-top:2%;overflow-x:hidden;">
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.no</th>
+                                <th>File Name</th>
+                                <th>Download File</th>
+                                <!-- <th>View File</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of fileList;index as i">
+                                <td>{{(this.presentpagefile - 1)*pageSizefile +i+1 }}</td>
+
+                                <td>{{file?.file_name}}</td>
+
+                                <td>
+                                    <a (click)="fileDownload(file.file_id,file.file_name )"><i class="fa fa-download"
+                                            style="color: green;">
+
+                                        </i></a>
+                                </td>
+                                <!-- <td style="margin-left:-1%">
+                                    <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                        data-toggle="modal" (click)="commentPopup(file.file_id,file.file_name)">
+                                        File Name:{{a.file_name }}<i class="fa fa-picture-o"
+                                            aria-hidden="true"></i>
+                                        <br>
+                                        (Note:Only image file can be viewed)
+                                    </p>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="fileList?.length == 0" style="margin-left: 42%;">
+                        <h3>Sorry File not found!.. </h3>
+                    </div>
+
+                    <div class="row" *ngIf="filepage">
+                        <div class="col-sm-11" style="margin-bottom: 5%;font-size: small;text-align:right;">
+                            <button mat-icon-button [disabled]="has_previousfile === false" color="primary"
+                                (click)="previousClickfile()">
+                                <mat-icon>arrow_back
+                                </mat-icon>
+                            </button>
+                            {{presentpagefile}}
+                            <button mat-icon-button [disabled]="has_nextfile === false" color="primary"
+                                (click)="nextClickfile()">
+                                <mat-icon>arrow_forward
+                                </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showimagepopup" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+            tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <div *ngIf="isGRNapproverTab">
+        <h2 style="margin-left: 3%;">Goods Received Note Approval Summary</h2>
+        <form [formGroup]="grnSearchForm" (ngSubmit)="grnsummarySearch()">
+
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width" style="margin-left: 50px;">
+                            <input class="toolbar-search" type="text" formControlName="no" matInput autocomplete="off"
+                                (keypress)="only_numalpha($event)">
+                            <mat-placeholder>GRN Number</mat-placeholder>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 250px;margin-top: 5px;margin-left: 50px;">
+                            <mat-label>Choose Supplier</mat-label>
+                            <input #name placeholder="Choose Supplier" matInput formControlName="suppliername"
+                                [matAutocomplete]="autosupp">
+                            <mat-autocomplete #autosupp="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                                </mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let suppliername of supplierNameData" [value]="suppliername">
+                                        {{suppliername.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field style="width:175px; margin-left: 50px;">
+                            <mat-label>GRN From Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker1" placeholder="GRN From Date"
+                                formControlName="fromdate">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width:175px; margin-left: 51px;">
+                            <mat-label>GRN To Date</mat-label>
+                            <input matInput readonly [matDatepicker]="picker2" placeholder="GRN To Date"
+                                formControlName="todate">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+
+
+                </tr>
+                <tr>
+
+                    <!-- <td>
+                        <mat-form-field style="width: 175px;margin-left: 50px;">
+                            <mat-label>Max Qty</mat-label>
+                            <input matInput placeholder="Max Qty" formControlName="maxquantity" autocomplete="off"
+                                (keypress)="numberOnly($event)">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px;margin-left: 50px;">
+                            <mat-label>Min Qty</mat-label>
+                            <input matInput placeholder="Min Qty" formControlName="minquantity" autocomplete="off"
+                                (keypress)="numberOnly($event)">
+                        </mat-form-field>
+                    </td> -->
+                    <td>
+                        <mat-form-field style="width: 200px; margin-left: 50px;">
+                            <mat-label>Branch</mat-label>
+                            <input #branchInput placeholder="Select Branch Code" matInput
+                                formControlName="branch_id" [matAutocomplete]="branch">
+                            <mat-autocomplete #branch="matAutocomplete" [displayWith]="displayFnbranch"
+                                (opened)="autocompletebranchScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let branch of branchList" [value]="branch">
+                                        {{branch.code}}-{{branch.name}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary" type="submit" style="border-radius:40px;"
+                            color="primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <!-- </td>
+                    <td> -->
+                        <button class="btn btn-outline-primary" (click)="resetgrnapp()" type="submit"
+                            style="border-radius:40px;margin-left:  50px;" color="primary">Reset</button>
+                    </td>
+                    <td>
+                        <button [disabled]="grnApproverExport"style="border-radius:40px;margin-left: 50px;cursor: pointer" type="button"
+                    class="btn btn-outline-success" (click)="approverexceldownload()"
+                   >
+                    <span></span>Export </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="table-responsive" style="margin-top: 1%;width: 94%;margin-left: 30px;">
+            <table class="table scrolltable table-bordered" fixed-header>
+                <thead>
+                    <tr class="table_header" fixed-header style="text-align:center;">
+                        <th>S.No</th>
+                        <th>GRN No</th>
+                        <!-- <th>DC No</th> -->
+                        <th>Invoice No</th>
+                        <th>Supplier</th>
+                        <th>Branch</th>
+                        <th>Date</th>
+                        <th>Received Qty</th>
+                        <th>Status</th>
+                        <th>File</th>
+                        <th>Action</th>
+                        <th>Transaction History</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let grn of grnappList; index as i">
+                        <td>{{(this.presentpage - 1)*pageSize +i+1 }}</td>
+                        <td style="margin: 15px; padding: 15px;"> {{grn?.inwardheader?.code}} </td>
+                        <!-- <td style="margin: 15px; padding: 15px;">{{grn?.inwardheader?.dcnote}}</td> -->
+                        <td style="margin: 15px; padding: 15px;">{{grn?.inwardheader?.invoiceno}}</td>
+                        <td style="margin: 15px; padding: 15px;">{{grn?.poheader_id?.supplierbranch_id?.name}}</td>
+                        <td style="margin: 15px; padding: 15px;">{{grn?.branch_id?.fullname}}</td>
+                        <td style="white-space: nowrap;overflow:hidden;margin: 15px; padding: 15px;">{{grn?.date |
+                            date:'dd-MMM-yyyy'}}</td>
+                        <td style="margin: 15px; padding: 15px;">{{grn?.quantity}}</td>
+
+                        <td style="margin: 15px; padding: 15px;">{{grn?.inwardheader?.grn_status}}</td>
+                        <td style="text-align: center;color:green;"><span class="fa fa-file" aria-hidden="true"
+                                data-toggle="modal" (click)="filejson(grn)" data-target="#exampleModalLong"></span></td>
+                        <td style="text-align: center;color:green;"><span class="fa fa-eye" aria-hidden="true"
+                                (click)="approverview(grn)"></span></td>
+                        <td style="text-align: center;color:green;"><span class="fa fa-file" aria-hidden="true"
+                                data-toggle="modal" (click)="gettransaction(grn)"
+                                data-target="#exampleModalLongs"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="grnappList?.length==0; else paginationgrn" colspan="10" class="NodataAlign">No Records Found...
+        </div>
+        <ng-template #paginationgrn>
+            <div class="cursor" style="font-size: small;text-align:right; margin-bottom:100px;">
+                <button mat-icon-button [disabled]="has_previous === false" color="primary" (click)="previousClick()">
+                    <mat-icon>arrow_back
+                    </mat-icon>
+                </button>
+                {{presentpage}}
+                <button mat-icon-button [disabled]="has_next === false" color="primary" (click)="nextClick()">
+                    <mat-icon>arrow_forward
+                    </mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+
+        <div class="modal fade" id="exampleModalLongs" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered" style="width:90%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="font-family:'Times New Roman', Times, serif;font-size:25px;">
+                            Transaction History Against {{ponumpop}} </h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered" fixed-header
+                                style="width: 95%;margin-top: 10px;margin-left:25px;overflow-x: hidden;">
+                                <thead class="table_header" style="text-align: center;overflow-x: hidden;">
+                                    <tr style="margin: auto;">
+
+                                        <th>S.No</th>
+                                        <th>GRN Header No</th>
+                                        <th>Transaction Date</th>
+                                        <th>Status </th>
+                                        <th>Employee Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="padding: 0.5em 0.1em 0.1em;text-align:center;"
+                                        *ngFor="let tra of transactionlist; index as i">
+                                        <td>{{i+1}}</td>
+                                        <td> {{tra?.ref_id?.code}}</td>
+                                        <td> {{tra?.ref_id?.date | date: 'dd/MM/yyyy'}}</td>
+                                        <td>{{tra?.comments}}</td>
+                                        <td>{{tra?.from_user_id?.full_name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 5% ;margin-left:43%">
+                        <button type="submit" data-dismiss="modal" style="border-radius: 40px;"
+                            class="btn btn-outline-primary">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered" style="width:90%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="font-family:'Times New Roman', Times, serif;font-size:25px;">
+                            GRN File for {{grnnumpop}} </h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" fixed-header
+                                style="width: 95%;margin-top: 10px;margin-left:25px;overflow-x: hidden;">
+                                <thead class="table_header" style="text-align: center;overflow-x: hidden;">
+                                    <tr style="margin: auto;">
+
+                                        <th>S.No</th>
+                                        <th>File Name</th>
+                                        <th>Download File</th>
+                                        <!-- <th>View File </th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="padding: 0.5em 0.1em 0.1em;text-align:center;"
+                                        *ngFor="let a of grnjson; index as i">
+                                        <td>{{i+1}}</td>
+                                        <td> {{a?.file_name}}</td>
+
+                                        <td style="cursor: pointer;margin-top: 0%;width: 50%;"><i
+                                                class="fa fa-download"></i><br>
+                                            <p title="{{a.file_name }}" (click)="fileDownloads(a.file_id,a.file_name )"
+                                                class=" btn-btn-link">
+                                                {{i+1}}. {{a?.file_name }}<br>
+                                            </p><br>
+                                        </td>
+                                        <!-- <td style="margin-left:-1%">
+                                            <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                                data-toggle="modal"
+                                                (click)="commentPopupapprover(a.file_id,a.file_name)">
+                                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                                <br>
+                                                (Note:Only image file can be viewed)
+                                            </p>
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="grnjson?.length == 0" style="margin-left: 42%;">
+                            <h3>Sorry File not found!.. </h3>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 5% ;margin-left:43%">
+                        <button type="submit" data-dismiss="modal" style="border-radius: 40px;"
+                            class="btn btn-outline-primary">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="showimagepopup" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel" aria-hidden="true"
+            tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+
+                <div class="modal-content">
+                    <!-- <div class="modal-header"> -->
+                    <!-- <h2 class="modal-title" style="font-family:'Times New Roman', Times, serif;font-size:25px;">
+                            GRN File for {{grnnumpop}} </h2> -->
+
+                    <!-- </div> -->
+
+                    <div class="modal-body">
+
+                        <!-- <div id="myModal" class="modals">
+                            <span class="closecursor" (onclick)="closeModal()">&times;</span> -->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="modal-body">
+                            <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+                        </div>
+                        <!-- <button class="close" mat-button (click)="onNoClick()">X</button> -->
+
+                        <!-- <button mat-button class="close-icon" [mat-dialog-close]="true">
+                            <mat-icon>close</mat-icon>
+                            </button> -->
+                        <!-- </div> -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+        <p style="color: white">Please Wait. </p>
+    </ngx-spinner>

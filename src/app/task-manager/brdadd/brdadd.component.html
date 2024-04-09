@@ -1,0 +1,124 @@
+<form [formGroup]="brdaddform">
+  <div>
+  <div class="col-lg-12 col-md-12 col-sm-12 BRDTitle" >
+    <!-- <span
+    (click)="cancelbrd()"
+    class="material-icons">arrow_back</span> -->
+    <i class="fa fa-arrow-left" (click)="cancelbrd()" aria-hidden="true"></i>
+    <!-- <span class="material-icons">arrow_back</span>&nbsp; -->
+    <span style="margin-top: -3px; margin-left: 6px;">BRD Creation</span>
+  </div>
+    <!-- <div class="modal-body"> -->
+      <div class="cus-brdAddContainer">
+        <div>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="query" required/>
+            <!-- <mat-icon matSuffix class="maticonsize" (click)="pipesSearch('')">search</mat-icon> -->
+          </mat-form-field>
+        </div>
+        
+        <div>
+          <mat-form-field (click)="clientdopdown()">
+            <mat-label>Client</mat-label>
+            <input
+              #clientclientInput
+              placeholder="Select Client"
+              matInput
+              formControlName="client_id"
+              [matAutocomplete]="clientteamrole"
+              (click)="clientclick()"
+            />
+            <mat-autocomplete
+              #clientteamrole="matAutocomplete"
+              [displayWith]="displayccclient"
+            >
+              <ng-container>
+                <mat-option
+                  *ngFor="let opt of clientdrop"
+                  [value]="opt"
+                  (focusout)="FocusOut_select_client(opt)"
+                >
+                  {{ opt.name }}
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div >
+          <mat-form-field class="matformfieldstyle" 
+              (click)="appName()">
+              <mat-label>Project</mat-label>
+              <input #appnmInput class="matformfieldinputstyle" matInput placeholder="Select Project"
+                  formControlName="project" [matAutocomplete]="appnm" required>
+              <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm">
+                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                  <ng-container *ngIf="!isLoading">
+                      <mat-option *ngFor="let appnm of appNameList"
+                          [value]="appnm">
+                          {{appnm.name}}
+                      </mat-option>
+                  </ng-container>
+              </mat-autocomplete>
+          </mat-form-field>
+      </div>
+       
+        <!-- <div>
+          <mat-form-field>
+            <mat-label>Details</mat-label>
+            <input matInput formControlName="details" />
+            <mat-icon matSuffix class="maticonsize" (click)="pipesSearch('')">search</mat-icon> -->
+          <!-- </mat-form-field>
+        </div> -->
+      
+    
+      </div>
+      <div style="border: 1px solid rgba(0, 0, 0, 0.086);padding: 3px; margin-top: 55px;margin-left: 2%;"
+      class="col-sm-9 col-md-9 col-lg-9">
+      <div [ngxSummernote]="config" #textbox (keyup)="gettingPreviewValue"
+          [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()" (mediaDelete)="onDelete($event)"
+          placeholder="Description" id="notebook" (summernoteInit)="summernoteInit($event)"
+          (keyup)="sanitizedHtml; selectedposition"  formControlName="details">
+      </div>
+  </div>
+    <!-- </div> -->
+  
+    <!-- <div>
+        <button class="btn btn-primary" type="button" (click)="submitbrd()">
+          Submit
+        </button>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-secondary" type="button" (click)="cancelbrd()">
+          Cancel
+        </button>
+      </div> -->
+  
+    <!-- <div class="modal-footer"> -->
+      <div class="row" style="margin-top: 11px;">
+        <div class="col-md-10">
+
+        </div>
+        <!-- <div class="col-md-1" style="margin-top: -7%;">
+          <button
+        type="button"
+        class="btn btn-secondary"
+        data-dismiss="modal"
+        (click)="cancelbrd()"
+      >
+        Close
+      </button>
+      </div> -->
+      <div class="col-md-1" style="margin-left: -21px;margin-top: -7%;">
+      <button type="button" class="btn btn-primary" (click)="submitbrd()">
+        Submit
+      </button>
+
+        </div>
+      
+    </div>
+    <!-- </div> -->
+  </div>
+
+  </form>
+  

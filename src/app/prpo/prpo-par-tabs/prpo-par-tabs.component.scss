@@ -1,0 +1,30 @@
+tbody td {
+	padding: 0.5em 0.1em 0.1em;
+}
+.cursor{
+    cursor: pointer;
+}
+th, td{
+    text-align:center;
+}
+.NodataAlign{
+    text-align: center;
+}
+
+.table td.rightalign {
+    text-align: right;
+}
+
+.table td.leftalign {
+    text-align: left;
+}
+th>.alignsInTable, td>.alignsInTable{
+    width: auto;
+    min-width: 0;
+    max-width: 500px;
+    display: inline-block;
+    padding: 0px 10px 0px 10px;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    white-space: nowrap;
+  }

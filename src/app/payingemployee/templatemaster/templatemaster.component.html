@@ -1,0 +1,251 @@
+<div  *ngIf="isSummaryContent" class="main" >
+    <div class="search">
+        <div class="row">
+            <h2  class="templatemaster">Template Master</h2>
+        </div>
+   
+        <form [formGroup]="datassearch"  class="section" >
+            <section>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <mat-form-field class="templatename"  >
+                            <mat-label>Template Name</mat-label>    
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-md-6" id="search" >
+                        <div>
+                            <button mat-stroked-button type="button"  class="label"  (click)="searchData()" aria-label="Search" >
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <button mat-stroked-button type="button" class="clearddata" (click)="clearData()">Clear</button>
+                                <button type="button" mat-fab id="add"  (click)="newSegments()">
+                                <mat-icon matTooltip="Add" style="color: black;">add</mat-icon> 
+                             </button>
+                             <button type="button" id="add" mat-fab 
+                             (click)="uploadfile()">
+                             <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                         </button>
+                        </div>
+                    </div>   
+                </div>
+            </section>
+        </form>
+    </div>
+    
+    <div class="table" *ngIf="isShowTable">
+        <div>
+            <div>
+                <table class="tables table-border table-bordered " id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th class="text-center">S.no</th>                            
+                            <th class="text-center">Template Name</th>
+                            <th style="width:30%;padding-left:80px">Mapped Segments</th>
+                            <th class="text-center">Grade</th>
+                            <!-- <th class="text-center">GL NO</th> -->
+                            <th class="width text-center">Edit</th>
+                            <th class="width text-center">Delete</th>                       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sum of summarylist;index as ind">
+                            <td class="text-center">{{(pagination.index-1)*limit+ind+1}}</td>
+                            <td class="text-center">{{sum?.name}}</td>
+                            <td style="padding-left: 53px;padding-right:0;width:30%">
+                                <ul *ngFor="let segment of sum.segment">
+                                    <li *ngIf="segment.name">{{ segment.name }}</li>
+                                </ul>
+                            </td>
+                            <td class="text-center">{{sum?.grade?.name}}</td>
+                            <!-- <td class="text-center">{{sum?.glno}}</td> -->
+                            <td class="width text-center"><i class="fa-solid fa-pencil" (click)="editSegment(sum)"></i>
+                              </td>    
+                              <td class="width text-center">
+                                <i class="fa-solid fa-trash-can" (click)="deleteSegment(sum.id)"></i>             
+                              </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-sm-12" id="prevpage">
+                  <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false" color="primary">
+                      <mat-icon class="customIconSize">arrow_back</mat-icon>
+                  </button>
+                  {{pagination.index}}
+                  <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false"
+                      color="primary">
+                      <mat-icon class="customIconSize">arrow_forward</mat-icon>
+                  </button>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isNewCreation" class="addform" >
+    <h2>New Template</h2>
+    <form [formGroup]="addForm" autocomplete="off">
+      <table>
+        <div>
+          <tr>
+            <td>
+              <mat-label>Template Name<label class="template">*</label> </mat-label><br>
+              <mat-form-field class="matformfieldstyle1"  appearance="outline">
+                <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+              </mat-form-field>
+            </td>
+
+            <td>
+                    <mat-label class="gra">Grade<label style="color: red;">*</label></mat-label><br>
+                    <mat-form-field id="un"  appearance="outline"
+                        (click)="getComponentTypes()">
+                        <input #getcomponentInput  class="matformfieldinputstyle" matInput
+                        formControlName="gradelevel" [matAutocomplete]="component" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #component="matAutocomplete" [displayWith]="displayfncomponent"
+                        (opened)="autocompletecomponentScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let component of componentlist" [value]="component" title="{{component.name}}">
+                                {{component.name}}
+                            </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!componentlist.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                    </mat-form-field>  
+            </td>
+
+            <div class="modal-body">              
+                <tr>
+                    <td>
+                        <mat-label>Segment<label style="color: red;">*</label></mat-label><br>
+                        <mat-form-field style="width: 303px;  height: 60px;" (click)="getSegments()">  
+                            <mat-chip-grid #chiplist>
+                                <mat-chip-row *ngFor="let segment of chipSelectedsegment"  [removable]="true" (removed)="removedsegment(segment)">
+                                {{segment.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip-row>
+                                <input #segmentInput formControlName="segment" [matAutocomplete]="auto"
+                                [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]=true>
+                            </mat-chip-grid>
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="segmentSelected($event)">
+                                <mat-option *ngFor="let thissegement of allsegmentlist" [value]="thissegement">
+                                    {{thissegement.name}}
+                                </mat-option>
+                                <mat-option *ngIf="!allsegmentlist.length">No Records Found</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <!-- <td>
+                        <mat-label class="gra">GL No<label style="color: red;">*</label></mat-label><br>
+                        <mat-form-field class="MatGLFormFieldStyle"  appearance="outline">
+                            <input matInput class="matformfieldinputstyle"  formControlName="glno" autocomplete="off">
+                          </mat-form-field>
+                    </td> -->
+                </tr>
+                </div>
+        </div>
+      </table>
+      <button type="button"  class="btns btn"(click)="onCancelAdd()">Cancel</button>
+      <button type="submit"  class="btns btn ml-2" (click)="onSubmitAdd()" >Submit</button>
+    </form>
+  </div>
+ 
+  <div *ngIf="isTypeCreation" class="typecreation">
+    <h2>Template Mapping Edit</h2>
+    <form [formGroup]="editForm" autocomplete="off">
+        <table>
+            <div>
+              <tr>
+                <td>
+                  <mat-label>Template Name<label class="template">*</label> </mat-label><br>
+                  <mat-form-field class="matformfieldstyle4" appearance="outline">
+                    <input matInput class="matformfieldinputstyle" type="name" formControlName="name" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td>
+                    <mat-label class="gra">Grade<label style="color: red;">*</label></mat-label><br>
+                    <mat-form-field id="un"  appearance="outline"
+                        (click)="getComponentgrade('')">
+                        <input #getcomponentInput class="matformfieldinputstyle" matInput
+                        formControlName="gradelevel" [matAutocomplete]="component" (keyup)="getComponentgrade(editForm.value.gradelevel)">                    
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #component="matAutocomplete" [displayWith]="displayfncomponent" (opened)="autocompletecomponentScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let allow of componentlist" [value]="allow" title="{{allow.name}}">
+                                {{allow.name}}
+                            </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!componentlist.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                    </mat-form-field>
+                 </td>
+                 <div class="modal-body">
+                <tr>
+                 <td>
+                    <mat-label>Segment<label style="color: red;">*</label></mat-label><br>
+                    <mat-form-field style="width: 303px; height: 60px;" (click)="getSegments()">
+                        <mat-chip-grid #chiplist formControlName="segment"> 
+                        <mat-chip-row *ngFor="let segment of chipeditselectedsegment"  [removable]="true" (removed)="editremovedsegment(segment)">
+                            {{segment.name}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip-row>
+                        <input #editsegmentInput formControlName="segment" [matAutocomplete]="auto" [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true">
+                        </mat-chip-grid>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="editsegmentSelected($event)">
+                        <mat-option *ngFor="let type of segmentdata" [value]="type" title="{{type.name}}">
+                            {{type.name}}
+                        </mat-option>
+                        <mat-option *ngIf="!segmentdata.length">No Records Found</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>   
+                </td>  
+                <!-- <td>
+                    <mat-label class="gra">GL NO<label class="template">*</label> </mat-label><br>
+                    <mat-form-field class="MatGLFormFieldStyle" appearance="outline">
+                      <input matInput class="matformfieldinputstyle" type="name" formControlName="glno" autocomplete="off">
+                    </mat-form-field>
+                  </td> -->
+            </tr>        
+            </div> 
+              </tr>
+            </div>
+          </table>
+      <button type="button" class="btns btn"  (click)="onCancel()">Cancel</button>
+      <button type="submit"  (click)="update()" class="btns btn ml-2">Update</button>
+    </form>
+  </div>
+
+  
+<div *ngIf="isFileUpload">
+    <div class="card">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+                Cancel
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+                Download Template
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+</div>
+
+  
+

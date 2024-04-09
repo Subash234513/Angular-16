@@ -1,0 +1,1551 @@
+<div style="background-color: #F6F6F6">
+
+    <mat-card style="margin:10px 12px 20px 10px;" class="mat-elevation-z0">
+        <nav>
+            <div class="nav nav-tabs">
+                <span class="nav-item nav-link" data-toggle="tab" (click)="subModuleData(sub)" role="tab"
+                    *ngFor="let sub of attendance_Master_Menu_List;index as i">
+                    {{sub.name}}
+                </span>
+            </div>
+        </nav>
+        <div class="container" style="margin: 10px;">
+            <div *ngIf="isHoliday">
+                <app-holiday></app-holiday>
+
+            </div>
+
+            <!-- holiday summary -->
+            <!-- <div *ngIf="isHoliday" class="col-md-12">
+                <h2>Holiday Summary</h2> 
+
+                <form [formGroup]="holidaySearchForm">
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <mat-label>Year</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Year" formControlName="name">
+                            </mat-form-field>
+                        </div> 
+                        <div class="col-md-3">
+                            <mat-label>State</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="State" formControlName="state">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="holidaySearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetHoliday()">Clear</button>
+
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="addHoliday('Create','')">
+                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 800px;" id='commonstyle'>
+
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Year</th>
+                            <th>State</th> 
+                            <th>Edit</th> 
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        <tr *ngFor="let type of holidayList; index as i">
+                            <td>{{(presentpageholi - 1)*pagesize +i+1 }}</td>
+                            <td>{{type?.year}}</td>
+                            <td>{{type?.state?.name}}</td> 
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="addHoliday('Edit',type)">
+                                    <mat-icon style="color: gray; margin-left: 20px;" aria-label="Edit">edit</mat-icon>
+                                </button>
+                            </td> 
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="holidayList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isHolidayPage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousholi === false" color="primary"
+                            (click)="holidaySearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageholi}}
+                        <button mat-icon-button [disabled]="has_nextholi === false" color="primary"
+                            (click)="holidaySearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- leave summary -->
+            <div *ngIf="isLeaveType" class="col-md-12">
+                <h2>Leave Summary</h2>
+                <form [formGroup]="LeaveSearchForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-label>Name</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Name" formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="LeaveSearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetLeaveType()">Clear</button>
+
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="addLeave('Create','')">
+                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Ṇame</th>
+                            <th>Attendance</th>
+                            <th>Salary</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of LeaveList; index as i">
+                            <td>{{(presentpageLeave - 1)*pagesize +i+1 }}</td>
+                            <td>{{type.name}}</td>
+                            <td>
+                                <!-- {{type?.has_attendance}} -->
+                                <span [class.tick-mark]="type.has_attendance"></span>
+                                <span [class.un-tick-mark]="!type.has_attendance"></span>
+                            </td>
+
+                            <td>
+                                <!-- {{type?.has_salary}} -->
+                                <span [class.tick-mark]="type.has_salary"></span>
+                                <span [class.un-tick-mark]="!type.has_salary"></span>
+                            </td>
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="addLeave('Edit',type)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-icon-button matTooltip="Delete" class="iconbutton" color="primary"
+                                    (click)="leaveDelete(type.id)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">
+                                        delete</mat-icon>
+                                </button>
+                            </td>
+                            <!-- <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="LeaveList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isLeavePage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousLeave === false" color="primary"
+                            (click)="LeaveSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageLeave}}
+                        <button mat-icon-button [disabled]="has_nextLeave === false" color="primary"
+                            (click)="LeaveSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- <pre>{{LeaveSearchForm.value| json}}</pre> -->
+
+
+            <!-- attendance summary -->
+            <div *ngIf="isattendanceType" class="col-md-12">
+                <h2>Attendance Summary</h2>
+                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                    (click)="addAttendance('Create', '')">
+                    <mat-icon matTooltip="Add">add</mat-icon>
+                </button>
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Check In Mode</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of attendanceList; index as i">
+                            <td>{{(presentpageAttend - 1)*pagesize +i+1 }}</td>
+                            <td>{{type?.check_in_mode}}</td>
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="addAttendance('Edit',type)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-icon-button matTooltip="Delete" class="iconbutton" color="primary"
+                                    (click)="attendanceDelete(type.id)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">
+                                        delete</mat-icon>
+                                </button>
+                            </td>
+                            <!-- <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="attendanceList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isAttendancePage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousAttend === false" color="primary"
+                            (click)="attendancepreviousClick()">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageAttend}}
+                        <button mat-icon-button [disabled]="has_nextAttend === false" color="primary"
+                            (click)="attendancenextClick()">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- org details summary -->
+            <div *ngIf="isOrgDetails" class="col-md-12">
+                <h2>Organization Summary</h2>
+                <!-- <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addOrgDetails('Create','')">
+                <mat-icon matTooltip="Add">add</mat-icon>
+                </button> -->
+
+                <form [formGroup]="orgSearchForm">
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <mat-label>Name</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Name" formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="orgSearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetOrg()">Clear</button>
+
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="addOrgDetails('Create','')">
+                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Radius</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of OrgDetailsList; index as i">
+                            <td>{{(presentpageOrgDetails - 1)*pagesize +i+1 }}</td>
+                            <td>{{type?.code}}</td>
+                            <td>{{type?.name}}</td>
+                            <td>{{type?.latitude}}</td>
+                            <td>{{type?.longitude}}</td>
+                            <td>{{type?.radius}}</td>
+                            <td>
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="addOrgDetails('Edit',type)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-icon-button matTooltip="Delete" class="iconbutton" color="primary"
+                                    (click)="orgDetailsDelete(type.id)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">
+                                        delete</mat-icon>
+                                </button>
+                            </td>
+                            <!-- <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="OrgDetailsList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isOrgDetailsPage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousOrgDetails === false" color="primary"
+                            (click)="orgSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageOrgDetails}}
+                        <button mat-icon-button [disabled]="has_nextOrgDetails === false" color="primary"
+                            (click)="orgSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- org details Ip summary -->
+            <div *ngIf="isOrg_IP" class="col-md-12">
+                <h2>Organization IP Summary</h2>
+                <!-- <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                                    (click)="addOrgIP('Create', '')">
+                <mat-icon matTooltip="Add">add</mat-icon>
+                </button> -->
+
+                <form [formGroup]="orgSearchForm">
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <mat-label>Name</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Name" formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="orgSearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetOrg()">Clear</button>
+
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="addOrgIP('Create', '')">
+                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Organization Detail</th>
+                            <!-- <th>IP</th> -->
+                            <!-- <th>Edit</th> -->
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of OrgDetailsList; index as i">
+                            <td>{{(presentpageOrgDetails - 1)*pagesize +i+1 }}</td>
+                            <td (click)="orgIPView(type)"
+                                style="cursor: pointer;color:blue;text-decoration: underline;">{{type?.name}}</td>
+                            <!-- <td>{{type?.ip}}</td> -->
+                            <!-- <td> 
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" 
+                                color="primary" (click)="addOrgIP('Edit',type)">
+                                <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                            </button>
+                        </td> -->
+                            <td>
+                                <button mat-icon-button matTooltip="Delete" class="iconbutton" color="primary"
+                                    (click)="orgDetailsDelete(type.id)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">
+                                        delete</mat-icon>
+                                </button>
+                            </td>
+                            <!-- <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="Org_IPList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isOrgDetailsPage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousOrgDetails === false" color="primary"
+                            (click)="orgSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageOrgDetails}}
+                        <button mat-icon-button [disabled]="has_nextOrgDetails === false" color="primary"
+                            (click)="orgSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--------------------------- gradesummary-------------------------------------------------->
+
+
+
+            <div *ngIf="isGrade" class=" col-md-12">
+                <h2>Grade Summary</h2>
+
+                <form [formGroup]="GradeSearchForm">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <mat-label>Name</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Name" formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="GradeSearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetGrade()">Clear</button>
+
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="addGrade('Create', '')">
+                                    <mat-icon matTooltip="Add">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Active</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of gradeList let typeindex = index">
+                            <td>{{(PresentPageGrade - 1)*10+typeindex+1 }}</td>
+                            <td>{{type.name}}</td>
+                            <td>{{type.code}}</td>
+                            <td>
+                                <span *ngIf="type.is_active == true">Yes</span>
+                                <span *ngIf="type.is_active == false">No</span>
+
+                            </td>
+                            <td>
+
+                                <button mat-icon-button matTooltip=" Edit" class="iconbutton" color="primary"
+                                    (click)="addGrade('Edit',type)">
+                                    <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                                </button>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div *ngIf="gradeList ?.length == 0 " style="margin-left: 42%;">
+                    <h2>No Records Found....</h2>
+                </div>
+                <div class="col-sm-12" style="font-size: small; text-align:right; margin-bottom:5%">
+                    <button type="button" mat-icon-button [disabled]="has_previousGrade === false "
+                        (click)="GradeSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    {{PresentPageGrade}}
+                    <button type="button" mat-icon-button [disabled]="has_nextGrade === false "
+                        (click)="GradeSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <div *ngIf="isGradeLeaveMapping" class=" col-md-12">
+
+                <h2>Grade Leave Mapping Summary</h2>
+                <form [formGroup]="gradeleavemappingSearchForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-label>Select</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle" style="width: 250px;"
+                                (click)="gradeleavemappingget('')">
+                                <input class="matformfieldinputstyle" matInput placeholder="Select"
+                                    [matAutocomplete]="type"
+                                    (keyup)="gradeleavemappingget(gradeleavemappingSearchForm.value.codename)"
+                                    formControlName="codename" autocomplete="off">
+                                <mat-autocomplete #type="matAutocomplete" [displayWith]="displaygradeleave">
+                                    <mat-option *ngFor="let Type of MappingList" (click)="getGradeLeave(Type)"
+                                        [value]="Type">
+                                        {{Type.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="margin-top: 17px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetgradeleavemapping()">Clear</button>
+                                <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                                    (click)="Addgradeleavemapping('Create', '')">
+                                    <mat-icon matTooltip="Addgradeleavemapping">add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- 
+                <th>Grade:{{gradeleavetmappingSearchForm.value.codename.name }} </th> -->
+                <table class="table aligncenter table-bordered"
+                    style="margin-top: 10px;max-width: 800px; text-align: center;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Leave Type</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of gradeleaveMappingList let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{type?.leave_type?.name}}</td>
+                            <td>{{type?.leave_count}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div *ngIf="isShiftMapping" class="col-md-12">
+                <h2>Shift Mapping Summary</h2>
+                <form [formGroup]="ShiftmappingSearchForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-label>Employee Name</mat-label><br>
+                            <mat-form-field appearance="outline" class="matformfieldstyle" style="width: 250px;"
+                                (click)="ShiftMappingEmployeeget('')">
+                                <input class="matformfieldinputstyle" matInput placeholder="Select"
+                                    [matAutocomplete]="shift"
+                                    (keyup)="ShiftMappingEmployeeget(ShiftmappingSearchForm.value.employe)"
+                                    formControlName="employe" autocomplete="off">
+                                <mat-autocomplete #shift="matAutocomplete" [displayWith]="displayShiftmapping">
+                                    <mat-option *ngFor="let employee of EmployeeList" [value]="employee">
+                                        {{employee.full_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="margin-top: 25px;">
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                    (click)="ShiftMappingSearch('')">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"
+                                    style="margin-left: 20px;background-color: white;"
+                                    (click)="resetShiftMapping()">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-bordered" style="margin-top: 10px;max-width: 800px; text-align: center;"
+                        id='commonstyle'>
+
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>Employee Name</th>
+                                <th>From Date</th>
+                                <th>End Date</th>
+                                <th>Shift</th>
+                                <th>Add</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let type of shiftmappingList; index as i">
+                                <td>{{(presentpageshift - 1)*pagesize +i+1 }}</td>
+                                <td>{{type?.employee_id?.full_name}}</td>
+                                <td>{{type?.effective_from| date: 'dd-MM-yyyy'}}</td>
+                                <td>{{type?.effective_to| date: 'dd-MM-yyyy'}}</td>
+                                <!-- <td>   
+                                 <mat-form-field appearance="outline" style="width: 195px; font-size: 8px;"
+                                class="matformfieldinputstyle">
+                                <input class="matformfieldinputstyle" matInput [matDatepicker]="picker3"
+                                    formControlName="fromdate">
+                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field>
+
+                            </td>
+                            <td>    
+                                <mat-form-field appearance="outline" style="width: 195px; font-size: 8px;"
+                                class="matformfieldinputstyle">
+                                <input class="matformfieldinputstyle" matInput [matDatepicker]="picker6"
+                                    formControlName="Todate">
+                                <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                                <mat-datepicker #picker6></mat-datepicker>
+                            </mat-form-field>
+                        </td> -->
+                                <td>{{type?.shift_id?.shift_name}}</td>
+                                <td>
+                                    <!-- <button mat-icon-button matTooltip="visibility" class="iconbutton" color="primary"
+                                    (click)="AddShiftMapping()">
+                                    <mat-icon style="color: gray;" aria-label="Edit">
+                                        delete</mat-icon>  -data->
+                            </button> -->
+                                    <mat-icon style="color: black;" type="button" data-toggle="modal"
+                                        data-target="#exampleModal" (click)="AddShiftMapping('', type)">
+                                        visibility</mat-icon>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                <div *ngIf="shiftmappingList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+                <div class="row" *ngIf="isShiftMappingPage">
+                    <div class="col-sm-12" style="font-size: small;text-align: right; margin-bottom: 50px;">
+                        <button mat-icon-button [disabled]="has_previousshift === false" color="primary"
+                            (click)="ShiftMappingSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageshift}}
+                        <button mat-icon-button [disabled]="has_nextshift === false" color="primary"
+                            (click)="ShiftMappingSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background:#d7a2c7; height: 7vh;">
+                            <h2 class="modal-title"
+                                style="color:black ;font-family:'Times New Roman', Times, serif;font-size:20px;">
+                                {{EmpName?.full_name}} History</h2>
+
+                        </div>
+
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col">
+                                <form [formGroup]="ShiftMappingForm">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <!-- <label>Select Shift</label><br>
+                                                            <select style="width: 200px; height: 38px;">
+                                                                <option value="day">Day</option>
+                                                                <option value="night">Night</option>
+                                                            </select> -->
+                                                <mat-label style="font-size: 18px; margin-left: 20px;">Select
+                                                    Shift</mat-label>
+                                                <br>
+                                                <mat-form-field appearance="outline" class="matformfieldstyle"
+                                                    style="width: 200px; margin-left: 20px; ">
+
+                                                    <mat-select class="matformfieldinputstyle" formControlName="shift">
+                                                        <mat-option class="matformfieldinputstyle" value=1>
+                                                            Day</mat-option>
+                                                        <mat-option class="matformfieldinputstyle" value=2>
+                                                            Night</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+
+                                            </td>
+                                            <td>
+                                                <mat-label style=" margin-left: 20px;">From Date</mat-label>
+                                                <br>
+                                                <mat-form-field appearance="outline"
+                                                    style="width: 195px; font-size: 4px; margin-left: 20px;"
+                                                    class="matformfieldinputstyle">
+                                                    <input class="matformfieldinputstyle" matInput
+                                                        [matDatepicker]="picker7" formControlName="effective_from">
+                                                    <mat-datepicker-toggle class="maticonsize" matSuffix
+                                                        [for]="picker7">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #picker7></mat-datepicker>
+                                                </mat-form-field>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+
+
+                        </div>
+                        <div style="margin-left: 7px;margin-top: 20px;">
+                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                (click)="onSubmitShift()">Submit</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="center">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" fixed-header
+                                        style="width: 87%; text-align: center;">
+                                        <thead class="table_header" style="text-align: left;">
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>From Date</th>
+                                                <th>To Date</th>
+                                                <th>Shift</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let histry of CreateshiftmapList; index as i">
+                                                <td> {{i+1}} </td>
+                                                <td class="text-style">{{ histry?.effective_from | date:'dd-MM-yyyy'}}
+                                                </td>
+                                                <td class="text-style">{{ histry?.effective_to | date:'dd-MM-yyyy'}}
+                                                </td>
+                                                <td class="text-style">{{ histry?.shift_id?.shift_name}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="container" *ngIf="isShiftMappingCreate">
+
+                                        <h2> ShiftMappingCreate {{TypeOfForm}}</h2>
+
+                                    </div>
+
+                                    <div *ngIf="CreateshiftmapList ?.length == 0"
+                                        style="margin-left: 42%;margin-bottom: 40px;">
+                                        <h3>No Records Found.. </h3>
+                                    </div>
+                                    <div class="row" *ngIf="isShiftMappingCreatePage">
+                                        <div class="col-sm-12"
+                                            style="font-size: small;text-align: right; margin-bottom: 50px;">
+                                            <button mat-icon-button [disabled]="has_previousshiftmapping === false"
+                                                color="primary">
+                                                <mat-icon>arrow_back</mat-icon>
+                                            </button>
+                                            {{presentpageShiftmapping}}
+                                            <button mat-icon-button [disabled]="has_nextshiftmapping === false"
+                                                color="primary">
+                                                <mat-icon>arrow_forward</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                        border-color: black; 
+                                        background-color: white;" data-dismiss="modal"
+                                            (click)="onShiftMappingCancel(); ">Cancel</button>
+                                        <!-- <button type="button" class="close"  aria-label="Close"
+                                            (click)="onShiftMappingCancel()">Cancel -->
+                                        <!-- <span aria-hidden="true" (click)="onShiftMappingCancel()"></span> -->
+                                        <!-- </button> -->
+                                        <!-- <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                        border-color: black; 
+                                        background-color: white;" aria-hidden="true" (click)="onShiftMappingCancel()">Cancel</button> -->
+                                        <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                                            (click)="onShiftMappingCancel()">Cancel</button> -->
+                                        <!-- <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
+                                            (click)="onSubmitShift()">Submit</button> -->
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- holiday form -->
+            <div *ngIf="isHolidayCreate">
+                <!-- <h2>Legal Clause {{TypeOfForm}}</h2> -->
+                <h2>Holiday {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="HolidayForm">
+                            <table>
+                                <tr>
+                                    <th>
+                                        <div class="col-md-3">
+                                            <mat-label>Year</mat-label><br>
+                                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                                <input class="matformfieldinputstyle" type="text" matInput
+                                                    autocomplete="off" placeholder="Year" formControlName="year">
+                                            </mat-form-field>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <mat-label style="margin-left: 60px;">State</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px; margin-left: 60px;" (click)="holidayget('')">
+
+                                            <input class="matformfieldinputstyle" matInput placeholder="Select"
+                                                [matAutocomplete]="holiday"
+                                                (keyup)="holidayget(this.HolidayForm.value.state)"
+                                                formControlName="state" autocomplete="off">
+                                            <mat-autocomplete #holiday="matAutocomplete" [displayWith]="displayholiday">
+                                                <mat-option *ngFor="let state of StateList" [value]="state">
+                                                    {{state.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+
+                                    </th>
+                                    <th>
+
+
+                                        <button type="button" mat-fab
+                                            style="margin-left: 20px;background-color: #f5c68b;"
+                                            (click)="AddholidayForm()">
+                                            <mat-icon matTooltip="AddholidayForm">add</mat-icon>
+                                        </button>
+                                    </th>
+                                    <!-- <td>
+                                        <mat-label style="margin-left: 60px;">Holiday Date</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="margin-left: 60px;width: 250px;">
+
+                                            <input matInput readonly [matDatepicker]="picker"
+                                                class="matformfieldinputstyle" formControlName="holiday_date">
+                                            <mat-datepicker-toggle matSuffix class="maticonsize" [for]="picker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+                                    </td> -->
+                                </tr>
+                            </table>
+
+                            <table formArrayName="arr" class="table aligncenter"
+                                style="margin-top: 10px; max-width:500px" id="commonstyle">
+                                <thead class="table_header">
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of HolidayForm.get('arr')['controls']; let i = index "
+                                        [formGroupName]="i">
+
+                                        <td>{{i+1}}</td>
+
+                                        <td>
+                                            <!-- <div class="col-md-3">
+
+                                                <mat-form-field appearance="outline" style="width: 250px;" >
+                                                    <input  autocomplete="off" matInput
+                                                        placeholder="Text" formControlName="name">
+                                                </mat-form-field>
+                                            </div> -->
+
+                                            <mat-form-field appearance="outline" class="matformfieldstyle">
+                                                <input class="matformfieldinputstyle" type="text" matInput
+                                                    autocomplete="off" placeholder="Text" formControlName="name">
+                                            </mat-form-field>
+                                        </td>
+
+                                        <td>
+
+                                            <mat-form-field appearance="outline" style="width: 195px; font-size: 8px;"
+                                                class="matformfieldinputstyle">
+                                                <input class="matformfieldinputstyle" matInput [matDatepicker]="picker"
+                                                    formControlName="date">
+                                                <mat-datepicker-toggle class="maticonsize" matSuffix
+                                                    [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <div class="example-button-container">
+                                                <button type="button"
+                                                    style="border-color: #f5c68b; background-color: #f5c68b;"
+                                                    mat-mini-fab aria-label=" delete icon"
+                                                    (click)="deleteholidaydetail('i')">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div>
+
+
+                                <div style="margin-left: 7px;
+                                margin-top: 20px;">
+
+
+                                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;"
+                                        (click)="onHolidayCancelClick(); ">Cancel</button>
+
+                                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                        (click)="onSubmitHolidayClick()">Submit</button>
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--leave form  -->
+            <div *ngIf="isLeaveTypeCreate">
+                <!-- <h2>Legal Clause {{TypeOfForm}}</h2> -->
+                <h2>leave Type {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="LeaveForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <mat-label>Name</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="name" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-label>Attendance</mat-label>
+                                        <mat-radio-group aria-label="Select an option" formControlName="has_attendance"
+                                            style="margin-left: 30px;">
+                                            <mat-radio-button *ngFor="let attendance of attendancecheck"
+                                                [value]="attendance.value">
+                                                {{attendance.hidden}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-label>Salary</mat-label>
+                                        <mat-radio-group aria-label="Select an option" formControlName="has_salary"
+                                            style="margin-left: 76px;">
+                                            <mat-radio-button *ngFor="let salary of salarycheck" [value]="salary.value">
+                                                {{salary.hidden}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+
+
+                                <div style="margin-left: 7px;
+                                margin-top: 20px;">
+
+
+                                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;" (click)="onleaveCancelClick()">Cancel</button>
+
+                                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                        (click)="onSubmitLeaveClick()">Submit</button>
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--attendance form  -->
+            <div *ngIf="isattendanceTypeCreate">
+                <!-- <h2>Legal Clause {{TypeOfForm}}</h2> -->
+                <h2>Attendance Type {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="AttendanceForm" id="AttendanceCreateForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <mat-label>Check In Mode</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="check_in_mode" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+
+
+                                <div style="margin-left: 7px;
+                                margin-top: 20px;">
+
+
+                                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;"
+                                        (click)="onattendanceCancelClick()">Cancel</button>
+
+                                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                        (click)="onSubmitAttendanceClick()">Submit</button>
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--org details form  -->
+            <div *ngIf="isOrgDetailsCreate">
+                <!-- <h2>Legal Clause {{TypeOfForm}}</h2> -->
+                <h2>Organization Details {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="OrgDetailsForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <mat-label>Name</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="name" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-label style="margin-left: 60px;">Radius</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;margin-left: 60px">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="radius" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-label>Latitude</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="latitude" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-label style="margin-left: 60px;">Longitude</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;margin-left: 60px">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="longitude" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+
+
+                                <div style="margin-left: 7px;
+                                margin-top: 20px;">
+                                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;"
+                                        (click)="onOrgDetailsCancelClick()">Cancel</button>
+
+                                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                        (click)="onSubmitOrgDetailseClick()">Submit</button>
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--org IP form  -->
+            <div *ngIf="isOrg_IPCreate">
+                <!-- <h2>Legal Clause {{TypeOfForm}}</h2> -->
+                <h2>Organization IP {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="Org_IPForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <mat-label>Organization Detail Name</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;">
+                                            <mat-select class="matformfieldinputstyle" formControlName="org_detail_id"
+                                                placeholder="Type">
+                                                <mat-option *ngFor="let type of OrgDetailsList" [value]="type.id">
+                                                    {{type.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-label style="margin-left: 60px;">IP</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 250px;margin-left: 60px">
+                                            <input matInput #IPInput class="matformfieldinputstyle" type="text"
+                                                formControlName="ip_arr" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <button type="button" style="border-radius: 10px;margin-left: 60px;border-color: #f5c68b;
+                                        background-color: #f5c68b;" class="btn btn-light" [disabled]="addButton"
+                                            (click)="addIP()"><i class="fa fa-plus-circle"></i> Add</button>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>
+                                        <mat-label>IP</mat-label><br>
+                                            <mat-form-field appearance="outline" class="matformfieldstyle" style="width: 250px;">
+                                                <input matInput class="matformfieldinputstyle"  type="text"  formControlName="ip_arr"  
+                                                 autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <button type="button" style="  margin-top: 55px;border-radius: 10px;margin-left: 60px;border-color: #f5c68b;
+                                        background-color: #f5c68b;" class="btn btn-light" [disabled]="addButton"
+                                        (click)="addZoneName()"><i class="fa fa-plus-circle"></i> Add</button>
+                                    </td>
+                                </tr> -->
+
+
+                                <!-- <div class="table-responsive" style="margin-top: 1%;overflow-x: hidden;"> -->
+
+                                <table class="table aligncenter" style="margin-top: 10px;max-width: 800px;"
+                                    id='commonstyle'>
+                                    <thead class="table_header">
+                                        <tr>
+                                            <th>IP</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let ipName of IpList;index as i">
+                                            <td>{{ ipName.name}}</td>
+                                            <td>
+                                                <mat-icon style="color: gray;cursor: pointer;"
+                                                    (click)="zoneNameDelete(i)">delete
+                                                </mat-icon>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="IpList ?.length == 0">
+                                    <h3>No Records Found.. </h3>
+                                </div>
+                                <!-- </div> -->
+
+                            </table>
+                            <div>
+
+
+                                <div style="margin-left: 7px;
+                                margin-top: 20px;">
+
+
+                                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;" (click)="onOrg_IPCancelClick()">Cancel</button>
+
+                                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                        (click)="onSubmitOrg_IPClick()">Submit</button>
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--grade form  -->
+            <div *ngIf="isGradeCreate">
+
+                <h2> Grade {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="GradeForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="col-md-3">
+                                            <mat-label>Code</mat-label><br>
+                                            <mat-form-field appearance="outline" class="matformfieldstyle"
+                                                style="width: 250px;">
+                                                <input matInput class="matformfieldinputstyle" type="text"
+                                                    formControlName="name" autocomplete="off">
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-md-3">
+                                            <mat-label>Name</mat-label><br>
+                                            <mat-form-field appearance="outline" class="matformfieldstyle"
+                                                style="width: 250px;">
+                                                <input matInput class="matformfieldinputstyle" type="text"
+                                                    formControlName="code" autocomplete="off">
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-md-3">
+                                            <mat-label>Points</mat-label><br>
+                                            <mat-form-field appearance="outline" class="matformfieldstyle"
+                                                style="width: 250px;">
+                                                <input matInput class="matformfieldinputstyle" type="text"
+                                                    formControlName="points" autocomplete="off">
+                                            </mat-form-field>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div style="margin-left: 7px; margin-top: 20px;">
+                                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                            border-color: black;
+                                            background-color: white;" (click)="onGradeCancelClick()">Cancel</button>
+
+                                <button type="button" style="border-radius: 10px;margin-left:10px; 
+                                border-color:#f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                    (click)="onGradeSubmitClick()">Submit</button>
+
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="isGradeLeaveCreate">
+
+                <h2> GradeLeaveMapping {{TypeOfForm}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <form [formGroup]="GradeLeaveForm">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <mat-label>Grade Type</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 200px;" (click)="grademappingget('')">
+                                            <input class="matformfieldinputstyle" matInput placeholder="Type"
+                                                [matAutocomplete]="type"
+                                                (keyup)="grademappingget(this.GradeLeaveForm.value.grade)"
+                                                formControlName="grade" autocomplete="off">
+                                            <mat-autocomplete #type="matAutocomplete"
+                                                [displayWith]="displaygradeleavemapping">
+                                                <mat-option *ngFor="let Type of GradeMappingList" [value]="Type">
+                                                    {{Type.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+
+                                    </td>
+
+                                    <td>
+                                        <!-- <mat-label> Leave Type</mat-label><br>
+                                            <mat-form-field class="matformfieldstyle"
+                                            style="width: 300px; "
+                                                appearance="outline"
+                                                (click)="leavemappingget(this.GradeLeaveForm.value.leave)">
+
+                                                <input  class="matformfieldstyle" matInput placeholder="Select Leave Type" 
+                                                [matAutocomplete]="map"
+                                                    (keyup)="leavemappingget(this.GradeLeaveForm.value.leave)"
+                                                    formControlName="leave">
+                                                <mat-autocomplete #map="matAutocomplete"
+                                                    [displayWith]="displaygradeleavmap">
+                                                    <mat-option *ngFor="let Type of LeaveMappingList" [value]="Type">
+                                                        {{Type.name}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </mat-form-field>    -->
+
+                                        <mat-label style="margin-left: 60px;">Leave Type</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 200px;margin-left: 60px;" (click)="leavemappingget('')">
+                                            <input class="matformfieldinputstyle" matInput placeholder="Type"
+                                                [matAutocomplete]="leavetype"
+                                                (keyup)="leavemappingget(this.GradeLeaveForm.value.leave)"
+                                                formControlName="leave" autocomplete="off">
+                                            <mat-autocomplete #leavetype="matAutocomplete"
+                                                [displayWith]="displaygradeleavmap">
+                                                <mat-option *ngFor="let Type of LeaveMappingList" [value]="Type">
+                                                    {{Type.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-label>From Date</mat-label><br>
+                                        <mat-form-field appearance="outline" style="width: 195px; font-size: 4px;"
+                                            class="matformfieldinputstyle">
+                                            <input class="matformfieldinputstyle" matInput [matDatepicker]="picker12"
+                                                formControlName="effective_from">
+                                            <mat-datepicker-toggle class="maticonsize" matSuffix
+                                                [for]="picker12"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker12></mat-datepicker>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+
+                                        <!-- <mat-label>Count</mat-label><br>
+                                            <mat-form-field class="matformfieldstyle"
+                                            style="width: 250px;" appearance="outline">
+                                                <input matInput placeholder="Count" formControlName="count" autocomplete="off">
+                                            </mat-form-field> -->
+                                        <mat-label style="margin-left: 60px;">Count</mat-label><br>
+                                        <mat-form-field appearance="outline" class="matformfieldstyle"
+                                            style="width: 200px; margin-left: 60px;">
+                                            <input matInput class="matformfieldinputstyle" type="text"
+                                                formControlName="count" autocomplete="off">
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+                            <div>
+                                <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 10px;
+                                    border-color: black;
+                                    background-color: white;" (click)="onGradeLeaveCancelClick()">Cancel</button>
+                                <button type="button" style="border-radius: 10px; margin-left:10px; 
+                                border-color:#f5c68b; background-color: #f5c68b;" class="btn btn-light"
+                                    (click)="onGradeLeaveSubmitClick()">Submit</button>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--shift form-->
+
+
+
+
+            <!-- org Ip view -->
+            <div class="container" *ngIf="isOrgIPView">
+                <div class="row">
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <h2> <span class="material-icons alignvertical" style="cursor: pointer;"
+                                (click)="backnavigate()">arrow_back</span>({{orgDetail_code}}){{ orgDetail_name
+                            }}
+
+                            <!-- <span class="material-icons" (click)="addOrgIP('Edit',type)">edit</span> -->
+
+                        </h2>
+                        <!-- <h2>({{detailsIdeView?.code}}) {{detailsIdeView?.title}}</h2> -->
+                    </div>
+                    <!-- <div class="col-sm-2 col-md-2 col-lg-2">
+                        <button type="button" mat-stroked-button (click)="ResubmitIdentification()" *ngIf="identificationViewList?.is_created_by == true && identificationViewList?.approval_status?.text == 'REVIEW'"
+                        style="margin-left: 20px;background-color: white;">Resubmit</button>
+                    </div> -->
+                    <!-- <div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="placingOnRight"
+                            *ngIf="identificationViewList?.is_created_by == false && identificationViewList?.pending_approver?.length > 0 ">
+                            <mat-form-field class="ddheight">
+                                <mat-select placeholder="Select Action">
+                                    <mat-option *ngFor="let process of ProcessList" [value]="process?.name" data-toggle="modal"
+                                        data-target="#exampleModal" (click)="gettingRemarks(process)">
+                                        {{process?.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div> -->
+                </div>
+
+                <h2>Organization IP</h2>
+                <table class="table aligncenter table-bordered" style="margin-top: 10px;max-width: 40%;"
+                    id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <!-- <th>Code</th>
+                        <th>Name</th> -->
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of IPList; index as i">
+                            <td>{{i+1}}</td>
+                            <!-- <td>{{(presentpageOrgDetails - 1)*pagesize +i+1 }}</td> -->
+                            <td>{{type?.ip}}</td>
+                            <!-- <td>{{type?.code}}</td>
+                        <td>{{type?.name}}</td>
+                        <td>{{type?.latitude}}</td>
+                        <td>{{type?.longitude}}</td>
+                        <td>{{type?.radius}}</td> -->
+                            <!-- <td> 
+                            <button mat-icon-button matTooltip=" Edit" class="iconbutton" 
+                                color="primary" (click)="addOrgDetails('Edit',type)">
+                                <mat-icon style="color: gray;" aria-label="Edit">edit</mat-icon>
+                            </button>
+                        </td>
+                        <td>
+                            <button mat-icon-button matTooltip="Delete" class="iconbutton" 
+                            color="primary" (click)="orgDetailsDelete(type.id)">
+                                <mat-icon style="color: gray;" aria-label="Edit">
+                                    delete</mat-icon>
+                            </button>
+                        </td> -->
+                            <!-- <td><span class="material-icons cursor" (click)="addType('Project', 'edit', type)">edit</span></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="IPList ?.length == 0" style="margin-left: 42%;">
+                    <h3>No Records Found.. </h3>
+                </div>
+
+            </div>
+
+
+
+            <!-- Penalty -->
+
+            <div *ngIf="isPenalty">
+
+                <app-penalty></app-penalty>
+
+
+
+            </div>
+
+
+
+            <div *ngIf="isSpecialPermission">
+
+                <app-special-permission></app-special-permission>
+
+
+
+            </div>
+
+
+
+        </div>
+    </mat-card>
+</div>

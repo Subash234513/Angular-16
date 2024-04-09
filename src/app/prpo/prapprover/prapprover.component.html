@@ -1,0 +1,336 @@
+<div style="margin-left: 50px;margin-right: 80%;margin-top: 1%; width: 90%;">
+    <h1>Purchase Request Approval</h1>
+    <div>
+        <form [formGroup]="PRApprovalForm" >
+            <table>
+                <tr>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>PR Number</mat-label>
+                            <input matInput placeholder="Type" autocomplete="off" formControlName="no" size="50"
+                                readonly>
+                        </mat-form-field>
+
+                    </td>
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>PR Date</mat-label>
+                            <input matInput placeholder="dd-mm-yyyy" autocomplete="off" formControlName="date"
+                                type="date" readonly>
+                        </mat-form-field>
+                    </td>
+
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>PR Raised By</mat-label>
+                            <input matInput placeholder="Type" autocomplete="off" formControlName="raisedby" readonly>
+                        </mat-form-field>
+                    </td>
+                    <!-- </tr><tr> -->
+                    <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>Commodity Name</mat-label>
+                            <input matInput placeholder="Type" autocomplete="off" formControlName="name" readonly>
+                        </mat-form-field>
+                    </td>
+                    <!-- <td>
+                        <mat-form-field style="width: 175px; margin-left: 50px;">
+                            <mat-label>Choose Approver</mat-label>
+                            <input matInput placeholder="Type" autocomplete="off" formControlName="full_name" readonly>
+                        </mat-form-field>
+                    </td> -->
+                    <td> <span class="material-icons" type="button" data-toggle="modal"
+                            data-target=".bd-example-modal-xl">description</span></td>
+                </tr>
+
+            </table>
+
+            <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+                aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">
+                                Note Pad
+                            </h2>
+                        </div>
+                        <br>
+                        <div style="margin-left: 50px;width:90%;height: 70%;">
+                            <!-- <div>
+                <button (click)="enableEditor()" [disabled]="!editorDisabled">Enable</button>
+                <button (click)="disableEditor()" [disabled]="editorDisabled">Disable</button>
+            </div> -->
+                            <div>
+                                <!-- <div formControlName="html"  -->
+                                <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                    (mediaDelete)="onDelete($event)" (summernoteInit)="summernoteInit($event)"
+                                    formControlName="notepad">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="button" style="border-radius: 40px;margin-left: 10px;"
+                                class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<span class="material-icons">
+                        description
+                    </span>-->
+
+
+            <div class="table-responsive" style="margin-top: 2%;width: 90%;margin-left: 50px;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <!-- <th>Product Category</th>
+                        <th>Product Type</th> -->
+                            <th>Product Name</th>
+                            <th>Item</th>
+                            <th>Supplier Name</th>
+                            <th>UOM</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th>Capitailize</th>
+                            <th>Delivery Details</th>
+                            <th>Download File</th>
+                            <!-- <th>View File</th> -->
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let approve of prapproverlist; index as i">
+                            <td>{{i + 1}}</td>
+                            <!-- <td>{{approve.product_id.productcategory_id.name}}</td>
+                        <td>{{approve.product_id.producttype_id.name}}</td> -->
+                            <td>{{approve?.product_name}}</td>
+                            <td>{{approve?.item_name}}</td>
+                            <td>{{approve?.supplier_id?.name}}</td>
+                            <td>{{approve?.uom}}</td>
+                            <td>{{approve?.qty}}</td>
+                            <td>{{approve?.unitprice | amountPipeCustom}}</td>
+                            <td>{{approve?.qty * approve?.unitprice | amountPipeCustom }}</td>
+                            <td>
+                                <div *ngIf="approve.capitialized === 0 ; else lock">
+                                    No
+                                </div>
+                                <ng-template #lock>Yes </ng-template>
+                            </td>
+                            <td style="text-align:center">
+                                <button type="button" class="btn btn-default" mat-button data-toggle="modal"
+                                    (click)="delivaryDetailsPatch(approve.prccbs)" data-target="#deliveryModal">
+                                    <span class="material-icons">
+                                        local_shipping
+                                    </span>
+                                </button>
+
+                            </td>
+                            <td>
+                                <div *ngIf="approve.file_data?.length==0; else filePR" class="NodataAlign">No
+                                    Records Found...</div>
+                                <ng-template #filePR>
+    
+                                    <p *ngFor="let a of approve.file_data ;index as i;" title="{{a.file_name }}"
+                                        (click)="fileDownload(a.file_id,a.file_name )" class=" btn-btn-link">
+                                        {{i+1}}. {{a.file_name }}<br>
+                                    </p><br>
+    
+                                </ng-template>
+                            </td>
+                            
+                            <!-- <td> -->
+
+                                <!-- <div *ngIf="approve.file_data?.length==0; else filePRview" class="NodataAlign">No
+                                    Records Found...</div>
+                                <ng-template #filePRview>
+    
+                                    <p *ngFor="let a of approve.file_data ;index as i;" class="material-icons"
+                                     data-target="#my-modal"
+                                    data-toggle="modal"
+                                     (click)="commentPopup(a.file_id,a.file_name)"
+                                        class=" btn-btn-link">
+                                        touch_app
+                                    </p><br>
+    
+                                </ng-template> -->
+
+
+
+
+
+                                <!-- <span class="material-icons"> -->
+                                    <!-- <p class="btn btn-link" style="margin-left:-1%" data-target="#my-modal"
+                                        data-toggle="modal" (click)="commentPopup(approve.file_id,approve.file_name)">
+
+                                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                 <br>
+                                <small>(Note:Only image file can be viewed)</small> -->
+
+                                <!-- </span> -->
+                            <!-- </td> -->
+                            <div *ngIf="showimagepopup" id="my-modal" class="modal fade" aria-labelledby="my-modalLabel"
+                                aria-hidden="true" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+                                    <div class="modal-content">
+
+                                        <div class="modal-body">
+                                            <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </tr>
+                        <!--<tr><td colspan="10">No Records Found..</td></tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <!-- <div class="row" style="margin-bottom: 50px;"> -->
+            <form [formGroup]="approvalForm">
+                <td>
+                    <mat-form-field style="width: 300px; margin-left: 50px;" (click)="getemployeeForApprover()">
+                        <mat-label>Choose Approver</mat-label>
+                        <input #empInput placeholder="Select Approver"  matInput
+                            formControlName="employee_id" [matAutocomplete]="emp">
+                        <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnemp" (opened)="autocompleteempScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let emp of employeeList" [value]="emp">{{emp.full_name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <button type="submit" data-dismiss="modal" (click)="approveClick()" class="btn btn-outline-success"
+                    style="border-radius: 40px;margin-left: 10px;">Approve and Forward</button>
+                </td>
+                <mat-form-field style="width: 400px; margin-left: 50px;">
+                    <mat-label>Approval Remarks</mat-label>
+                    <textarea matInput placeholder="APPROVE Remarks" formControlName="remarks"
+                        autocomplete="off"></textarea>
+                </mat-form-field>
+                <!-- <td>
+                      
+                        <section class="example-section">
+                            <mat-checkbox  [(ngModel)]="IsChecked"
+                             class="example-margin" formControlName="dts">DTS</mat-checkbox>
+                </section>
+                    </td>   -->
+                <button type="submit" data-dismiss="modal" (click)="approveClick()" class="btn btn-outline-success"
+                    style="border-radius: 40px;margin-left: 10px;">Final Approve</button>
+            </form>
+
+            <form [formGroup]="rejectForm">
+                <mat-form-field style="width: 400px; margin-left: 50px;">
+                    <mat-label>Rejected Remarks</mat-label>
+                    <textarea matInput placeholder="REJECT Remarks" formControlName="remarks"
+                        autocomplete="off"></textarea>
+                </mat-form-field>
+                <!-- <td>
+                      
+                        <section class="example-section">
+                            <mat-checkbox  [(ngModel)]="IsChecked"
+                             class="example-margin" formControlName="dts">DTS</mat-checkbox>
+                </section>
+                    </td>  -->
+                <button type="button" data-dismiss="modal" (click)="rejectClick()" class="btn btn-outline-danger"
+                    [disabled]="rejectForm.invalid" style="border-radius: 40px;margin-left: 10px;">Reject</button>
+
+                <br>
+                <br>
+            </form>
+            <div style="margin-top: 3%;margin-left: 5%;margin-bottom: 100px;">
+                <button type="button" class="btn btn-outline-primary" style="border-radius: 40px;margin-left: 10px;"
+                (click)="onCancelClick()" >Cancel</button>
+            </div>
+
+
+        </form>
+    </div>
+
+</div>
+<!-- <pre>
+    {{PRApprovalForm.value | json }}
+</pre>
+<pre>
+    {{ approvalForm.value | json }}
+</pre>
+
+<pre>
+    {{ rejectForm.value | json }}
+</pre> -->
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true" id="deliveryModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #ddefdd;">
+                <h2 class="modal-title">  Delivery Details</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- <div style="background-color: #ddefdd;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2
+                    style="color:black ;font-family:'Times New Roman', Times, serif;font-size:25px;font-weight:lighter;text-align:center">
+                    Delivery Details</h2>
+
+            </div> -->
+            <div class="table-responsive" style="margin-top: 2%;margin-left: 50px; width: 94%;">
+                <table class="table scrolltable table-bordered" fixed-header>
+                    <thead>
+                        <tr class="table_header" fixed-header>
+                            <th>S.No</th>
+                            <th>BS Description</th>
+                            <th>CC Description</th>
+
+                            <th>Quantity</th>
+                            <th>Branch Name</th>
+
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let ccbs of prccbsDetailsList; index as i">
+                            <td>{{i + 1}}</td>
+                            <td>{{ccbs.bs}}</td>
+                            <td>{{ccbs.cc}}</td>
+                            <td>{{ccbs.qty}}</td>
+
+                            <td>
+                                {{ccbs.branch_id.name}}
+                            </td>
+
+
+                        </tr>
+                        <!--<tr><td colspan="10">No Records Found..</td></tr>-->
+                    </tbody>
+                </table>
+                <tr>
+                    <button style="margin-left: 500px;" type="button" data-dismiss="modal"
+                        class="btn btn-outline-primary">
+                        Back
+                    </button>
+                </tr>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" type="line-scale-party">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

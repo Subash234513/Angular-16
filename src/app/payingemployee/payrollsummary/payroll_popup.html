@@ -1,0 +1,262 @@
+<mat-dialog-content class="mat-typography" style="overflow: inherit;">
+
+  <style>
+    .headers {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .headers h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .headers p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .company-logos {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .company-logos img {
+      width: 63px;
+      height: auto;
+    }
+
+    .company-names {
+      font-size: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+
+    .pay-slip {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pay-slip hr {
+      border: none;
+      border-top: 1px solid #101010;
+      margin: 10px auto;
+      width: 100%;
+    }
+
+    .outer-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .outer-table th {
+      /* background-color: #f5f5f5; */
+      border: 1px solid black;
+      /* padding: 8px; */
+      /* text-align: center; */
+      /* vertical-align: middle;
+       */
+       width: 50%;
+
+    }
+
+    .inner-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .inner-table th,
+    .inner-table td {
+      border: none;
+      padding: 8px;
+      text-align: center;
+    }
+
+    table.inner-table th:first-child,
+    table.inner-table td:first-child {
+      border-right: 1px solid black;
+    }
+
+    /* tr, td{
+    border-right: 1px solid black !important;
+  } */
+
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 102.5%;
+      font-family: 'Courier New', Courier, monospace;
+      padding-left: 0%;
+    }
+
+    .tables {
+      flex-basis: 50%;
+      border: 1px solid black;
+      /* border-collapse: collapse; */
+      /* Add any other desired table styles */
+    }
+
+    .containers {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-family: 'Courier New', Courier, monospace;
+      padding-left: 0%;
+    }
+
+    .tabl {
+      flex-basis: 50%;
+      border: 1px solid black;
+      height: 40px;
+
+    }
+
+    .outer-tables {
+      border-collapse: collapse;
+      width: 100%;
+      /* flex-basis: 50%; */
+    }
+
+    .outer-tables th,
+    td {
+      /* background-color: #f5f5f5; */
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .outer-tabl {
+      flex-basis: 50%;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .outer-tabl th {
+      /* background-color: #f5f5f5; */
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+  </style>
+    <div class="row" >
+      <button type="button" mat-stroked-button 
+                              style="margin-left: 45%;background-color: #f5c68b;margin-top: 10px;margin-bottom: 3%;"
+                              (click)="generatePDF()">
+                              Download Pdf
+                          </button>
+    </div>
+  <div id="payslipdata">
+
+  <body>
+    <div class="salary-slip" style="font-family:'Courier New', Courier, monospace">
+      <div class="headers">
+        <div class="company-logos">
+          <img src="../../../assets/images/vsolv.png" alt="VSOLV Logo">
+        </div>
+        <div class="company-names">
+          Vsolv Engineering Pvt Ltd
+
+        </div>
+      </div>
+
+      <div class="pay-slip">
+        <h3 style="margin-top: -4%;">Pay Slip for the Month of {{this.payMonth}} {{this.payYear}}</h3>
+      </div>
+      <p style="text-align: right; font-family: 'Courier New', Courier, monospace;">(Amounts in INR)</p>
+
+      <table class="outer-table">
+        <tr>
+          <th colspan="2" style="text-align: left;">Name: <span>{{payslip_data?.employee?.full_name | uppercase}}</span>
+          </th>
+          <th colspan="2" style="text-align: left;">Employee Code: <span>{{payslip_data?.employee?.code}}</span>
+          </th>
+        </tr>
+
+      </table>
+
+
+      <div class="container">
+        <table class="tables">
+          <tr>
+            <th>Designation</th>
+            <td>{{payslip_data?.employee?.designation}}</td>
+          </tr>
+          <tr>
+            <th>UAN</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>ESI</th>
+            <td>{{payslip_data?.employee?.esi_number}}</td>
+          </tr>
+          <tr>
+            <th>PAN</th>
+            <td></td>
+          </tr>
+        </table>
+
+        <table class="tables">
+          <tr>
+            <th>BANK A/C NO</th>
+            <td>{{payslip_data?.employee?.bankdetails?.accountnumber}}</td>
+          </tr>
+          <tr>
+            <th>Month Days</th>
+            <td>{{payslip_data?.payable_days}}</td>
+          </tr>
+          <tr>
+            <th>Paid Days</th>
+            <td>{{payslip_data?.paid_days}}</td>
+          </tr>
+          <tr>
+            <th>Location</th>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <table class="outer-table" style="margin-top: 2%;">
+        <tr>
+          <th style="text-align: left; width: 50%; border-right: 1.5px solid black;">Earnings</th>
+          <th style="text-align: left;">Deductions</th>
+        </tr>
+      </table>
+      <div class="containers">
+        <table class="tabl" style="width: 97%;">
+          <tr *ngFor="let e of payslip_data?.Employeempay_details_data">
+            <th>{{e?.paycomponent?.name}}</th>
+            <td style="text-align: right;">{{e.amount | currency:"INR"}}</td>
+          </tr>
+        </table>
+        <table class="tabl">
+          <tr *ngFor="let e of payslip_data?.deduction_data">
+            <th>{{e?.paycomponent?.name}}</th>
+            <td style="text-align: right;">{{e?.amount | currency:"INR"}}</td>
+          </tr>
+        </table>
+      </div>
+      <table class="outer-tables">
+        <tr>
+          <th style="text-align: left; width: 25%;">Total</th>
+          <td style="text-align: right; width: 25%;">{{amount_total | currency:"INR"}}</td>
+          <th style="text-align: left;">Total</th>
+          <td style="text-align: right; ">{{deduction_sum | currency:"INR"}}</td>
+        </tr>
+      </table>
+      <table class="outer-tabl" style="text-align: right;">
+        <tr>
+          <th style="text-align: left;    width: 50%; ">Net Pay&nbsp;</th>
+          <td style="text-align: right;">{{amount_total -  deduction_sum | currency:"INR"}}</td>
+        </tr>
+      </table>
+    </div>
+    <p style="text-align: center;font-family: 'Courier New', Courier, monospace;">This is a computer generated document,
+      hence no signature is required.</p>
+    <br>
+    <br>
+  </body>
+  </div>
+
+</mat-dialog-content>

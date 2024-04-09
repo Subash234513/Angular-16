@@ -1,0 +1,354 @@
+<div style="background-color: #ffffff; margin-top: 1px;">
+    <div class="col-md-12">
+
+
+
+
+        <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="summarycallView">
+            <h2>Agreements</h2>
+            <div style="margin-left: 15px;">
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Project </th>
+                            <th>Proposal </th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of ProjectAndProposalList; let index = index">
+                            <td>{{(presentpageProjectAndProposal-1)*10+index+1 }}</td>
+                            <td>({{type?.project?.code}}) {{type?.project?.name}}</td>
+                            <td><span class="textdecorationatag" (click)="AgreementView(type)">
+                                    ({{type?.proposal?.proposer_code}}) {{type?.proposal?.name}}</span></td>
+                            <td>{{type?.agreement_status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="ProjectAndProposalList?.length==0 || ProjectAndProposalList == undefined ; else paginationpro"
+                    class="NodataAlign text-center">No Records Found...</div>
+                <ng-template #paginationpro>
+                    <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                        <button type="button" mat-icon-button [disabled]="has_previousProjectAndProposal === false"
+                            color="primary" (click)="ProjectAndProposalSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button> {{presentpageProjectAndProposal}}
+                        <button type="button" mat-icon-button [disabled]="has_nextProjectAndProposal === false"
+                            color="primary" (click)="ProjectAndProposalSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 8px;" *ngIf="ViewLegalAgreement">
+
+            <div class="row">
+                <div class="col-sm-8 col-md-8 col-lg-8">
+                    <table class="tableHeadernameTitle">
+                        <tr>
+                            <td>Name: {{ProjectName}} ({{ProposalName}})</td>
+                        </tr>
+                        <tr>
+                            <td>Issued: {{ movetoapproverbtn == true ? 'Yes':'No' }} &nbsp;&nbsp;&nbsp;&nbsp;
+                                <!-- </td> <td> -->
+                                Accepted: {{isacceptedbtn == true ? 'Yes':'No' }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <button *ngIf="getLegalResponseShow" style="margin-left: 20px;" mat-raised-button
+                        (click)="legalpdfDownload()"><span class="material-icons">download</span></button>
+                    <button style="margin-left: 20px;" (click)="CompareView()"
+                        *ngIf="(LatestVersion == this.VersionDataForm.value) && VersionArr?.length > 1 && getLegalResponseShow"
+                        mat-raised-button><span> Compare
+                        </span></button>
+                    <button style="margin-left: 20px;" mat-raised-button
+                        (click)="hideContent()"><span>Back</span></button>
+
+                </div>
+                <!-- <div class="col-sm-2 col-md-2 col-lg-2">
+                </div> -->
+
+            </div>
+
+
+
+            <!-- <br> -->
+
+
+            <div *ngIf="getLegalResponseCreate">
+                <div class="row">
+
+
+                    <div class="col">
+                        <button mat-raised-button data-toggle="modal" data-target="#exampleModalPreview"
+                            (click)="previewContent()">Preview</button>
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <mat-select [(ngModel)]="selected">
+                                <mat-option value="CLAUSE" (click)="getLegalClause(1)">Clause</mat-option>
+                                <mat-option value="TEMPLATE" (click)="getLegalClause(2)">Template</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <button mat-raised-button *ngIf="isEdit == false"
+                            (click)="LegalDocumentCreate('Create')">Save</button>
+                        <button mat-raised-button *ngIf="isEdit == true"
+                            (click)="LegalDocumentCreate('Edit')">Update</button>
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                    <div style="border: 1px solid rgba(0, 0, 0, 0.057);" class="col-sm-3 col-md-3 col-lg-3">
+                        <h2>{{selected}}</h2>
+                        <ul id="clauselist">
+                            <li *ngFor="let flow of LegalList; let indexflow = index"><span title="{{flow?.name}}"
+                                    (click)="getTextFrame(flow)">{{flow?.name}}
+                                    &nbsp;+</span></li>
+                        </ul>
+                    </div>
+
+                    <div style="border: 1px solid rgba(0, 0, 0, 0.086);padding: 3px;"
+                        class="col-sm-9 col-md-9 col-lg-9">
+                        <div [ngxSummernote]="config" #textbox (keyup)="gettingPreviewValue"
+                            [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()" (mediaDelete)="onDelete($event)"
+                            placeholder="Description" id="notebook" (summernoteInit)="summernoteInit($event)"
+                            (keyup)="sanitizedHtml; selectedposition" [formControl]="selectedLegalDocumentText">
+                        </div>
+                    </div>
+
+                </div>
+
+                <br>
+                <br>
+
+            </div>
+            <br>
+
+
+            <div class="modal fade" id="exampleModalPreview" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background:#c1e2f6;">
+                            <h2 class="modal-title" id="exampleModalLabel">
+                                Preview</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="border: 1px solid black;padding: 100px;">
+                                <div [innerHTML]="contenthtmlget">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div *ngIf="getLegalResponseShow">
+
+                <div *ngIf="legalDocumentView">
+                    <div class="row">
+                        <div class="col">
+                            <button *ngIf="movetoapproverbtn == false" mat-raised-button
+                                (click)="MoveToVendor()"><span>Push
+                                    to Vendor</span></button>
+                            <button *ngIf="is_vow_submitedBtn == false && (LatestVersion == this.VersionDataForm.value)"
+                                mat-raised-button (click)="MoveToVendor()"><span>Push
+                                    to Vendor</span></button>
+                        </div>
+                        <!-- <div class="col">
+
+                            <button *ngIf="(LatestVersion == this.VersionDataForm.value) && VersionArr?.length > 1"
+                                mat-raised-button><span> Compare
+                                </span></button>
+                        </div> -->
+                        <div class="col">
+                            <button
+                                *ngIf="movetoapproverbtn == true && (LatestVersion == this.VersionDataForm.value) && (is_vow_submitedBtn == false)"
+                                (click)="EditContent()" mat-raised-button><span
+                                    class="material-icons">edit</span></button>
+                        </div>
+                        <div class="col">
+                            <mat-button-toggle-group appearance="outline" aria-label="Font Style"
+                                *ngIf="(LatestVersion == this.VersionDataForm.value)">
+                                <mat-button-toggle style="color: black;" mat-raised-button value="Draft Version"
+                                    (click)="DraftAndVendorVersion('draftversion')">Draft Version</mat-button-toggle>
+                                <mat-button-toggle style="color: black;" mat-raised-button value="Vendor Version"
+                                    (click)="DraftAndVendorVersion('vendorversion')">Vendor Version</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-select [formControl]="VersionDataForm">
+                                    <mat-label>Version</mat-label>
+                                    <mat-option *ngFor="let version of VersionArr" [value]="version.id"
+                                        (click)="versionGetData(version)">
+                                        {{version.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col">
+                        <button mat-raised-button (click)="hideContent()"><span>Back</span></button>
+                    </div> -->
+
+                    </div>
+
+                    <br>
+                    <div style="border: 1px solid black;padding: 110px; margin-bottom: 100px;">
+                        <div [innerHTML]="contenthtmlget">
+
+                        </div>
+                    </div>
+
+
+
+                    <button id="myCheck" type="button" class="btn btn-primary" #closebutton1 data-toggle="modal"
+                        data-target="#exampleModal" style="display: none;">
+                        Launch demo modal
+                    </button>
+
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="exampleModalLabel" style="background-color: lightgreen">
+                                        {{title}}</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div *ngFor="let comment of ScriptCommentList;let  i=index">
+                                        <!-- <div class="comment-box" style="padding:10px;"> -->
+                                        <div class="card">
+                                            <div class="paddingfortableproposal">
+                                                <h3 class="textdecorationatag">
+                                                    {{comment?.created_by?.full_name}}</h3>
+                                                <small class="leftsidemargin"><span
+                                                        class="material-icons timeschedule">schedule</span>{{comment?.created_date
+                                                    | date:'dd-MMM-yyyy h:mm a'}}</small>
+                                                <p class="card-text"> &nbsp;&nbsp;&nbsp;&nbsp; {{comment?.content}} </p>
+                                            </div>
+                                        </div>
+                                        <!-- </div> -->
+                                    </div>
+                                    <form [formGroup]="superScriptCommentsForm">
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Comment:</label>
+                                            <textarea class="form-control" formControlName="comments"
+                                                id="message-text"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" (click)="SuperscriptCommentsSubmit('close')"
+                                        class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button *ngIf="LatestVersion == this.VersionDataForm.value" type="button"
+                                        (click)="SuperscriptCommentsSubmit('comment')" class="btn btn-primary"
+                                        data-dismiss="modal">Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+                <div *ngIf="legalDocumentComapareView">
+                    <button mat-raised-button (click)="backToDataLegalAgrementView()"><span>Back</span></button>
+
+                    <div class="row">
+
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-select [formControl]="versionLeftForm">
+                                    <mat-label>Version</mat-label>
+                                    <mat-option *ngFor="let version of VersionArr" [value]="version.id"
+                                        (click)="compareleft(version)">
+                                        {{version.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <br>
+
+                            <div style="border: 1px solid black; padding: 10px; font-size: 14px;">
+                                <div [innerHTML]="CompareHTML_left">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-select [formControl]="versionRightForm">
+                                    <mat-label>Version</mat-label>
+                                    <mat-option *ngFor="let version of VersionArr" [value]="version.id"
+                                        (click)="compareright(version)">
+                                        {{version.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <br>
+
+                            <div style="border: 1px solid black; padding: 10px; font-size: 14px;">
+                                <div [innerHTML]="CompareHTML_Right">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+    </div>
+</div>

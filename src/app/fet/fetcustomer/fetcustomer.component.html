@@ -1,0 +1,83 @@
+<div>
+    <h2>Executive Summary</h2>
+    <form [formGroup]="executiveform" >
+    <div class="col-md-12 row">
+        <div class="inputclass" >
+            <mat-form-field  >
+                <mat-label>Period</mat-label>
+                <input matInput readonly formControlName="period"  [matDatepicker]="period" autocomplete="off">
+                <mat-datepicker-toggle [for]="period" matSuffix></mat-datepicker-toggle>
+                <mat-datepicker #period></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <!-- <div class="inputclass" >
+            <mat-form-field>
+                <mat-label>Designation</mat-label>
+                <input matInput formControlName="designation">
+            </mat-form-field>
+        </div>
+        <div class="inputclass" >
+            <mat-form-field class="employeewidth">
+                <mat-label>Grade</mat-label>
+                <input formControlName="grade" matInput>
+            </mat-form-field>
+        </div> -->
+       
+        <div class="inputclass">
+            <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                aria-label="Search" (click)="summarybuttonsearch()">
+                <mat-icon>search</mat-icon>
+            </button>
+            <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                (click)="clear()">Clear</button>
+            <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+                (click)="navigatetoexecutivetask()">
+                <mat-icon matTooltip="Add">add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-12" >
+        <div>
+            <table class="table table-bordered" >
+                <tr class="table_header" >
+                    <th>S.No</th>
+                    <!-- <th>Executive</th> -->
+                    <th>Unit Head</th>
+                    <th>TeamLead</th>
+
+                    <th>Start Date </th>
+                    <th>End Date</th>
+                    
+                    <th>Edit</th>
+                </tr>
+                <tr *ngFor="let tab of executivesummarydata;let i=index">
+                    <td>{{i+1}}</td>
+                    <!-- <td>{{tab?.executive_action?.name}}</td> -->
+                    <td>{{tab?.unit_head?.full_name}}</td>
+                    <td>{{tab?.team_lead?.full_name}}</td>
+                    <td>{{tab?.start_date}}</td>
+                    <td>{{tab?.end_date}}</td>
+            
+                    <td><button mat-icon-button  (click)="editexecutivesummary(tab)" ><mat-icon>edit</mat-icon></button></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <div *ngIf="executivesummarydata?.length==0 ; else paginationexecutive"
+            class="NodataAlign text-center">No Records Found...</div>
+        <ng-template #paginationexecutive>
+            <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                <button type="button" mat-icon-button [disabled]="executivepagination?.has_previous === false"
+                    color="primary" (click)="paginationexecutivesummary('previous')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button> {{executivepagination?.index}}
+                <button type="button" mat-icon-button [disabled]="executivepagination?.has_next === false" color="primary"
+                    (click)="paginationexecutivesummary('next')">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        </div>
+    </div>
+</form>
+</div>

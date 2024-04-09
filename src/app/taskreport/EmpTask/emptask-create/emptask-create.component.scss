@@ -1,0 +1,123 @@
+// .AccessTags{
+//     display: inline-block;
+
+// }
+.cursor{
+    cursor: pointer;
+}
+
+.paddingSpace{
+    padding: 5px;
+    margin: 5px;
+}
+.tags{ 
+    display: inline-block;
+}
+
+.badge-blue{
+    background-color: cadetblue;
+}
+
+.tags .badges{
+    margin: 5px;
+    padding: 10px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+
+}
+
+.tags .badges:hover{
+    background-color: var(--global); 
+    color: white;  
+}
+
+.selectedDesign{
+    background-color: var(--global); 
+    color: white; 
+}
+.alignMiddle{
+    vertical-align: middle;
+}
+
+.padsize{
+    padding-left: 20px;
+}
+
+.marginset{
+    margin-top: 2px;
+}
+
+// .marginSetleft{
+//     margin: 20px;
+// }
+
+.noBorder .headers th {
+    border: 1px solid rgba(0, 0, 0, 0.164);
+    background-color: #ffffff;
+    padding: 5px; 
+}
+
+.noBorder tr td{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.164);
+    background-color: #ffffff;
+    // padding: 5px;
+    border-right: 1px solid rgba(0, 0, 0, 0.164);
+    border-left: 1px solid rgba(0, 0, 0, 0.164);
+
+}
+
+.inputslong{
+    width: 550px; 
+}
+
+.inputs{
+    width: 1px;
+    outline: 0;
+}
+
+.outlinesnone{
+    border: none;
+    outline: none;
+}
+
+
+select{ 
+    outline: 0;
+    height: 50px;
+    width: 120px;  
+    color: black;
+    cursor: pointer;
+    border: 1px solid #ffffff;
+    border-radius: 3px;
+    background-color: #ffffff;
+}
+
+.widthset{
+    width: 1px;
+}
+.inputWidthTop{
+    width: 200px;
+}
+
+.alignButtons{
+    display: flex;
+    flex-direction: column;
+}
+
+// .tight-gutter {
+//     padding: 0 2px;
+// }
+.arrowClass .mat-select-arrow {
+    color: green;
+}
+
+.my-class .mat-select-arrow-wrapper {
+    // your preferences here.
+    background-color: red;
+}
+.fonts{
+    font-size: 10px;
+}
+
+

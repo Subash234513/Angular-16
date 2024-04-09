@@ -1,0 +1,207 @@
+<div *ngIf="SummaryForm">
+    <form [formGroup]="brdsummarform">
+      <div class="cus-brdFormContainer">
+        <div class="cus-brdFormContainer1">
+          <div>
+            <mat-form-field>
+              <mat-label>Search Pipeline</mat-label>
+              <input matInput formControlName="query" />
+              <!-- <mat-icon matSuffix class="maticonsize" (click)="pipesSearch('')">search</mat-icon> -->
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field (click)="clientdopdown()">
+              <mat-label>Client</mat-label>
+              <input
+                #clientclientInput
+                placeholder="Select Client"
+                matInput
+                formControlName="client_id"
+                [matAutocomplete]="clientteamrole"
+                (click)="clientclick()"
+              />
+              <mat-autocomplete
+                #clientteamrole="matAutocomplete"
+                [displayWith]="displayccclient"
+              >
+                <ng-container>
+                  <mat-option *ngFor="let opt of clientdrop" [value]="opt">
+                    {{ opt.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div (click)="getModuledrop()">
+            <mat-form-field>
+              <mat-label>Module </mat-label>
+              <input
+                #moduleInput
+                placeholder="Select Module"
+                matInput
+                formControlName="module_id"
+                [matAutocomplete]="modulerole"
+                (click)="moduleClick()"
+              />
+              <mat-autocomplete
+                #modulerole="matAutocomplete"
+                [displayWith]="displaymoduleclient"
+              >
+                <ng-container>
+                  <mat-option *ngFor="let opt of moduledrop" [value]="opt">
+                    {{ opt.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div>
+            <div class="cus-taskFormIcon1">
+              <i
+                style="cursor: pointer"
+                class="fa-solid fa-magnifying-glass"
+                (click)="brdsummaryfunc()"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-secondary" type="button" (click)="reset()">
+              Clear
+            </button>
+          </div>
+        </div>
+        <div class="cus-brdFormContainer2">
+          <!-- <button
+            style="background-color: #044063; color: white"
+            class="btn btn-primary"
+            type="button"
+            (click)="add()"
+          >
+            + BRD
+          </button> -->
+  
+          <button
+            style="background-color: #044063; color: white"
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            (click)="add()"
+          >
+            <!-- (click)="add()" -->
+            + BRD
+          </button>
+  
+          <!-- Modal -->
+          <!-- <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <p
+                    class="modal-title"
+                    style="margin-bottom: 0"
+                    id="exampleModalLabel"
+                  >
+                    Brd Add
+                  </p>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    style="color: white"
+                    #closebutton
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <app-brdadd (OnSubmit)="returntosummary()" *ngIf="brdadd"></app-brdadd>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </form>
+  
+    <div class="cus-tableContainer">
+      <table class="table cus-table">
+        <thead>
+          <tr>
+            <th scope="col">S.No</th>
+            <th scope="col" >Name</th>
+            <th scope="col">Client</th>
+            <th scope="col">Module</th>
+            <th scope="col">Created By</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let type of brdsummary; index as i">
+          <tr>
+            <td>
+              {{ (this.presentpage - 1) * pagesize + i + 1 }}
+            </td>
+
+            <td> <span (click)="patch(type)" class="blue">{{ type.name }} </span></td>
+            <!-- (Click)="patch('')" -->
+            <td>
+              {{ type.client?.name }}
+            </td>
+            <td>
+              {{ type.app?.name }}
+            </td>
+            <td>
+              {{ type.created_by.full_name }}
+            </td>
+              <!-- <td>{{ type.details }}</td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- <div class="cus-pageCount">
+          <div class="cus-pageNumbers">
+              <p class="cus-btnActive">1</p>
+              <p>2</p>
+              <p>3</p>
+              <p>4</p>
+          </div>
+          <button class="cus-btnNext">
+              Next <mat-icon>arrow_forward</mat-icon>
+          </button>
+      </div> -->
+  
+    <div class="cus-pipePageBtnsDiv">
+      <button
+        mat-icon-button
+        [disabled]="has_previous === false"
+        (click)="previousPage()"
+      >
+        <mat-icon>arrow_backward</mat-icon>
+      </button>
+  
+      <div class="cus-pageNumbers">
+        <p class="cus-btnActive">{{ this.presentpage }}</p>
+      </div>
+  
+      <button
+        mat-icon-button
+        [disabled]="has_next === false"
+        (click)="nextPage()"
+      >
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div *ngIf="brdadd">
+    <app-brdadd (OnSubmit)="returntosummary()"></app-brdadd>
+  </div>
+  <div *ngIf="brdview">
+    <app-brdview (OnSubmit)="returntobrdview()"></app-brdview>
+  </div>

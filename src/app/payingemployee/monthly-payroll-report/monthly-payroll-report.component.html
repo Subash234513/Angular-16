@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    <!-- <p>dkdkdk</p> -->
+    <div class="header">
+
+    <div class="FrontHead">
+    <div>
+        <form [formGroup]="DateFormgroup">
+            
+        <!-- <mat-form-field dateFormat2 class="smallinput spacingForm" style="margin-top: -2%;">
+            <mat-label> Month </mat-label>
+            <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+              formControlName="monthyear" />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+            </mat-datepicker>
+          </mat-form-field> -->
+          <!-- <mat-form-field dateFormat2 class="smallinput spacingForm" style="margin-top: -2%;">
+            <mat-label> Month </mat-label>
+            <input matInput [matDatepicker]="dp" placeholder="Month and Year"
+              formControlName="monthyear" />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+            </mat-datepicker>
+          </mat-form-field> -->
+          <mat-form-field dateFormat2>
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="DatePicker"  [formControl]="monyear">
+            <mat-datepicker-toggle class="toggle" matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+            (monthSelected)="chosenMonthHandler($event, picker)" panelClass="example-month-picker"></mat-datepicker>
+          </mat-form-field>
+        </form>
+    </div>
+    <div>
+        <button class="btn borde" (click)="search()"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+    <div>
+        <button class="btn btn-danger" (click)="Previous()">Back</button>
+    </div>
+</div>
+    <div class="mt-5">
+        <table class="table table-light border text-center">
+            <tbody class="">
+                <tr *ngFor="let d of datepickerdata">
+                    <td class="border padding" >{{d.code}}</td>
+                    <td class="border padding">{{d.businesssegment}}</td>
+                    <td class="border padding">{{d.costcentre}}</td>
+                    <td class="border padding">{{d.Total_Amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>

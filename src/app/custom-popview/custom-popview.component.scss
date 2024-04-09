@@ -1,0 +1,51 @@
+h2 {
+  background-color: rgb(143, 143, 241);
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.popup-main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-main-container input {
+  height: 30px;
+  width: 200px;
+}
+
+.popup-common-div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.popup-btns-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.popup-btns-div button {
+  background-color: rgb(139, 139, 243);
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.cus-othersDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.cus-selectDiv {
+  padding-bottom: 10px;
+}
+
+.cus-select {
+  padding: 12px 6px;
+  font-size: 16px;
+}

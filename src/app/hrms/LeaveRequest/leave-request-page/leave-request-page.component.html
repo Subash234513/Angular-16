@@ -1,0 +1,57 @@
+<div>
+    <nav>
+        <div class="nav nav-tabs">
+            <span class="nav-item nav-link" data-toggle="tab" role="tab"
+                *ngFor="let sub of LeavePageObjects.LeaveRequest_Menu_List;index as i">
+                {{sub.name}}
+            </span>
+        </div>
+    </nav>
+
+
+
+
+
+    <div  *ngIf="MenuLeave['Leave Summary']" class="col-md-12" style="margin-top: 1%;">
+        <mat-card>
+        <app-leave-request-summary [TypeOfSummary]="this.LeavePageObjects.typeOfSummary" > </app-leave-request-summary>
+        </mat-card>
+    </div>
+
+
+ 
+
+
+    <div  *ngIf="MenuLeave['Approval Leave Summary']" style="margin-top: 1%;">
+        <mat-card>
+        <app-leave-request-summary [TypeOfSummary]="this.LeavePageObjects.typeOfSummary" > </app-leave-request-summary> 
+        </mat-card>
+    </div>
+
+
+
+    <div *ngIf="MenuLeave['Leave Report']" style="margin-top: 1%;">
+        <mat-card>
+            <app-track-leave-request></app-track-leave-request>
+        </mat-card>
+    </div>
+
+    <div *ngIf="MenuLeave['Attendance Change Request']" style="margin-top: 1%;">
+        <mat-card>
+            <app-request-change></app-request-change>
+        </mat-card>
+    </div>
+
+    <div *ngIf="MenuLeave['Od Request']" style="margin-top: 1%;">
+        <mat-card>
+            <app-ondutyrequest></app-ondutyrequest>
+        </mat-card>
+    </div>
+
+
+
+
+
+
+
+</div>

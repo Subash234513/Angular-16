@@ -1,0 +1,310 @@
+<div class="container">
+    <h2 (click)="backToSummary()"> <span class="material-icons iconsalign" >arrow_back</span> Employee Edit </h2>
+    <div class="padAll">
+        <form [formGroup]="Emp_Create_Form">
+            <table>
+                <tr> 
+                    <td class="leftMargin">
+                        <mat-label>Full Name<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Full Name" formControlName="full_name" required>
+                        </mat-form-field>
+                    </td> 
+                    <td class="leftMargin">
+                        <mat-label>DOJ<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field>
+                            <input matInput type="date" placeholder="DOJ" formControlName="doj" required> 
+                        </mat-form-field>
+                    </td> 
+               
+                    <td class="leftMargin">
+                        <mat-label>Designation<label style="color:red">*</label></mat-label> <br>
+                        <mat-form-field >
+                            <input type="text" placeholder="Search Designation" matInput formControlName="designation"
+                                  [matAutocomplete]="designref"
+                                (keyup)="getdesignation(Emp_Create_Form.value.designation)" autocomplete="off"
+                                #designInput>
+                            <mat-autocomplete #designauto #designref="matAutocomplete"
+                                [displayWith]="getdatadesignation">
+
+                                <mat-option *ngFor="let d of HR_empCreate.designationList;" [value]="d">{{d.name}}</mat-option> 
+
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>Reporting Branch<label style="color:red">*</label></mat-label> <br> 
+                        <mat-form-field >
+                            <input type="text" placeholder="Search Branch" matInput formControlName="branch_id" 
+                                autocomplete="off" (keyup)="getbranchsdata(Emp_Create_Form.value.branch_id)"
+                                [matAutocomplete]="branchlist" #branchInput>
+                            <mat-autocomplete #branchinfo #branchlist="matAutocomplete" [displayWith]="getdatabranch">
+                                <mat-option *ngFor="let d of HR_empCreate.branchList" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftMargin">
+                        <mat-label>Deployed Site<label style="color:red">*</label></mat-label> <br> 
+                        <mat-form-field >
+                            <input type="text" placeholder="Search Branch" matInput formControlName="employee_branch_id" 
+                                autocomplete="off" (keyup)="getbranchsdata(Emp_Create_Form.value.employee_branch_id)"
+                                [matAutocomplete]="branchlist" #branchInput>
+                            <mat-autocomplete #branchinfo #branchlist="matAutocomplete" [displayWith]="getdatabranch">
+                                <mat-option *ngFor="let d of HR_empCreate.branchList" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+
+                    <td class="leftMargin">
+                        <mat-label>Functional Head<label style="color:red">*</label></mat-label><br>
+
+                        <mat-form-field (click)="getTeamLead('')"> 
+    
+                            <input #teamldInput  matInput placeholder="Search Functional Head"
+                                (keyup)="getTeamLead(Emp_Create_Form.value.functional_head_id)" formControlName="functional_head_id"
+                                [matAutocomplete]="teamld"> 
+                            <mat-autocomplete #teamld="matAutocomplete" [displayWith]="displayFnteamld">
+                                <mat-option *ngFor="let teamld of HR_empCreate.teamldList" [value]="teamld"  matTooltip="{{teamld.full_name}}"> 
+                                    {{teamld.full_name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                 
+
+                    <td class="leftMargin">
+                        <mat-label> BS <label style="color:red">*</label></mat-label><br>
+
+                        <mat-form-field (click)="getbsdata('')">
+                            <input #bsInput placeholder="Select BS" matInput formControlName="bs_id"
+                                [matAutocomplete]="bs_id" (keyup)="getbsdata(Emp_Create_Form.value.bs_id)"> 
+                            <mat-autocomplete #bs_id="matAutocomplete" [displayWith]="displayFnbs_id">
+                                <mat-option *ngFor="let bs_id of HR_empCreate.bsdatalist" [value]="bs_id"
+                                    title="{{bs_id.name}}">{{bs_id.name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label> CC <label style="color:red">*</label></mat-label><br>
+    
+                        <mat-form-field (click)="getccdata('')"  class="spacingForm" >
+                            <input #CC_idInput placeholder="Select CC" matInput formControlName="cc_id"
+                                [matAutocomplete]="cc_id" (keyup)="getccdata(Emp_Create_Form.value.cc_id)"> 
+                            <mat-autocomplete #cc_id="matAutocomplete" [displayWith]="displayFncc">
+                                <mat-option *ngFor="let cc of HR_empCreate.ccdatalist" [value]="cc" 
+                                    title="{{cc.name}}">{{cc.name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td> 
+                </tr>
+                <tr> 
+                    <td class="leftMargin">
+                        <mat-label>Shift<label style="color:red">*</label></mat-label><br> 
+                        <mat-form-field class="widthOfField">
+                            <mat-select formControlName="shift_id" placeholder="Shift">
+                                <mat-option *ngFor="let type of HR_empCreate.shift_time" [value]="type?.id"> 
+                                    {{type?.shift_name}} 
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>Grade<label style="color:red">*</label></mat-label><br> 
+                        <mat-form-field class="widthOfField">
+                            <mat-select formControlName="Grade_id" placeholder="level">
+                                <mat-option *ngFor="let type of DropGrade" [value]="type?.id"> 
+                                    {{type?.name}} 
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <!-- <div style="width: 100%"> -->
+                            <!-- <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Payroll</p> -->
+                            <!-- <p class="pLetter" style=" margin-left: 38%;font-weight: 600;">Work Mode</p>
+                          </div>
+                          <div> -->
+                            <!-- <mat-form-field >
+                            <input type="checkbox" formControlName="is_payroll"
+                            (change)="updateCheckboxValue($event)">
+                          </mat-form-field> -->
+                          <mat-label>Work Mode<label style="color:red">*</label></mat-label><br>
+                          <mat-form-field>
+                            
+                            <!-- <mat-select  [(value)]="selectedShift" (selectionChange)="onShiftSelect($event)"
+                            formControlName="workmode" >
+                            <mat-option *ngFor="let shift of workshiftList" [value]="shift.id" >
+                              {{ shift.shift_name }}
+                            </mat-option>
+                          </mat-select> -->
+                          <mat-select formControlName="workmode" >
+                            <mat-option *ngFor="let work of workmodeList" 
+                                [value]="work.id">
+                                {{work.text}}
+                            </mat-option>
+                        </mat-select>
+                          </mat-form-field>
+              
+                          <!-- </div> -->
+                    </td>
+
+                    <td class="leftMargin">
+                          <mat-label>Department<label style="color:red">*</label></mat-label><br>
+                          <mat-form-field>
+                            <input type="text" matInput formControlName="department_id" autocomplete="off" 
+                              [matAutocomplete]="deptlist" (keyup)="getEmployeedepartmentdata(Emp_Create_Form.value.department_id)"
+                              #deptInput>
+                            <mat-autocomplete #deptinfo #deptlist="matAutocomplete" [displayWith]="getdepartmentinterface">
+                              <mat-option *ngFor="let d of employeetypelist" [value]="d">{{d.name}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+              
+                          
+                    </td>
+                    <!-- <td>
+                        <button (click)="showBank=!showBank" class="btn btn-light" > + Add Bank Details</button>
+                    </td> -->
+
+                    <!-- bank  -->
+                </tr>
+
+                <tr> 
+                    <td class="leftMargin">
+                        <mat-label>Role<label style="color:red">*</label></mat-label><br> 
+                        <mat-form-field class="widthOfField">
+                            <mat-select formControlName="role" placeholder="Role">
+                                <mat-option *ngFor="let type of HR_empCreate.roleList" [value]="type?.id"> 
+                                    {{type?.text}} 
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                
+                    <td class="leftMargin">
+                        <mat-label>Status<label style="color:red">*</label></mat-label><br> 
+                        <mat-form-field class="widthOfField">
+                            <mat-select formControlName="noticeperiod" placeholder="Status">
+                                <mat-option *ngFor="let type of statusList" [value]="type?.id"> 
+                                    {{type?.name}} 
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>PAN</mat-label><br>
+                        <mat-form-field  style="width: 100%;">
+                          <input matInput  (input)="onPanInput($event)"  formControlName="pan_number" placeholder="AAAAA0000A" maxlength="10" type="text" required>
+                      </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>ESI</mat-label><br>
+                        <mat-form-field  style="width: 100%;">
+                          <input matInput  (input)="this.Emp_Create_Form.get('esi_number').setValue(formatEsi($event.target.value))"  formControlName="esi_number" placeholder="00-00-0000000-000-0000" maxlength="22" type="text" required>
+                      </mat-form-field>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td class="leftMargin">
+                        <mat-label>UAN</mat-label><br>
+                        <mat-form-field  style="width: 100%;">
+                          <input matInput  (input)="onUANInput($event)"  formControlName="uan_number" placeholder="000000000000" maxlength="12" type="text" required>
+                      </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>Aadhar No</mat-label><br>
+                        <mat-form-field  style="width: 100%;">
+                            <input matInput formControlName="aadhar_number" placeholder="0000-0000-0000" (input)="onAadhaarInput($event)" maxlength="14" type="text" required>
+                      </mat-form-field>
+                    </td>
+                    <td class="leftMargin">
+                        <mat-label>PF No</mat-label><br>
+                        <mat-form-field style="width: 100%;">
+                            <input matInput formControlName="pf_number" placeholder="AAAAA00000000000000000" (input)="this.Emp_Create_Form.get('pf_number').setValue(formatPf($event.target.value));onPfInput($event)" maxlength="26" type="text" required>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                
+                <!-- <tr *ngIf="showBank">
+                    <td class="leftMargin">
+                        <mat-label>Account Name</mat-label><br>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Account Name" formControlName="account_name">
+                        </mat-form-field>
+                    </td> 
+
+                    <td class="leftMargin">
+                        <mat-label>Account No</mat-label><br>
+                        <mat-form-field class="lenthoftext matformfieldstyle">
+                            <input class="matformfieldinputstyle" type="text" placeholder="Acc Number"
+                                formControlName="account_no" matInput autocomplete="off">
+                        </mat-form-field>
+                    </td>
+
+                    <td class="leftMargin">
+                        <mat-label>Bank</mat-label><br>
+                        <mat-form-field > 
+                            <input type="text" placeholder="Search Bank" matInput
+                                formControlName="bank_id"  autocomplete="off"
+                                [matAutocomplete]="banksearch"
+                                (keyup)="getbank(Emp_Create_Form.value.bank_id)"  >  
+                            <mat-autocomplete  #banksearch="matAutocomplete"
+                                [displayWith]="getbankinterface">
+                                <mat-option *ngFor="let d of HR_empCreate.banklist" [value]="d"   
+                                (click)="getBankBranch(d?.id)"
+                                >{{d.name}} 
+                                </mat-option> 
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td> 
+                
+                    <td class="leftMargin">
+                        <mat-label>Bank Branch</mat-label><br>
+                        <mat-form-field > 
+                            <input type="text" placeholder="Search Bank" matInput
+                                formControlName="bank_branch"  autocomplete="off"
+                                [matAutocomplete]="bankbranchsearch"
+                                   >  
+                            <mat-autocomplete  #bankbranchsearch="matAutocomplete"
+                                [displayWith]="getbankinterface">
+                                <mat-option *ngFor="let d of HR_empCreate.bankbranchlist" [value]="d"   
+                                >{{d.name}} 
+                                </mat-option> 
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                    </tr>
+                    <tr *ngIf="showBank">
+
+                    <td class="leftMargin">
+                        <mat-label>IFSC</mat-label><br>
+                        <mat-form-field class="lenthoftext matformfieldstyle">
+                            <input class="matformfieldinputstyle" type="text" placeholder="No"
+                                formControlName="ifsc" matInput autocomplete="off">
+                        </mat-form-field>
+                    </td>
+ 
+                </tr> -->
+                <tr>
+                    <td>
+                        <button type="button" id="submitBtn" class="btn btn-light"  
+                        
+                        (click)="EMP_Create_Submit()">Submit</button>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!-- [disabled]="Emp_Create_Form.invalid" -->
+
+
+<!-- <pre>
+    {{Emp_Create_Form.value | json}}
+</pre>  -->

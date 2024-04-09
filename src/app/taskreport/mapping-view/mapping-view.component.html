@@ -1,0 +1,217 @@
+<div style="margin-left:30px;">
+<div *ngIf="mappingSummary">
+           
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h2>Mapping Summary</h2>
+
+   
+    </div>
+    <!-- <div class="row col-5">
+        <div class="col-5">
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput [formControl]="SearchMapping">
+            </mat-form-field>
+        </div>
+        <div class="col-7 display">
+            <button mat-stroked-button (click)="Search()">
+                <i class="fa fa-search"></i>
+            </button>
+            <button mat-stroked-button (click)="Clear()">
+                Clear
+            </button>
+            <button type="button" mat-fab style="margin-left: 20px;background-color: #f5c68b;"
+            (click)="addMapping()">
+                <mat-icon matTooltip="Add">add</mat-icon>
+            </button>
+        </div>
+    </div> -->
+    <form action="" [formGroup]="search">
+        <div class="row col-12">
+        <div class="col-2">
+            <mat-form-field (click)="ClientMaster('')">
+                <mat-label>Client</mat-label>
+                <input matInput [matAutocomplete]="auto1" (keyup)="ClientMaster($event.target.value)" formControlName="client">
+                <mat-autocomplete #auto1="matAutocomplete">
+                    <mat-option *ngFor="let value of ClientMasterDrop" [value]="value.name" (focusout)="ClientMasterId(value)" title="{{value.name}}">
+                        {{value.name}}
+                    </mat-option>
+                    <mat-option *ngIf="!ClientMasterDrop.length">No Records Found</mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-2">
+            <mat-form-field (click)="ProjectMaster('')">
+                <mat-label>Project</mat-label>
+                <input matInput [matAutocomplete]="auto2" (keyup)="ProjectMaster($event.target.value)" formControlName="project">
+                <mat-autocomplete #auto2="matAutocomplete">
+                    <mat-option *ngFor="let value of ProjectMasterDrop" [value]="value.name" (focusout)="ProjectMasterId(value)" title="{{value.name}}">
+                        {{value.name}}
+                    </mat-option>
+                    <mat-option *ngIf="!ProjectMasterDrop.length">No Records Found</mat-option>
+
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-2">
+            <mat-form-field (click)="ModuleMaster('')">
+                <mat-label>Module</mat-label>
+                <input matInput [matAutocomplete]="auto3" (keyup)="ModuleMaster($event.target.value)" formControlName="module">
+                <mat-autocomplete #auto3="matAutocomplete">
+                    <mat-option *ngFor="let value of ModuleMasterDrop" [value]="value.name" (focusout)="ModuleMasterId(value)" title="{{value.name}}">
+                        {{value.name}}
+                    </mat-option>
+                    <mat-option *ngIf="!ModuleMasterDrop.length">No Records Found</mat-option>
+                    
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="col-1 mt-1 ml-4">
+            <button mat-stroked-button (click)="Search()">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div class="col-1 mt-1">
+            <button mat-stroked-button (click)="clear()">
+                Clear
+            </button>
+        </div>
+        <div class="col-1">
+            <button type="button" mat-fab style="background-color: #f5c68b;"
+            (click)="addMapping()">
+                <mat-icon matTooltip="Add">add</mat-icon>
+            </button>
+        </div>
+    </div>
+    </form>
+
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div style="margin-left: 15px;">
+        <table class="table aligncenter" style="margin-top: 10px;max-width: 100%;"
+                            id='commonstyle'>
+                            <thead class="table_header">
+                <tr>
+                    <th>S.no</th>
+                    <th>Client</th>
+                    <th>Project</th>
+                    <th>Module</th>
+                    <th>Approver</th>
+                    <th>Action</th>
+                    
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let type of mappingList; index as i">
+                    <td>{{(presentpagemapping - 1)*pagesizemapping +i+1 }}</td>
+                    <td>{{type?.client_id.name}}</td>
+                    <td>{{type?.project_id.name}}</td>
+                    <td>{{type?.module_id.name}}</td>
+                    <td>{{type?.approved_by.full_name}}</td>
+                    <td> 
+                        <span class="material-icons" (click)="mappingActiveInactive(1, type)" *ngIf="type?.status == 0 " matTooltip="Click to Active" style="color: red;cursor: pointer;">wb_sunny </span>
+                        <span class="material-icons" *ngIf="type?.status == 1" style="color: green;cursor: pointer;" matTooltip="Click to Inactive" (click)="mappingActiveInactive(0, type)">wb_sunny </span>
+                     </td> 
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="mappingList?.length==0 || mappingList == undefined ; else paginationpro"
+        class="NodataAlign text-center">No Records Found...</div>
+    <ng-template #paginationpro>
+        <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+            <button type="button" mat-icon-button [disabled]="has_previousmapping === false" color="primary"
+                (click)="mappingSearch('previous')">
+                <mat-icon>arrow_back</mat-icon>
+            </button> {{presentpagemapping}}
+            <button type="button" mat-icon-button [disabled]="has_nextmapping === false" color="primary"
+                (click)="mappingSearch('next')">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    </div>
+    </div>
+</div>
+<div *ngIf="mappingcreation">
+    <h2>Mapping Creation</h2>
+    <form [formGroup]="mappingForm"  autocomplete="off">
+        <table>
+        <div>
+            <tr>
+                <td>
+                    <mat-label style="margin-left: -210px;" >Client<label style="color:red">*</label></mat-label><br>
+                <mat-form-field class="matformfieldstyle" style="width: 250px;" appearance="outline"
+                    (click)="clientmaster()">
+        
+                    <input #cltmasterInput  class="matformfieldinputstyle" matInput
+                        formControlName="client_id" [matAutocomplete]="cltmaster" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #cltmaster="matAutocomplete" [displayWith]="displayFncltmaster"
+                        (opened)="autocompleteCltmasterScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let clt of clientmasterList"  (focusout)="FocusOut_select_clientmaster(clt)" [value]="clt" title="{{clt.name}}">
+                                {{clt.name}}
+                            </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!clientmasterList.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                </td>
+                <td>
+                    <mat-label style="margin-left: -96px;">Project Name<label style="color:red">*</label></mat-label><br>
+                <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline"
+                    (click)="projectnamemaster()">
+        
+                    <input #appnmmasterInput  class="matformfieldinputstyle" matInput
+                        formControlName="project_id" [matAutocomplete]="appnmmaster" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #appnmmaster="matAutocomplete" [displayWith]="displayFnappnmmaster"
+                        (opened)="autocompleteAppnmmasterScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let appnm of appNamemasterList" (focusout)="FocusOut_select_projectmaster(appnm)" [value]="appnm" title="{{appnm.name}}">
+                                {{appnm.name}}
+                            </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!appNamemasterList.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                </td>
+        
+                <td>
+                    <mat-label style="margin-left: -96px;" >Module Name<label style="color:red">*</label></mat-label><br>
+                <mat-form-field class="matformfieldstyle" style="width: 250px;margin-left: 60px;" appearance="outline"
+                    (click)="modulenamemaster()">
+        
+                    <input #modnmmasterInput  class="matformfieldinputstyle" matInput
+                        formControlName="module_id" [matAutocomplete]="modnmmaster" >
+                        <mat-icon matSuffix class="maticonsize" >unfold_more</mat-icon>
+                    <mat-autocomplete #modnmmaster="matAutocomplete" [displayWith]="displayFnmodnmmaster"
+                        (opened)="autocompletemodnmmasterScroll()">
+                        <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let modnm of moduleNamemasterList" [value]="modnm" title="{{modnm.name}}">
+                                {{modnm.name}}
+                            </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!moduleNamemasterList.length">No Records Found</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                </td>
+              
+                
+            </tr>
+        </div>
+        </table>
+        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 2px;
+        border-color: black;
+        background-color: white;"
+        (click)="oncancelMapping()">Cancel</button>
+        <button type="submit" style="border-radius: 10px;margin-left: 10px;
+        border-color: #f5c68b;
+        background-color: #f5c68b;" (click)="mappingSubmit()" class="btn btn-light">Submit</button>
+    </form>
+</div>
+</div>

@@ -1,0 +1,204 @@
+<div class="row" *ngIf="employeePFStructure">
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <h2 class="employee">Employee Contribution</h2>
+        </div>
+
+        <div class="search">
+
+            <form [formGroup]="datassearch"  class="form">
+                <section>
+                    <div class="row" style="width:100%">
+                        <div class="col-sm-3" style="text-align:left">
+                            <mat-form-field  class="name">
+                                <mat-label>Name/Code</mat-label>
+
+                                <input matInput formControlName="name">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-3" class="column">
+                            <div>
+                                <button mat-stroked-button type="button" class="button"
+                                    aria-label="Search"
+                                    (click)="searchName()">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button mat-stroked-button type="button"  class="clear"  (click)="clearForm()">Clear</button>
+
+                                <button type="button" class="add" mat-fab 
+                                    (click)="addEmployeePF('Creation','')">
+                                    <mat-icon matTooltip="Add" style="color: black;">add</mat-icon>
+                                </button>
+                                <button type="button" class="add" mat-fab 
+                                (click)="uploadfile()">
+                                <mat-icon matTooltip="Upload" style="color: black;">arrow_upward</mat-icon>
+                            </button>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </form>
+
+        </div>
+
+
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive">
+            <table class="table aligncenter table-bordered">
+                <thead class="table_header">
+                    <tr>
+                        <th class="text-center">S.no</th>
+                        <th class="text-center">Code</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Percentage</th>
+                        <th class="text-center">Amount</th>
+                        <th class="text-center">GL NO</th>
+                        <th class="width text-center">Edit</th>
+                        <th class="width text-center">Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let type of PFStructureList; index as i">
+                        <td class="text-center">{{(presentpagepf - 1)*pagesizepf +i+1 }}</td>
+                        <td class="text-center">{{type?.code}}</td>
+                        <td class="text-center">{{type?.name}}</td>
+                        <td class="text-center">{{type?.percentage}} % </td>
+                        <td class="text-center">{{type?.amount | currency: 'INR'}} </td>
+                        <td class="text-center">{{type?.glno}}</td>
+                        <td class="width text-center"><i class="fa-solid fa-pencil" (click)="addEmployeePF('Edit',type)"></i>
+                            
+                        </td>
+                        <td class="width text-center"><i class="fa-solid fa-trash-can" (click)="deletePFStructure(type)"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="PFStructureList?.length==0 || PFStructureList == undefined ; else paginationpro"
+                class="NodataAlign text-center">No Records Found...</div>
+            <ng-template #paginationpro>
+                <div class="col-sm-12">
+                    <button type="button" mat-icon-button [disabled]="has_previousPF === false" color="primary"
+                        (click)="PFSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpagepayroll}}
+                    <button type="button" mat-icon-button [disabled]="has_nextPF === false" color="primary"
+                        (click)="PFSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="employeePFStructurecreation" class="employeePFStructurecreation">
+    <h2>PF {{TypeOfForm}}</h2>
+    <form [formGroup]="PFForm" autocomplete="off">
+        <table>
+            <div>
+                <tr>
+                    <td>
+                        <mat-label>Name<label  class="label">*</label> </mat-label><br>
+                        <mat-form-field class="matformfieldstyle1" appearance="outline">
+                            <input matInput class="matformfieldinputstyle" type="name" formControlName="name"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <!-- <td>
+                        <mat-label class="pay" >Pay Component<label class="pay2">*</label> </mat-label><br>
+                        <mat-form-field  class="matformfieldstyle2">
+                            <mat-select formControlName="paycomponentflagmaster" multiple (openedChange)="onDropdownOpened($event)"  >
+                                <mat-option *ngFor="let type of paycomponent_array" [value]="type.id" (onSelectionChange)="onSelectionChange($event)" >{{ type.name }}</mat-option>
+                              </mat-select>
+                        </mat-form-field>
+                    </td> -->
+                    <td>
+                        <mat-label class="pay" >Pay Component<label class="pay2" >*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle2" (click)="paycomponent_search('')">  
+                            <mat-chip-grid #chiplist>
+                                <mat-chip-row *ngFor="let employee of chipSelectedemployee"  [removable]="true" (removed)="removedemployee(employee)">
+                                {{employee.name}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip-row>
+                                <input #employeeInput formControlName="paycomponentflagmaster" [matAutocomplete]="auto" [matChipInputFor]="chiplist" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" matChipInputAddOnBlur="true" (keyup)="paycomponent_search(PFForm.value.paycomponentflagmaster)" >
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="employeeSelected($event)">
+
+                                  <mat-option *ngFor="let thisemployee of paycomponent_array" [value]="thisemployee" (focusout)="paycomponent_search(thisemployee.id)" title="{{thisemployee.name}}">
+                                    {{thisemployee.name}}
+                                  </mat-option>
+                                  <mat-option *ngIf="!paycomponent_array.length">
+                                    No Records Found
+                                  </mat-option>
+                                </mat-autocomplete>
+                            </mat-chip-grid>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-label class="per" >Percentage<label  class="per2">*</label>
+                        </mat-label><br>
+                        <mat-form-field class="matformfieldstyle3" 
+                            appearance="outline">
+                            <input matInput class="matformfieldinputstyle" type="name" formControlName="percentage"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-label class="cash">Amount<label  class="amount">*</label>
+                        </mat-label><br>
+                        <mat-form-field class="matformfieldstyle4"
+                            appearance="outline">
+                            <input matInput class="matformfieldinputstyle" type="name" formControlName="amount"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-label class="cash">Gl No<label  class="amount"></label>
+                        </mat-label><br>
+                        <mat-form-field class="matformfieldstyle4 mt-2"
+                            appearance="outline">
+                            <input matInput class="matformfieldinputstyle" type="name" formControlName="GlNo"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </div>
+        </table>
+        <button type="button" class="btn btn-light" (click)="oncancelPF()">Cancel</button>
+        <button type="submit" class="sub" (click)="pfSubmit()" class="btn btn-light">Submit</button>
+    </form>
+</div>
+
+<div *ngIf="isFileUpload">
+    <div class="card">
+        <div class="card-body">
+          <form novalidate [formGroup]="uploadForms">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" formControlName="files" id="importFile"
+                  (change)="fileChange($event, $event.target.files)">
+                <label class="custom-file-label" #labelImport for="importFile">Choose file</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-warning" type="button" (click)="uploadDocuments()">
+                <i class="fas fa-file-import"></i> Upload
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="cancel()" style="margin-left: 4%;">
+                Cancel
+              </button>
+              <button class="btn btn-outline-info" type="button" (click)="downloadTemplate()" style="    margin-left:35%;">
+                Download Template
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+</div>

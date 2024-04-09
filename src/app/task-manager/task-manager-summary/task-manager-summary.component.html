@@ -1,0 +1,66 @@
+<nav id="navshow" class="cus-tmsNavContainer">
+  <div class="nav nav-tabs cus-tmsNav">
+    <p
+      #myDiv
+      class="nav-item nav-link"
+      id="subname"
+      [ngClass]="i == returnnav ? 'active' : ''"
+      data-toggle="tab"
+      (click)="subModuleData(sub)"
+      role="tab"
+      *ngFor="let sub of Tran_Menu_List; index as i"
+    >
+      {{ sub.name }}
+    </p>
+  </div>
+</nav>
+
+<div *ngIf="isShowStory">
+  <app-storiesmain
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="CancelbackToSummary()"
+  ></app-storiesmain>
+</div>
+<div *ngIf="isShowSprint">
+  <app-sprintmain
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="CancelbackToSummary()"
+  ></app-sprintmain>
+</div>
+<div *ngIf="isShowTasksummary">
+  <app-tasks
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="CancelbackToSummary()"
+  ></app-tasks>
+</div>
+<div *ngIf="isShowBacklog">
+  <app-backlog
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="CancelbackToSummary()"
+  ></app-backlog>
+</div>
+<div *ngIf="isShowIssues">
+  <app-issues
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="CancelbackToSummary()"
+  ></app-issues>
+</div>
+
+<div *ngIf="isShowPipelines">
+  <app-pipelinetransaction></app-pipelinetransaction>
+</div>
+<div *ngIf="isShowtimesheet">
+  <app-timesheetadd> </app-timesheetadd>
+</div>
+<div *ngIf="isShowmeeting">
+  <app-meeting> </app-meeting>
+</div>
+<div *ngIf="isShowReport">
+  <app-report-icon>
+
+  </app-report-icon>
+</div>
+<div *ngIf="isShowBrd">
+  <app-brdsummary></app-brdsummary>
+
+</div>

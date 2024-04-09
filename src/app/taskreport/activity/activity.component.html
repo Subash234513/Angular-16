@@ -1,0 +1,214 @@
+<div *ngIf="activitycreation">
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+        <h2 style=" margin-left:30px;margin-top: 0px;">
+            Activity Creation
+        </h2>
+        
+        <div style="margin: 30px; margin-left: 17px; margin-top: 20px;">
+            <form [formGroup]="taskAddForm" autocomplete="off">
+                <div class="row col-12">
+                    <div class="col-sm-4">
+                        <mat-label>Client<label style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" appearance="outline" (click)="getclt('')">
+
+                            <input #cltInput class="matformfieldinputstyle" matInput 
+                                formControlName="client" [matAutocomplete]="clt" required (keyup)="getclt($event.target.value)">
+                            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                            <mat-autocomplete #clt="matAutocomplete" [displayWith]="displayFnclt"
+                                (opened)="autocompleteCltScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let clt of clientList" (focusout)="FocusOut_select_client(clt)"
+                                        [value]="clt" title="{{clt.name}}">
+                                        {{clt.name}}
+                                    </mat-option>
+                                </ng-container>
+                                <mat-option *ngIf="!clientList.length">No Records Found</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <mat-label style="margin-left: -128px;">Project Name<label
+                                style="color:red">*</label></mat-label><br>
+                        <mat-form-field class="matformfieldstyle" style="margin-left: -128px;" appearance="outline"
+                            (click)="getappName('')">
+
+                            <input #appnmInput class="matformfieldinputstyle" matInput 
+                            (input)="onActivityInputChange($event)" formControlName="app_id" [matAutocomplete]="appnm" required (keyup)="getappName($event.target.value)">
+                            <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                            <mat-autocomplete #appnm="matAutocomplete" [displayWith]="displayFnappnm"
+                                (opened)="autocompleteAppnmScroll()">
+                                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let appnm of appNameList"
+                                        (focusout)="FocusOut_select_project(appnm)" [value]="appnm" title="{{appnm.name}}">
+                                        {{appnm.name}}
+                                    </mat-option>
+                                </ng-container>
+                                <mat-option *ngIf="!appNameList.lenght">No Records Found</mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <mat-label style="margin-left: -260px; width: 220px;">Activity<label
+                                style="color:red">*</label></mat-label><br>
+                        <mat-form-field style="margin-left: -260px;" class="matformfieldstyle" appearance="outline">
+                            <input matInput formControlName="activity" required>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 15px;
+                                                    border-color:black;
+                                                    background-color: white;" (click)="oncancelteam()">Cancel</button>
+                        <button type="button" style="  border-radius: 10px;margin-left: 15px;border-color: #f5c68b;                                
+                                background-color:#f5c68b;" data-toggle="modal"
+                            class="btn btn-light" (click)="submit()">Submit</button>
+                        <!-- </td> -->
+
+                    </div>
+                </div>
+                <!-- </table> -->
+
+            </form>
+        </div>
+    </div>
+    <!-- </div>
+</div>
+</div> -->
+</div>
+
+<div class="row" *ngIf="activitySummary">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+
+
+        <form [formGroup]="activityform" autocomplete="off">
+            <!-- <button class="btn btn-outline-primary" id="activity">activity</button> -->
+
+
+            <div class="inpufield">
+
+                <div style=" margin-left: 45px;">
+                    <div>
+                        <h2>Activity Summary</h2>
+                        <mat-label>Name </mat-label>
+                    </div>
+
+                    <mat-form-field appearance="outline">
+                        <input matInput type="name" formControlName="name" autocomplete="off" required>
+                    </mat-form-field>
+
+                
+
+                    <button mat-stroked-button type="button" (click)="searchform()"
+                        aria-label="Search"  style="margin-left: 20px;"><mat-icon>search</mat-icon></button>
+
+            
+
+                
+                    <button mat-stroked-button type="button" (click)="clearForm()"  style="margin-left: 20px;">Reset</button>
+                
+
+              
+                    <button type="button" style=" background-color: #f5c68b;margin-left: 20px;" mat-fab
+                        (click)="addactivity('0')"><mat-icon>add</mat-icon></button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div style="margin-left: -74px;width: 95%;">
+            <table class="table aligncenter" style="margin-top: 10px;max-width: 100%; margin-left: 100px;"
+                id='commonstyle'>
+
+                <thead class="table_header">
+                    <tr style="text-align: center;">
+                        <th>S.no</th>
+                        <th>Client</th>
+                        <th>Project</th>
+                        <th>Activity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of activitylist; index as i">
+                        <td>{{(presentpageteam - 1)*pagesiz +i+1 }}</td>
+                        <td>{{type.client.name}}</td>
+                        <td>{{type.app.name}}</td>
+                        <td>{{type.activity}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="activitylist?.length==0 || activitylist == undefined ; else paginationpro"
+                class="NodataAlign text-center">No
+                Records Found...
+            </div>
+            <ng-template #paginationpro>
+                <div class="col-sm-4"
+                    style="font-size: small;text-align: right;margin-left: 75%; margin-bottom: 121px;">
+                    <button type="button" mat-icon-button [disabled]="has_previousactivity === false" color="primary"
+                        (click)="teamSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpageteam}}
+                    <button type="button" mat-icon-button [disabled]="has_nextactivity === false" color="primary"
+                        (click)="teamSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+            <!-- <div class="detailsside padings">
+                    <div class="row marginsize">
+                        <div class="col-sm-12 col-md-12 col-lg-12 borderright ">
+                            <div class="col-sm-4">
+
+
+                                <div class="col d-flex" style="justify-content: space-between;">
+                                    <div> 
+
+                                        <h3> ({{teammember.code | uppercase}}) {{teammember.name |
+                                            uppercase}}
+                                        </h3>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="showmember">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-sm-4">
+                                <h2 style="margin : 15px;">Activity members</h2>
+
+                                <table class="table aligncenter" style="margin-left: 15%;max-width: 50px;"
+                                    id='commonstyle'>
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Module</th>
+                                            <th>Activity</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let member of memberlist ; index as i">
+                                            <td>{{(presentpagemember - 1)*pagesizemember +i+1 }}
+                                            </td>
+                                            <td>{{member?.name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div> -->

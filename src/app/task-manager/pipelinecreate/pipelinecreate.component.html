@@ -1,0 +1,24 @@
+<div class="cus-createHeader">
+    <h3>New Pipeline Creation</h3>
+    <nav class="cus-createHeaderNav">
+        <p class="cus-createHeaderNavActive" id="cus-createDetailsBtn">
+            Pipeline Details
+        </p>
+    </nav>
+</div>
+
+<form [formGroup]="pipelineform" class="cus-createForm cus-createDetailsForm">
+
+    <div>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Pipeline Name</mat-label>
+            <input type="text" matInput autocomplete="off" formControlName="name">
+            <!-- <mat-placeholder>Name</mat-placeholder> -->
+        </mat-form-field>
+    </div>
+   
+    <div class="cus-createFormBtns">
+        <button class="btn btn-outline-secondary" (click)="BackToSummary()">Cancel</button>
+        <button class="btn btn-secondary" [disabled]="!pipelineform.valid" (click)="submitPipeline()">Save</button>
+    </div>
+</form>

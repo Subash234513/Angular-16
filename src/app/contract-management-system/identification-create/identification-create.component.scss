@@ -1,0 +1,98 @@
+.container {
+    margin-bottom: 100px;
+}
+
+
+::ng-deep .mat-form-field-outline {
+    color: grey !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
+    color: red !important;
+    opacity: 0.8 !important;
+}
+
+.matformfieldstyle {
+    font-size: 7px;
+    margin-top: 5px
+}
+
+.matformfieldinputstyle {
+    font-size: 16px;
+}
+
+.maticonsize {
+    font-size: 15px;
+}
+
+.mat-option:hover {
+    background: #EDF8FA !important;
+}
+
+#commonstyle {
+    border: 15px none #f6f6f6
+}
+
+table,
+th,
+td {
+    text-align: left;
+}
+
+.lenthoftext {
+    width: 200px;
+}
+
+.lenthoftextfield {
+    width: 870px;
+}
+
+.lenthoftextfielddesc {
+    width: 425px;
+}
+
+.gapforfield {
+    margin-left: 20px;
+}
+
+.gapforfieldfy {
+    margin-left: 20px;
+}
+.heightdesc{
+    height: 100px;
+}
+
+
+
+tr th,
+tr td {
+    padding: 2px;
+}
+
+.textdecorationatag{
+    text-decoration: underline;
+    color: #044063;
+    cursor: pointer;
+}
+.textdecorationatagdelete{
+    text-decoration: underline;
+    color: rgb(139, 39, 39);
+    cursor: pointer;
+}
+
+.cursor{
+    cursor: pointer;
+}
+.spacingfile{
+    margin: 2px;
+}
+
+
+.inputCMTFile01 {
+    width: 200px;
+}
+
+
+.btncolor{
+    background-color: #e0e0e0;
+}

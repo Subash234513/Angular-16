@@ -1,0 +1,38 @@
+.Search{
+    display: flex;
+    column-gap: 30px;
+    row-gap: 5px;
+}
+.smallinput{
+    width: 100%;
+}
+.row{
+    width: 100%;
+}
+.Main{
+    margin-left: 30px;
+    margin-top: 20px;
+}
+.table_width{
+    width:90%
+}
+.table{
+    width: 100%;
+    position: relative;
+}
+.table td:first-child{
+    background-color: #f2f2f2;
+    position: sticky;
+    left: 0;
+    z-index: 2 !important;
+}
+.table th:first-child{
+    background-color: #f2f2f2;
+    position: sticky;
+    left: 0;
+    z-index: 2 !important;
+}
+// .Sticky{
+//     position: absolute;
+//     top: 10px;
+// }

@@ -1,0 +1,47 @@
+.header{
+    margin-left: 1%;
+}
+
+.inputformat{
+    width: 175px; margin-left: 50px;
+}
+
+.inputformatlong{
+    width: 250px; margin-left: 50px;
+}
+.inputformatradiobutton{
+     margin-left: 30px;
+}
+.submitCancel{
+    margin: 50px 0 100px 50px;
+}
+
+.fileSpan{
+    margin-right: 200px;
+}
+
+.totaldisplay{
+    text-align:right;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input.rightalign {
+    text-align: right;
+}
+.rightaligntotal {
+    text-align: right;
+}
+.invisible{
+    display: block;
+    visibility: hidden;
+    height: 0;
+    width: 0;
+    text-align:center;
+    outline:none;
+    box-shadow: none;
+}
+.inputformatlongdesc{
+    width: 250px; margin-left: 50px;
+}

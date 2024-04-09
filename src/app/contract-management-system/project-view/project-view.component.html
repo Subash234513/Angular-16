@@ -1,0 +1,1063 @@
+<div *ngIf="projectcreate">
+    <app-project-create (onSubmitEdit)="ProjectCreate()" (onCancelEdit)="ProjectCancel()"></app-project-create>
+</div>
+
+
+<div *ngIf="SupplierCatlog">
+    <app-supplier-catlog (onSubmit)="SupplierCatCreate()" (onCancel)="SupplierCatCancel()">
+    </app-supplier-catlog>
+</div>
+
+<div class="container" *ngIf="projectdetailsView">
+
+
+    <!---------------------------------- Title Part ------------------------------------->
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <p (click)="backnavigate()"> <span class="material-icons alignvertical">arrow_back</span> <span
+                    class="alignvertical textdecorationatag" title="Project Details">Project
+                    Summary</span> / <span class="navigateclass alignvertical" title='({{detailsPreView?.code}})
+                 {{detailsPreView?.title}}'>({{detailsPreView?.code}})
+                    {{detailsPreView?.title}} </span>
+                <span class="material-icons" style="margin-left: 20px;" title="Project Edit"
+                    *ngIf="detailsPreView?.is_created_by == true && (detailsPreView?.approval_status?.text  == 'PENDING' || detailsPreView?.approval_status?.text  == 'REVIEW' ) "
+                    (click)="EditProject()">edit</span>
+                <span title="Project Resubmit" style="margin-left: 20px;"
+                    *ngIf="detailsPreView?.is_created_by == true && detailsPreView?.approval_status?.text  == 'REVIEW' ">
+                    <button type="button" mat-stroked-button (click)="ResubmitProject()">Resubmit</button>
+                </span>
+            </p>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+
+            <div class="placingOnRight">
+                <mat-form-field class="ddheight" style="width: 140px;">
+                    <mat-select placeholder="Select Version">
+                        <mat-option *ngFor="let version of ProjectVersionlist" [value]="version?.id"
+                            (click)="getProjectBasedversionSelect(version)">
+                            {{version?.version}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="placingOnRight"
+                *ngIf="detailsPreView?.is_created_by == false && detailsPreView?.pending_approver?.length > 0 ">
+                <mat-form-field class="ddheight" style="width: 140px;">
+                    <mat-select placeholder="Select Action">
+                        <mat-option *ngFor="let process of ProcessList" [value]="process?.name" data-toggle="modal"
+                            data-target="#exampleModal" (click)="gettingRemarks(process)">
+                            {{process?.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+
+    <!----------------------------- Approve Reject Review Remarks -------------------------------->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#c1e2f6;">
+                    <h2 class="modal-title" id="exampleModalLabel">{{SelectedProcess}}
+                        Remarks</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="RemarksForm">
+                        <div class="col-md-3">
+                            <mat-label>Remarks</mat-label><br>
+                            <mat-form-field class="matformfieldstyle lenthoftextfield">
+                                <textarea class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                    placeholder="Remarks" formControlName="remarks"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col-md-3">
+                            <mat-label>Group</mat-label><br>
+                            <mat-form-field class="matformfieldstyle">
+                                <mat-select class="matformfieldinputstyle" placeholder="Role"
+                                    formControlName="group_id">
+                                    <mat-option *ngFor="let gp of groupApproverList" [value]="gp.id">
+                                        {{gp.approver.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                        border-color: black;
+                                                        background-color: white;" data-dismiss="modal">Close</button>
+
+                    <button type="button" [disabled]="RemarksForm.invalid" style="border-radius: 10px;margin-left: 10px; 
+                                                    border-color: #f5c68b; background-color: #f5c68b;"
+                        class=" mat-stroked-button" data-dismiss="modal"
+                        (click)="Approval_Reject_Review(SelectedProcess)">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!------------------------------ Project View --------------------------->
+    <button mat-button color="primary" data-toggle="collapse" data-target="#collapseDetailView" aria-expanded="false"
+        aria-controls="collapseExample">Project Full Details View<mat-icon>expand_more</mat-icon>
+    </button>
+    <div id="collapseDetailView" class="panel-collapse collapse show in">
+        <div class="row smallsize" style="width: 90%;">
+            <div class="col">
+                <div style="margin-left: 15px;">
+                    <strong>Project Creation & Spec Approval group:</strong>
+                    <mat-chip-grid class="inlineprint"
+                        *ngFor="let dataapprover of detailsPreView?.approver; let indexapprover = index">
+                        <div *ngIf="dataapprover?.status?.text == 'Pending'; else Rejects">
+                            <mat-chip-row color="primary" selected>{{dataapprover?.approver?.name}}</mat-chip-row>
+                        </div>
+                        <ng-template #Rejects>
+                            <div *ngIf="dataapprover?.status?.text == 'Rejected'; else awaiting">
+                                <mat-chip-row color="warn" selected> {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                        <ng-template #awaiting>
+                            <div
+                                *ngIf="dataapprover?.status?.text == 'Awaiting' || dataapprover?.status?.text =='Reviwed' || dataapprover?.status?.text == 'Viewer'; else approvedcases">
+                                <mat-chip-row style="background-color: rgba(122, 122, 122, 0.704);color: black;" selected>
+                                    {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                        <ng-template #approvedcases>
+                            <div *ngIf="dataapprover?.status?.text == 'Approved';">
+                                <mat-chip-row style="background-color: rgba(36, 167, 36, 0.704); color: black;" selected>
+                                    {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                    </mat-chip-grid>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            <table class="tablepaddingsizeheader smallsize">
+                <tr>
+                    <th>Type:</th>
+                    <td>{{detailsPreView?.type?.name}}</td>
+                    <th>Beneficiary Group:</th>
+                    <td>{{detailsPreView?.onbehalf_group?.name}}</td>
+                    <th>Status:</th>
+                    <td>{{detailsPreView?.approval_status?.text}}</td>
+                    <th>Version: </th>
+                    <td>{{detailsPreView?.version}}</td>
+                    <td> <button mat-button color="primary" data-toggle="collapse" data-target="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">more..<mat-icon>expand_more</mat-icon>
+                        </button>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <table class="tablepaddingsize smallsize">
+
+                    <tr>
+                        <th>Commodity:</th>
+                        <td>{{detailsPreView?.commodity_id?.name}}</td>
+                        <th>Sub Commodity:</th>
+                        <td>{{detailsPreView?.subcommodity}}</td>
+                    </tr>
+                    <tr>
+                        <th>Submission Date:</th>
+                        <td> <span matTooltip="Start Date">{{detailsPreView?.submission_start_date |
+                                date:'dd-MM-yyyy'}}</span> -
+                            <span matTooltip="End Date">{{detailsPreView?.submission_end_date |
+                                date:'dd-MM-yyyy'}}</span>
+                        </td>
+                        <th>Project Date:</th>
+                        <td> <span matTooltip="Start Date">{{detailsPreView?.project_start_date |
+                                date:'dd-MM-yyyy'}}</span>
+                            -
+                            <span matTooltip="End Date">{{detailsPreView?.project_end_date | date:'dd-MM-yyyy'}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th> Audience:</th>
+                        <td> {{detailsPreView?.view_type?.text}} </td>
+                        <th>Budget:</th>
+                        <td>{{detailsPreView?.budget | amountPipe}}</td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Current Spend:</th>
+                        <td>{{detailsPreView?.estimate_currentspent | amountPipe }}</td>
+                        <th>Estimated Save:</th>
+                        <td>{{detailsPreView?.estimate_save | amountPipe }}</td>
+                    </tr>
+
+                    <hr>
+
+                </table>
+                <div>
+                    <p><strong>Description(Project Scope):</strong><br> &nbsp; {{detailsPreView?.description}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row smallsize paddingsizediv" style="width: 90%;">
+            <div class="col">
+                <div style="margin-left: 15px;">
+                    <strong>Final Vendor Selection Approval Group:</strong>
+                    <mat-chip-grid class="inlineprint"
+                        *ngFor="let dataapprover of detailsPreView?.q_approver; let indexapprover = index">
+                        <div *ngIf="dataapprover?.status?.text == 'Pending'; else propRejects">
+                            <mat-chip-row color="primary" selected>{{dataapprover?.approver?.name}}</mat-chip-row>
+                        </div>
+                        <ng-template #propRejects>
+                            <div *ngIf="dataapprover?.status?.text == 'Rejected'; else propawaiting">
+                                <mat-chip-row color="warn" selected> {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                        <ng-template #propawaiting>
+                            <div *ngIf="dataapprover?.status?.text == 'Awaiting'; else propapprovedcases">
+                                <mat-chip-row style="background-color: rgba(122, 122, 122, 0.704); color: black;" selected>
+                                    {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                        <ng-template #propapprovedcases>
+                            <div *ngIf="dataapprover?.status?.text == 'Approved';else propviewer">
+                                <mat-chip-row style="background-color: rgba(36, 167, 36, 0.704); color: black;" selected>
+                                    {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                        <ng-template #propviewer>
+                            <div *ngIf="dataapprover?.status?.text == 'Viewer';">
+                                <mat-chip-row style="background-color: rgb(176, 172, 172); color: black;" selected>
+                                    {{dataapprover?.approver?.name}} </mat-chip-row>
+                            </div>
+                        </ng-template>
+                    </mat-chip-grid>
+                    <!-- <mat-chip-grid class="inlineprint"
+                        *ngFor="let dataapprover of detailsPreView?.q_approver; let indexapprover = index">
+                        <mat-chip-row style="background-color: rgb(176, 172, 172);" selected>
+                            {{dataapprover?.approver?.name}}</mat-chip-row>
+                    </mat-chip-grid> -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row smallsize paddingsizediv" style="width: 90%;">
+            <div class="col">
+                <div style="margin-left: 15px;">
+                    <strong>Collaborators:</strong>
+                    <mat-chip-grid class="inlineprint"
+                        *ngFor="let dataapprover of detailsPreView?.collabator; let indexapprover = index">
+                        <mat-chip-row style="background-color: rgb(176, 172, 172);color: black;" selected>
+                            {{dataapprover?.approver?.name}}</mat-chip-row>
+                    </mat-chip-grid>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="paddingsizediv">
+            <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapseNote"
+                aria-expanded="false" aria-controls="collapseExample">Note(Detailed Spec):
+                <mat-icon>expand_more</mat-icon>
+            </button>
+        </div>
+        <div class="collapse content" id="collapseNote">
+            <div class="card" id="collapseNoteView">
+                <div [innerHtml]="contentname">
+                </div>
+            </div>
+        </div>
+        <div class="paddingsizediv">
+            <button mat-button class="buttonwidth" color="primary" data-toggle="collapse"
+                data-target="#collapseStrategyNote" aria-expanded="false" aria-controls="collapseExample">Strategy Note(Major Benefits):
+                <mat-icon>expand_more</mat-icon>
+            </button>
+        </div>
+        <div class="collapse content" id="collapseStrategyNote">
+            <div class="card" id="collapseNoteView">
+                <div [innerHtml]="strategynote">
+
+                </div>
+            </div>
+        </div>
+        <div class="paddingsizediv">
+            <button mat-button class="buttonwidth" color="primary" data-toggle="collapse" data-target="#collapsevendor"
+                aria-expanded="false" aria-controls="collapseExample">Selected Invitation List:
+                <mat-icon>expand_more</mat-icon>
+            </button>
+        </div>
+        <div class="collapse content" id="collapsevendor">
+            <div class="card" id="collapseNoteView">
+                <table class="table table-bordered" style="margin-top: 10px;max-width: 40%;" id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let listuser of invitationList; let userindex = index">
+                            <td>{{userindex + 1}}</td>
+                            <td>{{listuser.v_code}}</td>
+                            <td>{{listuser.v_name}}</td>
+                            <td>{{listuser.email_id}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+        <br>
+
+        <div style=" margin-left: 15px;">
+            <p>Attachments:</p>
+            <div style="display:inline;  margin-left: 30px;"
+                *ngFor="let files of detailsPreView?.filedata; let indexfile = index">
+                <!-- <mat-chip-row class="cursor spacingfile" [matMenuTriggerFor]="menu1">{{indexfile+1}}.{{files?.file_name}}
+                </mat-chip-row>
+                <mat-menu #menu1="matMenu">
+                    <span (click)="Files_Api_View(files)" data-toggle="modal" data-target="#my-modalpreview">File
+                        view</span>
+                </mat-menu> -->
+                <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                    <button style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;"
+                        type="button" class="btn btncolor">{{indexfile+1}}.{{files?.file_name}}</button>
+                    <button type="button" class="btn btncolor material-icons"
+                        style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;"
+                        (click)="filedownload(files, 'project')">download</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="showimageHeaderPreviewPDF" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+        aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#c1e2f6;">
+                    <h2 class="modal-title">PDF View</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <pdf-viewer [src]="pdfurl" [render-text]="true" [original-size]="false"
+                    style="display: block;width: 500px; height: 800px;"></pdf-viewer>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div *ngIf="showimageHeaderPreview" id="my-modalpreview" class="modal fade" aria-labelledby="my-modalLabel"
+        aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <img src="{{jpgUrlsAPI}}" class="img-responsive" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <!-- <div *ngIf="showimageHeaderPreview" id="my-modalpreviewPreview" class="modal fade" aria-labelledby="my-modalLabel"
+        aria-hidden="true" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" data-dismiss="modal" style="width: 60%;height: 80%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <img src="{{jpgUrls}}" class="img-responsive" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!------------------------------------ Tabs Part -------------------------------->
+
+
+
+    <div>
+        <nav>
+            <div class="nav nav-tabs">
+                <span #myDiv class="nav-item nav-link" id="subname" data-toggle="tab" role="tab" style="color: black;"
+                    *ngFor="let sub of CMS_ProjectView_Menu_List;index as i" (click)="viewShow(sub)">
+                    {{sub?.name}}
+                </span>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container" *ngIf="proposalsTab">
+        <!-- <div class="row"
+            *ngIf="detailsPreView?.is_created_by == false && detailsPreView?.approval_status == 1; else statusnotcompleted"> -->
+        <div class="row">
+            <h2>Proposal Summary</h2>
+            <form [formGroup]="ProposalSearchForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <mat-label>Proposal Code</mat-label><br>
+                        <mat-form-field class="matformfieldstyle" appearance="outline">
+                            <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                placeholder="Code" formControlName="code">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-label>Name</mat-label><br>
+                        <mat-form-field class="matformfieldstyle" appearance="outline">
+                            <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                placeholder="Name" formControlName="name">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-label>Proposer Code</mat-label><br>
+                        <mat-form-field class="matformfieldstyle" appearance="outline">
+                            <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                placeholder="Code" formControlName="proposer">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-label>Approval Status</mat-label><br>
+                        <mat-form-field class="ddheight">
+                            <mat-select placeholder="Select status" formControlName="approvalstatus">
+                                <mat-option *ngFor="let data of StatusProposal" [value]="data?.id">
+                                    {{data?.text}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+
+
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div style="margin-top: 20px;">
+                            <button class=" mat-stroked-button" style="margin-left: 20px;background-color: white;"
+                                aria-label="Search" (click)="ProposalSearch('')">
+                                <mat-icon>search</mat-icon>
+                            </button>
+
+                            <button class=" mat-stroked-button" style="margin-left: 20px;background-color: white;"
+                                (click)="resetProposal()">Clear</button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <div class="table-responsive" *ngFor="let flow of ProposalList; let indexflow = index">
+                        <div class="card proposersummary">
+
+                            <div class="paddingfortableproposal">
+                                <h3 class="textdecorationatag" (click)="proposalview(flow)"> {{indexflow+1}}.
+                                    ({{flow?.code}}) {{flow?.name}} </h3>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="dateshow">
+                                <small> {{flow?.submitted_date}}</small>
+                            </div>
+                            <table class="proposaldetailsshow">
+                                <tr>
+                                    <th>Proposer Code:</th>
+                                    <td class="italicsstyle">{{flow?.proposer_code}}</td>
+                                    <!-- <th>Bid Amount:</th>
+                                    <td class="italicsstyle">{{flow?.budget}}</td> -->
+                                    <th>Status:</th>
+                                    <td class="italicsstyle">{{flow?.approval_status?.text}}</td>
+                                </tr>
+                            </table>
+                            <br>
+                            <div class="stepsdiv">
+                                <div class="progressstepper">
+                                    <div class="stepsshow">
+                                        <i class="material-icons stepcircle"
+                                            [ngStyle]="flow?.is_created == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}"
+                                            *ngIf="flow?.is_created == true">done</i>
+                                        <i class="material-icons stepcircle"
+                                            [ngStyle]="flow?.is_created == false?{'background-color': '#ff4444'}:{'background-color': '#ff4444'}"
+                                            *ngIf="flow?.is_created == false">priority_high</i>
+
+                                        <span class="processname">Submitted</span>
+                                    </div>
+                                    <div class="stepflow">
+                                        <hr>
+                                    </div>
+                                    <div class="stepsshow">
+                                        <i class="material-icons stepcircle" *ngIf="flow?.is_shortlisted == true"
+                                            [ngStyle]="flow?.is_shortlisted == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                                        <i class="material-icons stepcircle" *ngIf="flow?.is_shortlisted == false"
+                                            [ngStyle]="flow?.is_shortlisted == false?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">timer</i>
+
+                                        <span class="processname">Shortlisted</span>
+                                    </div>
+
+                                    <div class="stepflow">
+                                        <hr>
+                                    </div>
+                                    <div class="stepsshow">
+                                        <i class="material-icons stepcircle" *ngIf="flow?.is_finalized == true"
+                                            [ngStyle]="flow?.is_finalized == true?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                                        <i class="material-icons stepcircle" *ngIf="flow?.is_finalized == false"
+                                            [ngStyle]="flow?.is_finalized == false?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">timer</i>
+
+                                        <span class="processname">Finalized</span>
+                                    </div>
+
+
+                                    <div class="stepflow">
+                                        <hr>
+                                    </div>
+                                    <div class="stepsshow">
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'APPROVED'"
+                                            [ngStyle]="flow?.approval_status?.text == 'APPROVED'?{'background-color': '#66bb6a'}:{'background-color': '#66bb6a'}">done</i>
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'PENDING'"
+                                            [ngStyle]="flow?.approval_status?.text == 'PENDING'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">hourglass_empty</i>
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'DRAFT'"
+                                            [ngStyle]="flow?.approval_status?.text == 'DRAFT'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">flag</i>
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'WAITING'"
+                                            [ngStyle]="flow?.approval_status?.text == 'WAITING'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">flag</i>
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'UNDER EVALUATION'"
+                                            [ngStyle]="flow?.approval_status?.text == 'UNDER EVALUATION'?{'background-color': 'rgb(236 236 236)'}:{'background-color': 'rgb(236 236 236)'}">flag</i>
+                                        <i class="material-icons stepcircle"
+                                            *ngIf="flow?.approval_status?.text == 'REJECTED'"
+                                            [ngStyle]="flow?.approval_status?.text == 'REJECTED'?{'background-color': '#ff4444'}:{'background-color': '#ff4444'}">close</i>
+
+                                        <span class="processname">{{flow.approval_status.text}}</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <br>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #statusnotcompleted>
+            <h4 style="text-align: center;">Project Status is "Pending"</h4>
+        </ng-template>
+    </div>
+
+    <div *ngIf="ProjectCommentsTab">
+
+        <div>
+            <h2>Comments</h2>
+
+            <div class="container">
+                <br>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+
+                        <!--------------------------------- Main comment section ----------------------------->
+
+
+                        <textarea class="textareaset" #maincomment [formControl]="commentinput" cols="30"
+                            rows="10"></textarea>
+                        <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b;
+                            background-color: #f5c68b;" class=" mat-stroked-button"
+                            (click)="postcomment(this.commentinput.value)">Comment</button>
+                        <div class="input-group mb-3 inputCMTFile01">
+                            <div class="custom-file">
+                                <input type="file" (change)="onFileSelected($event)" class="custom-file-input"
+                                    id="inputGroupFile01">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                        <div *ngIf="this.Documentfilearray?.length > 0">
+                            <!-- <mat-chip-grid *ngFor="let files of Documentfilearray; let indexfile = index">
+                                <mat-chip-row class="cursor spacingfile"   data-toggle="modal"
+                                data-target="#my-modalpreviewPreview">{{indexfile+1}}.{{files?.name}}
+                                    <mat-icon (click)="deleteInlineFile(indexfile, '')">cancel</mat-icon>
+                                </mat-chip-row>
+                            </mat-chip-grid> -->
+                            <div style="display:inline" *ngFor="let files of Documentfilearray; let indexfile = index">
+                                <div class="btn-group mr-2 mb-2" role="group" aria-label="First group">
+                                    <button
+                                        style="font-size:14px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;"
+                                        type="button" class="btn btncolor" (click)="filepreview(files)"
+                                        data-toggle="modal" data-target="#my-modalpreview">{{indexfile+1}}.
+                                        {{files?.name}} </button>
+                                    <button style="border-top-right-radius: 40px;border-bottom-right-radius: 40px;"
+                                        type="button" class="btn btncolor"
+                                        (click)="deleteInlineFile(indexfile, files)">X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-sm-10 col-md-10 col-lg-10 bordercomments">
+
+                        <div class="commentsection"
+                            *ngFor="let datacomments of projectCommentsList; let indexcomments = index">
+                            <div class="row" *ngIf="projectCommentsList?.length > 0">
+                                <div class="col">
+                                    <!------------------------------- Main CommentList ----------------------------------->
+                                    <strong>
+                                        {{datacomments?.created_by?.full_name}}</strong>
+                                    <small class="leftsidemargin"><span
+                                            class="material-icons timeschedule">schedule</span>{{datacomments?.created_date
+                                        | date:'dd-MMM-yyyy h:mm a'}}</small>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="commentsviewspace">
+                                <p style="margin-left: 20px;"> {{datacomments?.comment}}</p>
+                            </div>
+                            <small>
+                                <span class="material-icons" (click)="replycommentinputshowhide(datacomments)"
+                                    title="reply">
+                                    reply
+                                </span>
+                                &nbsp;
+                                <span class="material-icons" data-toggle="modal" (click)="popupimageView(datacomments)"
+                                    data-target="#exampleModalcommentFile">
+                                    image
+                                </span>
+                            </small>
+                            <!------------------------- reply input ------------------------------>
+                            <div *ngIf="datacomments?.replyshow == true">
+                                <textarea class="textareasetreply" [value]="datacomments.replyinput" #rply></textarea>
+                                <button type="button" (click)="replycomment(rply?.value, datacomments)" style="border-radius: 10px;margin-left: 10px;
+                                        border-color: #f5c68b; 
+                                        background-color: #f5c68b;" class=" mat-stroked-button">Reply</button>
+                            </div>
+                            <br>
+                            <!--------------------------------- Reply ----------------------------->
+                            <div class="jumbotronView" *ngIf="datacomments?.reply?.length > 0">
+
+                                <div *ngFor="let reply of datacomments?.reply">
+                                    <small>
+                                        <strong>
+                                            {{reply?.created_by?.full_name}}
+                                        </strong> &nbsp;
+                                        <small class="leftsidemargin"><span
+                                                class="material-icons timeschedule">schedule</span>{{reply?.created_date
+                                            | date:'dd-MMM-yyyy h:mm a'}}</small>
+                                        <br>
+                                        <p style="margin-left:10px;">{{reply?.comment}}</p>
+                                    </small>
+                                    <hr>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModalcommentFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#c1e2f6;">
+                    <h2 class="modal-title" id="exampleModalLabel">Comment File View
+                    </h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                        <thead class="table_header">
+                            <tr>
+                                <th>S.No</th>
+                                <th>File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let files of imageViewFor_Comment_ReplyList; index as index">
+                                <td>{{index+ 1}}</td>
+                                <td> <span style="cursor: pointer;" (click)="filedownload(files, 'comment')">
+                                        {{files.file_name}} </span> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                border-color: black;
+                                background-color: white;" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="HistoryTab">
+        <h2>Transaction History</h2>
+
+        <div style="margin-left: 15px;">
+            <table class="table table-bordered" style="margin-top: 10px;max-width: 70%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Approver</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of TranHistoryList; let historyindex = index">
+                        <td>{{historyindex+1}}</td>
+                        <td>{{type?.created_date | date: 'dd-MMM-yyyy hh:mm aa'}}</td>
+                        <td>{{type?.approval_status?.text}}</td>
+                        <td>{{type?.approver?.full_name}}</td>
+                        <td>{{type?.comments}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="TranHistoryList?.length==0 || TranHistoryList == undefined" class="NodataAlign text-center">No
+                Records Found...</div>
+        </div>
+
+
+    </div>
+
+    <div *ngIf="ShortlistTab">
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div>
+                <h2>Shortlist Proposals</h2>
+                <div class="table-responsive" *ngFor="let flow of ShortlistList; let indexflow = index">
+                    <div class="card proposersummary">
+
+                        <div class="paddingfortableproposal">
+                            <h3 class="textdecorationatag" (click)="proposalview(flow)"> {{indexflow+1}}.
+                                ({{flow?.code}}) {{flow?.name}} </h3>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="dateshow">
+                            <small> {{flow?.submitted_date}}</small>
+                        </div>
+                        <table class="proposaldetailsshow">
+                            <tr>
+                                <th>Proposer Code:</th>
+                                <td class="italicsstyle">{{flow?.proposer_code}}</td>
+                                <th>Status:</th>
+                                <td class="italicsstyle">{{flow?.approval_status?.text}}</td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="finalizedTab">
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h2>Finalized Proposals</h2>
+
+            <div class="row">
+                <div class="col">
+                    <button mat-stroked-button data-toggle="modal" data-target="#exampleModalMoveToApprover"
+                        *ngIf="ShowHideButtonForApprover">
+                        Move To Approver Group
+                    </button>
+                </div>
+                <div class="col">
+                    <span class="material-icons" data-toggle="modal" data-target="#exampleModalReleaseNote"
+                        (click)="CoverNoteGet()">mark_as_unread</span>
+
+
+
+                    <div class="modal fade" id="exampleModalReleaseNote" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background:#c1e2f6;">
+                                    <h2 class="modal-title" id="exampleModalLabel">
+                                        Release Note</h2>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div [innerHTML]="ReleaseNote">
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+            </div>
+
+            <div>
+                <div class="table-responsive" *ngFor="let flow of finalizeList; let indexflow = index">
+                    <div class="card proposersummary">
+
+                        <div class="paddingfortableproposal">
+                            <h3 class="textdecorationatag" (click)="proposalview(flow)"> {{indexflow+1}}.
+                                ({{flow?.code}}) {{flow?.name}} </h3>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="dateshow">
+                            <small> {{flow?.submitted_date}}</small>
+                        </div>
+                        <table class="proposaldetailsshow">
+                            <tr>
+                                <th>Proposer Code:</th>
+                                <td class="italicsstyle">{{flow?.proposer_code}}</td>
+                                <th>Status:</th>
+                                <td class="italicsstyle">{{flow?.approval_status?.text}}</td>
+                                <th>Select:</th>
+                                <td>
+                                    <input type="checkbox" class="checkboxsize"
+                                        (click)="SelectForFinalApprovalGroup(flow, $event)" />
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModalMoveToApprover" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#c1e2f6;">
+                        <h2 class="modal-title" id="exampleModalLabel">
+                            Release Note</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form [formGroup]="ApprovalNote">
+                            <div [ngxSummernote]="config" [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                                formControlName="content" (mediaDelete)="onDelete($event)" placeholder="Description"
+                                (summernoteInit)="summernoteInit($event)" (keyup)="sanitizedHtml">
+                            </div>
+
+                            <br>
+                            <div class="col-md-3">
+                                <mat-label>Remarks</mat-label><br>
+                                <mat-form-field class="matformfieldstyle lenthoftextfield">
+                                    <textarea class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                        placeholder="Remarks" formControlName="remarks"></textarea>
+                                </mat-form-field>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class=" mat-stroked-button" style="border-radius: 7px;margin-left: 10px;
+                                                    border-color: black;
+                                                    background-color: white;" data-dismiss="modal">Close</button>
+
+                        <button type="button" style="border-radius: 10px;margin-left: 10px; 
+                                                border-color: #f5c68b; background-color: #f5c68b;"
+                            class=" mat-stroked-button" data-dismiss="modal"
+                            (click)="FinalApprovalSelectedData()">Submit</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="SupplierTab">
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div>
+                <h2>Suppliers</h2>
+                <div class="table-responsive"
+                    *ngFor="let flow of SupplierCatlogApprovedVendorList; let indexflow = index">
+                    <div class="card proposersummary">
+
+                        <div class="paddingfortableproposal">
+                            <h3 class="textdecorationatag" (click)="SuppliersCatlog(flow)"> {{indexflow+1}}.
+                                ({{flow?.code}}) {{flow?.name}} </h3>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="dateshow">
+                            <small> {{flow?.submitted_date}}</small>
+                        </div>
+                        <table class="proposaldetailsshow">
+                            <tr>
+                                <th>Proposer Code:</th>
+                                <td class="italicsstyle">{{flow?.proposer_code}}</td>
+                                <th>Status:</th>
+                                <td class="italicsstyle">{{flow?.approval_status?.text}}</td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div *ngIf="EvaluateTab">
+        <div>
+            <h2>Evaluation</h2>
+            <!-- <nav>
+                <div class="nav nav-tabs">
+                    <span #myDiv *ngFor="let sub of EvaluationList;index as i"
+                        (click)="getIndividualListBasedOnType(sub)" class="nav-item nav-link" id="subname"
+                        data-toggle="tab" role="tab" style="color: black;">
+                        {{sub?.type}}
+                    </span>
+                </div>
+            </nav>
+
+
+            <table>
+                <tr>
+                    <td *ngFor="let row of IndividualEvaluationList?.value; let i = index">
+                        <ul class="ulminmax">
+                            <li class="minmaxheader"><strong>{{row.name}}</strong></li>
+                            <li class="minmax" *ngFor="let rowdata of row.value;">{{rowdata}}</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table> -->
+
+            <nav>
+                <div class="nav nav-tabs">
+                    <span #myDiv *ngFor="let sub of EvaluateListData;index as i"
+                        (click)="getIndividualListBasedOnType(sub)" class="nav-item nav-link" id="subname"
+                        data-toggle="tab" role="tab" style="color: black;">
+                        {{sub?.type?.name}}
+                    </span>
+                </div>
+            </nav>
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+
+                <table class="table-bordered table-responsive tableForEvaluator" *ngIf="IndividualEvaluationList?.data?.length > 0">
+                    <tr>
+                        <th>Sl.No</th>
+                        <th *ngFor="let datahead of IndividualEvaluationList?.header">{{ datahead | uppercase }}</th>
+                    </tr>
+                    <ng-container *ngFor="let datas of IndividualEvaluationList?.data; let i = index">
+                        <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td *ngFor="let dat of IndividualEvaluationList?.dup_header">
+                                {{ datas[dat]?.text }}
+                                <i class="fa fa-flag" style="color: red" *ngIf="datas[dat]?.red_flag == true"
+                                    aria-hidden="true"></i>
+                                <div *ngFor="let files of datas[dat]?.File">{{ files }}</div>
+                            </td>
+                        </tr>
+                        <tr class="list" style="background-color: #dcdbdb"
+                            *ngFor="let datasub of datas?.sub_question; let j = index">
+                            <td>{{ i + 1 }}.{{ j + 1 }}</td>
+                            <td *ngFor="let dat of IndividualEvaluationList?.dup_header">
+                                {{ datasub[dat]?.text }}
+                                <i class="fa fa-flag" style="color: red" *ngIf="datasub[dat]?.red_flag == true"
+                                    aria-hidden="true"></i>
+                                <div *ngFor="let files of datasub[dat]?.File">{{ files }}</div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+<div class="container" *ngIf="proposalIndividialView">
+    <app-proposal-view (onCancelproposal)="ProposalCancel()"></app-proposal-view>
+
+</div>

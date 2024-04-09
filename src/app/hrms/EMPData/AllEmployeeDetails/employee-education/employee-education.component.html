@@ -1,0 +1,425 @@
+<section class="cus-tableContainer">
+  <div class="row">
+    <div class="col-sm-1 col-md-1 col-1 col-lg-1 col-xl-1">
+      <div class="cardspaceListProfile color display">
+        {{EmpObjects.employeeFirstLetter == null ? 'VS': EmpObjects.employeeFirstLetter | uppercase}}
+      </div>
+    </div>
+    <div class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3">
+      <p style="color: #046ba8;font-size:x-large;font-weight: 700;margin-top: 7%;">Education Details</p>
+    </div>
+    <div class="col-sm-4 col-md-4 col-4 col-lg-4 col-xl-4">
+    </div>
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+
+    </div>
+    <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;padding-left:100px;">
+      <div class="popup-btn">
+        <button class="btn btn-primary" style="background-color: #044063;margin-left: -32px;" type="button" (click)="showSaveButton()"
+          data-toggle="modal" data-target="#exampleModal">
+          <span>+ Add</span>
+        </button>
+      </div>
+    </div>
+    <!-- <div class="col-sm-2 col-md-2 col-2 col-lg-2 col-xl-2" style="margin-top: 1.2%;">
+            <div class="popup-btn">
+              <button class="btn btn-primary" style="background-color: #044063;" type="button" data-toggle="modal" data-target="#docsModal">
+                <span>Upload</span>
+              </button>
+            </div>
+          </div> -->
+  </div>
+
+  <div *ngFor="let item of EmpEducationInfo; let i = index" class="newCard" style="margin-top: 3%;">
+    <div class="d-flex">
+      <div class="p-2 flex-grow-1">
+        <p> <span class="color" style="font-weight: 600;font-size: medium;"> {{ item?.inst_name }}</span> <span
+            *ngIf="item.percentage!==null"> | {{item?.percentage}}%</span> | <span class="col-md-auto cus-badgeBlue ">
+            {{ item?.degree?.name }}
+          </span><span *ngIf="item.stream !== null" class="col col-lg-2 cus-badgeBlue">
+            {{ item?.stream?.name }}
+          </span></p>
+        <p> {{ getMonthName(item?.passing_month) }} {{ item?.passing_year }} </p>
+      </div>
+
+      <div class="p-2" style="width: 100px;">
+        <a (click)="editRow(item)" data-toggle="modal" data-target="#exampleModal" style="    margin-left: -38%;">
+          <i class="fa solid fa-pencil"></i>
+        </a>
+        <i style="margin-left: 20%;" class="fa solid fa-trash-can" (click)="deleteAddress(item?.id)"></i>
+        <span *ngIf="item?.employee_document !== null">
+        <i  style="margin-left: 20%;" class="fa solid fa-download" (click)="downloadfiles(item)"></i></span>
+      </div>
+      <!-- <div class="p-2" style="width: 100px;">
+        <a data-toggle="modal" data-target="#bankModalLabels">
+          <i class="fa solid fa-file"></i>
+        </a>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+
+<div *ngIf="EducationFormShow" class="modal fade bottom-modal" id="exampleModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>Education
+            Details</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButtons
+          style="color: white;opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="educationForm" class="formAbove">
+          <div class="container">
+            <div class="row">
+              <div class="col smallfield">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Title</mat-label>
+                  <input #titleInput placeholder="Select Title" name="titleName" matInput formControlName="title"
+                    [matAutocomplete]="emp" (input)="getTitleAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #emp="matAutocomplete" [displayWith]="displayFnEmp"
+                    (optionSelected)="titleSelecteds($event)">
+                    <mat-option *ngFor="let title of TitleDropdownList" [value]="title">
+                      {{ title.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="col smallfieldDegree">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Degree</mat-label>
+                  <input name="degreeName" #titleInputdegree placeholder="Select Degree" matInput
+                    formControlName="degree" (click)="getDegreeAutocomplete()" [matAutocomplete]="empdegree"
+                    (input)="getDegreeAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #empdegree="matAutocomplete" [displayWith]="displayDegree"
+                    (optionSelected)="titleSelected($event)">
+                    <mat-option *ngFor="let degree of MappedDegreeList" [value]="degree">
+                      {{ degree.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="col smallfield">
+                <mat-form-field class="spacingForm shortinput">
+                  <mat-label>Stream</mat-label>
+                  <input name="streamName" #titleInputStream placeholder="Select Stream" matInput
+                    formControlName="stream" (click)="getStreamAutocompletes()" [matAutocomplete]="empstream"
+                    (input)="getStreamAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #empstream="matAutocomplete" [displayWith]="displayStream">
+                    <mat-option *ngFor="let stream of StreamDropdownList" [value]="stream">
+                      {{ stream.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-form-field class="form-field instiName">
+                  <mat-label>Institute</mat-label>
+                  <input matInput placeholder="Institute Name" name="instituteName" formControlName="inst_name">
+                </mat-form-field>
+
+              </div>
+
+              <div class="col smallfield">
+
+
+                <mat-form-field class="form-field shortinputCity">
+                  <mat-label>City</mat-label>
+                  <input name="cityName" #titleInputCity placeholder="Select City" matInput formControlName="city"
+                    [matAutocomplete]="empcity" (input)="getCityAutocomplete()">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #empcity="matAutocomplete" [displayWith]="displayCity">
+                    <mat-option *ngFor="let city of CityDropdownList" [value]="city">
+                      {{ city.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col smallfield">
+                <mat-form-field class="dateFormat shortinput" dateFormatLR>
+                  <mat-label>Passing MM/YYYY</mat-label>
+                  <input matInput [matDatepicker]="dps" name="date" [formControl]="monyear"
+                    (dateChange)='ChangeDateFormat("monthyear")' placeholder="MM/YYYY" formControlName="monthyear">
+                  <mat-datepicker-toggle matSuffix [for]="dps"></mat-datepicker-toggle>
+                  <mat-datepicker #dps startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                    (monthSelected)="chosenMonthHandler($event, dps)">
+                  </mat-datepicker>
+                </mat-form-field>
+                <br>
+              </div>
+              <div class="col smallfield">
+                <mat-form-field class="form-field shortinputPercentage">
+                  <mat-label>Percentage</mat-label>
+                  <input matInput formControlName="percentage" name="percent" type="text" />
+                </mat-form-field>
+                <br>
+              </div>
+              <div class="col smallfield">
+                <!-- <form [formGroup]="fileUploadForm">
+                <div class="form-group">
+                  <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                  accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+                </div>
+                </form> -->
+
+
+                <!-- <br> -->
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-sm-7" style="margin-top: 2%;">
+
+                <label style="margin-right: 1em;">
+                  <input type="file" class="borderremove" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                  .dotx,.dotm,.docb,
+                  .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" multiple="true" name="images"
+                    (change)="fileChange($event)">
+                </label>
+              </div>
+              <div class="col-sm-2"></div>
+              <div class="col-sm-2" style="    margin-left: 3%;
+              margin-top: -1%;">
+                <button class="btn btn-primary insidePopup" id="saveEdu" *ngIf="addingMode" (click)="onSubmitss()"
+                style="background-color: #044063;">Submit</button>
+              <button class="btn btn-dark insidePopup" id="saveEdu" *ngIf="!addingMode" (click)="onUpdates()"
+                style="background-color: #044063;">Update</button>
+              </div>
+            </div> -->
+
+            <div class="row" *ngIf="!fileupdate">
+              <div  class="col-sm-9" style="margin-left: 0%;">
+                <div class="cus-attachCard" *ngIf="reuploadfileArr?.file_name !== null">
+                  <!-- H -->
+                  <span>{{ reuploadfileArr?.file_name }}</span>
+                  <button mat-icon-button type="button" (click)="viewfile(reuploadfileArr)" data-target="#viewDownload" data-toggle="modal" style="margin-left: 20%;">
+                    <mat-icon  aria-label="View" style="font-size: x-large;color: blue;
+                    margin-top: -19px;">visibility</mat-icon>
+                  
+                  </button>
+                  <mat-icon  aria-label="Delete" (click)="delete(reuploadfileArr)"  style="font-size: x-large;color: blue; 
+                  ">delete</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="fileupdate || addingMode">
+              
+              <div class="col-sm-5" style="    margin-top: 3%;">
+                <label style="margin-right: 1em;">
+                  <input type="file" class="borderremove" #fileInput accept=".txt,.doc,.pdf,.ppt,.pot,.pps,.pptx,.odt,.odg,.odp,.ods,.docx,.docm,
+                  .dotx,.dotm,.docb,
+                  .xlsx,.xls,.xlt,.xlm,.xlsm,.xltx,.xltm,.jpg,.jpeg,.tiff,.tif,.png" multiple="true" name="images"
+                    (change)="fileChange($event)">
+                </label>
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                  <div class="cus-aSearchBtnDiv">
+                    <div>
+                      <button class="btn btn-primary insidePopup" id="saveEdu" *ngIf="addingMode" (click)="onSubmitss()"
+                        style="background-color: #044063;">Save</button>
+                      <button class="btn btn-dark insidePopup" id="saveEdu" *ngIf="!addingMode" (click)="onUpdateValue()"
+                        style="background-color: #044063;">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal bottom-modal" id="docsModal" tabindex="-1" role="dialog" aria-labelledby="bankModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b> Upload
+            Educational Certificate </b>
+
+
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+          #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body">
+        <form [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+
+            </div>
+            <div class="col-md-4">
+
+              <mat-form-field class="remarks">
+                <mat-label>Remarks</mat-label>
+                <input type="text" matInput placeholder="Remarks" name="remarkInfo" formControlName="remarks" />
+              </mat-form-field>
+              <br>
+              <span class="error-message" *ngIf="(!remarkInfo?.valid && (remarkInfo?.touched || remarkInfo?.dirty))">
+                *Remarks required
+              </span>
+
+            </div>
+
+            <div class="col-md-1">
+
+              <button class="inputFile" type="submit"><mat-icon>cloud_upload</mat-icon></button>
+
+            </div>
+          </div>
+          <br>
+          <!-- <span class="error-message" *ngIf="(!docsFile?.valid && (docsFile?.touched || docsFile?.dirty))">
+        *File required
+                 </span> -->
+
+        </form>
+
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>
+<div class="modal bottom-modal" id="bankModalLabels" tabindex="-1" role="dialog" aria-labelledby="bankModalLabels"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 350px;margin-left:120px;margin-top:100px">
+      <div class="modal-header" id="educationHeader">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;"><b>File </b>
+
+
+
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+          #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body">
+        <!-- <form [formGroup]="fileUploadForm" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <input type="file" id="file" name="docsFile" (change)="onFileChange($event)" class="form-control"
+                accept=".pdf, .jpeg, .jpg, .png" id="inputGroupFile01" formControlName="file" />
+
+            </div>
+            <div class="col-md-4">
+
+              <mat-form-field class="remarks">
+                <mat-label>Remarks</mat-label>
+                <input type="text" matInput placeholder="Remarks" name="remarkInfo" formControlName="remarks" />
+              </mat-form-field>
+              <br>
+              <span class="error-message" *ngIf="(!remarkInfo?.valid && (remarkInfo?.touched || remarkInfo?.dirty))">
+                *Remarks required
+              </span>
+
+            </div>
+           
+            <div class="col-md-1">
+
+              <button class="inputFile" type="submit"><mat-icon>cloud_upload</mat-icon></button>
+
+            </div>
+          </div>
+          <br>
+   
+
+        </form> -->
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;opacity: 1;"
+        #closebutton>
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+        <div *ngFor="let document of EmployeeDocuments.data">
+
+          <ng-container *ngIf="document.type.name === 'Educational certificate'">
+            <div *ngFor="let data of document.file">
+              <div style="margin-top:10px">
+                {{data.file_name}}
+              </div>
+
+            </div>
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="viewDownload" role="dialog" aria-labelledby="bankModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 800px;">
+
+      <div class="modal-header" id="educationHeader" style="width: 800px; ">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; font-size: large;">
+          View File
+        </h5>
+        <!-- <mat-icon  style="margin-left: 7%;
+        font-size: 25px; cursor: pointer;" (click)="onDownload()">cloud_download</mat-icon> -->
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closebutton style="color: white; opacity: 1;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12 col-sm-12" fxLayoutAlign="space-between">
+            <pdf-viewer *ngIf="pdfshow" [src]="filesrc" [original-size]="false" [render-text]='false'
+              [show-borders]="true" [fit-to-page]="true" [show-all]="true" style="display: block; height: 500px;"
+              [fit-to-page]="true">
+            </pdf-viewer>
+            <br>
+            <img *ngIf="imgshow" src="{{filesrc}}" class="img-responsive"
+              style="display: block;border-width: 2px;border-style: solid;width: 100%;" />
+          </div>
+
+          <div class="modal-footer">
+
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+  </div> -->
+    </div>
+  </div>
+</div>

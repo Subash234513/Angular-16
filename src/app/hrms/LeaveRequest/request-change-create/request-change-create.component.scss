@@ -1,0 +1,32 @@
+.paddings {
+    padding: 0 20px;
+}
+
+.inputSizeWidthSmall {
+    width: 120px;
+}
+
+.rowset {
+    display: flex;
+    flex-direction: row;
+}
+
+.marginset {
+    margin-left: 50px;
+}
+
+.fonts {
+    font-size: 14px;
+}
+
+.mat-form-field-outline {
+    color: grey !important;
+}
+
+.mat-form-field {
+    font-size: 14px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    height: 50px !important
+    }

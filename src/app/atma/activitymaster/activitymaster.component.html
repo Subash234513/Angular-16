@@ -1,0 +1,110 @@
+<!-- <div class="container">
+    <div class="row">
+        <div class="col">
+    <h2 style="margin-left: -65px;">Activity Form</h2>
+<form style="margin-left:-50px;" [formGroup]="ActivityForm"  autocomplete="off">
+    <table>
+        <tr>
+            <span (click)="addSection()" style="margin-left: 20px;">
+                <mat-icon matTooltip="Add">add_circle_outline</mat-icon>
+            </span>
+        </tr>
+    </table>
+
+    <div class="table-responsive" style="width:95%;margin-top: 1%;">
+        <table class="table table-bordered" fixed-header style="width: 95%;margin-top: 10px;">
+            <thead class="table_header" style="text-align: left;"> 
+                <tr>
+                    <th>S.No</th>
+                    <th>Activity Name</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <ng-container formArrayName="activities"
+                                    *ngFor="let section of ActivityForm.controls.activities['controls']; let i = index">
+                                    <tr [formGroupName]="i">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;">
+                                            <mat-label>Activity Name</mat-label>
+                                            <input matInput placeholder="Activity Name" formControlName="name" autocomplete="off">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field style="width: 250px;">
+                                            <mat-label>Remarks</mat-label>
+                                            <input matInput placeholder="Remarks" formControlName="description" autocomplete="off">
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button type="button">
+                                                <mat-icon style="color: black;" aria-label="Edit"
+                                                    (click)=removeSection(i)>
+                                                    delete</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </table>
+                        </div>
+                        <div style="margin: 30px;">
+
+
+                            <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: 390px;
+                            border-color: black; 
+                            background-color: white;" (click)="onactivityCancel()">Cancel</button>
+            
+                            <button type="button" style="border-radius: 10px;margin-left: 10px;
+                            border-color: #f5c68b; 
+                            background-color: #f5c68b;" class="btn btn-light" (click)="activitysubmit()">Submit</button>
+            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+     -->
+
+
+     <div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 style="margin-left: -65px;"> Activity Form</h2>
+            <form style="margin-left:-50px;" [formGroup]="ActivityForm">
+                <table>
+                    <tr>
+                        <td>
+                            <mat-label>Activity Name</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Name"
+                                    formControlName="name" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-label style="margin-left: 50px;">Remarks</mat-label><br>
+                            <mat-form-field class="matformfieldstyle" appearance="outline"
+                            style="margin-left: 50px;">
+                                <input class="matformfieldinputstyle" type="text" placeholder="Remarks"
+                                    formControlName="description" matInput autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                       
+                    </tr>
+                </table>
+                <div style="margin: 30px;">
+
+
+                    <button type="button" class="btn btn-light" style="border-radius: 7px;margin-left: -30px;
+                    border-color: black; 
+                    background-color: white;" (click)="onactivityCancel()">Cancel</button>
+
+                    <button type="button" style="border-radius: 10px;margin-left: 10px;
+                    border-color: #f5c68b; 
+                    background-color: #f5c68b;" class="btn btn-light" (click)="activitysubmit()">Submit</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

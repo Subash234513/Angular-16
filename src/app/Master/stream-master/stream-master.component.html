@@ -1,0 +1,116 @@
+<div class="col-sm-12 row" *ngIf="isSearch">
+    <div class="col-sm-6 row mt-5 pl-4 d-flex align-items-center">
+        <div class="col-sm-5 SearchMargin">
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input type="text" matInput [formControl]="Search">
+            </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+            <button mat-raised-button (click)="SearchData()">
+                <mat-icon>search</mat-icon>
+            </button>
+           
+        </div>
+        <div class="col-sm-2">
+            <button mat-raised-button (click)="clear()">
+                clear
+            </button>
+         </div>
+         <div class="col-sm-2">
+            <button type="button" id="add" mat-fab (click)="add()">
+                <mat-icon matTooltip="add"  class="black">add</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+  
+<div *ngIf="isTable">
+    <table class="table table-bordered">
+        <thead>
+            <th class="text-center">S.No</th>
+            <th class="text-center">Degree</th>
+            <th class="text-center">Stream</th>
+            <th class="text-center width">Edit</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of summaryData;let i=index">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{data.degree_id.name}}</td>
+                <td class="text-center">{{data.name}}</td>
+                <td class="text-center width"><i class="fa-solid fa-pencil" (click)="Edit(data)"></i></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button type="button" mat-icon-button [disabled]="pagination.has_previous===false" color="primary" (click)="prevpage()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span>{{pagination.index}}</span>
+        <button type="button" mat-icon-button [disabled]="pagination.has_next===false" color="primary" (click)="nextpage()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+</div>
+<div *ngIf="isCreate" class="creation">
+    <h2 class="creationName">Add Stream</h2>
+    <form [formGroup]="CreateGroup">
+        <div class="col-sm-12 row pl-2">
+            <div class="col-sm-2 ml-3">
+                <mat-form-field (click)="StreamDropdown()">
+                    <mat-label>Degree</mat-label>
+                    <input type="text" formControlName="Degreeid" [matAutocomplete]="auto" matInput>
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let stream of StreamDropdowndata" [value]="stream.name" (focusout)="Autocomplete(stream.id)">
+                            {{stream.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                
+            </div>
+            <div class="col-sm-2 ml-3">
+                <mat-form-field>
+                    <mat-label>Stream</mat-label>
+                    <input type="text" formControlName="StreamName" matInput>
+                    
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="ml-4">
+            <button class="btn btn-secondary" (click)="Back()">Back</button>
+            <button class="btn btn-primary ml-3" (click)="Submit()">Submit</button>
+        </div>
+      
+    </form>
+</div>
+<div *ngIf="isEdit" class="creation">
+    <h2 class="creationName">Edit Stream</h2>
+    <form [formGroup]="EditGroup">
+        <div class="col-sm-12 row pl-2">
+            <div class="col-sm-2 ml-3">
+                <mat-form-field (click)="StreamDropdown()">
+                    <mat-label>Degree</mat-label>
+                    <input type="text" formControlName="Degreeid" [matAutocomplete]="auto" matInput>
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let stream of StreamDropdowndata" [value]="stream.name" (focusout)="Autocomplete(stream.id)">
+                            {{stream.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                
+            </div>
+            <div class="col-sm-2 ml-3">
+                <mat-form-field>
+                    <mat-label>Stream</mat-label>
+                    <input type="text" formControlName="StreamName" matInput>
+                    
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="ml-4">
+            <button class="btn btn-secondary" (click)="Back()">Back</button>
+            <button class="btn btn-primary ml-3" (click)="Update()">Update</button>
+        </div>
+      
+    </form>
+</div>

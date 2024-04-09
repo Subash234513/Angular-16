@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="placingOnRight">
+          <form [formGroup]="chartform"  autocomplete="off">
+            <mat-form-field class="ddheight">
+              <mat-select placeholder="Select Action" formControlName="chartaction">
+                  <mat-option *ngFor="let process of chart_status_List" [value]="process.id"
+                      (click)="gettingRecord(process)">
+                      {{process?.name}}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+  </div>
+  <div *ngIf="defaultweekly" class="chart-container">
+    <canvas  id="Mydefaultweeklychart" >{{ def_weeklychart }}</canvas>
+  </div>
+
+  <div *ngIf="isShowWeekly">
+    <app-weeklychart></app-weeklychart>
+  </div>
+  <div *ngIf="isShowMonthly">
+    <app-monthlychart></app-monthlychart>
+  </div>
+
+
+
+  
+  
+
+    <h2>
+      <span class="material-icons" style="cursor: pointer;" (click)="startdate_iconclick()">
+        {{startdate_icon  ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }} 
+        </span>
+        Recently Worked Project
+    </h2> 
+    <div class="row">
+    <div class="col-sm-3">
+      <div *ngIf="startdate_icon == true" style="margin-left: 30px;">
+        <div class="vertical-menu" *ngFor="let project of projectbasedtaskList">
+          <a (click)="Selectedproject(project)"><mat-icon *ngIf="project?.task.currently_working == true">done</mat-icon>
+            {{project.task.name}}
+          </a>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <mat-card>
+          <table class="table"style="margin-top: 10px;">
+            <thead class="table_header">
+               <tr>
+                <th>Sl.No</th>
+                <th>Task</th>
+                <th>Task Progess</th>
+                <th>Status</th>
+               </tr>
+           </thead>
+           <tbody>
+              <tr *ngFor="let type of selectedProjectList;index as i">
+                <td>{{i+1}}</td>
+                <td>
+                  {{ type?.code}}<br>
+                  <small style="color: grey;">{{ type?.desc}}</small>
+                </td>
+                <td>
+                  <progress value={{type?.scale}} max=5> </progress>
+                                <!-- <span>{{limit?.active_count | number}}/{{limit?.limit | number}}</span> -->
+                </td>
+                <td>
+                  <span *ngIf="type?.status == 'Work in Progress'" class="badge badge-pill badge-primary">{{ type?.status}}</span>
+                  <span *ngIf="type?.status == 'Completed'" class="badge badge-pill badge-info">{{ type?.status}}</span> 
+                  <span *ngIf="type?.status == 'Verified'" class="badge badge-pill badge-success">{{ type?.status}}</span>
+                  <span *ngIf="type?.status == 'Hold'" class="badge badge-pill badge-warning">{{ type?.status}}</span>
+                </td>
+              </tr>    
+           </tbody>
+          </table>
+      </mat-card>
+    </div>
+  </div>
+  
+  
+  
+
+ 
+
+  <!-- <div class="row">
+    <div class="column">
+      <div class="chart-container">
+        <canvas  id="MybarChart" >{{ barchart }}</canvas>
+      </div>
+    </div>
+    <div class="column">
+      <div class="chart-container">
+        <canvas  id="MylineChart" >{{ linechart }}</canvas>
+      </div>
+    </div>
+  </div> -->
+  
+</div>
+
+
+
+

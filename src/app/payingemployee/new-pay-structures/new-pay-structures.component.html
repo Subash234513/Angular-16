@@ -1,0 +1,470 @@
+<div style="margin: 2%;">
+    <form [formGroup]="empdetails">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2> {{emp_info?.full_name}}'s Pay Structure</h2>
+            </div>
+            <div class="col-sm-2">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Choose Grade</mat-label>
+                    <mat-select formControlName="gradelevel" class="matformfieldinputstyle"
+                        (selectionChange)="getpaydetails()">
+                        <mat-option *ngFor="let allow of gradeList" [value]="allow.id">
+                            {{allow.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Choose PF</mat-label>
+                    <mat-select formControlName="pfSelect" class="matformfieldinputstyle">
+                        <mat-option value="1" selected>Yes</mat-option>
+                        <!-- <mat-option value="0">No</mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Choose ESI</mat-label>
+                    <mat-select formControlName="esiSelect" class="matformfieldinputstyle">
+                        <mat-option value="1">Yes</mat-option>
+                        <mat-option value="0">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <hr style="margin-top: -1%;">
+    <div *ngIf="isExpanded">
+        <form [formGroup]="empdetails">
+
+            <div class="row"  >
+                <div class="col-md-3">
+                    SALARY COMPONENTS
+                </div>
+                <div class="col-md-3">
+                    CALCULATION
+                </div>
+                <div class="col-md-3">
+                    MONTHLY
+                </div>
+                <div class="col-md-3">
+                    YEARLY
+                </div>
+            </div>
+            <hr style="background-color: #F6F8FF;">
+            <div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Take Home
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                            <mat-form-field>
+                                <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                            </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrtakeHome" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-card style="    background-color: #F6F8FF;
+            height: 61px;
+            width: 102%;
+            margin-left: -1%;
+            margin-bottom: 2%;">
+                    <div class="row">
+
+
+                        <div class="col-md-4">
+                            <mat-label style="font-size: large;">Total CTC</mat-label>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-3">
+                            <!-- <mat-form-field> -->
+                            <!-- <input matInput formControlName="monthCTC"> -->
+                            <span id="fonts"
+                                style="font-size: large;    margin-left: 43%;">{{empdetails.get('monthCTC').value
+                                | currency:'INR'}}</span>
+                            <!-- </mat-form-field> -->
+
+                        </div>
+                        <div class="col-md-3">
+                            <!-- <mat-form-field> -->
+                            <!-- <input matInput formControlName="yrCTC">-->
+                            <span id="fonts"
+                                style="font-size: large;    margin-left: 40%;">{{empdetails.get('yrCTC').value
+                                | currency:'INR'}}</span>
+                            <!-- </mat-form-field> -->
+                        </div>
+
+               
+
+
+
+                    </div>
+
+                </mat-card>
+                <div class="row">
+                    <div class="col-md-3">
+                        Gross Remuneration
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input type="number" matInput formControlName="monthRemun" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- <span id="fonts">{{empdetails.get('yrRemun').value | currency:'INR'}}</span> -->
+                        <mat-form-field>
+                            <input matInput formControlName="yrRemun" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Gross Salary
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthGross" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- <span id="fonts">{{empdetails.get('yrGross').value | currency:'INR'}}</span>
+                     -->
+                        <mat-form-field>
+                            <input matInput formControlName="yrGross" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Basic
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width:30%">
+                            <input type="number" matInput formControlName="basicpercnt" style="text-align: right;">
+                        </mat-form-field>
+                        <mat-label>%</mat-label>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthBasic" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Allowance
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field style="width:30%">
+                            <input type="number" matInput formControlName="allowpercnt" style="text-align: right;">
+
+                        </mat-form-field>
+                        <mat-label>%</mat-label>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthAllow" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Special Remunerations
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthsplRemun" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrsplRemun" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <div *ngIf="groupedData">
+                            <div class="row" *ngFor="let group of groupNames">
+                                <ng-container *ngIf="group === 'Basic'">
+                                    <!-- Display the segment name (Earnings) for the "Basic" group -->
+                                    <div *ngFor="let segment of groupedData[group]" style="margin-left: 6%;">
+                                        {{ segment }}
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input type="number" matInput formControlName="monthSegA" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrSegA" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Segment B
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input type="number" matInput formControlName="monthSegB" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrSegB" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Segment C
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input type="number" matInput formControlName="monthSegC" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrSegC" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Deductions
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthDeduct" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrDeduct" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div *ngIf="groupedData">
+                            <div class="row" *ngFor="let group of groupNames">
+                                <ng-container *ngIf="group === 'Deduction'">
+                                    <!-- Display the segment name (Earnings) for the "Basic" group -->
+                                    <div *ngFor="let segment of groupedData[group]" style="margin-left: 6%;">
+                                        <ng-container *ngIf="segment === 'Deductions'">
+                                            {{ segment }}
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input type="number" matInput formControlName="monthD" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Saatutory deductions
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="stmonthDeduct" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="styrDeduct" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Saatutory PF
+                    </div>
+                    <div class="col-md-3">
+
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="stmonthPF" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Saatutory ESI
+
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="stmonthESI" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Company Contribution
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthCC" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="yrCC" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        ESI
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthCCESI" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        PF
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field>
+                            <input matInput formControlName="monthCCPF" style="text-align: right;">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button style="margin-left: 84%;" type="button" class="btn btn-outline-success"
+                            (click)="togglePanel()">Save and Continue</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div *ngIf="isSegmenShow">
+        <div *ngFor="let segment of formArrayData">
+            <mat-card>
+              <mat-card-title>{{ segment.segment_name }}</mat-card-title>
+              <mat-card-content>
+                <div *ngFor="let paycomponent of segment.paycomponents">
+                  <form>
+                    <mat-form-field>
+                      <input matInput placeholder="Pay Component Name" [(ngModel)]="paycomponent.paycomponent_name" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 1%;">
+                      <input matInput placeholder="Pay Component Percentage" [(ngModel)]="paycomponent.paycomponent_percentage" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 1%;">
+                      <input matInput placeholder="Monthly" [(ngModel)]="paycomponent.monthly" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 1%;">
+                      <input matInput placeholder="Yearly" [(ngModel)]="paycomponent.yearly" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                  </form>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+                <button style="margin-left: 80%;margin-top: 2%;" type="button" class="btn btn-outline-success"
+                    (click)="togglePanels()">Save and View Preview</button>
+            </div>
+          </div>
+    </div>
+</div>

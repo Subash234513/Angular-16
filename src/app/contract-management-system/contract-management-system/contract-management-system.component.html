@@ -1,0 +1,330 @@
+<div style="background-color: #ffffff">
+    <nav *ngIf="MenuView" id="navshow">
+        <div class="nav nav-tabs">
+            <span #myDiv class="nav-item nav-link" id="subname" [ngClass]="(i==returnnav)?'active':''" data-toggle="tab"
+                (click)="subModuleData(sub)" role="tab" *ngFor="let sub of CMS_Tran_Menu_List;index as i"
+                style="color: black;">
+                {{sub.name}}
+            </span>
+        </div>
+    </nav>
+
+    <div *ngIf="projectcreate">
+        <app-project-create (onSubmit)="ProjectCreate()" (onCancel)="ProjectCancel()"></app-project-create>
+    </div>
+
+    <div *ngIf="projecview">
+        <app-project-view (onSubmit)="ProjectViewBack()"></app-project-view>
+    </div>
+
+    <div *ngIf="identificationcreate">
+        <app-identification-create (onSubmit)="IdentificationCreate()" (onCancel)="IdentificationCancel()">
+        </app-identification-create>
+    </div>
+
+
+    <div *ngIf="identificationview">
+        <app-identification-view (onSubmit)="IdentificationViewBack()"></app-identification-view>
+    </div>
+
+    <div class="col-md-12" *ngIf="projectsummary">
+        <h2>Project Summary</h2>
+        <form [formGroup]="ProjectSearchForm" style="margin-left: 20px;">
+            <div class="row">
+
+
+                <div class="col-md-3">
+                    <mat-label>Code</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <input class="matformfieldinputstyle" type="text" matInput autocomplete="off" placeholder="Code"
+                            formControlName="code">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label>Project Title</mat-label><br>
+                    <mat-form-field class="matformfieldstyle ">
+                        <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                            placeholder="Title" formControlName="title">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label>Approval Status</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <mat-select class="matformfieldinputstyle" formControlName="approvalstatus"
+                            placeholder="Status">
+                            <!-- <mat-option *ngFor="let appstatus of ApprovalStatusList" title=" {{appstatus.text}}"
+                                [value]="appstatus.id">
+                                {{appstatus.text}}
+                            </mat-option> -->
+                            <mat-optgroup *ngFor="let group of ApprovalStatusList" [label]="group.name">
+                                <mat-option *ngFor="let sub of group.value" [value]="sub.id" (click)="statusclick(sub)">
+                                    {{sub.text}}
+                                </mat-option>
+                            </mat-optgroup>
+
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label>Active Status</mat-label><br>
+                    <mat-form-field class="matformfieldstyle">
+                        <mat-select class="matformfieldinputstyle" formControlName="is_closed" placeholder="Status">
+                            <mat-option *ngFor="let status of Is_Closed_Open_List" title="{{status.text}}"
+                                [value]="status.id">
+                                {{status.text}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-label>Project Type</mat-label><br>
+                    <mat-form-field class="lenthoftext matformfieldstyle">
+                        <input #typeInput placeholder="Select Type" type="text" matInput class="matformfieldinputstyle"
+                            [matAutocomplete]="type" formControlName="projecttype"
+                            (keyup)="typeDD(this.ProjectSearchForm.value.projecttype)">
+                        <mat-autocomplete #type="matAutocomplete" [displayWith]="displayFnType"
+                            (opened)="autocompletetypeScroll()">
+                            <mat-option *ngIf="isLoading" class="is-loading">Loading...
+                            </mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let Type of TypeList" [value]="Type">
+                                    {{Type.name}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <div style="margin-top: 26px;">
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            aria-label="Search" (click)="ProjectSearch('')">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button mat-stroked-button type="button" style="margin-left: 20px;background-color: white;"
+                            (click)="resetProject()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+        <div class="col-sm-12 col-md-12 col-lg-12">
+
+            <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Code</th>
+                        <th>Project Title</th>
+                        <th>Project Type</th>
+                        <th>Approval Status</th>
+                        <th>Active Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of ProjectList; let proindex = index">
+                        <td>{{proindex+1}}</td>
+                        <td>{{type?.code}}</td>
+                        <td><span (click)="ProjectView(type)" class="textdecorationatag">
+                                {{type?.title}} </span> </td>
+                        <td>{{type?.type?.name}}</td>
+                        <td>{{type?.approval_status?.text}}</td>
+                        <td>{{type?.is_closed}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="ProjectList?.length==0 || ProjectList == undefined ; else paginationpro"
+                class="NodataAlign text-center">No Records Found...</div>
+            <ng-template #paginationpro>
+                <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                    <button type="button" mat-icon-button [disabled]="has_previousProject === false" color="primary"
+                        (click)="ProjectSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpageProject}}
+                    <button type="button" mat-icon-button [disabled]="has_nextProject === false" color="primary"
+                        (click)="ProjectSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="col-md-12" *ngIf="IdentificationApprovedSummaryView">
+        <h2>Approved Project Proposal Request Summary</h2>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <table class="table table-bordered" style="margin-top: 10px;max-width: 100%;" id='commonstyle'>
+                <thead class="table_header">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Code</th>
+                        <th>Title</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let type of APP_IdentificationList; let proindex = index">
+                        <td>{{proindex+1}}</td>
+                        <td>{{type?.code}}</td>
+                        <td><span>
+                                {{type?.title}} </span> </td>
+                        <td><button mat-stroked-button type="button"
+                                style="margin-left: 20px;background-color: #f5c68b;" (click)="addProject(type, 'add')"
+                                matTooltip="Create Project">
+                                Create Project
+                            </button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="APP_IdentificationList?.length==0 || APP_IdentificationList == undefined ; else paginationproidentification"
+                class="NodataAlign text-center">No Records Found...</div>
+            <ng-template #paginationproidentification>
+                <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                    <button type="button" mat-icon-button [disabled]="has_previousProjectAPPIdentification === false"
+                        color="primary" (click)="ProjectApprovedIdentificationSearch('previous')">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button> {{presentpageProjectAPPIdentification}}
+                    <button type="button" mat-icon-button [disabled]="has_nextProjectAPPIdentification === false"
+                        color="primary" (click)="ProjectApprovedIdentificationSearch('next')">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+
+
+    <!-- identification Master -->
+
+    <div class="col" *ngIf="identification">
+
+        <div class="row">
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="p-auto">
+                    <h2>Project Proposal Request Summary</h2>
+
+                    <form [formGroup]="IdentificationSearchForm" style="margin-left: 20px;">
+                        <div class="row">
+                            <div class="col-md-3 gapforfield">
+                                <mat-label>Code/Name</mat-label><br>
+                                <mat-form-field class="matformfieldstyle">
+                                    <input class="matformfieldinputstyle" type="text" matInput autocomplete="off"
+                                        placeholder="Code/Name" formControlName="title">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-label>Status</mat-label><br>
+                                <mat-form-field class="matformfieldstyle">
+                                    <mat-select class="matformfieldinputstyle" formControlName="approvalstatus"
+                                        placeholder="Status">
+                                        <mat-option *ngFor="let appstatus of IdentificationStatusList"
+                                            title=" {{appstatus.text}}" [value]="appstatus.id">
+                                            {{appstatus.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <!-- <mat-label>Approval Status</mat-label><br>
+                                <mat-form-field class="matformfieldstyle">
+                                    <mat-select class="matformfieldinputstyle" formControlName="approvalstatus"
+                                        placeholder="Status">
+                                        <mat-optgroup *ngFor="let group of ApprovalStatusList" [label]="group.name">
+                                            <mat-option *ngFor="let sub of group.value" [value]="sub.id">
+                                                {{sub.text}}
+                                            </mat-option>
+                                        </mat-optgroup>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div style="margin-top: 26px;">
+                                    <button type="button" mat-stroked-button
+                                        style="margin-left: 20px;background-color: white;" aria-label="Search"
+                                        (click)="IdentificationSearch('')">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+
+                                    <button type="button" mat-stroked-button
+                                        style="margin-left: 20px;background-color: white;"
+                                        (click)="reset_Identification()">Clear</button>
+
+                                    <button type="button" mat-stroked-button
+                                        style="margin-left: 20px;background-color: #f5c68b;"
+                                        (click)="addIdentification()">
+                                        <mat-icon matTooltip="Add">add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-bordered" style="margin: 10px 10px 100px 10px;max-width: 95%;"
+                    id='commonstyle'>
+                    <thead class="table_header">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let type of identificationSummaryList; index as i">
+                            <td> {{(presentpageIdentification - 1)*pagesize +i+1 }} </td>
+                            <td>{{type?.code}}</td>
+                            <td (click)="identificationView(type)" style="cursor: pointer;color:blue;">
+                                {{type?.title}}</td>
+                            <td>{{type?.type.name}}</td>
+                            <td>{{type?.approval_status?.text}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="identificationSummaryList?.length==0 || identificationSummaryList == undefined ; else paginationproident"
+                    class="NodataAlign text-center">No Records Found...</div>
+                <ng-template #paginationproident>
+                    <div class="col-sm-12" style="font-size: small;text-align: right;margin-bottom: 5%;">
+                        <button mat-icon-button [disabled]="has_previousIdentification == false" color="primary"
+                            (click)="IdentificationSearch('previous')">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageIdentification}}
+                        <button mat-icon-button [disabled]="has_nextIdentification == false" color="primary"
+                            (click)="IdentificationSearch('next')">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>

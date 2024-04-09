@@ -1,0 +1,297 @@
+<div *ngIf="isShowSprint">
+  <div>
+    <form [formGroup]="sprintSummaryForm" class="cus-sprintFormMain">
+      <div class="cus-sprintFormContainer">
+        <div class="cus-sprintFormContainer1">
+          <div style="width: 400px">
+            <mat-form-field style="width: 100%">
+              <mat-label>Search Sprints</mat-label>
+              <input matInput formControlName="query" />
+              <!-- <mat-icon matSuffix class="maticonsize" (click)="sprintSearch('')">search</mat-icon> -->
+            </mat-form-field>
+          </div>
+
+          <div>
+            <button
+              class="btn"
+              type="button"
+              (click)="resetSprint()"
+              style="background-color: #e4e4e4; color: #044063"
+            >
+              Clear
+            </button>
+          </div>
+
+          <div class="cus-sprintFormIcon1" style="cursor: pointer;" (click)="searchsprints()">
+            <i
+              class="fa-solid fa-magnifying-glass"
+              
+            ></i>
+          </div>
+
+          <!-- <i class="fa-solid fa-xmark" style="margin-left: 18%;" (click)="resetSprint()"></i> -->
+          <!-- <mat-icon class="maticonsize" (click)="sprintSearch('')">search</mat-icon> -->
+          <!-- <mat-form-field style="width: 100%;" (click)="getassignlist()">
+                          <mat-label>Created By</mat-label>
+                        <mat-select matInput formControlName="method" (selectionChange)="onAssignChange($event)">
+                          <mat-option *ngFor="let opt of statusLists" [value]="opt.name">
+                            {{ opt.name }}
+                          </mat-option>
+                        </mat-select>
+           
+          /mat-form-field>   -->
+
+          <div style="position: relative">
+            <button
+              class="btn"
+              (click)="togglePopup()"
+              class="cus-sprintFormIcon2"
+            >
+              <span> <i class="fa-solid fa-filter"></i></span>
+            </button>
+
+            <!-- popup Filter -->
+            <div *ngIf="this.showPopup">
+              <form
+                [formGroup]="sprintSummaryForm"
+                class="cus-filterSearchContainer"
+              >
+                <!-- <div >
+                    <mat-form-field class="matformfieldstyle" appearance="outline">
+                        <mat-select class="matformfieldinputstyle" placeholder="Filter"
+                            formControlName="dynamicdropdown">
+                            
+    
+                            <mat-option (click)="datefunc()"*ngFor="let type1 of sprintfilter"
+                                [value]="type1.id">{{type1.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div> -->
+
+                <div class="cus-filterSearch">
+                  <div>
+                    <mat-form-field>
+                      <mat-label>Start date</mat-label>
+                      <input
+                        matInput
+                        [matDatepicker]="picker1"
+                        placeholder="Start Date"
+                        autocomplete="off"
+                        formControlName="start_date"
+                        (dateInput)="startdateclick($event)"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker1"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                      <!-- <mat-datepicker (dateChange)="startdateclick()" ></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                      <mat-label>End date</mat-label>
+                      <input
+                        matInput
+                        [matDatepicker]="picker2"
+                        placeholder="End Date"
+                        autocomplete="off"
+                        formControlName="end_date"
+                        (dateInput)="enddateclick($event)"
+                        [min]="sprintSummaryForm.value.start_date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker2"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker2> </mat-datepicker>
+                      <!-- <mat-datepicker (click)="enddateclick()"></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <!-- <div >
+                <mat-form-field>
+                    <mat-label>Query</mat-label>
+                    <input matInput  formControlName="query" placeholder="Query">
+                </mat-form-field>
+            </div> -->
+                </div>
+
+                <div class="cus-filterSearch-btnDiv">
+                  <button
+                    class="btn btn-secondary"
+                    color="primary"
+                    (click)="resetsprinitform()"
+                  >
+                    Reset
+                  </button>
+                  <div>
+                    <button
+                      class="btn btn-primary"
+                      type="submit"
+                      color="primary"
+                      (click)="applyfilter()"
+                      style="margin-right: 10px;background-color: #044063;color: white;"
+                    >
+                      Apply
+                    </button>
+
+                    <button
+                      class="btn btn-secondary"
+                      (click)="togglePopup()"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="cus-sprintFormContainer2">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            style="background-color: #044063; color: white"
+            (click)="getSprintAddScreen()"
+          >
+            <!-- (click)="getSprintAddScreen()" -->
+            + Sprint
+          </button>
+
+          <!-- Sprint Creation Popup -->
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header" style="background-color: #044063;color: white;">
+                  <p
+                    class="modal-title"
+                    id="exampleModalLabel"
+                    style="margin-bottom: 0"
+                  >
+                    New Sprint Creation
+                  </p>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    #closebutton
+                    style="color: white;"
+                    (click)="popclose()"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div *ngIf="sprintcreate">
+                  <app-sprint-creation (OnSubmit)="SubmitbackTosprintSummary()"></app-sprint-creation>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <hr />
+
+  <div class="cus-tableContainer">
+    <table class="table cus-table" fixed-header>
+      <thead class="table_header">
+        <tr>
+          <th class="ba-code"><i class="fa-solid fa-list"></i> S.No</th>
+          <th class="ba-name">
+            <i class="fa-solid fa-hashtag"></i> Sprint Name
+          </th>
+          <th class="ba-organization">
+            <i class="fa-regular fa-calendar"></i> Start Date
+          </th>
+          <th class="ba-organization">
+            <i class="fa-regular fa-calendar"></i> End Date
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let tab of sprintList; let i = index"
+          style="text-align: center"
+        >
+          <td style="text-align: center">
+            {{ (pageNumbers - 1) * pagesizeStoryTask + i + 1 }}
+          </td>
+          <td style="text-align: start">
+            <span class="cus-badgeLightBlack">{{ tab?.code }}</span> -
+            {{ tab?.name }}
+          </td>
+          <td style="text-align: center">
+            {{
+              tab.start_day !== "None"
+                ? (tab?.start_day | date : "dd/MM/yyyy")
+                : ""
+            }}
+          </td>
+          <td style="text-align: center">
+            {{
+              tab?.end_day !== "None"
+                ? (tab?.end_day | date : "dd/MM/yyyy")
+                : ""
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    *ngIf="sprintList?.length == 0 || sprintList == undefined"
+    class="NodataAlign text-center"
+  >
+    No Records Found...
+  </div>
+
+  <!-- Page Buttons -->
+  <div class="cus-taskPageBtnsDiv">
+    <button
+      mat-icon-button
+      [disabled]="has_sprintprevious === false"
+      (click)="previousPage()"
+    >
+      <mat-icon>arrow_backward</mat-icon>
+    </button>
+    <div *ngIf="this.pageNumb == 1">
+      <p class="cus-btnActive">
+        {{ this.pageNumbers }}
+      </p>
+    </div>
+    <div *ngIf="this.pageNumb != 1">
+      <p class="cus-btnActive">
+        {{ this.pageNumbers }}
+      </p>
+    </div>
+    <button
+      mat-icon-button
+      [disabled]="has_sprintnext === false"
+      (click)="nextPage()"
+    >
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- <div *ngIf="sprintcreate">
+  <app-sprint-creation
+    (OnSubmit)="SubmitbackTosprintSummary()"
+    (OnCancel)="CancelbackTosprintSummary()"
+  ></app-sprint-creation>
+</div> -->

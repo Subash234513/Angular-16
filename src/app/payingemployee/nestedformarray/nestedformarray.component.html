@@ -1,0 +1,165 @@
+
+<div class="container mt-5">
+   
+    <div class="col-12 name">
+        R. SELVAKUMAR's Pay Structure
+    </div>
+    <div class="col-12 mt-5 row">
+        <div class="col-4">
+            <!-- <h4>Basic mat-select</h4> -->
+            <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-4">
+            <!-- <h4>Basic mat-select</h4> -->
+            <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-4">
+            <!-- <h4>Basic mat-select</h4> -->
+            <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="container " >
+        <form action="">
+       
+        <div class="row col-12 border d-flex align-items-center bg-dark text-light height" >
+            <div class="col-3">SALARY COMPONENTS</div>
+            <div class="col-3">
+                CALCULATION</div>
+            <div class="col-3">MONTHLY</div>
+            <div class="col-3">
+                YEARLY</div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue">
+            <div class="col-3">Task Home</div>
+            <div class="col-3" >
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                </mat-form-field>
+                </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline">
+                    <input type="number" matInput formControlName="monthtakeHome" class="alignValue">
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="yrtakeHome" style="text-align: right;">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row col-12 d-flex align-items-center skyblue">
+            <div class="col-3"  (click)="Gross()">Gross Remuneration</div>
+            <div class="col-3">
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                </mat-form-field>
+                </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline">
+                    <input type="number" matInput formControlName="monthtakeHome" class="alignValue">
+                </mat-form-field>
+            </div>
+            <div class="col-3">
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="yrtakeHome" class="alignValue">
+                </mat-form-field>
+            </div>
+        </div>
+        <div *ngIf="hide">
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-3">1</div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="perwidth">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                    </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-3">2</div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="perwidth">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                    </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrtakeHome" class="alignValue">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-3">3</div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline" class="perwidth">
+                        <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                    </mat-form-field>
+                    </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthtakeHome" class="alignValue">
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrtakeHome" style="text-align: right; "formControlName="">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row col-12 d-flex align-items-center skyblue">
+                <div class="col-3">4</div>
+                <mat-form-field appearance="outline" class="perwidth">
+                    <input type="number" matInput formControlName="monthtakeHome" style="text-align: right;">
+                </mat-form-field>
+                <div class="col-3">
+                    </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input type="number" matInput formControlName="monthtakeHome" class="alignValue">
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="yrtakeHome" class="alignValue">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>

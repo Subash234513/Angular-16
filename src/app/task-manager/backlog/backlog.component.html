@@ -1,0 +1,538 @@
+<div *ngIf="isShowBacklog">
+  <div>
+    <form [formGroup]="backlogSummaryForm" class="form-container">
+      <div class="cus-backlogFormContainer">
+        <div class="cus-backlogContainer1">
+          <div>
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <mat-select formControlName="dropfilter">
+                <mat-option *ngFor="let pep of assigns" [value]="pep.id" (click)="newfun(pep)">
+                  {{ pep.text }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div (click)="getDeveloperdrop()">
+            <mat-form-field style="width: 100%">
+              <mat-label> Employee</mat-label>
+              <input
+                #developerinput
+                placeholder="Select Employee"
+                matInput
+                formControlName="developer_id"
+                [matAutocomplete]="developerrole"
+                (click)="developerClick()"
+              />
+              <mat-autocomplete
+                #developerrole="matAutocomplete"
+                [displayWith]="displaydevelopclient"
+              >
+                <ng-container>
+                  <mat-option *ngFor="let opt of develop" [value]="opt" title="{{opt.name}}">
+                    {{ opt.name }}
+                  </mat-option>
+                </ng-container>
+                <mat-option *ngIf="!develop ||!develop.length">
+                  No Results Found
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="col-md-2">
+          <span
+            style="
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              display: flex;
+              font-size: larger;
+              margin-top: -4%;
+              margin-left: 49%;
+            "
+          >
+            <mat-icon style="margin-left: 2%">filter_list</mat-icon>filter</span
+          >
+        </div> -->
+        <!-- <div class="cus-taskBtnDiv"> -->
+          <!-- Search Icon -->
+          <!-- <div class="cus-taskFormIcon1">
+            <i
+              class="fa-solid fa-magnifying-glass"
+              (click)="applyfilter()"
+            ></i>
+          </div>
+        </div> -->
+        <div>
+          <!-- <i class="fa-solid fa-xmark" style="margin-left: 23%;" (click)="resetTasks()"></i> -->
+          <button
+            class="btn"
+            type="button"
+            (click)="resetTasks()"
+            style="background-color: #e4e4e4; color: #044063"
+          >
+            Clear
+          </button>
+        </div>
+        <div>
+        <button (click)="applyfilter()"class="cus-backlogFormIcon1">
+          <span> <i class="fa-solid fa-magnifying-glass"></i></span>
+        </button>
+      </div>
+          <div style="position: relative">
+           
+            <button (click)="backlogPopup()" class="cus-backlogFormIcon1">
+              <span> <i class="fa-solid fa-filter"></i></span>
+            </button>
+        
+            <!-- Filter Popup -->
+            <div *ngIf="backlogPopus">
+              <form
+                [formGroup]="backlogSummaryForm"
+                class="cus-filterSearchContainer" style="margin-right: -35px;"
+              >
+                <!-- <div>
+              <mat-form-field class="matformfieldstyle" appearance="outline">
+                <mat-select
+                  class="matformfieldinputstyle"
+                  placeholder="Filter"
+                  formControlName="dynamicdropdown"
+                >
+                  <mat-option
+                    (click)="backlogfunction()"
+                    *ngFor="let type1 of backlogfilter"
+                    [value]="type1.id"
+                    >{{ type1.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+                <div class="cus-filterSearch">
+                  <div>
+                    <mat-form-field>
+                      <mat-label>Start date</mat-label>
+                      <input
+                        matInput
+                        [matDatepicker]="picker1"
+                        placeholder="Start Date"
+                        autocomplete="off"
+                        formControlName="start_date"
+                        (dateInput)="startdateclick($event)"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker1"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                      <!-- <mat-datepicker (dateChange)="startdateclick()" ></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <mat-form-field>
+                      <mat-label>End date</mat-label>
+                      <input
+                        matInput
+                        [matDatepicker]="picker2"
+                        placeholder="End Date"
+                        autocomplete="off"
+                        formControlName="end_date"
+                        (dateInput)="enddateclick($event)"
+                        [min]="backlogSummaryForm.value.start_date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker2"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker2> </mat-datepicker>
+                      <!-- <mat-datepicker (click)="enddateclick()"></mat-datepicker> -->
+                    </mat-form-field>
+                  </div>
+                  <!-- <div >
+                    <mat-form-field>
+                        <mat-label>Query</mat-label>
+                        <input matInput formControlName="query" placeholder="Query">
+                    </mat-form-field>
+                </div> -->
+                <div (click)="getClientdrop()">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>client</mat-label>
+                    <input
+                      #clientclientInput
+                      placeholder="Select Client"
+                      matInput
+                      formControlName="client"
+                      [matAutocomplete]="clientteamrole"
+                      (click)="clientclick()"
+                    />
+                    <mat-autocomplete
+                      #clientteamrole="matAutocomplete"
+                      [displayWith]="displayccclient"
+                    >
+                      <ng-container>
+                        <mat-option
+                          *ngFor="let opt of clientdrop"
+                          [value]="opt" title="{{opt.name}}"
+                        >
+                          {{ opt.name }}
+                        </mat-option>
+                      </ng-container>
+                      <mat-option *ngIf="!clientdrop ||!clientdrop.length">
+                        No Results Found
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                  <div (click)="getAppdrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Project</mat-label>
+                      <input
+                        #clientInput
+                        placeholder="Select Project"
+                        matInput
+                        formControlName="app_id"
+                        [matAutocomplete]="clientrole"
+                        (click)="appClick()"
+                      />
+                      <mat-autocomplete
+                        #clientrole="matAutocomplete"
+                        [displayWith]="displayFnclient"
+                      >
+                        <!-- <mat-autocomplete> -->
+                        <ng-container>
+                          <mat-option *ngFor="let opt of appdrop" [value]="opt" title="{{opt.name}}">
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!appdrop || !appdrop.length">
+                          No Results Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <!-- (selectionChange)="onSelectChange($event)" -->
+                 
+                  <div (click)="getModuledrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Module </mat-label>
+                      <input
+                        #moduleInput
+                        placeholder="Select Module"
+                        matInput
+                        formControlName="module_id"
+                        [matAutocomplete]="modulerole"
+                        (click)="moduleClick()"
+                      />
+                      <mat-autocomplete
+                        #modulerole="matAutocomplete"
+                        [displayWith]="displaymoduleclient"
+                      >
+                        <ng-container>
+                          <mat-option
+                            *ngFor="let opt of moduledrop"
+                            [value]="opt" title="{{opt.name}}"
+                          >
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!moduledrop ||!moduledrop.length">
+                          No Results Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <!--  (selectionChange)="onSelectChange($event)" -->
+                 
+                  <div>
+                    <mat-form-field>
+                      <mat-label>task</mat-label>
+                      <input matInput formControlName="query"  placeholder="Type Tasks" />
+                    </mat-form-field>
+                  </div>
+                  <div (click)="getTeamleaddrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Team Lead</mat-label>
+                      <input
+                        #teamlead
+                        placeholder="Select TeamLead"
+                        matInput
+                        formControlName="team_lead"
+                        [matAutocomplete]="teamrole"
+                        (click)="teamleadclick()"
+                      />
+                      <mat-autocomplete
+                        #teamrole="matAutocomplete"
+                        [displayWith]="displayteamleadclient"
+                      >
+                        <ng-container>
+                          <mat-option *ngFor="let opt of teams" [value]="opt" title="{{opt.name}}">
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!teams ||!teams.length">
+                          No Results Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <div (click)="getteamdrop()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Team</mat-label>
+                      <input
+                        #teamInput
+                        placeholder="Select Team"
+                        matInput
+                        formControlName="team"
+                        [matAutocomplete]="teamsrole"
+                        (click)="teamclick()"
+                      />
+                      <mat-autocomplete
+                        #teamsrole="matAutocomplete"
+                        [displayWith]="displayFnteamclient"
+                      >
+                        <ng-container>
+                          <mat-option
+                            *ngFor="let opt of teamdrop"
+                            [value]="opt" title="{{opt.name}}"
+                          >
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!teamdrop ||!teamdrop.length">
+                          No Results Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div click="getSprintDropDown()">
+                    <mat-form-field style="width: 100%">
+                      <mat-label>Sprints</mat-label>
+                      <input
+                        #teamInput
+                        placeholder="Select Sprint"
+                        matInput
+                        formControlName="sprint"
+                        [matAutocomplete]="teamsprintrole"
+                        (click)="teamsprintclick()"
+                      />
+                      <!-- (selectionChange)="onSelectChangeSpr($event)"> -->
+                      <mat-autocomplete
+                        #teamsprintrole="matAutocomplete"
+                        [displayWith]="displaysprintteamclient"
+                      >
+                        <ng-container>
+                          <mat-option
+                            *ngFor="let opt of sprintlsts"
+                            [value]="opt" title="{{opt.name}}"
+                          >
+                            {{ opt.name }}
+                          </mat-option>
+                        </ng-container>
+                        <mat-option *ngIf="!sprintlsts ||!sprintlsts.length">
+                          No Results Found
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                </div>
+               
+
+                <div class="cus-filterSearch-btnDiv">
+                  <button
+                    class="btn btn-secondary"
+                    color="primary"
+                    (click)="resetsprinitform()"
+                  >
+                    Reset
+                  </button>
+                  <div class="cus-aSearchBtnDiv">
+                    <button
+                      class="btn btn-primary"
+                      type="submit"
+                      color="primary"
+                      (click)="applyfilter()"
+                      style="background-color: #044063;color: white;"
+                    >
+                      Apply
+                    </button>
+                    <button
+                      class="btn btn-secondary"
+                      (click)="backlogPopup()"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div>
+      <div class="cus-tableContainer">
+        <table class="table cus-table">
+          <thead>
+            <tr>
+              <th scope="col"><i class="fa-solid fa-list-check"></i> Task</th>
+              <th><i class="fa-solid fa-at"></i>Assignee</th>
+              <th scope="col"><i class="fa-solid fa-tag"></i> Labels</th>
+              <th scope="col">
+                <i class="fa-regular fa-calendar-days"></i> Due Date
+              </th>
+              <th scope="col">
+                <i class="fa-solid fa-rotate-right"></i> Status
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let type of backlogList; index as i">
+            <tr>
+              <td>
+                <div>
+                  <mat-icon
+                    *ngIf="type?.priority_type?.text === 'High'"
+                    style="color: #F50000"
+                    title="High"
+                    >flag</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="type?.priority_type?.text === 'Normal'"
+                    style="color: #FFCC00"
+                    title="Normal"
+                    >flag</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="type?.priority_type?.text === 'Low'"
+                    style="color: #6FDDFF"
+                    title="Low"
+                    >flag</mat-icon
+                  >
+                  <span class="cus- badge">
+                    <span
+                      style="padding: 2px 4px"
+                      class="cus-badgeLightBlack"
+                      >{{ type?.code }}</span
+                    >
+                  </span>
+                  -
+                  <span
+                    class="firstcolumn"
+                    title="{{ type?.task }}"
+                    (click)="story_TaskView(type.id)"
+                    style="cursor: pointer; color: blue"
+                  >
+                    {{
+                      type?.task.length > 40
+                        ? (type?.task | slice : 0 : 40) + ".."
+                        : type.task
+                    }}
+                  </span>
+                </div>
+              </td>
+              <td style="text-align: center;">{{ type?.assigned_to[0].name | uppercase}}</td>
+              <td style="text-align: center;">
+                <span   class="cus-badge">
+                  <span class="cus-badgecustom">{{ type?.type }}</span>
+                </span>
+              </td>
+              <td  style="text-align: center;">
+                <span> {{ type?.end_date | date : "dd-MMM-yyyy" }} </span>
+              </td>
+              <td  style="text-align: center;">
+                <span class="cus-badge" >
+                  <span
+                    *ngIf="type?.task_status == 'Work in Progress'"
+                    class="cus-badgeBlue"
+                    >Work In Progress</span
+                  >
+                  <span *ngIf="type?.task_status == 'Hold'" class="cus-badgeViolet">Hold</span>
+                  <span
+                    *ngIf="type?.task_status == 'Completed'"
+                    class="cus-badgeGreen"
+                    >Completed</span
+                  >
+                  <span
+                    *ngIf="type?.task_status == 'Yet to Start'"
+                    class="cus-badgeLightBlack"
+                    >Yet to Start</span
+                  >
+                  <span
+                    *ngIf="type?.task_status == 'Verified'"
+                    class="cus-badgeYellow"
+                    >Verified</span
+                  >
+                  <span
+                    *ngIf="type?.task_status == 'Draft'"
+                    class="cus-badgeLightGreen"
+                    >Draft</span
+                  >
+                  <span
+                    *ngIf="type?.task_status == 'Rejected'"
+                    class="cus-badgeRed"
+                    >Rejected</span
+                  >
+                  <span *ngIf="type?.task_status == 'Reopen'" class="cus-badgeRed">Reopen</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+
+
+
+
+
+
+
+
+        </table>
+        <!-- <div *ngIf="backlogList?.length==0 || backlogList == undefined ; "
+                    class="NodataAlign text-center">No Records Found...</div> -->
+      </div>
+
+      <div class="cus-backlogPageBtnsDiv">
+        <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                    <p style="text-align: center;">{{this.pageNumbers+2}}</p> 
+                    <p style="text-align: center;">{{this.pageNumbers+3}}</p>             -->
+
+        <!-- <div *ngIf="this.pageNumbers != 1" class="cus-pageNumbers"> -->
+        <!-- <p style="text-align: center;">{{this.pageNumbers-1}}</p>  -->
+        <!-- <p class="cus-btnActive" style="text-align: center;">{{this.pageNumbers}}</p> -->
+        <!-- <p style="text-align: center;">{{this.pageNumbers+1}}</p> 
+                    <p style="text-align: center;">{{this.pageNumbers+2}}</p>                -->
+
+        <!-- </div> -->
+        <!-- <div class="row" *ngIf="istaskpagination">
+                    <div class="col-sm-12" style="font-size: small;text-align:right;margin-bottom: 5%;">
+                        <button mat-icon-button [disabled]="has_previousTask === false" color="primary"
+                            (click)="previousClick()">
+                            <mat-icon>arrow_back</mat-icon>
+                        </button>
+                        {{presentpageTask}}
+                        <button mat-icon-button [disabled]="has_nextTask === false" color="primary"
+                            (click)="nextClick()">
+                            <mat-icon>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </div> -->
+        <button
+          [disabled]="has_previousStoryTask === false"
+          (click)="previousPage()"
+        >
+          <mat-icon>arrow_backward</mat-icon>
+        </button>
+        <p class="cus-btnActive">
+          {{ this.pageNumbers }}
+        </p>
+        <button [disabled]="has_nextStoryTask === false" (click)="nextPage()">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="taskview">
+  <app-taskviews
+    (OnSubmit)="SubmitbackToSummary()"
+    (OnCancel)="SubmitbackToSummary()"
+  ></app-taskviews>
+</div>

@@ -1,0 +1,796 @@
+<div class="maindiv">
+  <div id="summary">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Payroll Review</h2>
+      </div>
+      <div class="col-md-2">
+        <!-- <button mat-raised-button color="secondary" matTooltip="download" (click)="openSpecialAllowance()" data-target="#specialModal" data-toggle="modal"
+          style="    margin-left: -75%;
+          margin-top: 3%;">
+          Special Allowance
+        </button> -->
+        <mat-slide-toggle style="max-width: 105%;
+        margin-top: 5%;" (change)="onToggle($event)">Special Allowance</mat-slide-toggle>
+
+      </div>
+
+      <div class="col-md-2" style="padding: 0px">
+        <form [formGroup]="searchform">
+          <mat-form-field dateFormat2 class="smallinput spacingForm" style="margin-top: -2%;">
+            <mat-label> Month </mat-label>
+            <input matInput [matDatepicker]="dp" [formControl]="monyear" placeholder="Month and Year"
+              formControlName="monthyear" />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+            </mat-datepicker>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-md-1">
+        <button mat-raised-button matTooltip="search" (click)="searchData()" style="margin-left: -40%;">
+          Search
+        </button>
+      </div>
+      <!-- <div class="col-md-1">
+        <button mat-raised-button color="primary" matTooltip="download" (click)="downloadData()"
+          style="margin-left: -40%;">
+          Download
+        </button>
+      </div> -->
+    </div>
+
+    <!-- <mat-card *ngIf="isShowTable"> -->
+      <mat-card *ngIf="showFilter" style="height: 76px;
+      /* border-radius: 36px; */
+      margin-bottom: 1%;
+      background-color: whitesmoke;">
+        <form [formGroup]="searchform">
+          <div class="row">
+            <div class="col-md-2">
+
+              <mat-form-field style="width: 100%;">
+                <mat-label>Filter</mat-label>
+                <mat-select matInput formControlName="filter">
+                  <mat-option *ngFor="let option of dataFilter" [value]="option.value">
+                    {{ option.key }}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-placeholder>Filter</mat-placeholder> -->
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+
+              <mat-form-field style="width: 100%;">
+                <mat-label>Payroll Status</mat-label>
+                <mat-select matInput formControlName="status">
+                  <mat-option *ngFor="let opt of droplist" [value]="opt.id">
+                    {{ opt.text }}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-placeholder>Status</mat-placeholder> -->
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+
+              <mat-form-field style="width: 114%;">
+                <mat-label>Business Segment</mat-label>
+                <mat-select matInput formControlName="bs">
+                  <mat-option *ngFor="let opt of bslist" [value]="opt.id">
+                    {{ opt.name }}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-placeholder>Status</mat-placeholder> -->
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+
+              <mat-form-field style="width: 86%;margin-left: 14%; ">
+                <mat-label>Cost Center</mat-label>
+                <mat-select matInput formControlName="cc">
+                  <mat-option *ngFor="let opt of cclist" [value]="opt.id">
+                    {{ opt.name }}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-placeholder>Status</mat-placeholder> -->
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+
+              <mat-form-field style="width: 100%;" (click)="functionalHead()">
+                <mat-label>Employee</mat-label>
+                <!-- <input type="text" matInput formControlName="employee"> -->
+              
+                  <input #fnInput matInput formControlName="functional_head" placeholder="Select Employee"
+                    [matAutocomplete]="fn" (keyup)="employeecomponent_search($event.target.value)"
+                    (keypress)="validation($event)">
+                  <mat-icon matSuffix class="maticonsize">unfold_more</mat-icon>
+                  <mat-autocomplete #fn="matAutocomplete" [displayWith]="displayFnFunHead"
+                    (opened)="autocompleteFunctionalHeadScroll()">
+                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                    <ng-container *ngIf="!isLoading">
+                      <mat-option *ngFor="let fun of functionalHeadList" [value]="fun">
+                        {{fun.full_name}}
+                      </mat-option>
+                    </ng-container>
+                    <mat-option *ngIf="!functionalHeadList || !functionalHeadList.length">
+                      NO RECORDS FOUND
+                  </mat-option>
+                  </mat-autocomplete>
+                
+              </mat-form-field>
+            </div>
+            <div class="col-md-1">
+              <button mat-stroked-button type="button" style="background-color: white;margin-top: 11%;"
+                aria-label="Search" (click)="searchData()">Apply Filter
+                <!-- <mat-icon>Apply Filter</mat-icon> -->
+              </button>
+            </div>
+            <div class="col-md-1">
+              <button mat-stroked-button type="button" (click)="resetForm()"
+                style="background-color: white;margin-top: 11%;margin-left: 18%;">Clear</button>
+            </div>
+          </div>
+        </form>
+      </mat-card>
+      <!-- <mat-slide-toggle style="max-width: 105%;
+      margin-top: 5%;" (change)="onToggle($event)">Table Detailed View</mat-slide-toggle> -->
+
+
+      <mat-card *ngIf="isShowTable">
+        <div class="mat-elevation-z5" class="table-row" id="tablediv" class="table-bordered" *ngIf="isShowTable">
+
+          <table mat-table [dataSource]="dataSource" id="tablemain">
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="table_header">
+                <input type="checkbox" (change)="onMasterCheckboxClick($event)" />
+              </th>
+              <td mat-cell *matCellDef="let row" id="theader">
+                <input type="checkbox" [checked]="isAllCheckboxCheck" (change)="onSingleChecked($event, row)" />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="empcode" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              text-align: center;
+              width: 130px;
+              position: sticky;" class="table_header">
+                Employee Code
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.code }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              text-align: center;
+              width: 130px;
+              position: sticky;
+            " class="table_header">
+                Employee Name
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.full_name | uppercase }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="doj" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Joining Date
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.doj | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="businesssegment" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Business Segment
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.businesssegment }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="costcentre" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Cost Centre
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.costcentre }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="stdtakeHomeWOBonus"  >
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home W/O Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" >
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Std'">
+               
+                    {{ item['take_home w/o bonus'] | currency : "INR" }}
+                   
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="stdMonthBonus"  >
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Monthly Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Std'">
+                 
+                    {{ item.bonus | currency : "INR" }}
+                
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="stdTakeHome" >
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" >
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Std'">
+               
+                    {{ item?.take_home | currency : "INR" }}
+                   
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currLOPdays">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Paid Days
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                  
+                    {{ item.paid_days }}
+               
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="curradvDeduct">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Advance Deduction
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                    {{ item.deduction_amout | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currtakeHomeWOBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home W/O Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                    {{ item['take_home w/o bonus'] | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currMonthBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Monthly Bonus
+              </th>
+
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                    {{ item.bonus | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currTakeHome">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                    {{ item.take_home | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevLOPdays">
+              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid" id="heads" class="table_header">
+                Paid Days
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    <!-- <ng-container *ngIf="isShowStd"> -->
+                    {{ item.paid_days }}
+                    <!-- </ng-container> -->
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevadvDeduct">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Advance Deduction
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    {{ item.deduction_amout | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevtakeHomeWOBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home W/O Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    {{ item['take_home w/o bonus'] | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevMonthBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    {{ item.bonus | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevTakeHome">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    {{ item?.take_home | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="oldLOPdays">
+              <th mat-header-cell *matHeaderCellDef style="border-left: 1px dotted" id="heads" class="table_header">
+                Paid Days
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    <!-- <ng-container *ngIf="isShowStd"> -->
+                    {{ item.paid_days }}
+                    <!-- </ng-container> -->
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="oldadvDeduct">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Advance Deduction
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    {{ item.deduction_amout | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="oldtakeHomeWOBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home W/O Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    {{ item['take_home w/o bonus'] | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="oldMonthBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    {{ item.bonus | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="oldTakeHome">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Take Home
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    {{ item.take_home | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-first-group" sticky>
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="6"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                Employee Details
+              </th>
+            </ng-container>
+            
+            <ng-container matColumnDef="header-row-second-group" >
+            
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"
+                style="border: 1px dotted; text-align: center; font-weight: bold" >
+                Standard
+              </th>
+            
+            </ng-container>
+            <ng-container matColumnDef="header-row-third-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="5"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{currMonShow }}
+              </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-fourth-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="5"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{ prevMonShow }}
+              </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-fifth-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="5"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{ oldMonShow }}
+              </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="[
+            'header-row-first-group',
+            'header-row-second-group',
+            'header-row-third-group',
+            'header-row-fourth-group',
+            'header-row-fifth-group'
+          ]"></tr>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row class="element-row" *matRowDef="let row; columns: displayedColumns"
+              [ngClass]="{ mismatch: row.paid_days == 3 }"></tr>
+          </table>
+        </div>
+       
+                    <!-- else paginationpro -->
+
+        <div class="col-sm-12" style="font-size: x-small; text-align: right; padding-right: 2%" *ngIf="isShowTable">
+          <button (click)="prevpage()" mat-icon-button [disabled]="pagination.has_previous === false" color="primary">
+            <mat-icon class="customIconSize">arrow_back</mat-icon>
+          </button>
+          {{ pagination.index }}
+          <button (click)="nextpage()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+            <mat-icon class="customIconSize">arrow_forward</mat-icon>
+          </button>
+        </div>
+
+        <div *ngIf="showButtons" style="margin-top: 11px; margin-left: 37%">
+          <div class="row">
+            <button type="button" style="border-radius: 10px" (click)="approvePay()" class="btn btn-outline-success">
+              Approve
+            </button>
+            <button type="button" style="border-radius: 10px; margin-left: 4%" (click)="holdPay()"
+              class="btn btn-outline-warning">
+              Hold
+            </button>
+            <button type="button" style="border-radius: 10px; margin-left: 4%" (click)="rejectPay()"
+              class="btn btn-outline-danger">
+              Reject
+            </button>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card *ngIf="isShowTableSpl">
+        <div class="mat-elevation-z5" class="table-row" id="tablediv" class="table-bordered" *ngIf="isShowTableSpl">
+
+          <table mat-table [dataSource]="dataSourceSpl" id="tablemains">
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="table_header">
+                <input type="checkbox" (change)="onMasterCheckboxClick($event)" />
+              </th>
+              <td mat-cell *matCellDef="let row" id="theader">
+                <input type="checkbox" [checked]="isAllCheckboxCheck" (change)="onSingleChecked($event, row)" />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="empcode" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              text-align: center;
+              width: 55px;
+              position: sticky;" class="table_header">
+                Employee Code
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.code }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              text-align: center;
+              width: 130px;
+              position: sticky;
+            " class="table_header">
+                Employee Name
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.full_name | uppercase }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="doj" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Joining Date
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.doj | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="businesssegment" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Business Segment
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.businesssegment }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="costcentre" sticky>
+              <th mat-header-cell *matHeaderCellDef style="
+              font-size: small;
+              font-weight: bold;
+              border-right: 1px dotted;
+              width: 130px;
+              position: sticky;
+              text-align: center;
+            " class="table_header">
+                Cost Centre
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle" style="background-color: #f0f0f0">
+                {{ element[0]?.costcentre }}
+              </td>
+            </ng-container>
+         
+            <ng-container matColumnDef="Amount">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Amount
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'Current Month'">
+                    {{ item.amount | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+       
+            <ng-container matColumnDef="prevAmount">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Amount
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-1'">
+                    {{ item.amount | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="oldAmount">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Amount
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'CM-2'">
+                    {{ item.amount | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="prevMonthBonus">
+              <th mat-header-cell *matHeaderCellDef id="heads" class="table_header">
+                Bonus
+              </th>
+              <td mat-cell *matCellDef="let element" class="rowStyle">
+                <ng-container *ngFor="let item of element">
+                  <ng-container *ngIf="item.headings === 'previous bonus record'">
+                    {{ item.amount | currency : "INR" }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-first-group" sticky>
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="6"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                Employee Details
+              </th>
+            </ng-container>
+            
+           
+            <ng-container matColumnDef="header-row-third-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{currMonShow }}
+              </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-fourth-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{ prevMonShow }}
+              </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-fifth-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                {{ oldMonShow }}
+              </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-sixth-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"
+                style="border: 1px dotted; text-align: center; font-weight: bold">
+                Previous Bonus
+              </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="[
+            'header-row-first-group',
+            'header-row-third-group',
+            'header-row-fourth-group',
+            'header-row-fifth-group',
+            'header-row-sixth-group'
+          ]"></tr>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsSpl"></tr>
+            <tr mat-row class="element-row" *matRowDef="let row; columns: displayedColumnsSpl"
+              [ngClass]="{ mismatch: row.paid_days == 3 }"></tr>
+          </table>
+        </div>
+       
+                    <!-- else paginationpro -->
+
+        <div class="col-sm-12" style="font-size: x-small; text-align: right; padding-right: 2%" *ngIf="isShowTableSpl">
+          <button (click)="prevpages()" mat-icon-button [disabled]="pagination.has_previous === false" color="primary">
+            <mat-icon class="customIconSize">arrow_back</mat-icon>
+          </button>
+          {{ pagination.index }}
+          <button (click)="nextpages()" mat-icon-button [disabled]="pagination.has_next === false" color="primary">
+            <mat-icon class="customIconSize">arrow_forward</mat-icon>
+          </button>
+        </div>
+
+        <div *ngIf="showButtons" style="margin-top: 11px; margin-left: 37%">
+          <div class="row">
+            <button type="button" style="border-radius: 10px" (click)="approvePay()" class="btn btn-outline-success">
+              Approve
+            </button>
+            <button type="button" style="border-radius: 10px; margin-left: 4%" (click)="holdPay()"
+              class="btn btn-outline-warning">
+              Hold
+            </button>
+            <button type="button" style="border-radius: 10px; margin-left: 4%" (click)="rejectPay()"
+              class="btn btn-outline-danger">
+              Reject
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    <!-- </mat-card> -->
+    <div *ngIf="showRecords" class="NodataAlign text-center">No Records Found...</div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="specialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style=" background-color: #044063;">
+        <h5 class="modal-title" id="exampleModalLongTitle" style="color: white;">Special Allowance</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"  style="color: white;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="width: 600px;">
+        <div class="row">
+          <div class="col-md-5" style="padding: 0px">
+            <form [formGroup]="specialform">
+              <mat-form-field dateFormat2 class="smallinput spacingForm" style="margin-top: -2%;">
+                <mat-label> Month </mat-label>
+                <input matInput [matDatepicker]="dpi" [formControl]="monyears" placeholder="Month and Year"
+                  formControlName="monthyear" />
+                <mat-datepicker-toggle matSuffix [for]="dpi"></mat-datepicker-toggle>
+                <mat-datepicker #dpi startView="multi-year" (yearSelected)="chosenYearHandlers($event)"
+                  (monthSelected)="chosenMonthHandlers($event, dpi)" panelClass="example-month-picker">
+                </mat-datepicker>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-md-3">
+            <button mat-raised-button matTooltip="search" (click)="searchSplData()"  data-dismiss="modal">
+              Search
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button mat-raised-button color="primary" matTooltip="download" (click)="downloadSplData()"
+              style="margin-left: -40%;"  data-dismiss="modal">
+              Download
+            </button>
+          </div>
+        </div>
+     
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="removemem()">Close</button>
+        <button type="button" class="btn btn-primary"  data-dismiss="modal" (click)="submitted()" style="background-color: #044063;color: white;">Submit</button>
+      </div> -->
+    </div>
+  </div>
+</div>
