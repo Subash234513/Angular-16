@@ -3,10 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: false, 
-    // apiURL: 'http://13.200.50.27:8188/',
+    apiURL: 'http://13.200.50.27:8188/',
   //  apiURL: 'http://13.200.50.27:8192/',
    //Final _Live
-  apiURL:'http://3.108.200.134:8208/',
+  // apiURL:'http://3.108.200.134:8208/',
 
   nacFEURL:'',
   EmemoURL: '',

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentLoaderDirective } from '../directives/component-loader.directive';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgxSummernoteModule } from 'ngx-summernote';
+// import { NgxSummernoteModule } from 'ngx-summernote';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -14,13 +14,14 @@ import { BrowserModule } from '@angular/platform-browser';
     ComponentLoaderDirective
   ],
   imports: [
-    CommonModule,NgxSummernoteModule,
+    CommonModule,
+    // NgxSummernoteModule
     FormsModule,NgxSpinnerModule,
     ReactiveFormsModule,NgxPaginationModule,
     HttpClientModule
   ],
   exports: [
-    CommonModule,NgxSummernoteModule,
+    CommonModule,
     FormsModule,NgxSpinnerModule,
     ReactiveFormsModule,NgxPaginationModule,
     HttpClientModule,

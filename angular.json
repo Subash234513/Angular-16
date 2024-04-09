@@ -34,15 +34,15 @@
               "src/icon.css",
               "src/arrow.css",
               "src/style.css",
-              "node_modules/ngx-toastr/toastr.css",
-              "node_modules/summernote/dist/summernote-lite.min.css"
+              "node_modules/ngx-toastr/toastr.css"
+             
               
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
               "./node_modules/bootstrap/dist/js/bootstrap.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/summernote/dist/summernote-lite.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
+              
             ],
             "vendorChunk": true,
             "extractLicenses": false,
